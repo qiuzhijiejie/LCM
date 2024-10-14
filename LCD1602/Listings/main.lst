@@ -1,0 +1,164 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              09/21/2024 15:18:38 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\main.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "LCD1602.h"
+   3          
+   4          sbit LCD_RS = P3^0; 
+   5          sbit LCD_RW = P3^1;
+   6          sbit LCD_EN = P3^2;
+   7          sbit   KEY  = P2^0;     
+   8          
+   9          
+  10          
+  11          unsigned char mode=0;
+  12          
+  13          
+  14          unsigned char row, col;
+  15          void displayCustomCharacter()
+  16          {
+  17   1          // 定义自定义字符，每个字符占8字节，16进制表示 (以简单的笑脸为例)
+  18   1      //unsigned char customChar[8] = {0x00, 0x0A, 0x1F, 0x11, 0x0A, 0x0E, 0x00, 0x00};
+  19   1      unsigned char customChar7[8] = {0x1F, 0x11, 0x11, 0x11, 0x11, 0x11, 0x1F, 0x00}; // 空心矩形
+  20   1      unsigned char pattern2[8] = {0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A}; // 相反的棋盘格样式
+  21   1      
+  22   1          // 将自定义字符数组写入CGRAM
+  23   1          Write_CGRAM(pattern2);
+  24   1                      
+  25   1          // 设置光标位置到LCD上的某个地方，并显示自定义字符
+  26   1              for (  row = 0; row < 2; row++) {
+  27   2                              for (  col = 0; col < 16; col++) {
+  28   3           // 设置光标位置，每行地址不同
+  29   3          unsigned char position = 0x80 + (row * 0x40) + col;  // 0x80 是第一行起始地址, 0xC0 是第二行起始地址
+  30   3          LCD_WriteCommand(position);
+  31   3          LCD_WriteData(0x00);      // 显示存储在CGRAM中的第一个自定义字符
+  32   3              }       
+  33   2                      }       
+  34   1      }
+  35          
+  36          
+  37          
+  38          
+  39          
+  40          unsigned char row, col;
+  41          void displayCustomCharacter1()
+  42          {
+  43   1          // 定义自定义字符，每个字符占8字节，16进制表示 (以简单的笑脸为例)
+  44   1      
+  45   1      unsigned char pattern1[8] = {0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15}; // 棋盘格样式
+  46   1      
+  47   1      
+  48   1          // 将自定义字符数组写入CGRAM
+  49   1          Write_CGRAM(pattern1);
+  50   1                      
+  51   1          // 设置光标位置到LCD上的某个地方，并显示自定义字符
+  52   1              for (  row = 0; row < 2; row++) {
+  53   2                              for (  col = 0; col < 16; col++) {
+  54   3           // 设置光标位置，每行地址不同
+C51 COMPILER V9.60.7.0   MAIN                                                              09/21/2024 15:18:38 PAGE 2   
+
+  55   3          unsigned char position = 0x80 + (row * 0x40) + col;  // 0x80 是第一行起始地址, 0xC0 是第二行起始地址
+  56   3          LCD_WriteCommand(position);
+  57   3          LCD_WriteData(0x00);      // 显示存储在CGRAM中的第一个自定义字符
+  58   3              }       
+  59   2                      }       
+  60   1      }
+  61          
+  62          
+  63          int main() 
+  64          {
+  65   1      
+  66   1              LCD_Init(); // 初始化LCD1602
+  67   1              LCD_Clear();
+  68   1                   
+  69   1                              displayCustomCharacter();
+  70   1                              Delay(50);
+  71   1                  displayCustomCharacter1();  
+  72   1                  Delay(50);
+  73   1                  HD44780_DisplayChar(0x48);  
+  74   1                  Delay(50);
+  75   1                  HD44780_DisplayChar(0x4b);  
+  76   1                              Delay(50);
+  77   1                  HD44780_DisplayChar(0x5d);  
+  78   1                              Delay(50);
+  79   1                  HD44780_DisplayChar(0x23);  
+  80   1                              Delay(50);
+  81   1                          HD44780_DisplayChar(0xff); 
+  82   1                              Delay(50);
+  83   1                  HD44780_DisplayChar(0x24); 
+  84   1              
+  85   1                      while (1) 
+  86   1              {
+  87   2      
+  88   2                              //按键1
+  89   2                              if (ReadKey1()) {
+  90   3                              mode++;
+  91   3                              mode %= 8; // 确保 mode 的值在 0 到  之间循环
+  92   3                              //LCD_Clear(); 
+  93   3                                      
+  94   3                                      
+  95   3                      // 直接根据 mode 的值显示图案，不再等待图案完成 
+  96   3                      switch (mode) {
+  97   4              case 1:
+  98   4                  
+  99   4                              displayCustomCharacter();
+ 100   4                  break;
+ 101   4              case 2:
+ 102   4                   displayCustomCharacter1();  
+ 103   4                  break;
+ 104   4              case 3:
+ 105   4                  HD44780_DisplayChar(0x48);  
+ 106   4                  break;
+ 107   4              case 4:
+ 108   4                  HD44780_DisplayChar(0x4b);  
+ 109   4                  break;
+ 110   4              case 5:
+ 111   4                  HD44780_DisplayChar(0x5d);  
+ 112   4                  break;
+ 113   4              case 6:
+ 114   4                  HD44780_DisplayChar(0x23);  
+ 115   4                  break;
+ 116   4                      case 7:
+C51 COMPILER V9.60.7.0   MAIN                                                              09/21/2024 15:18:38 PAGE 3   
+
+ 117   4                          HD44780_DisplayChar(0xff); 
+ 118   4                              break;
+ 119   4              default:
+ 120   4                  HD44780_DisplayChar(0x24);  
+ 121   4                  break;
+ 122   4          }
+ 123   3      
+ 124   3      
+ 125   3              }
+ 126   2                              
+ 127   2      
+ 128   2                      
+ 129   2              
+ 130   2      
+ 131   2      
+ 132   2      
+ 133   2      }
+ 134   1      
+ 135   1              }
+ 136          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    393    ----
+   CONSTANT SIZE    =     24    ----
+   XDATA SIZE       =      3      26
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
