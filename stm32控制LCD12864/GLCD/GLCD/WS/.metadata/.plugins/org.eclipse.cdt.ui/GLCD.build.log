@@ -1,0 +1,10 @@
+10:36:00 **** Incremental Build of configuration Debug for project GLCD ****
+make -j4 all 
+arm-none-eabi-size   GLCD.elf 
+   text	   data	    bss	    dec	    hex	filename
+  15276	     44	   1884	  17204	   4334	GLCD.elf
+Finished building: default.size.stdout
+ 
+
+10:36:00 Build Finished. 0 errors, 0 warnings. (took 303ms)
+
