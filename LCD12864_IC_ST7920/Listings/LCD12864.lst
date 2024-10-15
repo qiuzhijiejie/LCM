@@ -1,0 +1,904 @@
+C51 COMPILER V9.60.7.0   LCD12864                                                          09/12/2024 11:38:37 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD12864
+OBJECT MODULE PLACED IN .\Objects\LCD12864.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE LCD12864.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\
+                    -Listings\LCD12864.lst) OBJECT(.\Objects\LCD12864.obj)
+
+line level    source
+
+   1          #include <INTRINS.H>        
+   2          #include <MATH.H>    
+   3          #include <ABSACC.H> 
+   4          #include <REGx52.H> 
+   5          #include <STDIO.H> 
+   6          #include "LCD12864.H"
+   7          #include "HANZI.H"
+   8          
+   9          
+  10          
+  11          sbit LCD12864_RS = P3^0; 
+  12          sbit LCD12864_RW = P3^1;
+  13          sbit LCD12864_E  = P3^2;
+  14          sbit CS1=P3^3;          // 左半屏
+  15          sbit CS2=P3^4;                  // 右半屏
+  16          //sbit LCD12864_RST=P3^5;       //复位
+  17          //sbit int0=P2^0;               //中断
+  18          sbit KEY=P2^0;                  //按键
+  19          
+  20          
+  21          //bit loge=0; 
+  22          
+  23          
+  24          #define uint unsigned int
+  25          #define uchar unsigned char
+  26          
+  27          unsigned char column;  //列
+  28          unsigned char Page;    //页
+  29          unsigned char code BMP3[]; 
+  30          unsigned char code BMP4[]; 
+  31          unsigned char code font[];
+  32          unsigned char code Character[];
+  33          
+  34          
+  35          
+  36          uchar ReadKey() //按键函数
+  37          {
+  38   1          if (KEY == 1) 
+  39   1                      {  // 按键被按下
+  40   2                              Delay(100);  // 简单的去抖动处理
+  41   2                              if (KEY == 1) 
+  42   2                                      {
+  43   3                                              while (KEY == 1);  // 等待按键释放
+  44   3                                              return 1;  // 返回按键被按下
+  45   3                                      }
+  46   2          }
+  47   1          return 0;  // 返回按键没有被按下
+  48   1      }
+  49          
+  50          
+  51          
+  52          void Lcd12864_BusyL(void) // 测左半屏
+  53          {    
+  54   1          uchar temp = 0xFF; // 初始化变量 temp 为 0xFF
+C51 COMPILER V9.60.7.0   LCD12864                                                          09/12/2024 11:38:37 PAGE 2   
+
+  55   1          CS1 = 1;          // 使能选择信号 CS1
+  56   1          CS2 = 0;          // 禁用选择信号 CS2
+  57   1          LCD12864_RS = 0;  // 设置 RS 端口为 0，选择命令寄存器
+  58   1          LCD12864_RW = 1;  // 设置 WR 端口为 1，切换为读取模式
+  59   1          P1 = 0xFF;        // 将端口1设置为 0xFF
+  60   1          
+  61   1          while ((temp & 0x80) == 0x80) // 循环直到忙碌标志位被清除
+  62   1          {
+  63   2              LCD12864_E = 1;  // 使能 LCD12864（将 E 端口设为高电平）
+  64   2              //_nop_();         // 空操作，可能用于延时
+  65   2              temp = P1;       // 读取端口1的状态到 temp
+  66   2              LCD12864_E = 0;  // 禁用 LCD12864（将 E 端口设为低电平）
+  67   2          }
+  68   1      }
+  69          
+  70          
+  71          
+  72          void Lcd12864_BusyR(void) // 测右半屏
+  73          {
+  74   1          uchar temp = 0xFF;// 初始化变量 temp 为 0xFF
+  75   1          CS1 = 0;          // 禁用选择信号 CS1
+  76   1          CS2 = 1;          // 使能选择信号 CS2
+  77   1          LCD12864_RS = 0;  // 设置 RS 端口为 0，选择命令寄存器
+  78   1          LCD12864_RW = 1;  // 设置 WR 端口为 1，切换为读取模式
+  79   1          P1 = 0xFF;        // 将端口1设置为 0xFF
+  80   1          
+  81   1          while ((temp & 0x80) == 0x80) // 循环直到忙碌标志位被清除
+  82   1          {
+  83   2              LCD12864_E = 1;  // 使能 LCD12864（将 E 端口设为高电平）
+  84   2              //_nop_();         // 空操作，可能用于延时
+  85   2              temp = P1;       // 读取端口1的状态到 temp
+  86   2              LCD12864_E = 0;  // 禁用 LCD12864（将 E 端口设为低电平）
+  87   2          }
+  88   1      }
+  89          
+  90          
+  91          
+  92          void SetPage_Column(void)   // 设置光标位置，页，列
+  93          {   
+  94   1          unsigned char x, y;
+  95   1      
+  96   1          // 根据列地址的高 2 位选择处理函数
+  97   1          switch (column & 0xC0)   /*0X1100 0000,保持低6位就是0-63*/
+  98   1                              {
+  99   2              case 0:    Lcd12864_BusyL(); break;   //0X0000处理左半部分0-63
+ 100   2              case 0x40: Lcd12864_BusyR(); break;   //0X0100处理右半部分64-127
+ 101   2                              }
+ 102   1         
+ 103   1          // 计算列地址 (y)
+ 104   1          y = (column & 0x3f) | 0x40;  //0X0011 1111保留低 6 位并设置列地址基准值 0x40
+ 105   1      
+ 106   1          // 计算页地址 (x)
+ 107   1          x = (Page & 0x07)   | 0xb8;  //0X0000 0111保留低 3 位并设置页地址基准值 0xb8
+ 108   1      
+ 109   1          // 发送页地址到 LCD
+ 110   1          LCD12864_RS = 0;      
+ 111   1          LCD12864_RW = 0;      
+ 112   1          P1 = x;  
+ 113   1          LCD12864_E = 1;   
+ 114   1          //_nop_();   
+ 115   1          LCD12864_E = 0;   
+ 116   1          //_nop_();
+C51 COMPILER V9.60.7.0   LCD12864                                                          09/12/2024 11:38:37 PAGE 3   
+
+ 117   1          
+ 118   1          // 发送列地址到 LCD
+ 119   1          LCD12864_RS = 0;      
+ 120   1          LCD12864_RW = 0;      
+ 121   1          P1 = y;  
+ 122   1          LCD12864_E = 1;   
+ 123   1          //_nop_();   
+ 124   1          LCD12864_E = 0;   
+ 125   1          //_nop_();
+ 126   1      }
+ 127          
+ 128          
+ 129          void WriteCommand_L(uint Command)// 写左指令1-64
+ 130          {
+ 131   1                        Lcd12864_BusyL();
+ 132   1                        P1 = Command ;   
+ 133   1                        LCD12864_RS = 0;   
+ 134   1                        LCD12864_RW = 0;   
+ 135   1                        LCD12864_E  = 1;   
+ 136   1                        //_nop_();   
+ 137   1                        LCD12864_E  = 0;   
+ 138   1                        //_nop_();
+ 139   1                              
+ 140   1      }
+ 141          
+ 142          
+ 143          
+ 144          
+ 145          
+ 146          void WriteCommand_R(uint Command)// 写右指令65-128
+ 147          {
+ 148   1                        Lcd12864_BusyR();
+ 149   1                        P1 = Command; 
+ 150   1                        LCD12864_RS = 0;   
+ 151   1                        LCD12864_RW = 0;   
+ 152   1                        LCD12864_E  = 1;   
+ 153   1                        //_nop_();   
+ 154   1                        LCD12864_E  = 0;   
+ 155   1                        //_nop_();
+ 156   1                              
+ 157   1      }
+ 158          
+ 159          
+ 160          uchar ReadDate(void)// 读数据
+ 161          {       
+ 162   1                              uchar Date;
+ 163   1                              SetPage_Column();
+ 164   1                              LCD12864_RS=1;
+ 165   1                              LCD12864_RW=1;
+ 166   1                              P1=0xff;
+ 167   1                              _nop_(); 
+ 168   1                              LCD12864_E=1;
+ 169   1                              _nop_();
+ 170   1                              Date=P1;
+ 171   1                              LCD12864_E=0;
+ 172   1                              _nop_();
+ 173   1                              CS1=0;
+ 174   1                              CS2=0;
+ 175   1                              return Date;
+ 176   1      }
+ 177          
+ 178          void WriteDate(uint Date)//写数据
+C51 COMPILER V9.60.7.0   LCD12864                                                          09/12/2024 11:38:37 PAGE 4   
+
+ 179          {       
+ 180   1                              SetPage_Column();
+ 181   1                              LCD12864_RS=1;
+ 182   1                              LCD12864_RW=0;
+ 183   1                              P1 = Date; 
+ 184   1                              LCD12864_E=1;
+ 185   1                              _nop_(); 
+ 186   1                              LCD12864_E=0;
+ 187   1                              _nop_();
+ 188   1                              CS1=0;
+ 189   1                              CS2=0;
+ 190   1      }
+ 191          
+ 192          
+ 193          void Clear(void) // 清屏
+ 194          {
+ 195   1                       Page = 0;   
+ 196   1                       column  = 0;   
+ 197   1                       for(Page=0;Page<8;Page++) //页  
+ 198   1                        for(column=0;column<128;column++) //列  
+ 199   1                         WriteDate(0); 
+ 200   1                                                      
+ 201   1      }
+ 202          
+ 203          
+ 204          void Lcd12864_Init(void)//初始化
+ 205          {
+ 206   1                       WriteCommand_L(0x3f); //显示开
+ 207   1                       WriteCommand_R(0x3f);   
+ 208   1                               
+ 209   1                       WriteCommand_L(0xc0); //显示开始行     P13
+ 210   1                       WriteCommand_R(0xc0);   
+ 211   1                               
+ 212   1                       WriteCommand_L(0x3f); //显示开  
+ 213   1                       WriteCommand_R(0x3f);   
+ 214   1              
+ 215   1                       P1 = 0xFF; // 假设按键接在P1口，设置为输入
+ 216   1      }
+ 217          
+ 218          
+ 219          
+ 220          
+ 221          void Showpicture(uchar DotByte,uchar DotByte1 ) //并在这些位置上写入指定的图案数据  
+ 222          {   
+ 223   1                      Page    = 0;   
+ 224   1                      column  = 0;   
+ 225   1                               for(Page=0;Page<8;Page++)//行像素（由 8 页组成）
+ 226   1                               {   
+ 227   2                                              for(column=0;column<128;column++) //128 列  
+ 228   2                                              {   
+ 229   3                                               WriteDate( DotByte );
+ 230   3                                               column++;
+ 231   3                                               WriteDate( DotByte1 );  
+ 232   3                                              } 
+ 233   2                              
+ 234   2                                      }   
+ 235   1      }
+ 236          
+ 237          
+ 238          
+ 239          
+ 240          
+C51 COMPILER V9.60.7.0   LCD12864                                                          09/12/2024 11:38:37 PAGE 5   
+
+ 241          void Showpicture_VerticalWave(uchar DotByte, uchar DotByte1)//中间往两边波浪般
+ 242          {
+ 243   1          unsigned char i;
+ 244   1          unsigned char mid_col = 64;    // 屏幕中间列
+ 245   1          unsigned char delay_time = 50; // 延迟时间，用于控制波动速度
+ 246   1      
+ 247   1          // 从中间向上下绘制波动图案
+ 248   1          for (i = 0; i < 64; i++) 
+ 249   1          {
+ 250   2              // 向上绘制波动图案
+ 251   2              for (Page = 0; Page < 8; Page++) 
+ 252   2              {
+ 253   3                  SetPage_Column();
+ 254   3                  for ( column = 0; column < 128; column++) 
+ 255   3                  {
+ 256   4                      // 如果当前列在波动范围内，则显示点图案
+ 257   4                      if ((column >= mid_col - i) && (column <= mid_col + i)) 
+ 258   4                      {
+ 259   5                          WriteDate(DotByte);
+ 260   5                      }
+ 261   4                      else 
+ 262   4                      {
+ 263   5                          WriteDate(0x00); // 填充背景色
+ 264   5                      }
+ 265   4                  }
+ 266   3              }
+ 267   2              
+ 268   2              // 向下绘制波动图案
+ 269   2              for ( Page = 0; Page < 8; Page++) 
+ 270   2              {
+ 271   3                  SetPage_Column();
+ 272   3                  for ( column = 0; column < 128; column++) 
+ 273   3                  {
+ 274   4                      // 如果当前列在波动范围内，则显示点图案
+ 275   4                      if ((column >= mid_col - i) && (column <= mid_col + i)) 
+ 276   4                      {
+ 277   5                          WriteDate(DotByte1);
+ 278   5                      }
+ 279   4                      else 
+ 280   4                      {
+ 281   5                          WriteDate(0x00); // 填充背景色
+ 282   5                      }
+ 283   4                  }
+ 284   3              }
+ 285   2      
+ 286   2              // 添加延迟，以便视觉效果明显
+ 287   2              Delay(delay_time);
+ 288   2          }
+ 289   1      
+ 290   1          // 清除屏幕内容
+ 291   1          for ( Page = 0; Page < 8; Page++) 
+ 292   1          {
+ 293   2              SetPage_Column();
+ 294   2              for (column = 0; column < 128; column++) 
+ 295   2              {
+ 296   3                  WriteDate(0); // 清除内容
+ 297   3              }
+ 298   2          }
+ 299   1      }
+ 300          
+ 301          
+ 302          
+C51 COMPILER V9.60.7.0   LCD12864                                                          09/12/2024 11:38:37 PAGE 6   
+
+ 303          
+ 304          
+ 305          
+ 306          
+ 307          /*中间向两边同时展开的效果*/
+ 308          void Showpicture_Advanced(uchar DotByte, uchar DotByte1)
+ 309          {
+ 310   1          unsigned char col;
+ 311   1          unsigned char mid_col = 64;  // 中间列，宽度的一半
+ 312   1          unsigned char delay_time = 1000; // 减少延迟时间，加快速度
+ 313   1      
+ 314   1          // 遍历所有页
+ 315   1          for (Page = 0; Page < 8; Page++)
+ 316   1          {
+ 317   2              for (col = 0; col <= mid_col; col++)
+ 318   2              {
+ 319   3                  // 同时从中间向左和向右绘制图案
+ 320   3                  column = mid_col - col;
+ 321   3                  SetPage_Column(); // 设置页和列位置
+ 322   3                  WriteDate(DotByte);
+ 323   3                  WriteDate(DotByte1);
+ 324   3      
+ 325   3                  column = mid_col + col;
+ 326   3                  SetPage_Column(); // 设置页和列位置
+ 327   3                  WriteDate(DotByte);
+ 328   3                  WriteDate(DotByte1);
+ 329   3              }
+ 330   2      
+ 331   2              // 为了加快速度，减少延迟
+ 332   2              Delay(delay_time);
+ 333   2          }
+ 334   1      
+ 335   1          // 清除屏幕内容
+ 336   1          for (Page = 0; Page < 8; Page++)
+ 337   1          {
+ 338   2              for (col = 0; col < 128; col++)
+ 339   2              {
+ 340   3                  column = col;
+ 341   3                  SetPage_Column(); 
+ 342   3                  WriteDate(0); // 清除内容
+ 343   3              }
+ 344   2          }
+ 345   1      }
+ 346          
+ 347          
+ 348          
+ 349          
+ 350          /* 从两边向中间同时收缩的效果（奇数行），逐渐加速和减速 */
+ 351          void Showpicture_Advanced1(uchar DotByte, uchar DotByte1)
+ 352          {
+ 353   1          unsigned char col;
+ 354   1          unsigned char mid_col               = 64;   // 中间列，宽度的一半
+ 355   1          unsigned char delay_time    = 1000; // 初始延迟时间
+ 356   1          unsigned char speed_factor  = 10;   // 加速/减速因子
+ 357   1      
+ 358   1          // 从中间向外扩展绘制图案
+ 359   1          for (Page = 0; Page < 8; Page++)
+ 360   1          {
+ 361   2              for (col = 0; col <= mid_col; col++)
+ 362   2              {
+ 363   3                  // 从中间向两侧扩展
+ 364   3                  column = mid_col + col; // 从中间向右扩展
+C51 COMPILER V9.60.7.0   LCD12864                                                          09/12/2024 11:38:37 PAGE 7   
+
+ 365   3                  SetPage_Column(); // 设置页和列位置
+ 366   3                  WriteDate(DotByte);
+ 367   3                  WriteDate(DotByte1);
+ 368   3      
+ 369   3                  column = mid_col - col; // 从中间向左扩展
+ 370   3                  SetPage_Column(); // 设置页和列位置
+ 371   3                  WriteDate(DotByte);
+ 372   3                  WriteDate(DotByte1);
+ 373   3      
+ 374   3                  // 动态调整延迟时间，逐渐减速
+ 375   3                  delay_time = delay_time > speed_factor ? delay_time - speed_factor : 1;
+ 376   3                  Delay(delay_time);
+ 377   3              }
+ 378   2              // 重置延迟时间以准备下一页的绘制
+ 379   2              delay_time = 1000;
+ 380   2          }
+ 381   1      
+ 382   1          // 清除屏幕内容（从两侧向中间收缩清除）
+ 383   1          delay_time = 100; // 减小初始延迟时间，加快清除速度
+ 384   1          for (Page = 0; Page < 8; Page++)
+ 385   1          {
+ 386   2              for (col = 0; col <= mid_col; col++)
+ 387   2              {
+ 388   3                  // 从中间向两侧收缩清除
+ 389   3                  column = mid_col + col; // 从中间向右扩展清除
+ 390   3                  SetPage_Column(); 
+ 391   3                  WriteDate(0); // 清除内容
+ 392   3      
+ 393   3                  column = mid_col - col; // 从中间向左扩展清除
+ 394   3                  SetPage_Column(); 
+ 395   3                  WriteDate(0); // 清除内容
+ 396   3      
+ 397   3                  // 动态调整延迟时间，逐渐加速
+ 398   3                  delay_time += speed_factor;
+ 399   3                  Delay(delay_time);
+ 400   3              }
+ 401   2          }
+ 402   1      }
+ 403          
+ 404          
+ 405          
+ 406          
+ 407          
+ 408          /* 从两边向中间同时收缩的效果（偶数行） */
+ 409          void Showpicture_Advanced2(uchar DotByte, uchar DotByte1)
+ 410          {
+ 411   1          unsigned char col;
+ 412   1          unsigned char mid_col = 64;  // 中间列，宽度的一半
+ 413   1          unsigned char delay_time = 1000; // 减少延迟时间，加快速度
+ 414   1      
+ 415   1          // 遍历所有页
+ 416   1          for (Page = 0; Page < 8; Page+=2)
+ 417   1          {
+ 418   2              for (col = 0; col <= mid_col; col++)
+ 419   2              {
+ 420   3                  // 同时从左边和右边向中间绘制图案
+ 421   3                  column = col; // 从左边向中间
+ 422   3                  SetPage_Column(); // 设置页和列位置
+ 423   3                  WriteDate(DotByte);
+ 424   3                  WriteDate(DotByte1);
+ 425   3      
+ 426   3                  column = 127 - col; // 从右边向中间
+C51 COMPILER V9.60.7.0   LCD12864                                                          09/12/2024 11:38:37 PAGE 8   
+
+ 427   3                  SetPage_Column(); // 设置页和列位置
+ 428   3                  WriteDate(DotByte);
+ 429   3                  WriteDate(DotByte1);
+ 430   3              }
+ 431   2      
+ 432   2              // 为了加快速度，减少延迟
+ 433   2              Delay(delay_time);
+ 434   2          }
+ 435   1      
+ 436   1          // 清除屏幕内容
+ 437   1          for (Page = 0; Page < 8; Page++)
+ 438   1          {
+ 439   2              for (col = 0; col < 128; col++)
+ 440   2              {
+ 441   3                  column = col;
+ 442   3                  SetPage_Column(); 
+ 443   3                  WriteDate(0); // 清除内容
+ 444   3              }
+ 445   2          }
+ 446   1      }
+ 447          
+ 448          
+ 449          
+ 450          
+ 451          
+ 452          /*中间向四个方向（上下左右）同时展开的十字光标效果*/
+ 453          
+ 454          void Showpicture_CrossCursorEffect(uchar DotByte, uchar DotByte1)
+ 455          {
+ 456   1          unsigned char i;
+ 457   1          unsigned char mid_col = 64;  // 屏幕中间列
+ 458   1          unsigned char mid_Page = 4;  // 屏幕中间页
+ 459   1          unsigned char delay_time = 50; // 延迟时间，用于控制光标移动速度
+ 460   1      
+ 461   1          // 从中间向四个方向同时绘制图案
+ 462   1          for (i = 0; i <= mid_Page; i++)
+ 463   1          {
+ 464   2              // 向上绘制图案
+ 465   2              Page = mid_Page - i;
+ 466   2              for (column = mid_col - i; column <= mid_col + i; column++)
+ 467   2              {
+ 468   3                  SetPage_Column(); // 设置页和列位置
+ 469   3                  WriteDate(DotByte);
+ 470   3                  WriteDate(DotByte1);
+ 471   3              }
+ 472   2      
+ 473   2              // 向下绘制图案
+ 474   2              Page = mid_Page + i;
+ 475   2              for (column = mid_col - i; column <= mid_col + i; column++)
+ 476   2              {
+ 477   3                  SetPage_Column(); // 设置页和列位置
+ 478   3                  WriteDate(DotByte);
+ 479   3                  WriteDate(DotByte1);
+ 480   3              }
+ 481   2      
+ 482   2              // 向左绘制图案
+ 483   2              column = mid_col - i;
+ 484   2              for (Page = mid_Page - i; Page <= mid_Page + i; Page++)
+ 485   2              {
+ 486   3                  SetPage_Column(); // 设置页和列位置
+ 487   3                  WriteDate(DotByte);
+ 488   3                  WriteDate(DotByte1);
+C51 COMPILER V9.60.7.0   LCD12864                                                          09/12/2024 11:38:37 PAGE 9   
+
+ 489   3              }
+ 490   2      
+ 491   2              // 向右绘制图案
+ 492   2              column = mid_col + i;
+ 493   2              for (Page = mid_Page - i; Page <= mid_Page + i; Page++)
+ 494   2              {
+ 495   3                  SetPage_Column(); // 设置页和列位置
+ 496   3                  WriteDate(DotByte);
+ 497   3                  WriteDate(DotByte1);
+ 498   3              }
+ 499   2      
+ 500   2              // 添加延迟，以便视觉效果明显
+ 501   2              Delay(delay_time);
+ 502   2          }
+ 503   1      
+ 504   1          // 清除屏幕内容
+ 505   1          for (Page = 0; Page < 8; Page++)
+ 506   1          {
+ 507   2              for (column = 0; column < 128; column++)
+ 508   2              {
+ 509   3                  SetPage_Column(); 
+ 510   3                  WriteDate(0); // 清除内容
+ 511   3              }
+ 512   2          }
+ 513   1      }
+ 514          
+ 515          
+ 516          
+ 517          
+ 518          
+ 519          
+ 520          void LcmPutBMP( uchar *puts )   //显示一幅完整的图像
+ 521          {   
+ 522   1               uint X=0;   
+ 523   1               Page = 0;   
+ 524   1               column  = 0;   
+ 525   1                       for(Page=0;Page<8;Page++)  //遍历8页,一页8行 
+ 526   1                       {   
+ 527   2                              for(column=0;column<128;column++)//遍历128列 
+ 528   2                              {   
+ 529   3                               WriteDate( puts[X] );   
+ 530   3                               X++;   
+ 531   3                              }   
+ 532   2               }   
+ 533   1      }
+ 534          
+ 535          
+ 536          
+ 537          
+ 538          unsigned char offset; 
+ 539          void LcmPutBMPsjw(uchar *puts) //rubbot
+ 540          {
+ 541   1          uint X = 0;
+ 542   1          int i, j;
+ 543   1          int maxOffset = 8; // 最大偏移量
+ 544   1          unsigned char currentPage;
+ 545   1      
+ 546   1          for ( offset = 0; offset < maxOffset; offset++) 
+ 547   1          {
+ 548   2              // 每次绘制前重新从图像起始位置读取数据
+ 549   2              X = 0;
+ 550   2      
+C51 COMPILER V9.60.7.0   LCD12864                                                          09/12/2024 11:38:37 PAGE 10  
+
+ 551   2              // 遍历所有的页面
+ 552   2              for (i = 0; i < 8; i++) 
+ 553   2              {
+ 554   3                  currentPage = i;
+ 555   3      
+ 556   3                  // 设置当前页和列
+ 557   3                  SetPage_Column();
+ 558   3                  
+ 559   3                  // 绘制一整页 (128列)
+ 560   3                  for (j = 0; j < 128; j++) 
+ 561   3                  {
+ 562   4                      if (currentPage >= offset && currentPage < (8 - offset)) 
+ 563   4                      {
+ 564   5                          WriteDate(puts[X]); // 写入图像数据
+ 565   5                      } 
+ 566   4                      else 
+ 567   4                      {
+ 568   5                          WriteDate(0x00); // 填充背景色
+ 569   5                      }
+ 570   4                      X++;
+ 571   4                  }
+ 572   3              }
+ 573   2              Delay(50); // 控制渐变效果的速度
+ 574   2          }
+ 575   1      }
+ 576          
+ 577                          
+ 578          void LcmReverseBMPP( unsigned char *puts ) //取反  
+ 579          {   
+ 580   1       uint X=0;   
+ 581   1       Page = 0;   
+ 582   1       column  = 0;   
+ 583   1       for(Page=0;Page<8;Page++)   
+ 584   1       {   
+ 585   2        for(column=0;column<128;column++)   
+ 586   2        {   
+ 587   3         WriteDate(~puts[X] ); //反面  
+ 588   3         X++;   
+ 589   3        }   
+ 590   2       }   
+ 591   1      }
+ 592          
+ 593          
+ 594          //8x8的图形
+ 595          void Display8_8(uchar C[],uchar i)//i图形要显示的行位置
+ 596          {
+ 597   1              uchar k,num=0;
+ 598   1              num=i*0x08;
+ 599   1               for(k=0;k<0x08;k++)
+ 600   1               {
+ 601   2                              WriteDate(C[num+k]);
+ 602   2                              column+=0x01;
+ 603   2               } 
+ 604   1      
+ 605   1      }
+ 606          
+ 607          //16x16的图形
+ 608          void Display16_16(uchar F[], uchar i)
+ 609          {
+ 610   1      uchar k=0;
+ 611   1      uint    num=0;
+ 612   1       num=i*0x20;//32
+C51 COMPILER V9.60.7.0   LCD12864                                                          09/12/2024 11:38:37 PAGE 11  
+
+ 613   1      
+ 614   1              for(k=0;k<0x10;k++)//前16行,上半部分
+ 615   1               {
+ 616   2                              WriteDate(F[num+k]);
+ 617   2                              column+=0x01;
+ 618   2               } 
+ 619   1                      column-=0x10;//向左移动16个位置,回到最左边的列
+ 620   1                      Page+=0x01;   //下一页，下半部分
+ 621   1               
+ 622   1        for(k=16;k<0x20;k++)//后16行，下半部分
+ 623   1               {
+ 624   2                              WriteDate(F[num+k]);
+ 625   2                              column+=0x01;
+ 626   2               } 
+ 627   1        Page-=0x01; 
+ 628   1        Delay(80); 
+ 629   1      }
+ 630          
+ 631          
+ 632          //3个8×8的
+ 633          void Display_character()
+ 634          { 
+ 635   1                      uchar k,c, a=0;//C-页,K-列
+ 636   1                      column  = 0;//从最左边开始
+ 637   1               for(c=0;c<8;c++)//第1个图案
+ 638   1               { 
+ 639   2                              Page = c; 
+ 640   2                              for(k=0;k<16;k++)
+ 641   2                              { 
+ 642   3                                      Display8_8(character,0);
+ 643   3                              }
+ 644   2                              column  = 0;
+ 645   2               }
+ 646   1        Delay(1500);
+ 647   1      
+ 648   1       for(c=0;c<8;c++)//第2个图案
+ 649   1              { 
+ 650   2                      Page = c; 
+ 651   2                      for(k=0;k<16;k++)
+ 652   2                      { 
+ 653   3                              Display8_8(character,1);
+ 654   3                      }
+ 655   2                              column  = 0;
+ 656   2       }
+ 657   1        Delay(1500);
+ 658   1      
+ 659   1       for(c=0;c<8;c++)//第3个图案
+ 660   1              { 
+ 661   2                      Page = c; 
+ 662   2                      for(k=0;k<16;k++)
+ 663   2                      { 
+ 664   3                              Display8_8(character,2);
+ 665   3                      }
+ 666   2                              column  = 0;
+ 667   2       }
+ 668   1        Delay(1000);
+ 669   1      
+ 670   1      }
+ 671          
+ 672          
+ 673          //4个16×16的汉字
+ 674          void Display_Chinese()
+C51 COMPILER V9.60.7.0   LCD12864                                                          09/12/2024 11:38:37 PAGE 12  
+
+ 675          {
+ 676   1               uchar a=0;
+ 677   1               Page    = 0;   //第一页
+ 678   1               column  = 0;//最左列
+ 679   1               for(a=0;a<8;a++)
+ 680   1                       {
+ 681   2                                      Display16_16(font,a);/* [font]是存储多个16x16汉字点阵数据的数组。
+ 682   2                                                                                                                        a决定从[font]数组的哪个位置开始读取数据
+ 683   2                                                                                                                              以便显示正确的汉字*/
+ 684   2                       }
+ 685   1                       
+ 686   1               Page = 2; //第三页和第四页  
+ 687   1               column  = 0;
+ 688   1               for(a=8;a<16;a++)
+ 689   1                       {
+ 690   2                                      Display16_16(font,a);
+ 691   2                       }
+ 692   1                       
+ 693   1         Page = 4;   
+ 694   1               column  = 0;
+ 695   1               for(a=16;a<24;a++)
+ 696   1                       {
+ 697   2                                      Display16_16(font,a);
+ 698   2                       }
+ 699   1      
+ 700   1         Page = 6;   
+ 701   1               column  = 0;
+ 702   1               for(a=24;a<32;a++)
+ 703   1                       {
+ 704   2                                      Display16_16(font,a);
+ 705   2                       }
+ 706   1      
+ 707   1      }
+ 708          
+ 709          
+ 710          
+ 711          void Delay(unsigned int xms) //@12.000MHz
+ 712          {
+ 713   1          unsigned char i, j;
+ 714   1          while(xms--) // 每次循环减少 1 毫秒
+ 715   1          {
+ 716   2              i = 12;    // 内部循环次数
+ 717   2              j = 169;   // 内部循环次数
+ 718   2              
+ 719   2              do
+ 720   2              {
+ 721   3                  while (--j); // 内部延时
+ 722   3              } while (--i); // 外部延时
+ 723   2          }
+ 724   1      }
+ 725          
+ 726          
+ 727          void LcmPutDots( unsigned char DotByte,unsigned char DotByte1 )   
+ 728          {   
+ 729   1       Page = 0;   
+ 730   1       column  = 0;   
+ 731   1       for(Page=0;Page<8;Page++)   
+ 732   1       {   
+ 733   2        for(column=0;column<128;column++)   
+ 734   2        {   
+ 735   3         WriteDate( DotByte );
+ 736   3         column++;
+C51 COMPILER V9.60.7.0   LCD12864                                                          09/12/2024 11:38:37 PAGE 13  
+
+ 737   3         WriteDate( DotByte1 );  
+ 738   3        } 
+ 739   2          
+ 740   2       }   
+ 741   1      } 
+ 742          
+ 743          void LcmPutDots1(unsigned char DotByte)
+ 744          {
+ 745   1          Page = 0;
+ 746   1          column  = 0;
+ 747   1          for(Page = 0; Page < 8; Page++)
+ 748   1          {
+ 749   2              for(column = 0; column< 128; column++)
+ 750   2              {
+ 751   3                  WriteDate(DotByte);
+ 752   3              }
+ 753   2          }
+ 754   1      }
+ 755          
+ 756          
+ 757          
+ 758          unsigned char i;
+ 759          void LcmPutDotsOddColumns(void)//奇数列
+ 760          {
+ 761   1          unsigned char DotByte9[] = {0x3C, 0x66, 0xC3, 0xC3, 0x3F, 0x03, 0x03, 0xFE}; // 这是示例数据，可以换成
+             -任意内容
+ 762   1      
+ 763   1          for (Page = 0; Page < 8; Page++) // 遍历所有8个页面
+ 764   1          {
+ 765   2              for (column = 1; column < 128; column += 2) // 遍历奇数列，起始列为1，步长为2
+ 766   2              {
+ 767   3                  SetPage_Column(); // 设置当前页和奇数列的位置
+ 768   3      
+ 769   3                  for (i = 0; i < 8; i++) // 写入8个字节的数据到当前列
+ 770   3                  {
+ 771   4                      WriteDate(DotByte9[i]); // 写入每列的点阵数据，或者根据需要写入其他数据
+ 772   4                  }
+ 773   3              }
+ 774   2          }
+ 775   1      }
+ 776          
+ 777          
+ 778          
+ 779          
+ 780          void LcmPutDotsStars(unsigned char pattern)
+ 781          {
+ 782   1        
+ 783   1          for (Page = 0; Page < 8; Page++) // 遍历所有8个页面
+ 784   1          {
+ 785   2              for (column = 0; column < 128; column++) // 遍历每一列
+ 786   2              {
+ 787   3                  SetPage_Column(); // 设置光标位置
+ 788   3      
+ 789   3                  if (column % 2 == 0) // 每隔一列显示一个随机模式
+ 790   3                  {
+ 791   4                      WriteDate(pattern); // 显示给定的模式
+ 792   4                  }
+ 793   3                  else
+ 794   3                  {
+ 795   4                      WriteDate(~pattern); // 显示反模式，产生“星罗棋布”效果
+ 796   4                  }
+ 797   3              }
+C51 COMPILER V9.60.7.0   LCD12864                                                          09/12/2024 11:38:37 PAGE 14  
+
+ 798   2          }
+ 799   1      }
+ 800          
+ 801          
+ 802          
+ 803          
+ 804          
+ 805          /*
+ 806          void Step(void) interrupt 0 using 0//中断
+ 807          { _nop_(); 
+ 808            _nop_(); 
+ 809            _nop_();
+ 810            _nop_();
+ 811            _nop_();
+ 812            _nop_();
+ 813            _nop_();
+ 814            _nop_();
+ 815            _nop_();
+ 816            _nop_();
+ 817            _nop_();
+ 818            _nop_();
+ 819            _nop_();
+ 820            _nop_();
+ 821            _nop_();
+ 822            _nop_();
+ 823            _nop_();
+ 824            _nop_();
+ 825            _nop_();
+ 826            _nop_(); 
+ 827            _nop_(); 
+ 828            _nop_();
+ 829            _nop_();
+ 830            _nop_();
+ 831            _nop_();
+ 832            _nop_();
+ 833            _nop_();
+ 834            _nop_();
+ 835            _nop_();
+ 836            _nop_();
+ 837            _nop_();
+ 838            _nop_();
+ 839            _nop_();
+ 840            _nop_();
+ 841            _nop_();
+ 842            _nop_();
+ 843            _nop_();
+ 844            _nop_();
+ 845            
+ 846                  if(int0==0)
+ 847                  loge=!loge;
+ 848              while(!int0);
+ 849            return;
+ 850          }
+ 851          */
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   2926    ----
+   CONSTANT SIZE    =      8    ----
+   XDATA SIZE       =      4      66
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+C51 COMPILER V9.60.7.0   LCD12864                                                          09/12/2024 11:38:37 PAGE 15  
+
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
