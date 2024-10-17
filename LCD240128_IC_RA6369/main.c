@@ -58,7 +58,7 @@ void Main( void )
 		switch(mode){	
 		case 0:DisplayDots(0xff,0x00);
 		break;
-		case 1:DisplayDots(0x55,0xaa);;
+		case 1:DisplayDots(0x55,0xaa);
 		break;
 		case 2:DisplayDots(0x55,0x55);
 		break;
@@ -68,11 +68,11 @@ void Main( void )
 		break;
 		case 5:picture();	
 		break;
-		case 6:Display_FullCGROM();;	
+		case 6:Display_FullCGROM();	
 		break;
-		case 7:DisplayBMP(0,0,240,128,BMP1); ;	
+		case 7:DisplayBMP(0,0,240,128,BMP1); 	
 		break;
-		case 8:ReverseDisplayBMP(0,0,240,128,BMP1); ;	
+		case 8:ReverseDisplayBMP(0,0,240,128,BMP1); 	
 		break;
 
 }
