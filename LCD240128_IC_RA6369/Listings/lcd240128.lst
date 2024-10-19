@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   LCD240128                                                         10/15/2024 13:46:51 PAGE 1   
+C51 COMPILER V9.60.7.0   LCD240128                                                         10/19/2024 09:11:57 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD240128
@@ -62,7 +62,7 @@ line level    source
   52   2              Delay(1);  // 简单的去抖动处理
   53   2              if (LCD_KEY == 1) 
   54   2                      {  // 检查按键是否仍然按下
-C51 COMPILER V9.60.7.0   LCD240128                                                         10/15/2024 13:46:51 PAGE 2   
+C51 COMPILER V9.60.7.0   LCD240128                                                         10/19/2024 09:11:57 PAGE 2   
 
   55   3                  while (LCD_KEY == 1);  // 等待按键释放
   56   3                  return 1;  // 返回按键被按下
@@ -126,7 +126,7 @@ line level    source
  114   1      }   
  115          
  116          /*
-C51 COMPILER V9.60.7.0   LCD240128                                                         10/15/2024 13:46:51 PAGE 3   
+C51 COMPILER V9.60.7.0   LCD240128                                                         10/19/2024 09:11:57 PAGE 3   
 
  117          写命令
  118          dat1: 第一个要写入的数据字节。
@@ -190,7 +190,7 @@ line level    source
  176   1              {
  177   2                      a=y*30+x;                             //0x24-Set Address Pointer-Table 6-6 
  178   2                      WriteCommand((uchar)(a),(uchar)(a>>8),0x24,2);
-C51 COMPILER V9.60.7.0   LCD240128                                                         10/15/2024 13:46:51 PAGE 4   
+C51 COMPILER V9.60.7.0   LCD240128                                                         10/19/2024 09:11:57 PAGE 4   
 
  179   2              }
  180   1      }
@@ -254,7 +254,7 @@ line level    source
  236          
  237          
  238          
-C51 COMPILER V9.60.7.0   LCD240128                                                         10/15/2024 13:46:51 PAGE 5   
+C51 COMPILER V9.60.7.0   LCD240128                                                         10/19/2024 09:11:57 PAGE 5   
 
  239          /*
  240          显示16x16点阵的汉字字符
@@ -318,7 +318,7 @@ line level    source
  298   1          uint num = 0;  // 偏移量初始为0
  299   1          num = character_code * 0x10;  // 每个字符占用16字节（8×16）
  300   1          
-C51 COMPILER V9.60.7.0   LCD240128                                                         10/15/2024 13:46:51 PAGE 6   
+C51 COMPILER V9.60.7.0   LCD240128                                                         10/19/2024 09:11:57 PAGE 6   
 
  301   1          Locatexy(x, y, Graphic);  // 定位到显示的起始位置
  302   1      
@@ -382,7 +382,7 @@ line level    source
  360   2                      y += 1;  // 移动到下一行
  361   2                      Locatexy(x, y, Graphic);  // 更新光标位置
  362   2              }
-C51 COMPILER V9.60.7.0   LCD240128                                                         10/15/2024 13:46:51 PAGE 7   
+C51 COMPILER V9.60.7.0   LCD240128                                                         10/19/2024 09:11:57 PAGE 7   
 
  363   1        
  364   1      } 
@@ -446,7 +446,7 @@ line level    source
  422   1      {
  423   2          for ( i = 0; i < count[group]; i++)
  424   2          {
-C51 COMPILER V9.60.7.0   LCD240128                                                         10/15/2024 13:46:51 PAGE 8   
+C51 COMPILER V9.60.7.0   LCD240128                                                         10/19/2024 09:11:57 PAGE 8   
 
  425   3              Display_8_16(start_x[group] + i, start_y[group], Chinese_character, start_code[group] + i);
  426   3          }
