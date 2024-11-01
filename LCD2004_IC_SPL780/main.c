@@ -25,6 +25,10 @@ int main()
 			write_CGROM(0x10);//ÄÚÖÃ
 			Delay(30);
 			Write_DDRAM(0xfa);
+			Delay(30);
+//			LCD_Clear();
+//			LCD_ShowString(1,1,"YH");
+
 			
 while (1) 
 {
