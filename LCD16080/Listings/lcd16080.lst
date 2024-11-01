@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   LCD16080                                                          09/30/2024 16:05:58 PAGE 1   
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/01/2024 11:45:53 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD16080
@@ -62,7 +62,7 @@ line level    source
   52   1          return 0;  // 按键没有被按下
   53   1      }
   54          
-C51 COMPILER V9.60.7.0   LCD16080                                                          09/30/2024 16:05:58 PAGE 2   
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/01/2024 11:45:53 PAGE 2   
 
   55          
   56          
@@ -126,7 +126,7 @@ line level    source
  114   1          LCM_RD = 0;            // 开始读取数据
  115   1          _nop_();               // 延迟
  116   1      
-C51 COMPILER V9.60.7.0   LCD16080                                                          09/30/2024 16:05:58 PAGE 3   
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/01/2024 11:45:53 PAGE 3   
 
  117   1          Data = LCM_PORT;       // 从P1读取数据
  118   1      
@@ -190,7 +190,7 @@ line level    source
  176   1          lcdWriteCommand(0xC1);   //  (0xC1) Table6-19
  177   1              //Data Read and Increment ADP
  178   1          return lcdReadData();    // 读取数据并返回
-C51 COMPILER V9.60.7.0   LCD16080                                                          09/30/2024 16:05:58 PAGE 4   
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/01/2024 11:45:53 PAGE 4   
 
  179   1      }
  180          
@@ -254,7 +254,7 @@ line level    source
  238   1      }           //0x24-Set Address drawPointer
  239          
  240          
-C51 COMPILER V9.60.7.0   LCD16080                                                          09/30/2024 16:05:58 PAGE 5   
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/01/2024 11:45:53 PAGE 5   
 
  241          
  242          
@@ -318,7 +318,7 @@ line level    source
  300          void lineto(unsigned char x1, unsigned char y1, bit b) // 绘制 (XPOS, YPOS) 到 (x1, y1) 的直线
  301          {
  302   1          line(X, Y, x1, y1, b); // 调用 line 函数绘制直线
-C51 COMPILER V9.60.7.0   LCD16080                                                          09/30/2024 16:05:58 PAGE 6   
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/01/2024 11:45:53 PAGE 6   
 
  303   1      }
  304          
@@ -382,7 +382,7 @@ line level    source
  362   3              }
  363   2          }
  364   1          else                            // Y 方向增量大于 X 方向增量
-C51 COMPILER V9.60.7.0   LCD16080                                                          09/30/2024 16:05:58 PAGE 7   
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/01/2024 11:45:53 PAGE 7   
 
  365   1          {
  366   2              dk = dx;
@@ -446,7 +446,7 @@ line level    source
  424          
  425          /**
  426           * @brief 显示图形子程序
-C51 COMPILER V9.60.7.0   LCD16080                                                          09/30/2024 16:05:58 PAGE 8   
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/01/2024 11:45:53 PAGE 8   
 
  427           * @param s 指向图像数据的指针，图像的第一个字节表示宽度，第二个字节表示高度，后面是像素数据
  428           */
@@ -510,7 +510,7 @@ line level    source
  486   4                      if (byte1 & 0x01)
  487   4                          byte2 |= 0x80;
  488   4                      byte1 >>= 1;
-C51 COMPILER V9.60.7.0   LCD16080                                                          09/30/2024 16:05:58 PAGE 9   
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/01/2024 11:45:53 PAGE 9   
 
  489   4                  }
  490   3      
@@ -574,7 +574,7 @@ line level    source
  548          
  549          
  550          /**
-C51 COMPILER V9.60.7.0   LCD16080                                                          09/30/2024 16:05:58 PAGE 10  
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/01/2024 11:45:53 PAGE 10  
 
  551           * @brief 获取给定英文字母字符在点阵中的位置
  552           * 
@@ -638,7 +638,7 @@ line level    source
  610          {
  611   1          unsigned int minIndex = 0, maxIndex = CHINESECHARNUMBER - 1;
  612   1          unsigned int midIndex, midChar;
-C51 COMPILER V9.60.7.0   LCD16080                                                          09/30/2024 16:05:58 PAGE 11  
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/01/2024 11:45:53 PAGE 11  
 
  613   1      
  614   1          // 使用二分查找法定位字符
@@ -702,7 +702,7 @@ line level    source
  672   2              {
  673   3                  charCode = charCode * 256 + *s; // 组合两个字节成完整的字符编码
  674   3                  s++; // 跳过第二个字节
-C51 COMPILER V9.60.7.0   LCD16080                                                          09/30/2024 16:05:58 PAGE 12  
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/01/2024 11:45:53 PAGE 12  
 
  675   3                  putchar(charCode); // 显示双字节字符
  676   3              }
@@ -766,7 +766,7 @@ line level    source
  734   2              Y = y;             // 将当前行赋值给 YPOS
  735   2              lcdSetPosition();             // 设置当前行的起始位置
  736   2      
-C51 COMPILER V9.60.7.0   LCD16080                                                          09/30/2024 16:05:58 PAGE 13  
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/01/2024 11:45:53 PAGE 13  
 
  737   2              for (x = 0; x < 30; x++)  // 遍历X轴
  738   2              {
@@ -830,7 +830,7 @@ line level    source
  796   1      
  797   1          // 绘制圆的八个对称点
  798   1          while (x <= y) {
-C51 COMPILER V9.60.7.0   LCD16080                                                          09/30/2024 16:05:58 PAGE 14  
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/01/2024 11:45:53 PAGE 14  
 
  799   2              // 绘制圆的八个象限的点
  800   2              line(x_center + x, y_center + y, x_center + x, y_center + y, b); // 第1象限

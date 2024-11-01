@@ -14,7 +14,7 @@ void main(void)
 	FillHorizontalStripePattern();
 	FillHorizontalStripePattern1();
 	FillHorizontalStripePattern2();
-	lcdFill(0x55);
+    lcdFill(0x55);
 	
 	
 //	lcdFill(0x00);

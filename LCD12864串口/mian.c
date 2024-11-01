@@ -20,8 +20,8 @@ void main(void)
 
 	FillScreenWithPattern(0x00);
 
-    drawimge(Img_SUNMAN_128x64);
-
+	drawimge(Img_SUNMAN_128x64);
+	DisplaystringAtposition(6,1,"LCD12864");
 
 
 

@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   LCD12864                                                          09/24/2024 09:35:46 PAGE 1   
+C51 COMPILER V9.60.7.0   LCD12864                                                          11/01/2024 15:55:44 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD12864
@@ -62,7 +62,7 @@ line level    source
   52   1         //_nop_();        
   53   1         SCLK = 0;      // 将时钟引脚 SCLKPIN 置低（结束负脉冲的下降沿）
   54   1         //_nop_();       
-C51 COMPILER V9.60.7.0   LCD12864                                                          09/24/2024 09:35:46 PAGE 2   
+C51 COMPILER V9.60.7.0   LCD12864                                                          11/01/2024 15:55:44 PAGE 2   
 
   55   1         SCLK = 1;      // 将时钟引脚 SCLKPIN 置高（准备下一次数据传输）
   56   1      }
@@ -126,7 +126,7 @@ line level    source
  114            * @brief  向LCD12864读状态  
  115            * @param  
  116            * @retval None
-C51 COMPILER V9.60.7.0   LCD12864                                                          09/24/2024 09:35:46 PAGE 3   
+C51 COMPILER V9.60.7.0   LCD12864                                                          11/01/2024 15:55:44 PAGE 3   
 
  117            */
  118          void Write_Status(unsigned char e)
@@ -190,7 +190,7 @@ line level    source
  176          
  177          /**
  178            * @brief  显示关
-C51 COMPILER V9.60.7.0   LCD12864                                                          09/24/2024 09:35:46 PAGE 4   
+C51 COMPILER V9.60.7.0   LCD12864                                                          11/01/2024 15:55:44 PAGE 4   
 
  179            * @param  None
  180            * @retval None
@@ -254,7 +254,7 @@ line level    source
  238          
  239          /**
  240            * @brief  设置绘图区域内部RAM指针
-C51 COMPILER V9.60.7.0   LCD12864                                                          09/24/2024 09:35:46 PAGE 5   
+C51 COMPILER V9.60.7.0   LCD12864                                                          11/01/2024 15:55:44 PAGE 5   
 
  241            * @param  None
  242            * @retval None
@@ -318,380 +318,370 @@ line level    source
  300   1              Write_Command(0x0c);
  301   1              Delay(1);
  302   1              Write_Command(0x01);
-C51 COMPILER V9.60.7.0   LCD12864                                                          09/24/2024 09:35:46 PAGE 6   
+C51 COMPILER V9.60.7.0   LCD12864                                                          11/01/2024 15:55:44 PAGE 6   
 
  303   1              Delay(1);
  304   1              Write_Command(0x06);
  305   1      
- 306   1              
- 307   1      //    Write_Command(0x33);                        //接口模式设置
- 308   1      //    Delay(3);                         //延时3MS
- 309   1      //    Write_Command(0x30);                        //基本指令集
- 310   1      //    Delay(3);                         //延时3MS
- 311   1      //    Write_Command(0x30);                        //重复送基本指令集
- 312   1      //    Delay(3);                         //延时3MS
- 313   1      //    Write_Command(0x01);                        //清屏控制字
- 314   1      //    Delay(3);                         //延时3MS
- 315   1      //    Graphic_Display_ON();                            //开显示
- 316   1      }
- 317          
- 318          /**
- 319            * @brief  屏幕逐个显示字符。
- 320            * @param  None
- 321            * @retval None
- 322            */
- 323          
- 324          void moveToNextCharPosition(void)  // 移动光标到下一个字符位置
- 325          {
- 326   1              
- 327   1          X++;                       // 字符位置加1
- 328   1          X &= 0x0F;                 // 限制CXPOS在0到15的范围内
- 329   1      
- 330   1          if (X == 0)                // 如果CXPOS为0，表示需要换行
- 331   1          {   
- 332   2              Y++;                   // 行位置加1
- 333   2              Y &= 0x3;             // 限制CYPOS在0到3的范围内
- 334   2          }
- 335   1      }
- 336          
- 337          void DisplaySequence(void)
- 338          {
- 339   1      //      unsigned char XPosition,YPosition;
- 340   1       //   charlcdfill(' ');
- 341   1              Delay(10);
- 342   1          Graphic_Display_ON();
- 343   1          XPosition = 0;
- 344   1          YPosition = 0;
- 345   1          drawimge(Img_SUNMAN_128x64);
- 346   1      
- 347   1      }
- 348          
- 349          
- 350          
- 351          /**
- 352            * @brief  设置字符光标在LCD内部RAM的地址
- 353            * @param  None
- 354            * @retval None
- 355            */
- 356          void setLcdCursorPosition(void)  
- 357          {
- 358   1              unsigned char addDDRAM;
- 359   1              X &= 0xF;// 限制在0-15列 
- 360   1              addDDRAM = X / 2;//每两个字符共享一个 DDRAM 单元
- 361   1              if (Y == 0) Write_Command(addDDRAM | 0x80);// DDRAM地址:80H-87H
- 362   1              else if (Y == 1) Write_Command(addDDRAM | 0x90);// DDRAM地址:90H-97H
- 363   1              else if (Y == 2) Write_Command(addDDRAM | 0x88);// DDRAM地址:88H-8FH
- 364   1              else if (Y == 3) Write_Command(addDDRAM | 0x98);// DDRAM地址:98H-9FH
-C51 COMPILER V9.60.7.0   LCD12864                                                          09/24/2024 09:35:46 PAGE 7   
+ 306   1      }
+ 307          
+ 308          /**
+ 309            * @brief  屏幕逐个显示字符。
+ 310            * @param  None
+ 311            * @retval None
+ 312            */
+ 313          
+ 314          void moveToNextCharPosition(void)  // 移动光标到下一个字符位置
+ 315          {
+ 316   1              
+ 317   1          X++;                       // 字符位置加1
+ 318   1          X &= 0x0F;                 // 限制CXPOS在0到15的范围内
+ 319   1      
+ 320   1          if (X == 0)                // 如果CXPOS为0，表示需要换行
+ 321   1          {   
+ 322   2              Y++;                   // 行位置加1
+ 323   2              Y &= 0x3;             // 限制CYPOS在0到3的范围内
+ 324   2          }
+ 325   1      }
+ 326          
+ 327          void DisplaySequence(void)
+ 328          {
+ 329   1      //      unsigned char XPosition,YPosition;
+ 330   1      //   charlcdfill(' ');
+ 331   1              Delay(10);
+ 332   1          Graphic_Display_ON();
+ 333   1          XPosition = 0;
+ 334   1          YPosition = 0;
+ 335   1          drawimge(Img_SUNMAN_128x64);
+ 336   1      
+ 337   1      }
+ 338          
+ 339          
+ 340          
+ 341          /**
+ 342            * @brief  设置字符光标在LCD内部RAM的地址
+ 343            * @param  None
+ 344            * @retval None
+ 345            */
+ 346          void setLcdCursorPosition(void)  
+ 347          {
+ 348   1              unsigned char addDDRAM;
+ 349   1              X &= 0xF;// 限制在0-15列 
+ 350   1              addDDRAM = X / 2;//每两个字符共享一个 DDRAM 单元
+ 351   1              if (Y == 0) Write_Command(addDDRAM | 0x80);// DDRAM地址:80H-87H
+ 352   1              else if (Y == 1) Write_Command(addDDRAM | 0x90);// DDRAM地址:90H-97H
+ 353   1              else if (Y == 2) Write_Command(addDDRAM | 0x88);// DDRAM地址:88H-8FH
+ 354   1              else if (Y == 3) Write_Command(addDDRAM | 0x98);// DDRAM地址:98H-9FH
+ 355   1      }       
+ 356          
+ 357          
+ 358          
+ 359          /**
+ 360            * @brief  处理图形数据
+ 361            * @param  imageData[] 图像数组
+ 362            * @retval None
+ 363            */
+ 364          void drawimge(unsigned char code *imgeData)
+C51 COMPILER V9.60.7.0   LCD12864                                                          11/01/2024 15:55:44 PAGE 7   
 
- 365   1      }       
- 366          
- 367          
- 368          
- 369          /**
- 370            * @brief  处理图形数据
- 371            * @param  imageData[] 图像数组
- 372            * @retval None
- 373            */
- 374          void drawimge(unsigned char code *imgeData)
- 375          {
- 376   1          unsigned char width, height;
- 377   1          
- 378   1          // 获取图像的宽度
- 379   1          width = *imgeData;
- 380   1          imgeData++;  // 指针向前移动，指向图像高度
- 381   1          
- 382   1          // 获取图像的高度
- 383   1          height = *imgeData;
- 384   1          imgeData++;  // 指针向前移动，指向实际图像数据
- 385   1          
- 386   1          // 显示图像
- 387   1          drawImageWithSize(width, height, imgeData);
- 388   1      }
- 389          
- 390          
- 391          //                                    128                  64
- 392          void drawImageWithSize(unsigned char width, unsigned char height, unsigned char code *imgeData)
- 393          {
- 394   1          unsigned char pixelX, pixelY, x;
- 395   1           x = XPosition;  // 保存当前X位置
- 396   1      
- 397   1          // 遍历图像的高度（逐行显示）
- 398   1          for (pixelY = 0; pixelY < height; pixelY++, YPosition++)  // 每次遍历一行，GYPOS增加一行
- 399   1          {
- 400   2              // 遍历图像的宽度
- 401   2              for (XPosition = x, pixelX = 0; pixelX < width;)
- 402   2              {       if ((XPosition & 0x08) == 0) Set_DrawingPosition();  // 根据位置设置光标
- 403   3                  Write_Data(*imgeData);                   // 显示当前字节的图像数据
- 404   3                  imgeData++;                         // 移动到下一个字节
- 405   3                  pixelX += 8;                         // X位置每次移动8个像素（每个字节8像素）
- 406   3                  XPosition += 8;                          // 光标在X方向移动8个像素
- 407   3              }
- 408   2          }
- 409   1      
- 410   1          XPosition = x;  // 恢复X方向的起始位置
- 411   1      }
- 412          
- 413          
- 414          /**
- 415            * @brief  自定义字符(点阵图形)写入LCD12864的字符生成 RAM
- 416            * @param  charindex:0-7,pattern[] 图像数组
- 417            * @retval None
- 418            */
- 419          void setchartoCGRAM(unsigned char charindex ,unsigned char code *pattern)
- 420          {
- 421   1              unsigned char i;
- 422   1               // 切换到扩展指令集并激活 CGRAM
- 423   1          Write_Command(0x34);  // 进入扩展指令集，图形模式关闭
- 424   1          Write_Command(0x02);  // 设置 SR = 0，激活 CGRAM
- 425   1          Write_Command(0x30);  // 返回基本指令集
- 426   1              
-C51 COMPILER V9.60.7.0   LCD12864                                                          09/24/2024 09:35:46 PAGE 8   
+ 365          {
+ 366   1          unsigned char width, height;
+ 367   1          
+ 368   1          // 获取图像的宽度
+ 369   1          width = *imgeData;
+ 370   1          imgeData++;  // 指针向前移动，指向图像高度
+ 371   1          
+ 372   1          // 获取图像的高度
+ 373   1          height = *imgeData;
+ 374   1          imgeData++;  // 指针向前移动，指向实际图像数据
+ 375   1          
+ 376   1          // 显示图像
+ 377   1          drawImageWithSize(width, height, imgeData);
+ 378   1      }
+ 379          
+ 380          
+ 381          //                                    128                  64
+ 382          void drawImageWithSize(unsigned char width, unsigned char height, unsigned char code *imgeData)
+ 383          {
+ 384   1          unsigned char pixelX, pixelY, x;
+ 385   1           x = XPosition;  // 保存当前X位置
+ 386   1      
+ 387   1          // 遍历图像的高度（逐行显示）
+ 388   1          for (pixelY = 0; pixelY < height; pixelY++, YPosition++)  // 每次遍历一行，GYPOS增加一行
+ 389   1          {
+ 390   2              // 遍历图像的宽度
+ 391   2              for (XPosition = x, pixelX = 0; pixelX < width;)
+ 392   2              {       if ((XPosition & 0x08) == 0) Set_DrawingPosition();  // 根据位置设置光标
+ 393   3                  Write_Data(*imgeData);                   // 显示当前字节的图像数据
+ 394   3                  imgeData++;                         // 移动到下一个字节
+ 395   3                  pixelX += 8;                         // X位置每次移动8个像素（每个字节8像素）
+ 396   3                  XPosition += 8;                          // 光标在X方向移动8个像素
+ 397   3              }
+ 398   2          }
+ 399   1      
+ 400   1          XPosition = x;  // 恢复X方向的起始位置
+ 401   1      }
+ 402          
+ 403          
+ 404          /**
+ 405            * @brief  自定义字符(点阵图形)写入LCD12864的字符生成 RAM
+ 406            * @param  charindex:0-7,pattern[] 图像数组
+ 407            * @retval None
+ 408            */
+ 409          void setchartoCGRAM(unsigned char charindex ,unsigned char code *pattern)
+ 410          {
+ 411   1              unsigned char i;
+ 412   1               // 切换到扩展指令集并激活 CGRAM
+ 413   1          Write_Command(0x34);  // 进入扩展指令集，图形模式关闭
+ 414   1          Write_Command(0x02);  // 设置 SR = 0，激活 CGRAM
+ 415   1          Write_Command(0x30);  // 返回基本指令集
+ 416   1              
+ 417   1              // 设置 CGRAM 地址 (低 2 位取自 charIndex，并与 0x40 合并)
+ 418   1              Write_Command(((charindex &0x3)<<4) |0x40);//設定CGRAM位址,P21
+ 419   1              for(i=0;i<32;i++)
+ 420   1                      Write_Data(*pattern); // 写入并移动到下一个字节
+ 421   1              
+ 422   1      }
+ 423          
+ 424          
+ 425          
+ 426          /**
+C51 COMPILER V9.60.7.0   LCD12864                                                          11/01/2024 15:55:44 PAGE 8   
 
- 427   1              // 设置 CGRAM 地址 (低 2 位取自 charIndex，并与 0x40 合并)
- 428   1              Write_Command(((charindex &0x3)<<4) |0x40);//設定CGRAM位址,P21
- 429   1              for(i=0;i<32;i++)
- 430   1                      Write_Data(*pattern); // 写入并移动到下一个字节
- 431   1              
- 432   1      }
- 433          
- 434          
- 435          
- 436          /**
- 437           * @brief 在指定的 (cx, cy) 位置显示字符串
- 438           * @param x 0-4 字符的X坐标位置
- 439           * @param y 0-4 字符的Y坐标位置
- 440           * @param s 要显示的字符串
- 441           */
- 442          void DisplaystringAtposition(unsigned char x ,unsigned char y ,unsigned char code*s)
- 443          {
- 444   1              X=x;
- 445   1              Y=y;
- 446   1              DisplayString(s);
- 447   1      }
- 448          
- 449                 
- 450          
- 451          
- 452          /**
- 453           * @brief 显示字符串，直到遇到字符码为0
- 454           * @param str 要显示的字符串
- 455           */
- 456          void DisplayString(unsigned char code *str) 
- 457          {
- 458   1          unsigned int charCode;
- 459   1      
- 460   1          while (1) 
- 461   1          {
- 462   2              charCode = *str;  // 读取当前字符
- 463   2              str++;  // 移动到下一个字符
- 464   2      
- 465   2              if (charCode == 0) break;  // 如果字符码为0，结束字符串显示
- 466   2      
- 467   2              if (charCode < 128)
- 468   2              {
- 469   3                  putchar(charCode);  // 显示ASCII字符
- 470   3              }
- 471   2              else
- 472   2              {
- 473   3                  // 处理扩展字符（高位和低位字节组合）
- 474   3                  putchar(charCode * 256 + *str);
- 475   3                  str++;  // 跳过下一个字符（低位字节）
- 476   3              }
- 477   2          }
- 478   1      }
- 479          
- 480          
- 481          /**
- 482           * @brief 显示字符到LCD屏幕上，并处理字符类型和自动对齐
- 483           *
- 484           * 该函数用于在LCD上显示字符，支持ASCII字符和汉字的显示，并处理字符位置的对齐。
- 485           * 对于汉字（字符码大于128），会自动处理两个字节并根据当前光标位置进行对齐；
- 486           * 对于ASCII字符（字符码小于128），如果在奇数位置会进行适当的对齐补充。
- 487           * 
- 488           * @param c 要显示的字符，可能是ASCII字符或汉字字符。
-C51 COMPILER V9.60.7.0   LCD12864                                                          09/24/2024 09:35:46 PAGE 9   
+ 427           * @brief 在指定的 (cx, cy) 位置显示字符串
+ 428           * @param x 0-4 字符的X坐标位置
+ 429           * @param y 0-4 字符的Y坐标位置
+ 430           * @param s 要显示的字符串
+ 431           */
+ 432          void DisplaystringAtposition(unsigned char x ,unsigned char y ,unsigned char code*s)
+ 433          {
+ 434   1              X=x;
+ 435   1              Y=y;
+ 436   1              DisplayString(s);
+ 437   1      }
+ 438          
+ 439                 
+ 440          
+ 441          
+ 442          /**
+ 443           * @brief 显示字符串，直到遇到字符码为0
+ 444           * @param str 要显示的字符串
+ 445           */
+ 446          void DisplayString(unsigned char code *str) 
+ 447          {
+ 448   1          unsigned int charCode;
+ 449   1      
+ 450   1          while (1) 
+ 451   1          {
+ 452   2              charCode = *str;  // 读取当前字符
+ 453   2              str++;  // 移动到下一个字符
+ 454   2      
+ 455   2              if (charCode == 0) break;  // 如果字符码为0，结束字符串显示
+ 456   2      
+ 457   2              if (charCode < 128)
+ 458   2              {
+ 459   3                  putchar(charCode);  // 显示ASCII字符
+ 460   3              }
+ 461   2              else
+ 462   2              {
+ 463   3                  // 处理扩展字符（高位和低位字节组合）
+ 464   3                  putchar(charCode * 256 + *str);
+ 465   3                  str++;  // 跳过下一个字符（低位字节）
+ 466   3              }
+ 467   2          }
+ 468   1      }
+ 469          
+ 470          
+ 471          /**
+ 472           * @brief 显示字符到LCD屏幕上，并处理字符类型和自动对齐
+ 473           *
+ 474           * 该函数用于在LCD上显示字符，支持ASCII字符和汉字的显示，并处理字符位置的对齐。
+ 475           * 对于汉字（字符码大于128），会自动处理两个字节并根据当前光标位置进行对齐；
+ 476           * 对于ASCII字符（字符码小于128），如果在奇数位置会进行适当的对齐补充。
+ 477           * 
+ 478           * @param c 要显示的字符，可能是ASCII字符或汉字字符。
+ 479           * 
+ 480           * @note 
+ 481           * - 汉字字符码大于128，且占两个字节（高字节和低字节）。该函数会自动分段显示。
+ 482           * - 自定义字符的高字节为0xFF，转换为ST7920控制器的字符码格式。
+ 483           */
+ 484          void putchar(unsigned int c) 
+ 485          {
+ 486   1          if (c > 128) // 字符码大于128表示为汉字
+ 487   1          {
+ 488   2              if ((X & 0x1) == 1) // 如果CXPOS字符位置在奇数位置
+C51 COMPILER V9.60.7.0   LCD12864                                                          11/01/2024 15:55:44 PAGE 9   
 
- 489           * 
- 490           * @note 
- 491           * - 汉字字符码大于128，且占两个字节（高字节和低字节）。该函数会自动分段显示。
- 492           * - 自定义字符的高字节为0xFF，转换为ST7920控制器的字符码格式。
- 493           */
- 494          void putchar(unsigned int c) 
- 495          {
- 496   1          if (c > 128) // 字符码大于128表示为汉字
- 497   1          {
- 498   2              if ((X & 0x1) == 1) // 如果CXPOS字符位置在奇数位置
- 499   2              {
- 500   3                  Write_Data(' '); // 自动补添一个空格对齐
- 501   3                  moveToNextCharPosition(); // 置字符位置为下一个有效位置
- 502   3              }
- 503   2              setLcdCursorPosition(); // 设置字符位置
- 504   2              if ((c & 0xff00) == 0xff00) // 如果高位字节为0xFF表示自定义字符
- 505   2              {
- 506   3                  c = 0xffff - c; // 转换为ST7920的字符码
- 507   3              }
- 508   2              Write_Data(c / 256); // 写高位字符
- 509   2              moveToNextCharPosition(); // 置字符位置为下一个有效位置
- 510   2              Write_Data(c & 0xff); // 写低位字符
- 511   2              moveToNextCharPosition(); // 置字符位置为下一个有效位置
- 512   2          }
- 513   1          else // 字符码小于128表示为ASCII字符
- 514   1          {
- 515   2              setLcdCursorPosition(); // 设置字符位置
- 516   2              if ((X& 0x1) == 1) // 如果CXPOS字符位置在奇数位置
- 517   2              {
- 518   3                  Write_Data(FCHARBUF); // 重新写高位字符缓冲区内容
- 519   3                  Write_Data(c); // 写当前字符
- 520   3              }
- 521   2              else // 如果CXPOS字符位置在偶数位置
- 522   2              {
- 523   3                  Write_Data(c); // 直接写当前字符
- 524   3                  FCHARBUF = c; // 保存当前字符到高位字符缓冲变量
- 525   3                  Write_Data(' '); // 自动补显一个空格
- 526   3              }
- 527   2              moveToNextCharPosition(); // 置字符位置为下一个有效位置
- 528   2          }
- 529   1      }
- 530          
- 531          
- 532          
- 533          /**
- 534           * @brief 在整个LCD屏幕上填充指定的ASCII字符
- 535           * 该函数会在LCD的每个字符位置显示由参数 `c` 代表的ASCII字符。
- 536           * 它通过循环逐个字符地在屏幕上显示，直到返回到初始位置（0,0），从而完成整个屏幕的填充。
- 537           * @param c 要显示的ASCII字符
- 538           */
- 539          void charlcdfill(unsigned int c) // 整屏显示指定ASCII字符的子程序
- 540          {   
- 541   1          for (X = Y = 0; 1;) // 初始化X和Y坐标为0,0，并开始无限循环
- 542   1          {   
- 543   2              putchar(c); // 调用putchar函数，在当前位置显示字符
- 544   2              if ((X == 0) && (Y == 0)) break; // 如果已经返回到屏幕起始位置(0,0)，则退出循环
- 545   2          }
- 546   1      }
- 547          
- 548          
- 549          
- 550          
-C51 COMPILER V9.60.7.0   LCD12864                                                          09/24/2024 09:35:46 PAGE 10  
+ 489   2              {
+ 490   3                  Write_Data(' '); // 自动补添一个空格对齐
+ 491   3                  moveToNextCharPosition(); // 置字符位置为下一个有效位置
+ 492   3              }
+ 493   2              setLcdCursorPosition(); // 设置字符位置
+ 494   2              if ((c & 0xff00) == 0xff00) // 如果高位字节为0xFF表示自定义字符
+ 495   2              {
+ 496   3                  c = 0xffff - c; // 转换为ST7920的字符码
+ 497   3              }
+ 498   2              Write_Data(c / 256); // 写高位字符
+ 499   2              moveToNextCharPosition(); // 置字符位置为下一个有效位置
+ 500   2              Write_Data(c & 0xff); // 写低位字符
+ 501   2              moveToNextCharPosition(); // 置字符位置为下一个有效位置
+ 502   2          }
+ 503   1          else // 字符码小于128表示为ASCII字符
+ 504   1          {
+ 505   2              setLcdCursorPosition(); // 设置字符位置
+ 506   2              if ((X& 0x1) == 1) // 如果CXPOS字符位置在奇数位置
+ 507   2              {
+ 508   3                  Write_Data(FCHARBUF); // 重新写高位字符缓冲区内容
+ 509   3                  Write_Data(c); // 写当前字符
+ 510   3              }
+ 511   2              else // 如果CXPOS字符位置在偶数位置
+ 512   2              {
+ 513   3                  Write_Data(c); // 直接写当前字符
+ 514   3                  FCHARBUF = c; // 保存当前字符到高位字符缓冲变量
+ 515   3                  Write_Data(' '); // 自动补显一个空格
+ 516   3              }
+ 517   2              moveToNextCharPosition(); // 置字符位置为下一个有效位置
+ 518   2          }
+ 519   1      }
+ 520          
+ 521          
+ 522          
+ 523          /**
+ 524           * @brief 在整个LCD屏幕上填充指定的ASCII字符
+ 525           * 该函数会在LCD的每个字符位置显示由参数 `c` 代表的ASCII字符。
+ 526           * 它通过循环逐个字符地在屏幕上显示，直到返回到初始位置（0,0），从而完成整个屏幕的填充。
+ 527           * @param c 要显示的ASCII字符
+ 528           */
+ 529          void charlcdfill(unsigned int c) // 整屏显示指定ASCII字符的子程序
+ 530          {   
+ 531   1          for (X = Y = 0; 1;) // 初始化X和Y坐标为0,0，并开始无限循环
+ 532   1          {   
+ 533   2              putchar(c); // 调用putchar函数，在当前位置显示字符
+ 534   2              if ((X == 0) && (Y == 0)) break; // 如果已经返回到屏幕起始位置(0,0)，则退出循环
+ 535   2          }
+ 536   1      }
+ 537          
+ 538          
+ 539          
+ 540          
+ 541          
+ 542           
+ 543          void FillScreenWithPattern(unsigned char pattern)
+ 544          {    
+ 545   1          unsigned char x, y;
+ 546   1      
+ 547   1          for (y = 0; y < 64; y++) // 遍历Y轴的64个位置（0-63），屏幕高度为64像素
+ 548   1          {
+ 549   2              YPosition = y;         // 设置Y轴位置
+ 550   2              Set_DrawingPosition(); // 设置当前的绘图位置
+C51 COMPILER V9.60.7.0   LCD12864                                                          11/01/2024 15:55:44 PAGE 10  
 
- 551          
- 552           
- 553          void FillScreenWithPattern(unsigned char pattern)
- 554          {    
- 555   1          unsigned char x, y;
- 556   1      
- 557   1          for (y = 0; y < 64; y++) // 遍历Y轴的64个位置（0-63），屏幕高度为64像素
- 558   1          {
- 559   2              YPosition = y;         // 设置Y轴位置
- 560   2              Set_DrawingPosition(); // 设置当前的绘图位置
- 561   2      
- 562   2              for (x = 0; x < 16; x++) // 遍历X轴的16个位置（每行16字节）
- 563   2              {
- 564   3                  Write_Data(pattern); // 在当前X位置显示传入的图案数据
- 565   3              }
- 566   2          }
- 567   1          YPosition = 0; // 完成后将Y轴位置重置
- 568   1      }
- 569          
- 570          
- 571          
- 572          //交错方块图案
- 573          void FillCheckerboardPattern(void)
- 574          {
- 575   1          unsigned char x, y;
- 576   1      
- 577   1          for (y = 0; y < 64; y++)  // 遍历Y轴的64个位置
- 578   1          {
- 579   2              YPosition = y;
- 580   2              Set_DrawingPosition();
- 581   2      
- 582   2              for (x = 0; x < 16; x++)  // 遍历X轴的16个字节
- 583   2              {
- 584   3                  if (y % 2 == 0)   // 偶数行显示0xAA
- 585   3                  {
- 586   4                      Write_Data(0x55);
- 587   4                  }
- 588   3                  else  // 奇数行显示0x55
- 589   3                  {
- 590   4                      Write_Data(0xaa);
- 591   4                  }
- 592   3              }
- 593   2          }
- 594   1      }
- 595          
- 596          
- 597          
- 598          
- 599          
- 600          //垂直条纹图案
- 601          void FillVerticalStripePattern(void)
- 602          {
- 603   1          unsigned char x, y;
- 604   1      
- 605   1          for (y = 0; y < 64; y++)  // 遍历Y轴
- 606   1          {
- 607   2              YPosition = y;
- 608   2              Set_DrawingPosition();
- 609   2      
- 610   2              for (x = 0; x < 16; x++)  // 遍历X轴
- 611   2              {
- 612   3                  Write_Data(0xaa);  // 每个字节上半部分全亮，下半部分全暗
-C51 COMPILER V9.60.7.0   LCD12864                                                          09/24/2024 09:35:46 PAGE 11  
+ 551   2      
+ 552   2              for (x = 0; x < 16; x++) // 遍历X轴的16个位置（每行16字节）
+ 553   2              {
+ 554   3                  Write_Data(pattern); // 在当前X位置显示传入的图案数据
+ 555   3              }
+ 556   2          }
+ 557   1          YPosition = 0; // 完成后将Y轴位置重置
+ 558   1      }
+ 559          
+ 560          
+ 561          
+ 562          //交错方块图案
+ 563          void FillCheckerboardPattern(void)
+ 564          {
+ 565   1          unsigned char x, y;
+ 566   1      
+ 567   1          for (y = 0; y < 64; y++)  // 遍历Y轴的64个位置
+ 568   1          {
+ 569   2              YPosition = y;
+ 570   2              Set_DrawingPosition();
+ 571   2      
+ 572   2              for (x = 0; x < 16; x++)  // 遍历X轴的16个字节
+ 573   2              {
+ 574   3                  if (y % 2 == 0)   // 偶数行显示0xAA
+ 575   3                  {
+ 576   4                      Write_Data(0x55);
+ 577   4                  }
+ 578   3                  else  // 奇数行显示0x55
+ 579   3                  {
+ 580   4                      Write_Data(0xaa);
+ 581   4                  }
+ 582   3              }
+ 583   2          }
+ 584   1      }
+ 585          
+ 586          
+ 587          
+ 588          
+ 589          
+ 590          //垂直条纹图案
+ 591          void FillVerticalStripePattern(void)
+ 592          {
+ 593   1          unsigned char x, y;
+ 594   1      
+ 595   1          for (y = 0; y < 64; y++)  // 遍历Y轴
+ 596   1          {
+ 597   2              YPosition = y;
+ 598   2              Set_DrawingPosition();
+ 599   2      
+ 600   2              for (x = 0; x < 16; x++)  // 遍历X轴
+ 601   2              {
+ 602   3                  Write_Data(0xaa);  // 每个字节上半部分全亮，下半部分全暗
+ 603   3              }           //1010 1010
+ 604   2          }               //0x55->01010 01010
+ 605   1      }
+ 606          
+ 607          
+ 608          
+ 609          //水平条纹图案
+ 610          void FillHorizontalStripePattern(void)
+ 611          {
+ 612   1          unsigned char x, y;
+C51 COMPILER V9.60.7.0   LCD12864                                                          11/01/2024 15:55:44 PAGE 11  
 
- 613   3              }           //1010 1010
- 614   2          }               //0x55->01010 01010
- 615   1      }
- 616          
- 617          
- 618          
- 619          //水平条纹图案
- 620          void FillHorizontalStripePattern(void)
- 621          {
- 622   1          unsigned char x, y;
- 623   1      
- 624   1          for (y = 0; y < 64; y++)  // 遍历Y轴
- 625   1          {
- 626   2              YPosition = y;
- 627   2              Set_DrawingPosition();
- 628   2      
- 629   2              for (x = 0; x < 16; x++)  // 遍历X轴
- 630   2              {
- 631   3                  if (y % 2 == 0)  // 偶数行显示全亮
- 632   3                  {
- 633   4                      Write_Data(0xFF);
- 634   4                  }
- 635   3                  else  // 奇数行显示全暗
- 636   3                  {
- 637   4                      Write_Data(0x00);
- 638   4                  }
- 639   3              }
- 640   2          }
- 641   1      }
- 642          
- 643          
- 644          //斜线图案
- 645          void FillDiagonalLinePattern(void)
- 646          {
- 647   1          unsigned char x, y;
- 648   1      
- 649   1          for (y = 0; y < 64; y++)  // 遍历Y轴
- 650   1          {
- 651   2              YPosition = y;
- 652   2              Set_DrawingPosition();
- 653   2      
- 654   2              for (x = 0; x < 16; x++)  // 遍历X轴
- 655   2              {
- 656   3                  Write_Data(1 << (y % 8));  // 逐行右移一个亮点
- 657   3              }
- 658   2          }
- 659   1      
- 660   1      }
- 661          
- 662          
- 663          
- 664          
+ 613   1      
+ 614   1          for (y = 0; y < 64; y++)  // 遍历Y轴
+ 615   1          {
+ 616   2              YPosition = y;
+ 617   2              Set_DrawingPosition();
+ 618   2      
+ 619   2              for (x = 0; x < 16; x++)  // 遍历X轴
+ 620   2              {
+ 621   3                  if (y % 2 == 0)  // 偶数行显示全亮
+ 622   3                  {
+ 623   4                      Write_Data(0xFF);
+ 624   4                  }
+ 625   3                  else  // 奇数行显示全暗
+ 626   3                  {
+ 627   4                      Write_Data(0x00);
+ 628   4                  }
+ 629   3              }
+ 630   2          }
+ 631   1      }
+ 632          
+ 633          
+ 634          //斜线图案
+ 635          void FillDiagonalLinePattern(void)
+ 636          {
+ 637   1          unsigned char x, y;
+ 638   1      
+ 639   1          for (y = 0; y < 64; y++)  // 遍历Y轴
+ 640   1          {
+ 641   2              YPosition = y;
+ 642   2              Set_DrawingPosition();
+ 643   2      
+ 644   2              for (x = 0; x < 16; x++)  // 遍历X轴
+ 645   2              {
+ 646   3                  Write_Data(1 << (y % 8));  // 逐行右移一个亮点
+ 647   3              }
+ 648   2          }
+ 649   1      
+ 650   1      }
+ 651          
+ 652          
+ 653          
+ 654          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
@@ -702,8 +692,6 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    DATA SIZE        =      6       9
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----       1
-C51 COMPILER V9.60.7.0   LCD12864                                                          09/24/2024 09:35:46 PAGE 12  
-
 END OF MODULE INFORMATION.
 
 

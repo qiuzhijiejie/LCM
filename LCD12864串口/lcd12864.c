@@ -303,16 +303,6 @@ void FillScreen(unsigned char DATA)  // 整屏显示指定的字节数据
 	Delay(1);
 	Write_Command(0x06);
 
-	
-//    Write_Command(0x33);                        //接口模式设置
-//    Delay(3);                         //延时3MS
-//    Write_Command(0x30);                        //基本指令集
-//    Delay(3);                         //延时3MS
-//    Write_Command(0x30);                        //重复送基本指令集
-//    Delay(3);                         //延时3MS
-//    Write_Command(0x01);                        //清屏控制字
-//    Delay(3);                         //延时3MS
-//    Graphic_Display_ON();                            //开显示
 }
 
 /**
@@ -337,7 +327,7 @@ void moveToNextCharPosition(void)  // 移动光标到下一个字符位置
 void DisplaySequence(void)
 {
 //	unsigned char XPosition,YPosition;
- //   charlcdfill(' ');
+//   charlcdfill(' ');
 	Delay(10);
     Graphic_Display_ON();
     XPosition = 0;
