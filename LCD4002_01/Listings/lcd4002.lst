@@ -1,0 +1,362 @@
+C51 COMPILER V9.60.7.0   LCD4002                                                           11/15/2024 20:39:31 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD4002
+OBJECT MODULE PLACED IN .\Objects\lcd4002.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE lcd4002.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listing
+                    -s\lcd4002.lst) OBJECT(.\Objects\lcd4002.obj)
+
+line level    source
+
+   1          #include "LCD4002.h"
+   2          #include <REGX52.H>
+   3          
+   4          
+   5          
+   6          sbit LCD_RS = P3^0; //寄存器选择线
+   7          sbit LCD_RW = P3^1;//读/写线(R/W)
+   8          sbit LCD_EN = P3^2;//使能线(EN)
+   9          sbit  KEY1  =P2^0;      
+  10          
+  11          
+  12          extern unsigned int i,j,maxSteps,Line,Column,row, col;
+  13          
+  14          
+  15          unsigned int ReadKey1() // 按键检测函数
+  16          {
+  17   1          if (KEY1 == 0) 
+  18   1              {  // 按键被按下
+  19   2              Delay(1);  // 简单的去抖动处理
+  20   2              if (KEY1 == 0) 
+  21   2                      {  // 检查按键是否仍然按下
+  22   3                  while (KEY1 == 0);  // 等待按键释放
+  23   3                  return 1;  // 返回按键被按下
+  24   3              }
+  25   2          }
+  26   1          return 0;  // 按键没有被按下
+  27   1      }
+  28          
+  29          
+  30          
+  31          
+  32          
+  33          void  Delay(xms)        //@12.000MHz
+  34          {
+  35   1              while(xms--)
+  36   1      {
+  37   2              unsigned char data i, j;
+  38   2      
+  39   2              i = 12;
+  40   2              j = 169;
+  41   2              do
+  42   2              {
+  43   3                      while (--j);
+  44   3              } while (--i);
+  45   2      }
+  46   1              }
+  47          
+  48          
+  49          //Busy flag
+  50          void Busy()
+  51          {
+  52   1              unsigned char temp;
+  53   1              LCD_DataPort=0xff;
+  54   1              LCD_RS=0;//读状态
+C51 COMPILER V9.60.7.0   LCD4002                                                           11/15/2024 20:39:31 PAGE 2   
+
+  55   1              LCD_EN=0;
+  56   1              LCD_RW=1;//读
+  57   1              do
+  58   1              {
+  59   2                      LCD_EN=1;
+  60   2                      temp=LCD_DataPort;
+  61   2                      LCD_EN=0;
+  62   2              }
+  63   1              while(temp&0x80);
+  64   1      }                                         /*对控制器每次进行读写操作之前， 
+  65                                                    都必须进行读写检测，确保STA7为0*/
+  66          
+  67          
+  68          
+  69          /**
+  70            * @brief  LCD4002写命令
+  71            * @param  Command 要写入的命令
+  72            * @retval 无
+  73            */
+  74          void LCD_WriteCommand(unsigned char Command) 
+  75          {
+  76   1              Busy();
+  77   1          LCD_RS = 0; // 选择为指令，1为数据，0为指令
+  78   1          LCD_RW = 0; // 选择为写， 1为读，0为写
+  79   1          LCD_DataPort = Command; // 写入指令的内容
+  80   1          LCD_EN = 1;   // 使能脚E先上升沿写入
+  81   1          Delay(0.1);
+  82   1          LCD_EN = 0;   // 使能脚E后负跳变完成写入
+  83   1      }
+  84          
+  85          
+  86          
+  87          /**
+  88            * @brief  LCD4002写数据
+  89            * @param  Data 要写入的数据,搭配LCD_SetCursor()光标使用。
+  90            * @retval 无
+  91            */
+  92          void LCD_WriteData(unsigned char Data) 
+  93          {
+  94   1              Busy();
+  95   1          LCD_RS = 1; // 选择为数据，1为数据，0为指令
+  96   1          LCD_RW = 0; // 选择为写， 1为读，0为写
+  97   1          LCD_DataPort = Data; // 写入指数据的内容
+  98   1          LCD_EN = 1;   // 使能脚E先上升沿写入
+  99   1          Delay(0.1);
+ 100   1          LCD_EN = 0;   // 使能脚E后负跳变完成写入
+ 101   1        
+ 102   1      }
+ 103          
+ 104          
+ 105          /**
+ 106            * @brief  LCD4002读数据
+ 107            * @param  Data 要写入的数据,搭配LCD_SetCursor()光标使用。
+ 108            * @retval 无
+ 109            */
+ 110          void LCD_ReadData(unsigned char Data) 
+ 111          {
+ 112   1              Busy();
+ 113   1          LCD_RS = 1; // 选择为数据，1为数据，0为指令
+ 114   1          LCD_RW = 1; // 选择为写， 1为读，0为写
+ 115   1              LCD_EN = 1;   // 使能脚E先上升沿写入
+ 116   1              Delay(0.1);
+C51 COMPILER V9.60.7.0   LCD4002                                                           11/15/2024 20:39:31 PAGE 3   
+
+ 117   1          LCD_DataPort = Data; // 写入指数据的内容
+ 118   1          LCD_EN = 0;   // 使能脚E后负跳变完成写入
+ 119   1      }
+ 120          
+ 121          
+ 122          
+ 123          /**
+ 124            * @brief  LCD4002初始化函数
+ 125            * @param  无
+ 126            * @retval 无
+ 127            */
+ 128          void LCD_Init() 
+ 129          {
+ 130   1          LCD_WriteCommand(0x38); // 设置40×2显示,5X7点阵,8位数据接口 
+ 131   1          LCD_WriteCommand(0x0c); // 显示开,光标关,闪烁关
+ 132   1      //      LCD_WriteCommand(0x0f);//显示开,光标开.闪烁开
+ 133   1          LCD_WriteCommand(0x06); // 当读或写一个字符后地址指针加一,不移动
+ 134   1          LCD_WriteCommand(0x01); // 光标复位，清屏
+ 135   1              Delay(0.1); 
+ 136   1              
+ 137   1      
+ 138   1      
+ 139   1      
+ 140   1      }
+ 141          
+ 142          /**
+ 143            * @brief  LCD4002清屏
+ 144            * @param  无
+ 145            * @retval 无
+ 146            */
+ 147          void LCD_Clear() 
+ 148          {
+ 149   1          Busy();
+ 150   1          LCD_WriteCommand(0x01);
+ 151   1              Delay(0.1);           // 等待清屏完成
+ 152   1      }
+ 153          
+ 154          
+ 155          /**
+ 156            * @brief  LCD4002设置光标位置
+ 157            * @param  Line 行位置，范围：1~2
+ 158            * @param  Column 列位置，范围：1~40
+ 159            * @retval 无
+ 160            */
+ 161          void LCD_SetCursor(unsigned int Line, unsigned int Column) 
+ 162          {
+ 163   1          // 确保列值在0-39之间
+ 164   1          if (Column >= 40) Column = 0;
+ 165   1          // 确保行值在0-2之间
+ 166   1          Line &= 0x01;  // 限制 Y 位置在 0 到 1 之间         
+ 167   1          if (Line == 0) 
+ 168   1          {
+ 169   2              LCD_WriteCommand(0x80 | Column);  // 第一行
+ 170   2          } 
+ 171   1          else  
+ 172   1          {
+ 173   2              LCD_WriteCommand(0xC0 | Column);  // 第二行
+ 174   2          } 
+ 175   1      
+ 176   1      }
+ 177                  
+ 178           
+C51 COMPILER V9.60.7.0   LCD4002                                                           11/15/2024 20:39:31 PAGE 4   
+
+ 179          
+ 180          
+ 181          unsigned char LCD_Readdata(void)               //读数据子程序
+ 182          {   unsigned char d;
+ 183   1          Busy();                       //HD44780液晶显示控制器忙检测
+ 184   1          LCD_DataPort=0xff;
+ 185   1          LCD_RS=1;                             //RS=1 RW=1 E=高电平
+ 186   1          LCD_RW=1;
+ 187   1          LCD_EN=1;
+ 188   1          Delay(0.005);
+ 189   1          d=LCD_DataPort;
+ 190   1          LCD_EN=0;
+ 191   1          return d;
+ 192   1      }
+ 193          
+ 194          
+ 195          
+ 196          // 
+ 197          /**
+ 198           * @brief  显示字符函数
+ 199           * @param  Line0-3行 Column 0-19列 i字符
+ 200           * @retval
+ 201           */
+ 202          void LCD_USER_ShowString(unsigned char Line, unsigned char Column, unsigned char  i) 
+ 203          {                       
+ 204   1              LCD_SetCursor(Line, Column); // 光标
+ 205   1              LCD_WriteData(i);
+ 206   1      }
+ 207          
+ 208          
+ 209          
+ 210          /**
+ 211           * @brief LCD4002显示字符串
+ 212           * @param Line 0-2行 Column 0-39列 *String 输入字符""
+ 213           * @retval 无
+ 214           */
+ 215          void LCD_ShowString(unsigned char Line, unsigned char Column, char *String) 
+ 216          {       unsigned char i;                
+ 217   1              LCD_SetCursor(Line, Column);
+ 218   1          for (i = 0; String[i] != '\0'; i++) 
+ 219   1              {
+ 220   2            LCD_WriteData(String[i]);
+ 221   2          }
+ 222   1      }
+ 223          
+ 224          
+ 225          //每次写入的字符 a 是递增的
+ 226          void write_CGROM(unsigned char a)//LCD内部固化字模存储器，内部含有常用字符
+ 227          {
+ 228   1          unsigned char j;
+ 229   1          LCD_WriteCommand(0x02);  // 光标归位命令 (光标位置回到初始位置，通常是DDRAM的起始地址)
+ 230   1          Delay(1);                // 延时一段时间，确保命令有效
+ 231   1          LCD_WriteCommand(0x80);  // 设置光标到第1行的起始地址 (0x80对应DDRAM的第1行起始地址)
+ 232   1          
+ 233   1          // 向第1行写入40个字符数据
+ 234   1          for (j = 0; j < 40; j++) 
+ 235   1          {
+ 236   2              LCD_WriteData(a);    // 向LCD写入数据 'a'
+ 237   2              a += 1;              // 自增'a'，以便下一个字符是'a'的下一个值
+ 238   2          }
+ 239   1      
+ 240   1          LCD_WriteCommand(0xC0);  // 设置光标到第2行的起始地址 (0xC0对应DDRAM的第2行起始地址)
+C51 COMPILER V9.60.7.0   LCD4002                                                           11/15/2024 20:39:31 PAGE 5   
+
+ 241   1          
+ 242   1          // 向第2行写入40个字符数据
+ 243   1          for (j = 0; j < 40; j++) 
+ 244   1          {
+ 245   2              LCD_WriteData(a);    // 向LCD写入数据 'a'
+ 246   2              a += 1;              // 自增'a'，同样依次写入下一个字符
+ 247   2          }
+ 248   1          
+ 249   1          Delay(1);                // 再次延时，确保数据全部写入
+ 250   1      }
+ 251          
+ 252          
+ 253          
+ 254          /**
+ 255           * @brief  全屏显示HD44780 内置字符
+ 256           * @param  Line 0-3  Column 0-19  输入16进制0X...
+ 257           * @retval 无
+ 258           */
+ 259          void Write_DDRAM(unsigned char a)//用来寄存待显示的字符代码
+ 260          {
+ 261   1          unsigned char j;
+ 262   1          
+ 263   1          LCD_WriteCommand(0x02); // 光标归位命令(光标位置回到初始位置，通常是DDRAM的起始地址)
+ 264   1          Delay(1);               // 延时10个单位 (比之前的延时长)
+ 265   1      
+ 266   1          LCD_WriteCommand(0x80);  // 设置光标到第1行的起始地址 (0x80对应DDRAM的第1行起始地址)
+ 267   1          
+ 268   1          // 向第1行写入40个相同的字符   
+ 269   1          for (j = 0; j < 40; j++) 
+ 270   1          {
+ 271   2              LCD_WriteData(a);    // 将字符 'a' 写入 LCD 显示数据存储器
+ 272   2          }
+ 273   1      
+ 274   1          LCD_WriteCommand(0xC0);  // 设置光标到第2行的起始地址 (0xC0对应DDRAM的第2行起始地址)
+ 275   1          
+ 276   1          // 向第2行写入20个相同的字符
+ 277   1          for (j = 0; j < 40; j++) 
+ 278   1          {
+ 279   2              LCD_WriteData(a);    // 将字符 'a' 写入 LCD 显示数据存储器
+ 280   2          }  
+ 281   1          Delay(1);                // 延时，确保数据完全写入
+ 282   1      }
+ 283          
+ 284          
+ 285          // 向 LCD 的 CGRAM 写入自定义字符数据
+ 286          void Write_CGRAM(unsigned char a[])
+ 287          {
+ 288   1          unsigned char k;
+ 289   1          
+ 290   1          // 发送命令 0x40，选择 CGRAM 地址
+ 291   1          LCD_WriteCommand(0x40); 
+ 292   1          
+ 293   1          // 将自定义字符数据写入 CGRAM
+ 294   1          for(k = 0; k < 64; k++)
+ 295   1          {
+ 296   2              LCD_WriteData(a[k]);  // 写入字符数据
+ 297   2          }
+ 298   1      }
+ 299          
+ 300             
+ 301          
+ 302          void displayCustomCharacter1(const unsigned char pattern[8]) 
+C51 COMPILER V9.60.7.0   LCD4002                                                           11/15/2024 20:39:31 PAGE 6   
+
+ 303          {
+ 304   1          unsigned char row, col;
+ 305   1      
+ 306   1          // 将自定义字符数组写入CGRAM
+ 307   1          Write_CGRAM(pattern);
+ 308   1      
+ 309   1          // 遍历LCD的每一行和每一列，显示自定义字符
+ 310   1          for (row = 0; row < 2; row++) 
+ 311   1          {
+ 312   2              for (col = 0; col < 40; col++) 
+ 313   2              {
+ 314   3                  // 针对LCD4002的行起始地址做出修正
+ 315   3                  unsigned char position;
+ 316   3                  if (row == 0) 
+ 317   3                                      {
+ 318   4                      position = 0x80 + col;   // 第1行地址 0x80 起始
+ 319   4                                      } else //if (row == 1) {
+ 320   3                      position = 0xC0 + col;   // 第2行地址 0xC0 起始
+ 321   3      
+ 322   3                  // 设置光标位置并显示自定义字符
+ 323   3                  LCD_WriteCommand(position);
+ 324   3                  LCD_WriteData(0x00);  // 显示存储在CGRAM中的第一个自定义字符
+ 325   3              }
+ 326   2          }
+ 327   1      }
+ 328          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    449    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       9
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,464 @@
+C51 COMPILER V9.60.7.0   LCD12232                                                          11/21/2024 17:09:47 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD12232
+OBJECT MODULE PLACED IN .\Objects\lcd12232.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE lcd12232.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
+                    -gs\lcd12232.lst) OBJECT(.\Objects\lcd12232.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include <AT89X52.H>
+   3          #include <intrins.h>
+   4          #include "picture.h"
+   5          
+   6          #define uint  unsigned int
+   7          #define uchar unsigned char
+   8          #define A0                    P3_0      //Selection of command or data.  1 :data  0 : command
+   9          #define E1                    P3_2              //Enable signal (E1) Right 
+  10          #define E2                    P3_3              //Enable signal (E2) Left
+  11          #define R_W                   P3_1              //Read/Write (R/W) signal for the 68-type microcontroller, or WRITE(WR
+             -) signal for the 80-type microcontroller.
+  12          #define RST                   P3_5              //RESET PIN;
+  13          #define DATA_BUS              P1                //Data bus      
+  14          
+  15          sbit LCD_KEY=P2^0;
+  16          sbit int0 = P2^0;                                               //external interrup input
+  17          bit  log  = 0;                                                  //display stop mark
+  18          unsigned char i;
+  19          void Delay(unsigned char ms)    //@12.000MHz
+  20          {
+  21   1              while(ms--)
+  22   1              {
+  23   2                      unsigned char data i, j;
+  24   2                      i = 12;
+  25   2                      j = 169;
+  26   2                      do
+  27   2                      {
+  28   3                              while (--j);
+  29   3                      } while (--i);
+  30   2              }
+  31   1      }
+  32          
+  33          uint ReadKey1() // 按键检测函数
+  34          {
+  35   1          if (LCD_KEY == 1)           
+  36   1              {  // 按键被按下
+  37   2             Delay(1); // 简单的去抖动处理
+  38   2              if (LCD_KEY == 1) 
+  39   2                      {  // 检查按键是否仍然按下
+  40   3                  while (LCD_KEY == 1);  // 等待按键释放
+  41   3                  return 1;  // 返回按键被按下
+  42   3              }
+  43   2          }
+  44   1          return 0;  // 按键没有被按下
+  45   1      }
+  46          
+  47          
+  48          void Delay1(uint n)
+  49          {
+  50   1              while(n--);
+  51   1      }
+  52          
+  53          
+C51 COMPILER V9.60.7.0   LCD12232                                                          11/21/2024 17:09:47 PAGE 2   
+
+  54          void Delay2(uint x)
+  55          {
+  56   1              while(x)
+  57   1              {   
+  58   2                      x--;     
+  59   2                      for(;log==1;);
+  60   2              }
+  61   1      }
+  62                  
+  63          
+  64          
+  65          
+  66          
+  67          //write Data to left half screen 
+  68          void Write_Data_L(unsigned char Data) 
+  69          {       Delay1(5);
+  70   1          A0=1;
+  71   1          R_W=0;
+  72   1              DATA_BUS=Data;
+  73   1          E1=1;
+  74   1          _nop_();
+  75   1          E1=0;
+  76   1              return;
+  77   1      }
+  78          
+  79          //write data to right half screen 
+  80          void Write_Data_R(unsigned char Data)
+  81          {
+  82   1              Delay1(5);
+  83   1              A0=1;//1:D7-D0上为显示数据
+  84   1              R_W=0;//R_W=0 时表示写操作
+  85   1              DATA_BUS=Data;
+  86   1              E2=1;
+  87   1              _nop_();
+  88   1              E2=0;
+  89   1              return;    
+  90   1      }
+  91          
+  92          //write command to left half screen
+  93          void write_command_L(unsigned char cmd)
+  94          {       
+  95   1              Delay1(20);
+  96   1          A0=0;//0:D7-D0上为显示控制命令
+  97   1          R_W=0;
+  98   1              DATA_BUS=cmd;
+  99   1          E1=1;
+ 100   1              _nop_();
+ 101   1          E1=0;
+ 102   1              return;
+ 103   1      }
+ 104          
+ 105          
+ 106          //write command to right half screen
+ 107          void write_command_R(unsigned char cmd)
+ 108          {       
+ 109   1              Delay1(20);
+ 110   1          A0=0;
+ 111   1          R_W=0;
+ 112   1              DATA_BUS=cmd;
+ 113   1          E2=1;
+ 114   1              _nop_();
+ 115   1          E2=0;
+C51 COMPILER V9.60.7.0   LCD12232                                                          11/21/2024 17:09:47 PAGE 3   
+
+ 116   1              return;
+ 117   1      }
+ 118          
+ 119          
+ 120          // Set page address 0~4
+ 121          void Set_Page_Address(unsigned char add)
+ 122          {
+ 123   1          add=0xb8|add;// (B8 Hex)-Table 15
+ 124   1          write_command_L(add);
+ 125   1          write_command_R(add);
+ 126   1              return;
+ 127   1      }
+ 128          
+ 129          
+ 130          //Set left half screen column address
+ 131          void Set_Column_Address_L(unsigned char address)
+ 132          {
+ 133   1          write_command_L(address&0x7F);//0x4F
+ 134   1      }
+ 135          
+ 136          //Set right half screen column address
+ 137          void Set_Column_Address_R(unsigned char address)
+ 138          {
+ 139   1          write_command_R(address&0x7F);
+ 140   1      }
+ 141          
+ 142          
+ 143          // Initial 
+ 144          void Initial(void)
+ 145          {       
+ 146   1              RST=1;
+ 147   1              Delay(10);
+ 148   1              RST=0;
+ 149   1              Delay(2);
+ 150   1              RST=1;
+ 151   1              Delay(10);
+ 152   1      
+ 153   1              write_command_L(0xE2);          //Software RESET left half screen
+ 154   1              write_command_R(0xE2);          //Table 27
+ 155   1      
+ 156   1              write_command_L(0xA4);          //Static Drive OFF 
+ 157   1              write_command_R(0xA4);//A5  //Table 21 A5                    
+ 158   1              
+ 159   1              write_command_L(0xA9);          //Select Duty Register 1/32/ (1/16-A8)
+ 160   1              write_command_R(0xA9);          //Table 23
+ 161   1      
+ 162   1              write_command_L(0xA0);          //Memory/Segment Mapping Register  Normal Mapping
+ 163   1              write_command_R(0xA0);//A1      //Table 19
+ 164   1      
+ 165   1              write_command_L(0xC0);          //Start line
+ 166   1              write_command_R(0xC0);          //Table 13
+ 167   1      
+ 168   1      
+ 169   1              write_command_L(0xAF);          //Turn on display
+ 170   1              write_command_R(0xAF);//AE      //Table 11
+ 171   1      
+ 172   1      }
+ 173          
+ 174          
+ 175          //在屏幕上显示图案或点阵
+ 176          void Display_dot(unsigned char value,unsigned char value1)
+ 177          {
+C51 COMPILER V9.60.7.0   LCD12232                                                          11/21/2024 17:09:47 PAGE 4   
+
+ 178   1          unsigned char i,j;
+ 179   1          for(i=0;i<0x04;i++)//i从0到3,4页
+ 180   1              {
+ 181   2                      Set_Page_Address(i);
+ 182   2              Set_Column_Address_L(0x00);
+ 183   2              Set_Column_Address_R(0x00);
+ 184   2      
+ 185   2                      for(j=0;j<32;j++)//每一页内写入32列的数据
+ 186   2                      {
+ 187   3                              Write_Data_L(value);
+ 188   3                              Write_Data_L(value1);
+ 189   3                              Write_Data_R(value1);
+ 190   3                              Write_Data_R(value);
+ 191   3                      }
+ 192   2              }
+ 193   1          return;
+ 194   1      }
+ 195          
+ 196          
+ 197          /*
+ 198          display one 16*16 dot character
+ 199          page：指定要在哪个页地址上开始显示汉字。页是屏幕的垂直方向上的一个逻辑区域。
+ 200          
+ 201          col：指定在哪一列开始显示汉字，列是水平方向的位置。
+ 202          
+ 203          Character_coding：汉字的编码，决定从字库中选择哪个字。
+ 204          
+ 205          ft[]：字模数据数组，存储所有汉字的字模信息，每个汉字用32字节（16x16点阵）表示。
+ 206          
+ 207          */
+ 208          //display one 16*16 dot character
+ 209          
+ 210          void Display16_16Chinese(unsigned char page, unsigned char col, unsigned char Character_coding,  unsigned 
+             -char ft[]) 
+ 211          {
+ 212   1          unsigned char i,columnaddress=col;
+ 213   1      
+ 214   1              Set_Page_Address(page);
+ 215   1              if(col<61) 
+ 216   1              {                      
+ 217   2                      for(i=0;i<16;i++)
+ 218   2                      {
+ 219   3                       if(columnaddress<61)            
+ 220   3                              {Set_Column_Address_L(columnaddress);
+ 221   4                              Write_Data_L(ft[Character_coding*32+i]);
+ 222   4                              }
+ 223   3                      else
+ 224   3                              {Set_Column_Address_R(columnaddress-61);
+ 225   4                              Write_Data_R(ft[Character_coding*32+i]);
+ 226   4                              }
+ 227   3                       columnaddress+=1;
+ 228   3                      }
+ 229   2      
+ 230   2                      columnaddress=col;
+ 231   2                      Set_Page_Address(page+1);       
+ 232   2                      for(i=16;i<32;i++)
+ 233   2                      {
+ 234   3                       if(columnaddress<61)            
+ 235   3                              {Set_Column_Address_L(columnaddress);
+ 236   4                              Write_Data_L(ft[Character_coding*32+i]);
+ 237   4                              }
+ 238   3                      else
+C51 COMPILER V9.60.7.0   LCD12232                                                          11/21/2024 17:09:47 PAGE 5   
+
+ 239   3                              {Set_Column_Address_R(columnaddress-61);
+ 240   4                              Write_Data_R(ft[Character_coding*32+i]);
+ 241   4                              }
+ 242   3                       columnaddress+=1;
+ 243   3                      }
+ 244   2              }
+ 245   1      
+ 246   1      
+ 247   1              else  
+ 248   1              {                      
+ 249   2                      for(i=0;i<16;i++)
+ 250   2                      {
+ 251   3                              if(columnaddress<122)            
+ 252   3                              {Set_Column_Address_R(columnaddress-61);
+ 253   4                              Write_Data_R(ft[Character_coding*32+i]);
+ 254   4                              }
+ 255   3                              else
+ 256   3                              {if(page<=1)
+ 257   4                                              {Set_Page_Address(page+2);
+ 258   5                                              Set_Column_Address_L(columnaddress-122);
+ 259   5                                              Write_Data_L(ft[Character_coding*32+i]);
+ 260   5                                              }
+ 261   4                              }       
+ 262   3                       columnaddress+=1;
+ 263   3                      }
+ 264   2      
+ 265   2                      columnaddress=col;
+ 266   2                      Set_Page_Address(page+1);       
+ 267   2                      for(i=16;i<32;i++)
+ 268   2                      {
+ 269   3                               if(columnaddress<122)           
+ 270   3                              {Set_Column_Address_R(columnaddress-61);
+ 271   4                              Write_Data_R(ft[Character_coding*32+i]);
+ 272   4                              }
+ 273   3                              else
+ 274   3                              {if(page<=1){Set_Page_Address(page+3);
+ 275   5                                                      Set_Column_Address_L(columnaddress-122);
+ 276   5                                                      Write_Data_L(ft[Character_coding*32+i]);
+ 277   5                                                      }
+ 278   4                              }
+ 279   3                       columnaddress+=1;
+ 280   3                      }
+ 281   2              }
+ 282   1      
+ 283   1      }
+ 284          
+ 285          // display one 8×16 dot character
+ 286          void Display8_16English(unsigned char page, unsigned char col, unsigned char Character_coding, unsigned ch
+             -ar ft[]) 
+ 287          {
+ 288   1          unsigned char i, columnaddress = col;
+ 289   1      
+ 290   1          // 设置第一个页面（显示前8列的数据）
+ 291   1          Set_Page_Address(page);
+ 292   1          if (col < 61) 
+ 293   1          {                  
+ 294   2              // 处理前8行数据（上半部分）
+ 295   2              for (i = 0; i < 8; i++)
+ 296   2              {
+ 297   3                  if (columnaddress < 61) // 左屏幕
+ 298   3                  {
+ 299   4                      Set_Column_Address_L(columnaddress);      // 设置左屏列地址
+C51 COMPILER V9.60.7.0   LCD12232                                                          11/21/2024 17:09:47 PAGE 6   
+
+ 300   4                      Write_Data_L(ft[Character_coding * 16 + i]);  // 写入数据
+ 301   4                  }
+ 302   3                  else  // 右屏幕
+ 303   3                  {
+ 304   4                      Set_Column_Address_R(columnaddress - 61); // 设置右屏列地址
+ 305   4                      Write_Data_R(ft[Character_coding * 16 + i]);  // 写入数据
+ 306   4                  }
+ 307   3                  columnaddress += 1;  // 列地址递增
+ 308   3              }
+ 309   2      
+ 310   2              // 处理下半部分
+ 311   2              columnaddress = col;
+ 312   2              Set_Page_Address(page + 1);  // 切换到下一页，显示下半部分的8行
+ 313   2              for (i = 8; i < 16; i++)
+ 314   2              {
+ 315   3                  if (columnaddress < 61)  // 左屏幕
+ 316   3                  {
+ 317   4                      Set_Column_Address_L(columnaddress);      // 设置左屏列地址
+ 318   4                      Write_Data_L(ft[Character_coding * 16 + i]);  // 写入数据
+ 319   4                  }
+ 320   3                  else  // 右屏幕
+ 321   3                  {
+ 322   4                      Set_Column_Address_R(columnaddress - 61); // 设置右屏列地址
+ 323   4                      Write_Data_R(ft[Character_coding * 16 + i]);  // 写入数据
+ 324   4                  }
+ 325   3                  columnaddress += 1;  // 列地址递增
+ 326   3              }
+ 327   2          }
+ 328   1          else  
+ 329   1          {                  
+ 330   2              // 如果在右屏的范围内
+ 331   2              for (i = 0; i < 8; i++)
+ 332   2              {
+ 333   3                  if (columnaddress < 122)  // 右屏幕
+ 334   3                  {
+ 335   4                      Set_Column_Address_R(columnaddress - 61);  // 设置右屏列地址
+ 336   4                      Write_Data_R(ft[Character_coding * 16 + i]);  // 写入数据
+ 337   4                  }
+ 338   3                  else if (page <= 1)  // 跨到下一个页面的左屏显示
+ 339   3                  {
+ 340   4                      Set_Page_Address(page + 2);                // 跳到下一个页面
+ 341   4                      Set_Column_Address_L(columnaddress - 122); // 设置左屏列地址
+ 342   4                      Write_Data_L(ft[Character_coding * 16 + i]);  // 写入数据
+ 343   4                  }
+ 344   3                  columnaddress += 1;  // 列地址递增
+ 345   3              }
+ 346   2      
+ 347   2              // 显示下半部分
+ 348   2              columnaddress = col;
+ 349   2              Set_Page_Address(page + 1);     
+ 350   2              for (i = 8; i < 16; i++)
+ 351   2              {
+ 352   3                  if (columnaddress < 122)  // 右屏幕
+ 353   3                  {
+ 354   4                      Set_Column_Address_R(columnaddress - 61);  // 设置右屏列地址
+ 355   4                      Write_Data_R(ft[Character_coding * 16 + i]);  // 写入数据
+ 356   4                  }
+ 357   3                  else if (page <= 1)  // 跨页显示
+ 358   3                  {
+ 359   4                      Set_Page_Address(page + 3);                // 跳到下一个页面
+ 360   4                      Set_Column_Address_L(columnaddress - 122); // 设置左屏列地址
+ 361   4                      Write_Data_L(ft[Character_coding * 16 + i]);  // 写入数据
+C51 COMPILER V9.60.7.0   LCD12232                                                          11/21/2024 17:09:47 PAGE 7   
+
+ 362   4                  }
+ 363   3                  columnaddress += 1;  // 列地址递增
+ 364   3              }
+ 365   2          }
+ 366   1              
+ 367   1      }
+ 368          
+ 369          
+ 370          //Show some Chinese characters
+ 371          void show_chinese(void)
+ 372          {       
+ 373   1              Display_dot(0x00,0x00);
+ 374   1          for (i = 0; i < 7; i++) 
+ 375   1          {
+ 376   2              Display16_16Chinese(2, i * 16, i, ft);
+ 377   2          }
+ 378   1      
+ 379   1          // 在 page 0 显示字符 7 到 9
+ 380   1          for (i = 0; i < 3; i++) 
+ 381   1          {
+ 382   2              Display16_16Chinese(0, i * 16, i + 7, ft);
+ 383   2          }
+ 384   1      }
+ 385          
+ 386          void show_english(void)
+ 387          {       
+ 388   1              Display_dot(0x00,0x00);
+ 389   1          for (i = 0; i < 12; i++) 
+ 390   1          {
+ 391   2              Display8_16English(2, i * 8, i, English_character);
+ 392   2          }
+ 393   1      
+ 394   1          for (i = 0; i < 13; i++) 
+ 395   1          {
+ 396   2              Display8_16English(0, i * 8, i + 16,English_character);
+ 397   2          }
+ 398   1      }
+ 399          
+ 400          
+ 401          
+ 402          //display Picture
+ 403          void Display_Picture(unsigned char pic[])
+ 404          {
+ 405   1          unsigned char i,j,num=0;
+ 406   1      
+ 407   1              for(i=0;i<0x04;i++)
+ 408   1              {
+ 409   2              Set_Page_Address(i);
+ 410   2          Set_Column_Address_L(0x00);
+ 411   2          Set_Column_Address_R(0x00);
+ 412   2      
+ 413   2              for(j=0;j<61;j++)                               //display left half screen
+ 414   2                      {
+ 415   3                          Write_Data_L(pic[i*122+j]);
+ 416   3                      }
+ 417   2              for(j=61;j<122;j++)                             //display right half screen
+ 418   2                      {
+ 419   3                          Write_Data_R(pic[i*122+j]);
+ 420   3                      }
+ 421   2              }
+ 422   1          return;
+ 423   1      }
+C51 COMPILER V9.60.7.0   LCD12232                                                          11/21/2024 17:09:47 PAGE 8   
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1144    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1      25
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

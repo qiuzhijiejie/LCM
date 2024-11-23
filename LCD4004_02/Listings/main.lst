@@ -1,0 +1,113 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              11/23/2024 15:52:01 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\m
+                    -ain.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "LCD4004.h"
+   3          unsigned char mode;
+   4          unsigned char data pattern1[8] = {0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15}; // CHESS
+   5          unsigned char data pattern2[8] = {0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A};    
+   6          unsigned char data pattern3[8] = {0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15}; //COL
+   7          unsigned char data pattern4[8] = {0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A}; 
+   8          unsigned char data pattern5[8] = {0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00};//ROW
+   9          unsigned char data pattern6[8] = {0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F};      
+  10          unsigned char data pattern7[8] = {0x00, 0x15, 0x00, 0x15, 0x00, 0x15, 0x00, 0x15}; //DOT
+  11                  
+  12          int main() 
+  13          {
+  14   1              
+  15   1              LCD_Init(); 
+  16   1              LCD_Clear();
+  17   1              displayCustomCharacter1(pattern1); 
+  18   1              Delay(100); 
+  19   1              displayCustomCharacter1(pattern2); 
+  20   1              Delay(100); 
+  21   1              displayCustomCharacter1(pattern3); 
+  22   1              Delay(80); 
+  23   1              displayCustomCharacter1(pattern4); 
+  24   1              Delay(80); 
+  25   1              displayCustomCharacter1(pattern5); 
+  26   1              Delay(80); 
+  27   1              displayCustomCharacter1(pattern6); 
+  28   1              Delay(80); 
+  29   1              displayCustomCharacter1(pattern7); 
+  30   1              Delay(80); 
+  31   1              write_CGROM(0x21);//ÄÚÖÃ
+  32   1              Delay(80);
+  33   1              write_CGROM(0xA1);//ÄÚÖÃ
+  34   1              Delay(80);
+  35   1              Write_DDRAM(0xCE);//ÄÚÖÃ×Ö·û
+  36   1              Delay(80);
+  37   1              LCD_Clear();
+  38   1              LCD_ShowString(0,12,"YeHuiDisplay.com");
+  39   1              LCD_ShowString(1,15,"LCM4004_02");
+  40   1      
+  41   1                              
+  42   1      while (1) 
+  43   1      {
+  44   2      
+  45   2                      if (ReadKey1()) 
+  46   2                {  
+  47   3                      LCD_Clear();
+  48   3                      mode++;
+  49   3                      mode %= 10;                     
+  50   3                      switch (mode) 
+  51   3                {
+  52   4              case 0:            
+  53   4                              displayCustomCharacter1(pattern1); 
+  54   4                  break;
+C51 COMPILER V9.60.7.0   MAIN                                                              11/23/2024 15:52:01 PAGE 2   
+
+  55   4              case 1:
+  56   4                  displayCustomCharacter1(pattern2);  
+  57   4                  break;
+  58   4              case 2:
+  59   4                  displayCustomCharacter1(pattern3); 
+  60   4                  break;
+  61   4              case 3:
+  62   4                 displayCustomCharacter1(pattern4);  
+  63   4                  break;
+  64   4              case 4:
+  65   4                  displayCustomCharacter1(pattern5);  
+  66   4                  break;
+  67   4              case 5:
+  68   4                  displayCustomCharacter1(pattern6);  
+  69   4                  break;
+  70   4                      case 6:
+  71   4                              displayCustomCharacter1(pattern7);
+  72   4                              break;
+  73   4                      case 7:
+  74   4                              write_CGROM(0x21); 
+  75   4                         break;
+  76   4                      case 8:
+  77   4                              write_CGROM(0xa1); 
+  78   4                         break;
+  79   4                      case 9:
+  80   4                              Write_DDRAM(0xFF); 
+  81   4                         break;
+  82   4          
+  83   4                      }
+  84   3              }                       
+  85   2      }
+  86   1      
+  87   1              }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    327    ----
+   CONSTANT SIZE    =     28    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     57    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

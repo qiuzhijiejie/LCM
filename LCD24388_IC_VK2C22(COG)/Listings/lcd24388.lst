@@ -1,0 +1,577 @@
+C51 COMPILER V9.60.7.0   LCD24388                                                          11/22/2024 22:43:58 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD24388
+OBJECT MODULE PLACED IN .\Objects\lcd24388.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE lcd24388.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
+                    -gs\lcd24388.lst) OBJECT(.\Objects\lcd24388.obj)
+
+line level    source
+
+   1           #include "lcd24388.h"
+   2          #include <intrins.h> 
+   3          sbit   KEY1  = P2^0;    
+   4          
+   5          //segtab[]Êý×é¶ÔÓ¦Êµ¼ÊµÄÐ¾Æ¬µ½LCDÁ¬Ïß£¬Á¬Ïß¼û-VK2c22²Î¿¼µçÂ·
+   6          //4com 
+   7          //Vk2c22a 
+   8          //unsigned char vk2c22_segtab[Vk2c22_SEGNUM]={
+   9          //      0,1,2,3,4,5,6,7,8,9,                    //SEG0-SEG9
+  10          //      10,11,12,13,14,15,16,17,18,19,  //SEG10-SEG19
+  11          //      20,21,22,23,24,25,26,27,28,29,  //SEG20-SEG29
+  12          //      30,31,32,33,34,35,36,37,38,39,  //SEG30-SEG39
+  13          //      40,41,42,43,                                    //SEG40-SEG43
+  14          //};
+  15          //Vk2c22b 
+  16          //unsigned char vk2c22_segtab[Vk2c22_SEGNUM]={
+  17          //      0,1,2,3,4,5,6,7,8,9,                    //SEG0-SEG9
+  18          //      10,11,12,13,14,15,16,17,18,19,  //SEG10-SEG19
+  19          //      20,21,22,23,24,25,26,27,28,29,  //SEG20-SEG29
+  20          //      30,31,32,33,34,35,36,37,38,39,  //SEG30-SEG39
+  21          //      40,41,
+  22          //};
+  23          //Àý£ºLCDÊµ¼ÊÖ»½ÓÁËSEG10µ½SEG21Ê¹ÓÃÏÂÃæÊý×é
+  24          //.hÎÄ¼þÅäÖÃVK2c22_SEGNUM=12
+  25          //const unsigned char vk2c22_segtab[VK2c22_SEGNUM]={    
+  26          //      10,11,12,13,14,15,16,17,18,19,  //SEG10-SEG19
+  27          //      20,21,                                                                                                  //SEG20-SEG21
+  28          //};
+  29          //vk2c22_dispram¶ÔÓ¦Ð¾Æ¬µÄÏÔÊ¾RAM
+  30          //4com
+  31          unsigned char vk2c22_dispram[Vk2c22_SEGNUM/2];//4COMÊ±Ã¿¸ö×Ö½ÚÊý¾Ý¶ÔÓ¦2¸öSEG
+  32          //¶ÔÓ¦Êý×évk2c22_segtab[VK2c22_SEGNUM]
+  33          //ÏÔÊ¾ RAM bufferÎª8Î»¶ÔÓ¦2¸öSEG£¬bit7/bit3->com3,bit6/bit2->com2,bit5/bit1->com1,bit4/bit0->com0
+  34          //LCD ÊµÀý  3¸ö8×Ö
+  35          //1ÊÇ°ÙÎ»£¬2ÊÇÊ®Î»£¬3ÊÇ¸öÎ»
+  36          /*ÏÔÊ¾bufferºÍlcdÍ¼°¸Ó³Éä¹ØÏµÈçÏÂ
+  37          /4COM
+  38          vk2c22_dispram[VK2c22_SEGNUM/2]=
+  39          {//com3   com2   com1     com0 //¶ÔÓ¦Ð¾Æ¬SEG½Å  ¶ÔÓ¦ÏÔÊ¾RAMÊý¾Ý
+  40                  1D,     1E,    1F,      1A,     //seg4                          vk2c22_dispram[2]-bit3-bit0
+  41                    ,     1C,    1G,      1B,     //seg5                          vk2c22_dispram[2]-bit7-bit4
+  42                  2D,     2E,    2F,      2A,     //seg6                          vk2c22_dispram[3]-bit3-bit0
+  43                    ,     2C,    2G,      2B,     //seg7                          vk2c22_dispram[3]-bit7-bit4
+  44                  3D,     3E,    3F,      3A,             //seg8                          vk2c22_dispram[4]-bit3-bit0
+  45                    ,     3C,    3G,      3B,             //seg9                          vk2c22_dispram[4]-bit7-bit4
+  46          }
+  47          */
+  48          
+  49          
+  50          
+  51          unsigned char Vk2c22_InitSequence(void);
+  52          /*******************************************************************************
+  53          * Function Name  : delay_nus
+  54          * Description    : ÑÓÊ±1uS³ÌÐò
+C51 COMPILER V9.60.7.0   LCD24388                                                          11/22/2024 22:43:58 PAGE 2   
+
+  55          * Input          : n->ÑÓÊ±Ê±¼änuS
+  56          * Output         : None
+  57          * Return         : None
+  58          *******************************************************************************/
+  59          void delay_nus(unsigned int n)     
+  60          {
+  61   1              unsigned char i;
+  62   1              while(n--)
+  63   1              {
+  64   2                      i=10;
+  65   2                      while(i--)
+  66   2                      {//nopÖ¸Áî¸ù¾Ýµ¥Æ¬»ú×öÏàÓ¦µÄÐÞ¸Ä
+  67   3                              _nop_();
+  68   3                      }
+  69   2              }
+  70   1      }
+  71          /*******************************************************************************
+  72          * Function Name  : delay_nms
+  73          * Description    : ÑÓÊ±1mS³ÌÐò
+  74          * Input          : n->ÑÓÊ±Ê±¼änmS
+  75          * Output         : None
+  76          * Return         : None
+  77          *******************************************************************************/
+  78          void delay_nms(unsigned long int n)
+  79          {
+  80   1              while(n--)
+  81   1              {
+  82   2                      delay_nus(1000);
+  83   2              }
+  84   1      }
+  85          /*******************************************************************************
+  86          * Function Name  : I2CStart
+  87          * Description    : Ê±ÖÓÏß¸ßÊ±£¬Êý¾ÝÏßÓÉ¸ßµ½µÍµÄÌø±ä£¬±íÊ¾I2C¿ªÊ¼ÐÅºÅ
+  88          * Input          : None
+  89          * Output         : None
+  90          * Return         : None
+  91          *******************************************************************************/
+  92          void Vk2c22_I2CStart( void )
+  93          {
+  94   1        Vk2c22_SCL_H();
+  95   1        Vk2c22_SDA_H();
+  96   1        delay_nus(VK2c22_CLK);
+  97   1        Vk2c22_SDA_L();
+  98   1        delay_nus(VK2c22_CLK);
+  99   1      }
+ 100          /*******************************************************************************
+ 101          * Function Name  : I2CStop
+ 102          * Description    : Ê±ÖÓÏß¸ßÊ±£¬Êý¾ÝÏßÓÉµÍµ½¸ßµÄÌø±ä£¬±íÊ¾I2CÍ£Ö¹ÐÅºÅ
+ 103          * Input          : None
+ 104          * Output         : None
+ 105          * Return         : None
+ 106          *******************************************************************************/
+ 107          void Vk2c22_I2CStop( void )
+ 108          {
+ 109   1        Vk2c22_SCL_H();
+ 110   1        Vk2c22_SDA_L();
+ 111   1        delay_nus(VK2c22_CLK);
+ 112   1        Vk2c22_SDA_H();
+ 113   1        delay_nus(VK2c22_CLK);
+ 114   1      }
+ 115          /*******************************************************************************
+ 116          * Function Name  : I2CSlaveAck
+C51 COMPILER V9.60.7.0   LCD24388                                                          11/22/2024 22:43:58 PAGE 3   
+
+ 117          * Description    : I2C´Ó»úÉè±¸Ó¦´ð²éÑ¯
+ 118          * Input          : None
+ 119          * Output         : None
+ 120          * Return         : 0-ok 1-fail
+ 121          *******************************************************************************/
+ 122          unsigned char Vk2c22_I2CSlaveAck( void )
+ 123          {
+ 124   1        unsigned int TimeOut;
+ 125   1        unsigned char RetValue;
+ 126   1              
+ 127   1        Vk2c22_SCL_L();
+ 128   1              //µ¥Æ¬»úSDA½ÅÎªµ¥ÏòIOÒªÉèÎªÊäÈë½Å
+ 129   1      //      Vk2c22_SET_SDA_IN();
+ 130   1        delay_nus(VK2c22_CLK);
+ 131   1        Vk2c22_SCL_H();//µÚ9¸ösclkÉÏÉýÑØ
+ 132   1      
+ 133   1        TimeOut = 10000;
+ 134   1        while( TimeOut-- > 0 )
+ 135   1        {
+ 136   2          if( Vk2c22_GET_SDA()!=0 )//¶ÁÈ¡ack
+ 137   2          {
+ 138   3            RetValue = 1;
+ 139   3          }
+ 140   2          else
+ 141   2          {
+ 142   3            RetValue = 0;
+ 143   3            break;
+ 144   3          }
+ 145   2        } 
+ 146   1              Vk2c22_SCL_L();
+ 147   1              //µ¥Æ¬»úSDA½ÅÎªµ¥ÏòIOÒªÉèÎªÊä³ö½Å
+ 148   1      //      Vk2c22_SET_SDA_OUT();  
+ 149   1        
+ 150   1        return RetValue;
+ 151   1      }
+ 152          /*******************************************************************************
+ 153          * Function Name  : I2CWriteByte
+ 154          * Description    : I2CÐ´Ò»×Ö½ÚÃüÁî,ÃüÁîÏÈËÍ¸ßÎ»
+ 155          * Input          : byte-ÒªÐ´ÈëµÄÊý¾Ý
+ 156          * Output         : None
+ 157          * Return         : None
+ 158          *******************************************************************************/
+ 159          void Vk2c22_I2CWriteByte( unsigned char byte )
+ 160          {
+ 161   1              unsigned char i=8;
+ 162   1              while (i--)
+ 163   1              { 
+ 164   2                      Vk2c22_SCL_L();
+ 165   2                      if(byte&0x80)
+ 166   2                              Vk2c22_SDA_H();
+ 167   2                      else
+ 168   2                              Vk2c22_SDA_L();
+ 169   2                      byte<<=1; 
+ 170   2                      delay_nus(VK2c22_CLK);
+ 171   2                      Vk2c22_SCL_H();     
+ 172   2                      delay_nus(VK2c22_CLK);
+ 173   2              }
+ 174   1      }
+ 175          
+ 176          /*******************************************************************************
+ 177          * Function Name  : WriteCmd
+ 178          * Description    : Ð´1×Ö½ÚÃüÁî
+C51 COMPILER V9.60.7.0   LCD24388                                                          11/22/2024 22:43:58 PAGE 4   
+
+ 179          * Input          : cmd-ÒªÐ´ÈëµÄÃüÁî
+ 180          * Output         : None
+ 181          * Return         : 0-ok 1-fail
+ 182          *******************************************************************************/
+ 183          unsigned char WriteCmdVk2c22(unsigned char cmd)
+ 184          {
+ 185   1              Vk2c22_I2CStart();
+ 186   1      
+ 187   1              Vk2c22_I2CWriteByte( Vk2c22_ADDR|0x00 );
+ 188   1              if( 1 == Vk2c22_I2CSlaveAck() )
+ 189   1              {
+ 190   2                      Vk2c22_I2CStop(); 
+ 191   2                      return 0;   
+ 192   2              }
+ 193   1              Vk2c22_I2CWriteByte( cmd );
+ 194   1              if( 1 == Vk2c22_I2CSlaveAck() )
+ 195   1              {
+ 196   2                      Vk2c22_I2CStop(); 
+ 197   2                      return 0;   
+ 198   2              }
+ 199   1        Vk2c22_I2CStop();
+ 200   1       
+ 201   1        return 0;    //·µ»Ø²Ù×÷³É°Ü±êÖ¾
+ 202   1      }
+ 203          /*******************************************************************************
+ 204          * Function Name  : Write1Data
+ 205          * Description    : Ð´1×Ö½ÚÊý¾Ýµ½ÏÔÊ¾RAM
+ 206          * Input          : Addr-Ð´ÈëramµÄµØÖ·
+ 207          *                : Dat->Ð´ÈëramµÄÊý¾Ý
+ 208          * Output         : None
+ 209          * Return         : 0-ok 1-fail
+ 210          *******************************************************************************/
+ 211          unsigned char Write1DataVk2c22(unsigned char Addr,unsigned char Dat)
+ 212          {
+ 213   1              //START ÐÅºÅ
+ 214   1              Vk2c22_I2CStart(); 
+ 215   1              //SLAVEµØÖ·
+ 216   1              Vk2c22_I2CWriteByte(Vk2c22_ADDR); 
+ 217   1              if( 1 == Vk2c22_I2CSlaveAck() )
+ 218   1              {               
+ 219   2                      Vk2c22_I2CStop();
+ 220   2                      return 1; 
+ 221   2              }
+ 222   1              //ÏÔÊ¾RAMµØÖ·
+ 223   1              Vk2c22_I2CWriteByte(Addr); 
+ 224   1              if( 1 == Vk2c22_I2CSlaveAck() )
+ 225   1              {
+ 226   2                      Vk2c22_I2CStop();
+ 227   2                      return 1;
+ 228   2              }
+ 229   1              //ÏÔÊ¾Êý¾Ý£¬1×Ö½ÚÊý¾Ý°üº¬2¸öSEG
+ 230   1              Vk2c22_I2CWriteByte(Dat);
+ 231   1              if( Vk2c22_I2CSlaveAck()==1 )
+ 232   1              {
+ 233   2                      Vk2c22_I2CStop();
+ 234   2                      return 1;
+ 235   2              }
+ 236   1              //STOPÐÅºÅ
+ 237   1       Vk2c22_I2CStop();
+ 238   1       return 0;   
+ 239   1      }
+ 240          /*******************************************************************************
+C51 COMPILER V9.60.7.0   LCD24388                                                          11/22/2024 22:43:58 PAGE 5   
+
+ 241          * Function Name  : WritenData
+ 242          * Description    : Ð´¶à¸öÊý¾Ýµ½ÏÔÊ¾RAM
+ 243          * Input          : Addr-Ð´ÈëramµÄÆðÊ¼µØÖ·
+ 244          *                : Databuf->Ð´ÈëramµÄÊý¾ÝbufferÖ¸Õë
+ 245          *                : Cnt->Ð´ÈëramµÄÊý¾Ý¸öÊý
+ 246          * Output         : None
+ 247          * Return         : 0-ok 1-fail
+ 248          *******************************************************************************/
+ 249          unsigned char  WritenDataVk2c22(unsigned char Addr,unsigned char *Databuf,unsigned char Cnt)
+ 250          {
+ 251   1              unsigned char n;
+ 252   1              
+ 253   1              //STARTÐÅºÅ     
+ 254   1              Vk2c22_I2CStart();                                                                      
+ 255   1              //SLAVEµØÖ·
+ 256   1              Vk2c22_I2CWriteByte(Vk2c22_ADDR);       
+ 257   1              if( 1 == Vk2c22_I2CSlaveAck() )
+ 258   1              {
+ 259   2                      Vk2c22_I2CStop();                                                                                                       
+ 260   2                      return 0;                                                                               
+ 261   2              }
+ 262   1              //ÏÔÊ¾RAMÆðÊ¼µØÖ·
+ 263   1              Vk2c22_I2CWriteByte(Addr);                                              
+ 264   1              if( 1 == Vk2c22_I2CSlaveAck() )
+ 265   1              {
+ 266   2                      Vk2c22_I2CStop();                                                                                                       
+ 267   2                      return 0;
+ 268   2              }
+ 269   1              //·¢ËÍCnt¸öÊý¾Ýµ½ÏÔÊ¾RAM
+ 270   1              for(n=0;n<Cnt;n++)
+ 271   1              { 
+ 272   2                      Vk2c22_I2CWriteByte(*Databuf++);
+ 273   2                      if( Vk2c22_I2CSlaveAck()==1 )
+ 274   2                      {
+ 275   3                              Vk2c22_I2CStop();                                                                                                       
+ 276   3                              return 0;
+ 277   3                      }
+ 278   2              }
+ 279   1              //STOPÐÅºÅ
+ 280   1               Vk2c22_I2CStop();                                                                                      
+ 281   1               return 0;    
+ 282   1      }
+ 283          /*******************************************************************************
+ 284          * Function Name  : Vk2c22_DisAll
+ 285          * Description    : ËùÓÐSEGÏÔÊ¾Í¬Ò»¸öÊý¾Ý£¬bit7/bit3-COM3 bit6/bit2-COM2 bit5/bit1-COM1 bit4/bit0-COM0
+ 286          *                                            : ÀýÈç£º0xffÈ«ÁÁ 0x00È«Ãð 0x55ÃðÁÁÃðÁÁ 0xaaÁÁÃðÁÁÃð 0x33ÃðÃðÁÁÁÁ 
+ 287          * Input          £ºdat->Ð´ÈëramµÄÊý¾Ý(1¸ö×Ö½ÚÊý¾Ý¶ÔÓ¦2¸öSEG)  
+ 288          * Output         : None
+ 289          * Return         : None
+ 290          *******************************************************************************/
+ 291          void Vk2c22_DisAll(unsigned char dat)
+ 292          {
+ 293   1              unsigned char segi;
+ 294   1              unsigned char dispram[22];
+ 295   1              
+ 296   1              for(segi=0;segi<28;segi++)
+ 297   1              {
+ 298   2                      dispram[segi]=dat;
+ 299   2              }
+ 300   1              WritenDataVk2c22(0,dispram,22);//ÕâÀïËÍ8bitÊý¾Ý¶ÔÓ¦2¸öSEG£¬Ã¿8bitÊý¾ÝµØÖ·¼Ó1£¬Ã¿8Î»Êý¾Ý1¸öACK   
+ 301   1      }
+ 302          /*******************************************************************************
+C51 COMPILER V9.60.7.0   LCD24388                                                          11/22/2024 22:43:58 PAGE 6   
+
+ 303          * Function Name  : DisSegComOn
+ 304          * Description    : µãÁÁ1¸öµã(1¸ösegºÍ1¸öcom½»²æ¶ÔÓ¦µÄÏÔÊ¾µã)
+ 305          * Input          £ºseg->µã¶ÔÓ¦µÄseg½Å  
+ 306          *                          £ºcom->µã¶ÔÓ¦com½Å  
+ 307          * Output         : None
+ 308          * Return         : None
+ 309          *******************************************************************************/
+ 310          
+ 311          void Vk2c22_DisSegComOn(unsigned char seg,unsigned char com)
+ 312          {
+ 313   1              unsigned char addrbit, tempdat;
+ 314   1      //      if(seg%2==0)
+ 315   1      //              Write1DataVk2c22(seg/2,(1<<(com)));//ÕâÀïËÍ8Î»Êý¾ÝµÍ4bitÓÐÐ§£¬Ã¿8bitÊý¾ÝµØÖ·¼Ó1£¬Ã¿8Î»Êý¾Ý1¸öACK)
+ 316   1      //      else
+ 317   1      //              Write1DataVk2c22(seg/2,(1<<(4+com)));//ÕâÀïËÍ8Î»Êý¾Ý¸ß4bitÓÐÐ§£¬Ã¿8bitÊý¾ÝµØÖ·¼Ó1£¬Ã¿8Î»Êý¾Ý1¸öACK      
+ 318   1              
+ 319   1          if (seg % 2 == 0)//ÅÐ¶ÏÊÇ²»ÊÇÅ¼Êý
+ 320   1              addrbit = (1 << com); // ¶ÔÓ¦µÍ 4 Î»
+ 321   1          else
+ 322   1              addrbit = (1 << (4 + com)); // ¶ÔÓ¦¸ß 4 Î»
+ 323   1          // ½«ÏÔÊ¾×´Ì¬ÀÛ¼Ó£¬¶ø²»ÊÇ¸²¸Ç
+ 324   1          tempdat = vk2c22_dispram[seg / 2] | addrbit;
+ 325   1          vk2c22_dispram[seg / 2] = tempdat;
+ 326   1          WritenDataVk2c22(seg / 2, &tempdat, 1);     
+ 327   1      }
+ 328          /*******************************************************************************
+ 329          * Function Name  : DisSegComOff
+ 330          * Description    : ¹Ø±Õ1¸öµã(1¸ösegºÍ1¸öcom½»²æ¶ÔÓ¦µÄÏÔÊ¾µã)
+ 331          * Input          £ºseg->µã¶ÔÓ¦µÄseg½Å  
+ 332          *                          £ºcom->µã¶ÔÓ¦com½Å  
+ 333          * Output         : None
+ 334          * Return         : None
+ 335          *******************************************************************************/
+ 336          void Vk2c22_DisSegComOff(unsigned char seg,unsigned char com)
+ 337          {
+ 338   1              if(seg%2==0)
+ 339   1                      Write1DataVk2c22(seg/2,~(1<<com));//ÕâÀïËÍ8Î»Êý¾ÝµÍ4bitÓÐÐ§£¬Ã¿8bitÊý¾ÝµØÖ·¼Ó1£¬Ã¿8Î»Êý¾Ý1¸öACK
+ 340   1              else
+ 341   1                      Write1DataVk2c22(seg/2,~(1<<(4+com)));//ÕâÀïËÍ8Î»Êý¾Ý¸ß4bitÓÐÐ§£¬Ã¿8bitÊý¾ÝµØÖ·¼Ó1£¬Ã¿8Î»Êý¾Ý1¸öACK     
+ 342   1      }
+ 343          /*******************************************************************************
+ 344          * Function Name  : Enter_Standby
+ 345          * Description    : ½øÈëµôµçµÍ¹¦ºÄÄ£Ê½,µôµçÎÞÏÔÊ¾
+ 346          * Input          £ºNone 
+ 347          * Output         : None
+ 348          * Return         : 0-ok 1-fail
+ 349          *******************************************************************************/
+ 350          void Vk2c22_Enter_Standby(void)
+ 351          {               
+ 352   1      //      WriteCmdVk2c22(Vk2c22_MODESET|BIAS_1_2|F_80HZ|RCOFF_LCDOFF);  //Ä£Ê½ÉèÖÃ  1/2 Bais 1/4 DutyÖ¡ÆµÂÊ80Hz,Ä
+             -Ú²¿ÏµÍ³Õñµ´Æ÷¿ª£¬lcd¹ØÏÔÊ¾
+ 353   1              WriteCmdVk2c22(Vk2c22_MODESET|BIAS_1_3|F_80HZ|RCOFF_LCDOFF);  //Ä£Ê½ÉèÖÃ  1/3 Bais 1/4 DutyÖ¡ÆµÂÊ80Hz,ÄÚ²
+             -¿ÏµÍ³Õñµ´Æ÷¿ª£¬lcd¹ØÏÔÊ¾
+ 354   1      //      WriteCmdVk2c22(Vk2c22_MODESET|BIAS_1_2|F_160HZ|RCOFF_LCDOFF); //Ä£Ê½ÉèÖÃ  1/2 Bais 1/4 DutyÖ¡ÆµÂÊ160Hz,
+             -ÄÚ²¿ÏµÍ³Õñµ´Æ÷¿ª£¬lcd¹ØÏÔÊ¾
+ 355   1      //      WriteCmdVk2c22(Vk2c22_MODESET|BIAS_1_3|F_160HZ|RCOFF_LCDOFF); //Ä£Ê½ÉèÖÃ  1/3 Bais 1/4 DutyÖ¡Æµ?60Hz,ÄÚ
+             -²¿ÏµÍ³Õñµ´Æ÷¿ª£¬lcd¹ØÏÔÊ¾
+ 356   1      }
+ 357          /*******************************************************************************
+ 358          * Function Name  : Exit_Standby
+ 359          * Description    : ÍË³öµôµçµÍ¹¦ºÄÄ£Ê½
+ 360          * Input          £ºNone 
+C51 COMPILER V9.60.7.0   LCD24388                                                          11/22/2024 22:43:58 PAGE 7   
+
+ 361          * Output         : None
+ 362          * Return         : None
+ 363          *******************************************************************************/
+ 364          void Vk2c22_Exit_Standby(void)
+ 365          {       
+ 366   1      //      WriteCmdVk2c22(Vk2c22_MODESET|BIAS_1_2|F_80HZ|RCON_LCDON);  //Ä£Ê½ÉèÖÃ  1/2 Bais 1/4 DutyÖ¡ÆµÂÊ80Hz,ÄÚ²
+             -¿ÏµÍ³Õñµ´Æ÷¿ª£¬lcd¿ªÏÔÊ¾
+ 367   1              WriteCmdVk2c22(Vk2c22_MODESET|BIAS_1_3|F_80HZ|RCON_LCDON);  //Ä£Ê½ÉèÖÃ  1/3 Bais 1/4 DutyÖ¡ÆµÂÊ80Hz,ÄÚ²¿Ï
+             -µÍ³Õñµ´Æ÷¿ª£¬lcd¿ªÏÔÊ¾
+ 368   1      //      WriteCmdVk2c22(Vk2c22_MODESET|BIAS_1_2|F_160HZ|RCON_LCDON); //Ä£Ê½ÉèÖÃ  1/2 Bais 1/4 DutyÖ¡ÆµÂÊ160Hz,ÄÚ
+             -²¿ÏµÍ³Õñµ´Æ÷¿ª£¬lcd¿ªÏÔÊ¾
+ 369   1      //      WriteCmdVk2c22(Vk2c22_MODESET|BIAS_1_3|F_160HZ|RCON_LCDON); //Ä£Ê½ÉèÖÃ  1/3 Bais 1/4 DutyÖ¡Æµ?60Hz,ÄÚ²¿
+             -ÏµÍ³Õñµ´Æ÷¿ª£¬lcd¿ªÏÔÊ¾
+ 370   1      }
+ 371          
+ 372          /*******************************************************************************
+ 373          * Function Name  : Lowlevel_Init
+ 374          * Description    : ÅäÖÃÍ¨ÐÅÏßGPIO
+ 375          * Input          £ºNone 
+ 376          * Output         : None
+ 377          * Return         : None
+ 378          *******************************************************************************/
+ 379          void Vk2c22_Lowlevel_Init(void)
+ 380          {
+ 381   1              //Í¨ÐÅÏßµçÆ½²»Í¬£¬½¨Òé¼ÓµçÆ½×ª»»µçÂ·
+ 382   1              //´Ëº¯Êý¸ù¾Ý¿Í»§µ¥Æ¬»ú×öÏàÓ¦µÄÐÞ¸Ä      
+ 383   1      //      Vk2c22_SET_SDA_DIR();
+ 384   1      //      GPIO_SetMode(Vk2c22_SCL_PORT, Vk2c22_SCL_PIN, GPIO_MODE_OUTPUT);
+ 385   1      //      GPIO_SetMode(Vk2c22_SDA_PORT, Vk2c22_SDA_PIN, GPIO_MODE_QUASI);
+ 386   1                           
+ 387   1              Vk2c22_SCL_H();  
+ 388   1              Vk2c22_SDA_H();         
+ 389   1      }
+ 390          /*******************************************************************************
+ 391          * Function Name  : Init
+ 392          * Description    : ³õÊ¼»¯ÅäÖÃ
+ 393          * Input          £ºNone 
+ 394          * Output         : None
+ 395          * Return         : None
+ 396          *******************************************************************************/
+ 397          void Vk2c22_Init(void)
+ 398          {       
+ 399   1              //¹Ü½ÅÅäÖÃ¸ù¾Ý¿Í»§µ¥Æ¬»ú×öÏàÓ¦µÄÐÞ¸Ä
+ 400   1              Vk2c22_Lowlevel_Init();
+ 401   1              //1/4 Duty
+ 402   1      //      WriteCmdVk2c22(Vk2c22_MODESET|BIAS_1_2|F_80HZ|RCON_LCDON);  //Ä£Ê½ÉèÖÃ  1/2 Bais 1/4 DutyÖ¡ÆµÂÊ80Hz,ÄÚ²
+             -¿ÏµÍ³Õñµ´Æ÷¿ª£¬lcd¿ªÏÔÊ¾
+ 403   1              WriteCmdVk2c22(Vk2c22_MODESET|BIAS_1_3|F_80HZ|RCON_LCDON);  //Ä£Ê½ÉèÖÃ  1/3 Bais 1/4 DutyÖ¡ÆµÂÊ80Hz,ÄÚ²¿Ï
+             -µÍ³Õñµ´Æ÷¿ª£¬lcd¿ªÏÔÊ¾
+ 404   1      //      WriteCmdVk2c22(Vk2c22_MODESET|BIAS_1_2|F_160HZ|RCON_LCDON); //Ä£Ê½ÉèÖÃ  1/2 Bais 1/4 DutyÖ¡ÆµÂÊ160Hz,ÄÚ
+             -²¿ÏµÍ³Õñµ´Æ÷¿ª£¬lcd¿ªÏÔÊ¾
+ 405   1      //      WriteCmdVk2c22(Vk2c22_MODESET|BIAS_1_3|F_160HZ|RCON_LCDON); //Ä£Ê½ÉèÖÃ  1/3 Bais 1/4 DutyÖ¡Æµ?60Hz,ÄÚ²¿
+             -ÏµÍ³Õñµ´Æ÷¿ª£¬lcd¿ªÏÔÊ¾
+ 406   1              vk2c22_maxcom=4;
+ 407   1              WriteCmdVk2c22(Vk2c22_BLINKSET|BLINK_OFF);              //ÉÁË¸¹Ø±Õ      
+ 408   1      //      WriteCmdVk2c22(Vk2c22_BLINKSET|BLINK_2HZ);              //ÉÁË¸2HZ
+ 409   1      //      WriteCmdVk2c22(Vk2c22_BLINKSET|BLINK_1HZ);              //ÉÁË¸1HZ
+ 410   1      //      WriteCmdVk2c22(Vk2c22_BLINKSET|BLINK_0D5HZ);    //ÉÁË¸0.5HZ
+ 411   1              //SEG/VLCD¹²ÓÃ½ÅÉèÎªVLCD£¬ÄÚ²¿µçÑ¹µ÷Õû¹¦ÄÜ¹Ø±Õ,VLCDºÍVDD¶Ì½ÓVR=0Æ«ÖÃµçÑ¹=VDD
+ 412   1      //      WriteCmdVk2c22(Vk2c22_IVASET|VLCDSEL_IVAOFF_R0); 
+ 413   1              //SEG/VLCD¹²ÓÃ½ÅÉèÎªVLCD£¬ÄÚ²¿µçÑ¹µ÷Õû¹¦ÄÜ¹Ø±Õ,VLCDºÍVDD´®½Óµç×èVR>0Æ«ÖÃµçÑ¹=VLCD
+ 414   1      //      WriteCmdVk2c22(Vk2c22_IVASET|VLCDSEL_IVAOFF_R1); 
+C51 COMPILER V9.60.7.0   LCD24388                                                          11/22/2024 22:43:58 PAGE 8   
+
+ 415   1              //SEG/VLCD¹²ÓÃ½ÅÉèÎªSEG£¬ÄÚ²¿Æ«ÖÃµçÑ¹µ÷Õû£º1/3bias=0.652VDD 1/4bias=0.714VDD
+ 416   1              WriteCmdVk2c22(Vk2c22_IVASET|SEGSEL_IVA02H);     
+ 417   1      }
+ 418          /*******************************************************************************
+ 419          * Function Name  : disp_3num
+ 420          * Description    : ÏÔÊ¾3Î»Êý×Ö
+ 421          * Input          £ºdat->3Î»Êý×Ö Ê®½øÖÆ 
+ 422          * Output         : None
+ 423          * Return         : None
+ 424          *******************************************************************************/
+ 425          //void disp_3num(unsigned int dat)
+ 426          //{             
+ 427          //      unsigned dat8;
+ 428          //              
+ 429          //      dat8=dat/100%10;        //ÏÔÊ¾°ÙÎ»
+ 430          //      vk2c22_dispram[2]&=0xf0;
+ 431          //      vk2c22_dispram[2]|=shuzi_zimo[dat8]&0x0f;
+ 432          //      vk2c22_dispram[2]&=0x8f;
+ 433          //      vk2c22_dispram[2]|=shuzi_zimo[dat8]&0xf0;
+ 434          //      
+ 435          //      dat8=dat/10%10;         //ÏÔÊ¾Ê®Î»
+ 436          //      vk2c22_dispram[3]&=0xf0;
+ 437          //      vk2c22_dispram[3]|=shuzi_zimo[dat8]&0x0f;
+ 438          //      vk2c22_dispram[3]&=0x8f;
+ 439          //      vk2c22_dispram[3]|=shuzi_zimo[dat8]&0xf0;
+ 440          //      
+ 441          //      dat8=dat%10;                    //ÏÔÊ¾¸öÎ»
+ 442          //      vk2c22_dispram[4]&=0xf0;
+ 443          //      vk2c22_dispram[4]|=shuzi_zimo[dat8]&0x0f;
+ 444          //      vk2c22_dispram[4]&=0x8f;
+ 445          //      vk2c22_dispram[4]|=shuzi_zimo[dat8]&0xf0;
+ 446          //              
+ 447          //      if(dat<100)                             //Êý×ÖÐ¡ÓÚ100£¬°ÙÎ»²»ÏÔÊ¾
+ 448          //      {
+ 449          //      vk2c22_dispram[2]&=0xf0;
+ 450          //      vk2c22_dispram[2]&=0x8f;
+ 451          //      }
+ 452          //      if(dat<10)      //Êý×ÖÐ¡ÓÚ10£¬Ê®Î»²»ÏÔÊ¾
+ 453          //      {
+ 454          //      vk2c22_dispram[3]&=0xf0;
+ 455          //      vk2c22_dispram[3]&=0x8f;
+ 456          //      }
+ 457          //      //SEG²»Á¬Ðø1¸ö1¸öÊý¾ÝËÍ
+ 458          //              Write1DataVk2c22(2,vk2c22_dispram[2]);
+ 459          //              Write1DataVk2c22(3,vk2c22_dispram[3]);
+ 460          //              Write1DataVk2c22(4,vk2c22_dispram[4]);
+ 461          //      //SEGÁ¬ÐøËÍ¶à¸öÊý¾Ý
+ 462          ////    WritenDataVk2c22(2,&vk2c22_dispram[2],3);       
+ 463          //}     
+ 464          
+ 465          
+ 466          
+ 467          
+ 468          unsigned char Key() 
+ 469          {
+ 470   1          if (KEY1 == 0) 
+ 471   1              {  
+ 472   2              delay_nms(1);  
+ 473   2              if (KEY1 == 0) 
+ 474   2                      {  
+ 475   3                  while (KEY1 == 0);  
+ 476   3                  return 1;  
+C51 COMPILER V9.60.7.0   LCD24388                                                          11/22/2024 22:43:58 PAGE 9   
+
+ 477   3              }
+ 478   2          }
+ 479   1          return 0;  
+ 480   1      }
+ 481          
+ 482          
+ 483          unsigned char data shuzi_zimo[15]= //Êý×ÖºÍ×Ö·û×ÖÄ£
+ 484          {             
+ 485          // 0    1    2    3    4    5    6    7    8    9    -    L    0    H    
+ 486            0XAF,0xA0,0xCB,0xE9,0xE4,0X6D,0X6F,0XA8,0XEF,0XEC,0X40,0X07,0XAF,0XE6,0xFF,
+ 487          };
+ 488          
+ 489          unsigned char data shuzi_zimo2[15]= //Êý×ÖºÍ×Ö·û×ÖÄ£
+ 490          {             
+ 491          //   0    1    2    3    4    5    6    7    8    9    -    L    0    H         
+ 492                  0XFA,0X0A,0xBC,0X9E,0X4E,0XD6,0XF6,0X8A,0XFE,0XCE,0X40,0X70,0XFA,0X6E,0xFF,
+ 493          };
+ 494          
+ 495          void DisplayDigitOrChar(unsigned char pos, unsigned char index) 
+ 496          {
+ 497   1              unsigned char  Data;
+ 498   1          // ¼ì²éË÷ÒýÊÇ·ñÔÚÊý×é·¶Î§ÄÚ
+ 499   1          if (index >= sizeof(shuzi_zimo)) 
+ 500   1                      return;
+ 501   1      
+ 502   1          // »ñÈ¡×ÖÄ£Êý¾Ý
+ 503   1          Data = shuzi_zimo[index];
+ 504   1      
+ 505   1          // Ê¹ÓÃ Write1DataVk2c22 ½«Êý¾ÝÐ´ÈëÏÔÊ¾ RAM µÄÖ¸¶¨Î»ÖÃ
+ 506   1          Write1DataVk2c22(pos, Data);
+ 507   1      }
+ 508          
+ 509          
+ 510          void DisplayDigitOrChar2(unsigned char pos, unsigned char index) 
+ 511          {
+ 512   1              unsigned char  Data;
+ 513   1          // ¼ì²éË÷ÒýÊÇ·ñÔÚÊý×é·¶Î§ÄÚ
+ 514   1          if (index >= sizeof(shuzi_zimo2)) 
+ 515   1                      return;
+ 516   1      
+ 517   1          // »ñÈ¡×ÖÄ£Êý¾Ý
+ 518   1          Data = shuzi_zimo2[index];
+ 519   1      
+ 520   1          // Ê¹ÓÃ Write1DataVk2c22 ½«Êý¾ÝÐ´ÈëÏÔÊ¾ RAM µÄÖ¸¶¨Î»ÖÃ
+ 521   1          Write1DataVk2c22(pos, Data);
+ 522   1      }
+ 523          
+ 524          
+ 525          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    559    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     51      39
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

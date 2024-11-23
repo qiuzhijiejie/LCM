@@ -1,0 +1,5 @@
+-c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --asm --interleave --asm_dir ".\\lst\\" -I ..\..\..\Library\CMSIS\Include -I ..\..\..\Library\Device\Nuvoton\M451Series\Include -I ..\..\..\Library\StdDriver\inc -I ..\Bsp -I ..\User -I ..\lcd_driver -I ..\exti_driver -I ..\led_driver -I ..\touch -I ..\dotmatix_lcd -I ..\KH
+-I.\RTE\_project
+-ID:\KEIL_STM32\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include
+-D__UVISION_VERSION="541" -D_RTE_
+-o .\obj\main.o --list_dir ".\\lst\\" --list --omf_browse .\obj\main.crf --depend .\obj\main.d "..\User\main.c"

@@ -1,0 +1,6 @@
+".\Objects\main.obj",
+".\Objects\lcd12832.obj",
+".\Objects\picture.obj" 
+TO ".\Objects\project" 
+PRINT(".\Listings\project.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 
