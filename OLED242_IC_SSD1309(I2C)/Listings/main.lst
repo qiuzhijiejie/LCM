@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              11/11/2024 20:46:43 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/29/2024 15:58:51 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -11,75 +11,74 @@ line level    source
    1          #include "picture.h"
    2          #include "242oled.h"
    3          unsigned int mode;
-   4          const unsigned char  *point1;
-   5          const unsigned char  *point2;
-   6          const unsigned char  *point3;
-   7          const unsigned char  *point4;
-   8          const unsigned char  *point5;
-   9          int main()
-  10          { 
-  11   1                point1= &picture_tab1[0];
-  12   1                point2= &picture_tab2[0];
-  13   1                point3= &picture_tab3[0];
-  14   1                point4= &picture_tab4[0];
-  15   1                point5= &picture_tab5[0];
-  16   1                IO_init();
-  17   1                OLED_init();  
-  18   1                OLED_dotted_pattern();
-  19   1                delay_ms(200);
-  20   1                OLED_dotted_Reversepattern();
-  21   1                display1();
-  22   1                display2();
-  23   1                display3();
-  24   1                display4();
-  25   1                display5();     
-  26   1                OLED_full();
-  27   1       while(1)
-  28   1      {
-  29   2              
-  30   2              if (ReadKey1()) {
-  31   3          mode++;
-  32   3          mode %= 8;
-  33   3          switch (mode) {
-  34   4              case 0:
-  35   4                  display1();
-  36   4                  break;
-  37   4              case 1:
-  38   4                  display2();
-  39   4                  break;
-  40   4              case 2:
-  41   4                  display3();
-  42   4                  break;
-  43   4              case 3:
-  44   4                  display4();
-  45   4                  break;
-  46   4                      case 4:
-  47   4                  OLED_full();
-  48   4                  break;
-  49   4                      case 5:
-  50   4                  OLED_dotted_pattern();
-  51   4                  break;
-  52   4                      case 6:
-  53   4                  OLED_dotted_Reversepattern();
-  54   4                  break;
-C51 COMPILER V9.60.7.0   MAIN                                                              11/11/2024 20:46:43 PAGE 2   
+   4          
+   5          int main()
+   6          { 
+   7   1              IO_init();
+   8   1              OLED_init();
+   9   1              
+  10   1              OLED_fullROW(0xaa);
+  11   1              OLED_fullROW(0x55);     
+  12   1              OLED_full();
+  13   1              OLED_fullCOL(0xff,0x00);
+  14   1              OLED_fullCOL(0x00,0xff);
+  15   1              OLED_fullCOL(0x55,0xaa);
+  16   1              OLED_fullCOL(0xaa,0x55);
+  17   1              display2();
+  18   1              display3();     
+  19   1              display1(); 
+  20   1       while(1)
+  21   1      {
+  22   2              
+  23   2              if (ReadKey1()) {
+  24   3          mode++;
+  25   3          mode %= 10;
+  26   3          switch (mode) {
+  27   4              case 0:
+  28   4                  display1();
+  29   4                  break;
+  30   4              case 1:
+  31   4                  display2();
+  32   4                  break;
+  33   4              case 2:
+  34   4                              OLED_fullROW(0x55);
+  35   4                  break;
+  36   4              case 3:
+  37   4                              OLED_fullROW(0xaa);
+  38   4                  break;
+  39   4                      case 4:
+  40   4                  OLED_full();
+  41   4                  break;
+  42   4                      case 5:
+  43   4                  OLED_fullCOL(0xff,0x00);
+  44   4                  break;
+  45   4                      case 6:
+  46   4                  OLED_fullCOL(0x00,0xFF);
+  47   4                  break;
+  48   4                      case 7:
+  49   4                  OLED_fullCOL(0x55,0xAA);
+  50   4                  break;
+  51   4                      case 8:
+  52   4                  OLED_fullCOL(0xAA,0x55);
+  53   4                  break;
+  54   4                      case 9:
+C51 COMPILER V9.60.7.0   MAIN                                                              11/29/2024 15:58:51 PAGE 2   
 
-  55   4                      case 7:
-  56   4                  display5();
-  57   4                  break;
+  55   4                              display3();
+  56   4                  break;
+  57   4      
   58   4          }
   59   3      }
-  60   2      
-  61   2              }
-  62   1      }
+  60   2              }
+  61   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    184    ----
+   CODE SIZE        =    192    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =     17    ----
+   DATA SIZE        =      2    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

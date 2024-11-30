@@ -1,74 +1,39 @@
 #include "reg51.h"
 #include "picture.h"
+#include "242oled.h"
+ unsigned char  *point1;
+ unsigned char  *point2;
+ unsigned char  *point3;
+
 sbit   KEY1  = P2^0;
-
-#define set_0   0x01
-#define set_1   0x02
-#define clr_0   0xFE
-#define clr_1   0xFD
-
-#define IIC_SCK_0  P3 &=clr_0            
-#define IIC_SCK_1  P3|=set_0       
-#define IIC_SDA_0  P3&=clr_1            
-#define IIC_SDA_1  P3|=set_1
-
-#define OLED_COLUMN_NUMBER 128
-#define OLED_LINE_NUMBER 64
-#define OLED_PAGE_NUMBER (OLED_LINE_NUMBER/8)
-#define OLED_COLUMN_OFFSET 0
-#define OLED_LINE_OFFSET 0
-
-extern const unsigned char  *point1;
-extern const unsigned char  *point2;
-extern const unsigned char  *point3;
-extern const unsigned char  *point4;
-extern const unsigned char  *point5;
-extern unsigned char ACK=0;
-
+unsigned char ACK=0;
 unsigned char code OLED_init_cmd[25]=
 {
        0xAE,//关闭显示
-	
        0xD5,//设置时钟分频因子,震荡频率
        0x80,  //[3:0],分频因子;[7:4],震荡频率
-
        0xA8,//设置驱动路数
        0X3F,//默认(1/64)
-	
        0xD3,//设置显示偏移
        0X00,//默认为0
-	
        0x40,//设置显示开始行 [5:0],行数.
-	
        0x8D,//电荷泵设置
        0x10,//bit2，开启/关闭
        0x20,//设置内存地址模式
        0x02,//[1:0],00，列地址模式;01，行地址模式;10,页地址模式;默认10;
        0xA1,//段重定义设置,bit0:0,0->0;1,0->127;  A1
-	
-       0xC8,//设置COM扫描方向;bit3:0,普通模式;1,重定义模式 COM[N-1]->COM0;N:驱动路数 (C0 翻转显示) C8
-	   
+       0xC8,//设置COM扫描方向;bit3:0,普通模式;1,重定义模式 COM[N-1]->COM0;N:驱动路数 (C0 翻转显示) C8	   
        0xDA,//设置COM硬件引脚配置
-       0x12,//[5:4]配置  
-	   
+       0x12,//[5:4]配置  	   
        0x81,//对比度设置
-       0xf0,//1~255;默认0X7F (亮度设置,越大越亮)
-	   
+       0xf0,//1~255;默认0X7F (亮度设置,越大越亮)	   
        0xD9,//设置预充电周期
-       0x71,//[3:0],PHASE 1;[7:4],PHASE 2;
-	   
+       0x71,//[3:0],PHASE 1;[7:4],PHASE 2;	   
        0xDB,//设置VCOMH 电压倍率
-       0x00,//[6:4] 000,0.65*vcc;001,0.77*vcc;011,0.83*vcc;
-	   
-       0xA4,//全局显示开启;bit0:1,开启;0,关闭;(白屏/黑屏)
-	   
-       0xA6,//设置显示方式;bit0:1,反相显示;0,正常显示 
-       
+       0x00,//[6:4] 000,0.65*vcc;001,0.77*vcc;011,0.83*vcc;   
+       0xA4,//全局显示开启;bit0:1,开启;0,关闭;(白屏/黑屏)   
+       0xA6,//设置显示方式;bit0:1,反相显示;0,正常显示      
        0xAF,//开启显示   
-
-
-
-
 };
 
 
@@ -90,35 +55,28 @@ void delay_ms(unsigned int _ms_time)
       {;}
     }
   }
-/**************************IIC模块发送函数************************************************
 
- *************************************************************************/
 //写入  最后将SDA拉高，以等待从设备产生应答
 void IIC_write(unsigned char date)
 {
 	unsigned char i, temp;
-	temp = date;
-			
+	temp = date;		
 	for(i=0; i<8; i++)
-	{	IIC_SCK_0;
+	{	
+		IIC_SCK_0;
 		if ((temp&0x80)==0)
-         IIC_SDA_0;
-         else IIC_SDA_1;
-		temp = temp << 1;
-						  //最少250ns延时
-		IIC_SCK_1;
-		
+          IIC_SDA_0;
+         else 
+		  IIC_SDA_1;
+		temp = temp << 1;	//最少250ns延时
+		IIC_SCK_1;	
 	}
-	IIC_SCK_0;
+	IIC_SCK_0;	
 	
-	IIC_SDA_1;
-	
-	IIC_SCK_1;
-	
+	IIC_SDA_1;	
+	IIC_SCK_1;	
 	 ACK =0;
-	IIC_SCK_0;
-	
-
+	IIC_SCK_0;	
 }
 //启动信号
 //SCL在高电平期间，SDA由高电平向低电平的变化定义为启动信号
@@ -194,8 +152,23 @@ void OLED_clear(void)
   }
 
     
+ void OLED_fullROW(unsigned char Data)
+{
+    unsigned char page,column;
+    for(page=0;page<OLED_PAGE_NUMBER;page++)             //page loop
+      { 
+        Page_set(page);
+        Column_set(0);	  
+	for(column=0;column<OLED_COLUMN_NUMBER;column++)	//column loop
+          {
+            OLED_send_data(Data);
+          }
+      }
+  } 
+  
+  
  void OLED_full(void)
-  {
+{
     unsigned char page,column;
     for(page=0;page<OLED_PAGE_NUMBER;page++)             //page loop
       { 
@@ -207,6 +180,30 @@ void OLED_clear(void)
           }
       }
   } 
+
+
+void OLED_fullCOL(unsigned char oddData, unsigned char evenData)
+{
+    unsigned char page, column;
+    for (page = 0; page < OLED_PAGE_NUMBER; page++) // page loop
+    { 
+        Page_set(page);
+        Column_set(0);  
+        for (column = 0; column < OLED_COLUMN_NUMBER; column++) // column loop
+        {
+            // 判断列号是奇数还是偶数
+            if (column % 2 == 0)
+            {
+                OLED_send_data(oddData); // 偶数列灭
+            }
+            else
+            {
+                OLED_send_data(evenData); // 奇数列亮
+            }
+        }
+    }
+}
+
 void OLED_init(void)
   {
     unsigned char i;
@@ -283,82 +280,12 @@ void display2(void){
 		Picture_ReverseDisplay(point2);	 
 		delay_ms(1);  	
 }
+
 void display3(void)
 {
-	  
 		point3= &picture_tab3[0];
 		Picture_display(point3);
 		delay_ms(1);		
 		Picture_ReverseDisplay(point3);	 
-		delay_ms(1);  
-}
-
-void display4(void)
-{
-		point4= &picture_tab4[0];
-		Picture_display(point4);
-		delay_ms(1);		
-		Picture_ReverseDisplay(point4);	 
 		delay_ms(1);  	
-}
-void display5(void)
-{
-		point5= &picture_tab5[0];
-		Picture_display(point5);
-		delay_ms(1);		
-		Picture_ReverseDisplay(point5);	 
-		delay_ms(1);  	
-}
-
-
-
-void OLED_dotted_pattern(void) 
-{	
-	unsigned char page, column;
-    for (column = 0; column < OLED_COLUMN_NUMBER; column++) 
-	{  // 遍历列
-        Column_set(column);  // 设置当前列
-        for (page = 0; page < OLED_PAGE_NUMBER; page++) 
-		{  // 遍历页（从上到下填充一列）
-            Page_set(page);  // 设置当前页
-            
-            // 检查列和页的组合，并设置不同的图案形成麻点效果
-            if ((column + page) % 2 == 0) 
-			{
-                OLED_send_data(0xaa);  // 交替使用 0x55
-            } else 
-			{
-                OLED_send_data(0x55);  // 或者使用 0xAA
-            }
-        }
-
-        // 刷新当前列的显示，避免下一列与当前列内容重叠
-        OLED_send_cmd(0xAF);  // 可能需要发送的显示刷新命令 (示例值)
-    }
-}
-
-void OLED_dotted_Reversepattern(void) 
-{
-	unsigned char page, column;
-    for (column = 0; column < OLED_COLUMN_NUMBER; column++) 
-	{
-		// 遍历列
-        Column_set(column);  // 设置当前列
-        for (page = 0; page < OLED_PAGE_NUMBER; page++) 
-		{  // 遍历页（从上到下填充一列）
-            Page_set(page);  // 设置当前页
-            
-            // 检查列和页的组合，并设置不同的图案形成麻点效果
-            if ((column + page) % 2 == 0) 
-			{
-                OLED_send_data(0x55);  // 交替使用 0x55
-            } else 
-			{
-                OLED_send_data(0xAA);  // 或者使用 0xAA
-            }
-        }
-
-        // 刷新当前列的显示，避免下一列与当前列内容重叠
-        OLED_send_cmd(0xAF);  // 可能需要发送的显示刷新命令 (示例值)
-    }
 }

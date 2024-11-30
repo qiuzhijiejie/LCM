@@ -2,7 +2,23 @@
 #define __242oled_H__
 
 
-//unsigned char code OLED_init_cmd[25];
+
+#define set_0   0x01
+#define set_1   0x02
+#define clr_0   0xFE
+#define clr_1   0xFD
+
+#define IIC_SCK_0  P3 &=clr_0            
+#define IIC_SCK_1  P3|=set_0       
+#define IIC_SDA_0  P3&=clr_1            
+#define IIC_SDA_1  P3|=set_1
+
+#define OLED_COLUMN_NUMBER 128
+#define OLED_LINE_NUMBER 64
+#define OLED_PAGE_NUMBER (OLED_LINE_NUMBER/8)
+#define OLED_COLUMN_OFFSET 0
+#define OLED_LINE_OFFSET 0
+
 void delay_us(unsigned int _us_time);
 void delay_ms(unsigned int _ms_time);
 void IIC_write(unsigned char date);
@@ -22,10 +38,7 @@ unsigned int ReadKey1();
 void display1(void);
 void display2(void);
 void display3(void);
-void display4(void);
-void display5(void);
-void OLED_dotted_pattern(void);
-void OLED_dotted_Reversepattern(void);
-
+void OLED_fullROW(unsigned char Data);
+void OLED_fullCOL(unsigned char oddData, unsigned char evenData);
 
 #endif

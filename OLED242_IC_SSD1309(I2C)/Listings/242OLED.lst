@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   242OLED                                                           11/11/2024 20:44:37 PAGE 1   
+C51 COMPILER V9.60.7.0   242OLED                                                           11/29/2024 16:17:25 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE 242OLED
@@ -10,388 +10,337 @@ line level    source
 
    1          #include "reg51.h"
    2          #include "picture.h"
-   3          sbit   KEY1  = P2^0;
-   4          
-   5          #define set_0   0x01
-   6          #define set_1   0x02
-   7          #define clr_0   0xFE
-   8          #define clr_1   0xFD
-   9          
-  10          #define IIC_SCK_0  P3 &=clr_0            
-  11          #define IIC_SCK_1  P3|=set_0       
-  12          #define IIC_SDA_0  P3&=clr_1            
-  13          #define IIC_SDA_1  P3|=set_1
-  14          
-  15          #define OLED_COLUMN_NUMBER 128
-  16          #define OLED_LINE_NUMBER 64
-  17          #define OLED_PAGE_NUMBER (OLED_LINE_NUMBER/8)
-  18          #define OLED_COLUMN_OFFSET 0
-  19          #define OLED_LINE_OFFSET 0
-  20          
-  21          extern const unsigned char  *point1;
-  22          extern const unsigned char  *point2;
-  23          extern const unsigned char  *point3;
-  24          extern const unsigned char  *point4;
-  25          extern const unsigned char  *point5;
-  26          extern unsigned char ACK=0;
-  27          
-  28          unsigned char code OLED_init_cmd[25]=
-  29          {
-  30                 0xAE,//关闭显示
-  31                  
-  32                 0xD5,//设置时钟分频因子,震荡频率
-  33                 0x80,  //[3:0],分频因子;[7:4],震荡频率
-  34          
-  35                 0xA8,//设置驱动路数
-  36                 0X3F,//默认(1/64)
-  37                  
-  38                 0xD3,//设置显示偏移
-  39                 0X00,//默认为0
-  40                  
-  41                 0x40,//设置显示开始行 [5:0],行数.
-  42                  
-  43                 0x8D,//电荷泵设置
-  44                 0x10,//bit2，开启/关闭
-  45                 0x20,//设置内存地址模式
-  46                 0x02,//[1:0],00，列地址模式;01，行地址模式;10,页地址模式;默认10;
-  47                 0xA1,//段重定义设置,bit0:0,0->0;1,0->127;  A1
-  48                  
-  49                 0xC8,//设置COM扫描方向;bit3:0,普通模式;1,重定义模式 COM[N-1]->COM0;N:驱动路数 (C0 翻转显示) C8
-  50                     
-  51                 0xDA,//设置COM硬件引脚配置
-  52                 0x12,//[5:4]配置  
-  53                     
-  54                 0x81,//对比度设置
-C51 COMPILER V9.60.7.0   242OLED                                                           11/11/2024 20:44:37 PAGE 2   
+   3          #include "242oled.h"
+   4           unsigned char  *point1;
+   5           unsigned char  *point2;
+   6           unsigned char  *point3;
+   7          
+   8          sbit   KEY1  = P2^0;
+   9          unsigned char ACK=0;
+  10          unsigned char code OLED_init_cmd[25]=
+  11          {
+  12                 0xAE,//关闭显示
+  13                  
+  14                 0xD5,//设置时钟分频因子,震荡频率
+  15                 0x80,  //[3:0],分频因子;[7:4],震荡频率
+  16          
+  17                 0xA8,//设置驱动路数
+  18                 0X3F,//默认(1/64)
+  19                  
+  20                 0xD3,//设置显示偏移
+  21                 0X00,//默认为0
+  22                  
+  23                 0x40,//设置显示开始行 [5:0],行数.
+  24                  
+  25                 0x8D,//电荷泵设置
+  26                 0x10,//bit2，开启/关闭
+  27                 0x20,//设置内存地址模式
+  28                 0x02,//[1:0],00，列地址模式;01，行地址模式;10,页地址模式;默认10;
+  29                 0xA1,//段重定义设置,bit0:0,0->0;1,0->127;  A1
+  30                  
+  31                 0xC8,//设置COM扫描方向;bit3:0,普通模式;1,重定义模式 COM[N-1]->COM0;N:驱动路数 (C0 翻转显示) C8
+  32                     
+  33                 0xDA,//设置COM硬件引脚配置
+  34                 0x12,//[5:4]配置  
+  35                     
+  36                 0x81,//对比度设置
+  37                 0xf0,//1~255;默认0X7F (亮度设置,越大越亮)
+  38                     
+  39                 0xD9,//设置预充电周期
+  40                 0x71,//[3:0],PHASE 1;[7:4],PHASE 2;
+  41                     
+  42                 0xDB,//设置VCOMH 电压倍率
+  43                 0x00,//[6:4] 000,0.65*vcc;001,0.77*vcc;011,0.83*vcc;
+  44                     
+  45                 0xA4,//全局显示开启;bit0:1,开启;0,关闭;(白屏/黑屏)
+  46                     
+  47                 0xA6,//设置显示方式;bit0:1,反相显示;0,正常显示 
+  48                 
+  49                 0xAF,//开启显示   
+  50          
+  51          
+  52          
+  53          
+  54          };
+C51 COMPILER V9.60.7.0   242OLED                                                           11/29/2024 16:17:25 PAGE 2   
 
-  55                 0xf0,//1~255;默认0X7F (亮度设置,越大越亮)
-  56                     
-  57                 0xD9,//设置预充电周期
-  58                 0x71,//[3:0],PHASE 1;[7:4],PHASE 2;
-  59                     
-  60                 0xDB,//设置VCOMH 电压倍率
-  61                 0x00,//[6:4] 000,0.65*vcc;001,0.77*vcc;011,0.83*vcc;
-  62                     
-  63                 0xA4,//全局显示开启;bit0:1,开启;0,关闭;(白屏/黑屏)
-  64                     
-  65                 0xA6,//设置显示方式;bit0:1,反相显示;0,正常显示 
-  66                 
-  67                 0xAF,//开启显示   
-  68          
-  69          
-  70          
-  71          
-  72          };
-  73          
-  74          
-  75          void delay_us(unsigned int _us_time)
-  76          {       
-  77   1        unsigned char x=0;
-  78   1        for(;_us_time>0;_us_time--)
-  79   1        {
-  80   2          x++;
-  81   2        }
-  82   1      }
-  83          
-  84          void delay_ms(unsigned int _ms_time)
-  85            {
-  86   1          unsigned int i,j;
-  87   1          for(i=0;i<_ms_time;i++)
-  88   1          {
-  89   2          for(j=0;j<900;j++)
-  90   2            {;}
-  91   2          }
-  92   1        }
-  93          /**************************IIC模块发送函数************************************************
-  94          
-  95           *************************************************************************/
-  96          //写入  最后将SDA拉高，以等待从设备产生应答
-  97          void IIC_write(unsigned char date)
-  98          {
-  99   1              unsigned char i, temp;
- 100   1              temp = date;
- 101   1                              
- 102   1              for(i=0; i<8; i++)
- 103   1              {       IIC_SCK_0;
- 104   2                      if ((temp&0x80)==0)
- 105   2               IIC_SDA_0;
- 106   2               else IIC_SDA_1;
- 107   2                      temp = temp << 1;
- 108   2                                                        //最少250ns延时
- 109   2                      IIC_SCK_1;
- 110   2                      
- 111   2              }
- 112   1              IIC_SCK_0;
- 113   1              
- 114   1              IIC_SDA_1;
- 115   1              
- 116   1              IIC_SCK_1;
-C51 COMPILER V9.60.7.0   242OLED                                                           11/11/2024 20:44:37 PAGE 3   
+  55          
+  56          
+  57          void delay_us(unsigned int _us_time)
+  58          {       
+  59   1        unsigned char x=0;
+  60   1        for(;_us_time>0;_us_time--)
+  61   1        {
+  62   2          x++;
+  63   2        }
+  64   1      }
+  65          
+  66          void delay_ms(unsigned int _ms_time)
+  67            {
+  68   1          unsigned int i,j;
+  69   1          for(i=0;i<_ms_time;i++)
+  70   1          {
+  71   2          for(j=0;j<900;j++)
+  72   2            {;}
+  73   2          }
+  74   1        }
+  75          /**************************IIC模块发送函数************************************************
+  76          
+  77           *************************************************************************/
+  78          //写入  最后将SDA拉高，以等待从设备产生应答
+  79          void IIC_write(unsigned char date)
+  80          {
+  81   1              unsigned char i, temp;
+  82   1              temp = date;
+  83   1                              
+  84   1              for(i=0; i<8; i++)
+  85   1              {       IIC_SCK_0;
+  86   2                      if ((temp&0x80)==0)
+  87   2               IIC_SDA_0;
+  88   2               else IIC_SDA_1;
+  89   2                      temp = temp << 1;
+  90   2                                                        //最少250ns延时
+  91   2                      IIC_SCK_1;
+  92   2                      
+  93   2              }
+  94   1              IIC_SCK_0;
+  95   1              
+  96   1              IIC_SDA_1;
+  97   1              
+  98   1              IIC_SCK_1;
+  99   1              
+ 100   1               ACK =0;
+ 101   1              IIC_SCK_0;
+ 102   1              
+ 103   1      
+ 104   1      }
+ 105          //启动信号
+ 106          //SCL在高电平期间，SDA由高电平向低电平的变化定义为启动信号
+ 107          void IIC_start()
+ 108          {
+ 109   1              IIC_SDA_1;
+ 110   1              
+ 111   1              IIC_SCK_1;
+ 112   1                                                 //所有操作结束释放SCL        
+ 113   1              IIC_SDA_0;
+ 114   1              
+ 115   1              IIC_SCK_0;
+ 116   1              
+C51 COMPILER V9.60.7.0   242OLED                                                           11/29/2024 16:17:25 PAGE 3   
 
- 117   1              
- 118   1               ACK =0;
- 119   1              IIC_SCK_0;
- 120   1              
- 121   1      
- 122   1      }
- 123          //启动信号
- 124          //SCL在高电平期间，SDA由高电平向低电平的变化定义为启动信号
- 125          void IIC_start()
- 126          {
- 127   1              IIC_SDA_1;
+ 117   1          IIC_write(0x78);
+ 118   1              
+ 119   1      }
+ 120          
+ 121          //停止信号
+ 122          //SCL在高电平期间，SDA由低电平向高电平的变化定义为停止信号
+ 123          void IIC_stop()
+ 124          {
+ 125   1              IIC_SDA_0;
+ 126   1              
+ 127   1              IIC_SCK_1;
  128   1              
- 129   1              IIC_SCK_1;
- 130   1                                                 //所有操作结束释放SCL        
- 131   1              IIC_SDA_0;
- 132   1              
- 133   1              IIC_SCK_0;
- 134   1              
- 135   1          IIC_write(0x78);
- 136   1              
- 137   1      }
- 138          
- 139          //停止信号
- 140          //SCL在高电平期间，SDA由低电平向高电平的变化定义为停止信号
- 141          void IIC_stop()
- 142          {
- 143   1              IIC_SDA_0;
- 144   1              
- 145   1              IIC_SCK_1;
- 146   1              
- 147   1              IIC_SDA_1;
- 148   1              
- 149   1      }
- 150          
- 151          void OLED_send_cmd(unsigned char o_command)
+ 129   1              IIC_SDA_1;
+ 130   1              
+ 131   1      }
+ 132          
+ 133          void OLED_send_cmd(unsigned char o_command)
+ 134            {
+ 135   1          
+ 136   1          IIC_start();
+ 137   1          IIC_write(0x00); 
+ 138   1          IIC_write(o_command);
+ 139   1          IIC_stop();
+ 140   1          
+ 141   1        }
+ 142            
+ 143          void OLED_send_data(unsigned char o_data)
+ 144            { 
+ 145   1          IIC_start();
+ 146   1          IIC_write(0x40);
+ 147   1          IIC_write(o_data);
+ 148   1          IIC_stop();
+ 149   1         }
+ 150            
+ 151          void Column_set(unsigned char column)
  152            {
- 153   1          
- 154   1          IIC_start();
- 155   1          IIC_write(0x00); 
- 156   1          IIC_write(o_command);
- 157   1          IIC_stop();
- 158   1          
- 159   1        }
- 160            
- 161          void OLED_send_data(unsigned char o_data)
- 162            { 
- 163   1          IIC_start();
- 164   1          IIC_write(0x40);
- 165   1          IIC_write(o_data);
- 166   1          IIC_stop();
- 167   1         }
- 168            
- 169          void Column_set(unsigned char column)
- 170            {
- 171   1          column+=OLED_COLUMN_OFFSET;
- 172   1          OLED_send_cmd(0x10|(column>>4));    //设置列地址高位
- 173   1          OLED_send_cmd(0x00|(column&0x0f));   //设置列地址低位  
- 174   1               
- 175   1        }
- 176            
- 177          void Page_set(unsigned char page)
- 178            {
-C51 COMPILER V9.60.7.0   242OLED                                                           11/11/2024 20:44:37 PAGE 4   
+ 153   1          column+=OLED_COLUMN_OFFSET;
+ 154   1          OLED_send_cmd(0x10|(column>>4));    //设置列地址高位
+ 155   1          OLED_send_cmd(0x00|(column&0x0f));   //设置列地址低位  
+ 156   1               
+ 157   1        }
+ 158            
+ 159          void Page_set(unsigned char page)
+ 160            {
+ 161   1          OLED_send_cmd(0xb0+page);
+ 162   1        }
+ 163            
+ 164          void OLED_clear(void)
+ 165            {
+ 166   1          unsigned char page,column;
+ 167   1          for(page=0;page<OLED_PAGE_NUMBER;page++)             //page loop
+ 168   1            { 
+ 169   2                Page_set(page);
+ 170   2                Column_set(0);          
+ 171   2                for(column=0;column<OLED_COLUMN_NUMBER;column++)      //column loop
+ 172   2                  {
+ 173   3                    OLED_send_data(0x00);
+ 174   3                  }
+ 175   2            }
+ 176   1        }
+ 177          
+ 178              
+C51 COMPILER V9.60.7.0   242OLED                                                           11/29/2024 16:17:25 PAGE 4   
 
- 179   1          OLED_send_cmd(0xb0+page);
- 180   1        }
- 181            
- 182          void OLED_clear(void)
- 183            {
- 184   1          unsigned char page,column;
- 185   1          for(page=0;page<OLED_PAGE_NUMBER;page++)             //page loop
- 186   1            { 
- 187   2                Page_set(page);
- 188   2                Column_set(0);          
- 189   2                for(column=0;column<OLED_COLUMN_NUMBER;column++)      //column loop
- 190   2                  {
- 191   3                    OLED_send_data(0x00);
- 192   3                  }
- 193   2            }
- 194   1        }
- 195          
- 196              
- 197           void OLED_full(void)
- 198            {
- 199   1          unsigned char page,column;
- 200   1          for(page=0;page<OLED_PAGE_NUMBER;page++)             //page loop
- 201   1            { 
- 202   2              Page_set(page);
- 203   2              Column_set(0);    
- 204   2              for(column=0;column<OLED_COLUMN_NUMBER;column++)        //column loop
- 205   2                {
- 206   3                  OLED_send_data(0xff);
- 207   3                }
- 208   2            }
- 209   1        } 
- 210          void OLED_init(void)
- 211            {
- 212   1          unsigned char i;
- 213   1          for(i=0;i<25;i++)
- 214   1            {
- 215   2              OLED_send_cmd(OLED_init_cmd[i]);
- 216   2            }
- 217   1        }
- 218          
- 219          void Picture_display(const unsigned char *ptr_pic)
- 220            {
- 221   1          unsigned char page,column;
- 222   1          for(page=0;page<OLED_PAGE_NUMBER;page++)        //page loop
- 223   1            { 
- 224   2              Page_set(page);
- 225   2              Column_set(0);    
- 226   2              for(column=0;column<OLED_COLUMN_NUMBER;column++)        //column loop
- 227   2                {
- 228   3                  OLED_send_data(*ptr_pic++);
- 229   3                }
- 230   2            }
- 231   1        }
- 232          void Picture_ReverseDisplay(const unsigned char *ptr_pic)
- 233          {
- 234   1          unsigned char page,column,dis_data;
- 235   1          for(page=0;page<OLED_PAGE_NUMBER;page++)        //page loop
- 236   1            { 
- 237   2              Page_set(page);
- 238   2              Column_set(0);    
- 239   2              for(column=0;column<OLED_COLUMN_NUMBER;column++)        //column loop
- 240   2                {
-C51 COMPILER V9.60.7.0   242OLED                                                           11/11/2024 20:44:37 PAGE 5   
+ 179           void OLED_fullROW(unsigned char Data)
+ 180          {
+ 181   1          unsigned char page,column;
+ 182   1          for(page=0;page<OLED_PAGE_NUMBER;page++)             //page loop
+ 183   1            { 
+ 184   2              Page_set(page);
+ 185   2              Column_set(0);    
+ 186   2              for(column=0;column<OLED_COLUMN_NUMBER;column++)        //column loop
+ 187   2                {
+ 188   3                  OLED_send_data(Data);
+ 189   3                }
+ 190   2            }
+ 191   1        } 
+ 192            
+ 193            
+ 194           void OLED_full(void)
+ 195          {
+ 196   1          unsigned char page,column;
+ 197   1          for(page=0;page<OLED_PAGE_NUMBER;page++)             //page loop
+ 198   1            { 
+ 199   2              Page_set(page);
+ 200   2              Column_set(0);    
+ 201   2              for(column=0;column<OLED_COLUMN_NUMBER;column++)        //column loop
+ 202   2                {
+ 203   3                  OLED_send_data(0xff);
+ 204   3                }
+ 205   2            }
+ 206   1        } 
+ 207          
+ 208          
+ 209          void OLED_fullCOL(unsigned char oddData, unsigned char evenData)
+ 210          {
+ 211   1          unsigned char page, column;
+ 212   1          for (page = 0; page < OLED_PAGE_NUMBER; page++) // page loop
+ 213   1          { 
+ 214   2              Page_set(page);
+ 215   2              Column_set(0);  
+ 216   2              for (column = 0; column < OLED_COLUMN_NUMBER; column++) // column loop
+ 217   2              {
+ 218   3                  // 判断列号是奇数还是偶数
+ 219   3                  if (column % 2 == 0)
+ 220   3                  {
+ 221   4                      OLED_send_data(oddData); // 偶数列灭
+ 222   4                  }
+ 223   3                  else
+ 224   3                  {
+ 225   4                      OLED_send_data(evenData); // 奇数列亮
+ 226   4                  }
+ 227   3              }
+ 228   2          }
+ 229   1      }
+ 230          
+ 231          void OLED_init(void)
+ 232            {
+ 233   1          unsigned char i;
+ 234   1          for(i=0;i<25;i++)
+ 235   1            {
+ 236   2              OLED_send_cmd(OLED_init_cmd[i]);
+ 237   2            }
+ 238   1        }
+ 239          
+ 240          void Picture_display(const unsigned char *ptr_pic)
+C51 COMPILER V9.60.7.0   242OLED                                                           11/29/2024 16:17:25 PAGE 5   
 
- 241   3                  dis_data=*ptr_pic++;
- 242   3                  dis_data=~dis_data;
- 243   3                  OLED_send_data(dis_data);
- 244   3                }
- 245   2            }
- 246   1        }
- 247          
- 248          void IO_init(void)
- 249          {
- 250   1        P2|=0xFF;                        
- 251   1        
- 252   1      
- 253   1      }
- 254           unsigned int ReadKey1() // 按键检测函数
- 255          {
- 256   1          if (KEY1 == 0) 
- 257   1              {  // 按键被按下
- 258   2              delay_ms(1);  // 简单的去抖动处理
- 259   2              if (KEY1 == 0) 
- 260   2                      {  // 检查按键是否仍然按下
- 261   3                  while (KEY1 == 0);  // 等待按键释放
- 262   3                  return 1;  // 返回按键被按下
- 263   3              }
- 264   2          }
- 265   1          return 0;  // 按键没有被按下
- 266   1      }
- 267          
+ 241            {
+ 242   1          unsigned char page,column;
+ 243   1          for(page=0;page<OLED_PAGE_NUMBER;page++)        //page loop
+ 244   1            { 
+ 245   2              Page_set(page);
+ 246   2              Column_set(0);    
+ 247   2              for(column=0;column<OLED_COLUMN_NUMBER;column++)        //column loop
+ 248   2                {
+ 249   3                  OLED_send_data(*ptr_pic++);
+ 250   3                }
+ 251   2            }
+ 252   1        }
+ 253          void Picture_ReverseDisplay(const unsigned char *ptr_pic)
+ 254          {
+ 255   1          unsigned char page,column,dis_data;
+ 256   1          for(page=0;page<OLED_PAGE_NUMBER;page++)        //page loop
+ 257   1            { 
+ 258   2              Page_set(page);
+ 259   2              Column_set(0);    
+ 260   2              for(column=0;column<OLED_COLUMN_NUMBER;column++)        //column loop
+ 261   2                {
+ 262   3                  dis_data=*ptr_pic++;
+ 263   3                  dis_data=~dis_data;
+ 264   3                  OLED_send_data(dis_data);
+ 265   3                }
+ 266   2            }
+ 267   1        }
  268          
- 269          
- 270          void display1(void)
- 271          {       
- 272   1                      point1= &picture_tab1[0];
- 273   1                      Picture_display(point1);
- 274   1                      delay_ms(1);            
- 275   1                      Picture_ReverseDisplay(point1);  
- 276   1                      delay_ms(1);
- 277   1      }       
- 278          
- 279          void display2(void){    
- 280   1                      point2= &picture_tab2[0];//logo
- 281   1                      Picture_display(point2);
- 282   1                      delay_ms(1);            
- 283   1                      Picture_ReverseDisplay(point2);  
- 284   1                      delay_ms(1);    
- 285   1      }
- 286          void display3(void)
- 287          {
- 288   1                
- 289   1                      point3= &picture_tab3[0];
- 290   1                      Picture_display(point3);
- 291   1                      delay_ms(1);            
- 292   1                      Picture_ReverseDisplay(point3);  
- 293   1                      delay_ms(1);  
- 294   1      }
- 295          
- 296          void display4(void)
- 297          {
- 298   1                      point4= &picture_tab4[0];
- 299   1                      Picture_display(point4);
- 300   1                      delay_ms(1);            
- 301   1                      Picture_ReverseDisplay(point4);  
- 302   1                      delay_ms(1);    
-C51 COMPILER V9.60.7.0   242OLED                                                           11/11/2024 20:44:37 PAGE 6   
+ 269          void IO_init(void)
+ 270          {
+ 271   1        P2|=0xFF;                        
+ 272   1        
+ 273   1      
+ 274   1      }
+ 275           unsigned int ReadKey1() // 按键检测函数
+ 276          {
+ 277   1          if (KEY1 == 0) 
+ 278   1              {  // 按键被按下
+ 279   2              delay_ms(1);  // 简单的去抖动处理
+ 280   2              if (KEY1 == 0) 
+ 281   2                      {  // 检查按键是否仍然按下
+ 282   3                  while (KEY1 == 0);  // 等待按键释放
+ 283   3                  return 1;  // 返回按键被按下
+ 284   3              }
+ 285   2          }
+ 286   1          return 0;  // 按键没有被按下
+ 287   1      }
+ 288          
+ 289          
+ 290          
+ 291          void display1(void)
+ 292          {       
+ 293   1                      point1= &picture_tab1[0];
+ 294   1                      Picture_display(point1);
+ 295   1                      delay_ms(1);            
+ 296   1                      Picture_ReverseDisplay(point1);  
+ 297   1                      delay_ms(1);
+ 298   1      }       
+ 299          
+ 300          void display2(void){    
+ 301   1                      point2= &picture_tab2[0];//logo
+ 302   1                      Picture_display(point2);
+C51 COMPILER V9.60.7.0   242OLED                                                           11/29/2024 16:17:25 PAGE 6   
 
- 303   1      }
- 304          void display5(void)
- 305          {
- 306   1                      point5= &picture_tab5[0];
- 307   1                      Picture_display(point5);
- 308   1                      delay_ms(1);            
- 309   1                      Picture_ReverseDisplay(point5);  
- 310   1                      delay_ms(1);    
- 311   1      }
- 312          
- 313          
- 314          
- 315          void OLED_dotted_pattern(void) 
- 316          {       
- 317   1              unsigned char page, column;
- 318   1          for (column = 0; column < OLED_COLUMN_NUMBER; column++) 
- 319   1              {  // 遍历列
- 320   2              Column_set(column);  // 设置当前列
- 321   2              for (page = 0; page < OLED_PAGE_NUMBER; page++) 
- 322   2                      {  // 遍历页（从上到下填充一列）
- 323   3                  Page_set(page);  // 设置当前页
- 324   3                  
- 325   3                  // 检查列和页的组合，并设置不同的图案形成麻点效果
- 326   3                  if ((column + page) % 2 == 0) 
- 327   3                              {
- 328   4                      OLED_send_data(0xaa);  // 交替使用 0x55
- 329   4                  } else 
- 330   3                              {
- 331   4                      OLED_send_data(0x55);  // 或者使用 0xAA
- 332   4                  }
- 333   3              }
- 334   2      
- 335   2              // 刷新当前列的显示，避免下一列与当前列内容重叠
- 336   2              OLED_send_cmd(0xAF);  // 可能需要发送的显示刷新命令 (示例值)
- 337   2          }
- 338   1      }
- 339          
- 340          void OLED_dotted_Reversepattern(void) 
- 341          {
- 342   1              unsigned char page, column;
- 343   1          for (column = 0; column < OLED_COLUMN_NUMBER; column++) 
- 344   1              {
- 345   2                      // 遍历列
- 346   2              Column_set(column);  // 设置当前列
- 347   2              for (page = 0; page < OLED_PAGE_NUMBER; page++) 
- 348   2                      {  // 遍历页（从上到下填充一列）
- 349   3                  Page_set(page);  // 设置当前页
- 350   3                  
- 351   3                  // 检查列和页的组合，并设置不同的图案形成麻点效果
- 352   3                  if ((column + page) % 2 == 0) 
- 353   3                              {
- 354   4                      OLED_send_data(0x55);  // 交替使用 0x55
- 355   4                  } else 
- 356   3                              {
- 357   4                      OLED_send_data(0xAA);  // 或者使用 0xAA
- 358   4                  }
- 359   3              }
- 360   2      
- 361   2              // 刷新当前列的显示，避免下一列与当前列内容重叠
- 362   2              OLED_send_cmd(0xAF);  // 可能需要发送的显示刷新命令 (示例值)
- 363   2          }
- 364   1      }
-C51 COMPILER V9.60.7.0   242OLED                                                           11/11/2024 20:44:37 PAGE 7   
-
+ 303   1                      delay_ms(1);            
+ 304   1                      Picture_ReverseDisplay(point2);  
+ 305   1                      delay_ms(1);    
+ 306   1      }
+ 307          
+ 308          void display3(void)
+ 309          {
+ 310   1                      point3= &picture_tab3[0];
+ 311   1                      Picture_display(point3);
+ 312   1                      delay_ms(1);            
+ 313   1                      Picture_ReverseDisplay(point3);  
+ 314   1                      delay_ms(1);    
+ 315   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    640    ----
+   CODE SIZE        =    548    ----
    CONSTANT SIZE    =     25    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =      1       8
+   DATA SIZE        =     10       8
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
