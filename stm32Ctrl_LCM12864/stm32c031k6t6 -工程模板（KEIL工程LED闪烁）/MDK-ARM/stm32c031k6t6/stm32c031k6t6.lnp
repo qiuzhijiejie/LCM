@@ -1,0 +1,23 @@
+--cpu Cortex-M0+
+"stm32c031k6t6\startup_stm32c031xx.o"
+"stm32c031k6t6\main.o"
+"stm32c031k6t6\stm32c0xx_it.o"
+"stm32c031k6t6\stm32c0xx_hal_msp.o"
+"stm32c031k6t6\lcd12864.o"
+"stm32c031k6t6\stm32c0xx_hal.o"
+"stm32c031k6t6\stm32c0xx_hal_cortex.o"
+"stm32c031k6t6\stm32c0xx_hal_rcc.o"
+"stm32c031k6t6\stm32c0xx_hal_rcc_ex.o"
+"stm32c031k6t6\stm32c0xx_hal_flash.o"
+"stm32c031k6t6\stm32c0xx_hal_flash_ex.o"
+"stm32c031k6t6\stm32c0xx_hal_gpio.o"
+"stm32c031k6t6\stm32c0xx_hal_dma.o"
+"stm32c031k6t6\stm32c0xx_hal_dma_ex.o"
+"stm32c031k6t6\stm32c0xx_hal_pwr.o"
+"stm32c031k6t6\stm32c0xx_hal_pwr_ex.o"
+"stm32c031k6t6\stm32c0xx_hal_exti.o"
+"stm32c031k6t6\system_stm32c0xx.o"
+--strict --scatter "stm32c031k6t6\stm32c031k6t6.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "stm32c031k6t6.map" -o stm32c031k6t6\stm32c031k6t6.axf

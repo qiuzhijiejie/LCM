@@ -1,0 +1,420 @@
+C51 COMPILER V9.60.7.0   LCD24064                                                          11/28/2024 18:01:46 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD24064
+OBJECT MODULE PLACED IN .\Objects\lcd24064.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE lcd24064.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
+                    -gs\lcd24064.lst) OBJECT(.\Objects\lcd24064.obj)
+
+line level    source
+
+   1          #include <INTRINS.H>              
+   2          #include <REG52.H>  
+   3          #include "lcd24064.h"
+   4          #include "picture.h"
+   5          
+   6          bit Log=0;
+   7          uchar  group,i,j;
+   8          void Locatexy(uchar xa,uchar ya,uchar mode)   
+   9          {  uint a=0;
+  10   1              if(mode)                                //Graphic mode   x=0-29  y=0-64    START ADDRESS ??0800
+  11   1                      {
+  12   2                              a=ya*30+xa;     
+  13   2                              WriteCommand((uchar)a,(uchar)(a>>8)+0x08,0x24,2);
+  14   2                      }
+  15   1      
+  16   1              else                                    //Character mode   x=0-29  y=0-7    START ADDRESS ??0000
+  17   1                      {
+  18   2                              a=ya*30+xa;     
+  19   2                              WriteCommand((uchar)(a),(uchar)(a>>8),0x24,2);
+  20   2                      }
+  21   1      
+  22   1      }
+  23          
+  24          /***************************/   
+  25          /*LCM READ AND WRITE BUSY CHECK                   
+  26          /***************************/ 
+  27          
+  28          void CheckBusy_S0S1()
+  29          {uchar b;
+  30   1               do     
+  31   1              {DataBus=0xff;
+  32   2               CD=1;
+  33   2               _RD=0;
+  34   2               b=DataBus;
+  35   2                _RD=1;        
+  36   2               }
+  37   1               while(b&0x03!=0x03);
+  38   1                      
+  39   1       }
+  40          
+  41          /***************************/   
+  42          /*DATA AUTO READ BUSY CHECK                    
+  43          /***************************/ 
+  44          
+  45          void CheckBusy_S2()
+  46          {uchar b;
+  47   1               do     
+  48   1              {DataBus=0xff;
+  49   2               CD=1;
+  50   2               _RD=0;
+  51   2               b=DataBus;
+  52   2               _RD=1; 
+  53   2               }
+  54   1               while(b&0x03==0);
+C51 COMPILER V9.60.7.0   LCD24064                                                          11/28/2024 18:01:46 PAGE 2   
+
+  55   1                      
+  56   1      }
+  57          
+  58          
+  59          /***************************/   
+  60          /*DATA AUTO WRITE BUSY CHECK                    
+  61          /***************************/ 
+  62          
+  63          void CheckBusy_S3()
+  64          {uchar b;
+  65   1               do     
+  66   1              {DataBus=0xff;
+  67   2               CD=1;
+  68   2               _RD=0;
+  69   2               b=DataBus;
+  70   2               _RD=1; 
+  71   2               }
+  72   1               while(b&0x08!=0x08);
+  73   1      }
+  74          
+  75          
+  76             
+  77          /***************************/   
+  78          /*WRITE COMMAND         
+  79          //    dat1:  parameters 1
+  80          //        dat2:  parameters 2
+  81          //      command: command
+  82          //parameters_num: parameters  number 
+  83          /***************************/   
+  84          void WriteCommand( uchar dat1,uchar dat2,uchar command,uchar parameters_num )   
+  85          {   
+  86   1        if((parameters_num==1)|(parameters_num==2))
+  87   1              {CheckBusy_S0S1();      
+  88   2               WriteData(dat1);
+  89   2              }       
+  90   1        if(parameters_num==2)
+  91   1              {CheckBusy_S0S1();      
+  92   2               WriteData(dat2);
+  93   2              }
+  94   1      
+  95   1              CheckBusy_S3();
+  96   1              CD = 1;   
+  97   1              DataBus = command; 
+  98   1              _WR = 0; 
+  99   1              _nop_();     
+ 100   1              _WR  = 1; 
+ 101   1             
+ 102   1      }   
+ 103          
+ 104             
+ 105          /***************************/   
+ 106          /*WRITE DATA                 */   
+ 107          /***************************/   
+ 108          void WriteData( uchar DataByte )   
+ 109          {    
+ 110   1               CD = 0;   
+ 111   1               DataBus = DataByte; 
+ 112   1               _WR = 0;  
+ 113   1              _nop_();    
+ 114   1               _WR  = 1;   
+ 115   1      }   
+ 116             
+C51 COMPILER V9.60.7.0   LCD24064                                                          11/28/2024 18:01:46 PAGE 3   
+
+ 117          void LcmClear( void )   
+ 118          {   uint a;
+ 119   1              Locatexy(0,0,Character);
+ 120   1              WriteCommand(0,0,0xb0,0 ); 
+ 121   1              for(a=0;a<8192;a++)
+ 122   1              {
+ 123   2                      WriteData( 0 ); 
+ 124   2              }   
+ 125   1              WriteCommand(0,0,0xb2,0 );
+ 126   1      }   
+ 127          
+ 128          void Display_Str(uchar x,uchar y,uchar *ascll)
+ 129          {
+ 130   1              Locatexy(x,y,Character);
+ 131   1              while(*ascll>0)
+ 132   1              {
+ 133   2                      WriteCommand(*ascll-0x20,0,0xc0,1 ); 
+ 134   2                      ascll++;
+ 135   2              } 
+ 136   1      }
+ 137          
+ 138          
+ 139          void Display_16_16(uchar x,uchar y,uchar  code *Chinese_character,uchar character_code)
+ 140          {       uchar k,j;    uint      num=0;
+ 141   1              num=character_code*0x20;
+ 142   1              Locatexy(x,y,Graphic);
+ 143   1              for(j=0;j<16;j++)
+ 144   1                      { for(k=0;k<2;k++)
+ 145   2                              {
+ 146   3                                      WriteCommand(*(Chinese_character+num),0,0xc0,1 ); 
+ 147   3                                      num++;
+ 148   3                              } 
+ 149   2                              y+=1;
+ 150   2                              Locatexy(x,y,Graphic);
+ 151   2                      }
+ 152   1      
+ 153   1      }
+ 154          
+ 155          void DisplayDots( uchar DotByte,uchar DotByte1 )   
+ 156          {       uchar k,j;  
+ 157   1              Locatexy(0,0,Graphic);  
+ 158   1              WriteCommand(0,0,0xb0,0 ); 
+ 159   1               for(j=0;j<32;j++)   
+ 160   1               {   
+ 161   2                for(k=0;k<30;k++)   
+ 162   2                      {
+ 163   3                              WriteData(DotByte);
+ 164   3      
+ 165   3                      } 
+ 166   2                for(k=0;k<30;k++)   
+ 167   2                      {
+ 168   3                              WriteData(DotByte1);
+ 169   3      
+ 170   3                      } 
+ 171   2              }  
+ 172   1              WriteCommand(0,0,0xb2,0 ); 
+ 173   1      }  
+ 174          
+ 175               
+ 176          void DisplayBMP(uchar x,uchar y,uchar W,uchar H,  uchar code *puts )   
+ 177          {       uchar k,j;
+ 178   1              Locatexy(x,y,Graphic); 
+C51 COMPILER V9.60.7.0   LCD24064                                                          11/28/2024 18:01:46 PAGE 4   
+
+ 179   1            
+ 180   1              for(j=0;j<H;j++)
+ 181   1                      {       WriteCommand(0,0,0xb0,0 ); 
+ 182   2                              for(k=0;k<W/8;k++)
+ 183   2                              {
+ 184   3                                      WriteData(*puts++);
+ 185   3      
+ 186   3                              } 
+ 187   2                      WriteCommand(0,0,0xb2,0 ); 
+ 188   2                              y+=1;
+ 189   2                              Locatexy(x,y,Graphic);
+ 190   2                      }  
+ 191   1      }   
+ 192               
+ 193          void ReverseDisplayBMP(uchar x,uchar y,uchar W,uchar H,  uchar code *puts )   
+ 194          {       uchar k,j;
+ 195   1              Locatexy(x,y,Graphic); 
+ 196   1            
+ 197   1              for(j=0;j<H;j++)
+ 198   1                      {       WriteCommand(0,0,0xb0,0 ); 
+ 199   2                              for(k=0;k<W/8;k++)
+ 200   2                              {
+ 201   3                                      WriteData(~(*puts));
+ 202   3                                      puts++;
+ 203   3                              } 
+ 204   2                      WriteCommand(0,0,0xb2,0 ); 
+ 205   2                              y+=1;
+ 206   2                              Locatexy(x,y,Graphic);
+ 207   2                      }  
+ 208   1      }  
+ 209          
+ 210             
+ 211          void Delay(uint MS)   
+ 212          {   
+ 213   1       unsigned char us,usn;   
+ 214   1       while(MS!=0)   
+ 215   1       {   
+ 216   2        usn = 2; //for 12M    
+ 217   2        while(usn!=0)   
+ 218   2        {   
+ 219   3         us=0xf6;   
+ 220   3         while (us!=0){us--;};   
+ 221   3         usn--;   
+ 222   3        }   
+ 223   2        MS--;   
+ 224   2       }  
+ 225   1       while(Log);
+ 226   1      }   
+ 227          
+ 228          
+ 229          
+ 230          
+ 231          void LcmInit( void )   
+ 232          {  
+ 233   1              RESET=0;
+ 234   1              Delay(50);
+ 235   1              RESET=1;
+ 236   1              Delay(50);
+ 237   1              WriteCommand(0,0,0x40,2 );   //Set Text Home Address
+ 238   1              WriteCommand(30,0,0x41,2 );    //Set Text Area Width
+ 239   1              WriteCommand(0,0x08,0x42,2 );   //Set Graphic Home Address
+ 240   1              WriteCommand(30,0,0x43,2 );     //Set Graphic Area Width
+C51 COMPILER V9.60.7.0   LCD24064                                                          11/28/2024 18:01:46 PAGE 5   
+
+ 241   1              WriteCommand(0,0,0xa7,0);               //Cursor Pattern Select
+ 242   1              WriteCommand(0,0,0x80,0);               //OR mode
+ 243   1              WriteCommand(0,0,0x9c,0);       //Text on, graphic on
+ 244   1      }   
+ 245          void Display_8_16(uchar x, uchar y, uchar code *English_character, uchar character_code)
+ 246          {
+ 247   1          uchar j;    // 行循环控制变量
+ 248   1          uint num = 0;  // 偏移量初始为0
+ 249   1          num = character_code * 0x10;  // 每个字符占用16字节（8×16）
+ 250   1          
+ 251   1          Locatexy(x, y, Graphic);  // 定位到显示的起始位置
+ 252   1      
+ 253   1          for(j = 0; j < 16; j++)  // 控制16行的循环
+ 254   1          {
+ 255   2              WriteCommand(*(English_character + num), 0, 0xc0, 1);  // 写入1个字节的点阵数据
+ 256   2              num++;  // 移动到字库中的下一个字节
+ 257   2              y += 1;  // 移动到下一行
+ 258   2              Locatexy(x, y, Graphic);  // 更新光标位置
+ 259   2          }
+ 260   1      }
+ 261          void Display_FullCGROM()
+ 262          {
+ 263   1          uchar x = 0, y = 0;       // 起始位置 (0, 0)
+ 264   1          uchar charCode = 0x01;    // 从 CGROM 的 0x01 开始
+ 265   1      
+ 266   1          // 遍历整个 LCD240128 屏幕 (30 列 x 16 行)
+ 267   1          while (y < 16)
+ 268   1          {
+ 269   2              Locatexy(x, y, Character);  // 设置光标位置
+ 270   2      
+ 271   2              // 显示当前的 CGROM 字符
+ 272   2              WriteCommand(charCode, 0, 0xc0, 1);  // 发送当前字符的代码到 LCD
+ 273   2      
+ 274   2              // 更新位置和字符
+ 275   2              x++;             // 移动到下一列
+ 276   2              charCode++;      // 显示下一个字符
+ 277   2      
+ 278   2      
+ 279   2              if (x >= 30)
+ 280   2              {
+ 281   3                  x = 0;       // 列回到 0
+ 282   3                  y++;         // 行数增加，换行
+ 283   3              }
+ 284   2      
+ 285   2      
+ 286   2              if (charCode > 0xFF)
+ 287   2              {
+ 288   3                  charCode = 0x01;
+ 289   3                              break;
+ 290   3              }
+ 291   2                      
+ 292   2          }
+ 293   1              
+ 294   1      Display_FullCGROM_SpecifiedPositions();
+ 295   1      
+ 296   1      }
+ 297          
+ 298          void Display_FullCGROM_SpecifiedPositions()
+ 299          {
+ 300   1          uchar charCode = 0x01;  
+ 301   1      
+ 302   1          uchar positions[][2] = 
+C51 COMPILER V9.60.7.0   LCD24064                                                          11/28/2024 18:01:46 PAGE 6   
+
+ 303   1              {
+ 304   1          {7, 4},{0, 5},{0, 6},{0, 7},
+ 305   1              
+ 306   1              };
+ 307   1      
+ 308   1          uchar num_positions = sizeof(positions) / sizeof(positions[0]); 
+ 309   1      
+ 310   1          for ( i = 0; i < num_positions; i++)
+ 311   1          {
+ 312   2              uchar x = positions[i][0];
+ 313   2              uchar y = positions[i][1];
+ 314   2      
+ 315   2              Locatexy(x, y,Character); 
+ 316   2              for ( j = 0; j < 30; j++) // 遍历每个位置显示内容
+ 317   2              {       
+ 318   3                  WriteCommand(charCode, 0, 0xc0, 1);
+ 319   3                  charCode++;
+ 320   3                  if (charCode > 0xFF)
+ 321   3                  {
+ 322   4                      charCode = 0x01; 
+ 323   4                  }
+ 324   3              }
+ 325   2          }
+ 326   1      }
+ 327          uchar start_x[] = {7, 10};   // 每组显示的起始X坐标
+ 328          uchar start_y[] = {22, 42};    // 每组显示的起始Y坐标
+ 329          uchar start_code[] = {0, 16};  // 每组显示的起始字符编码
+ 330          uchar count[] = {16, 11};     // 每组显示的字符数量
+ 331          void wordageEng(void)
+ 332          {  
+ 333   1              
+ 334   1              unsigned char i; 
+ 335   1              
+ 336   1          DisplayBMP(0,0,240,64,BMP0); 
+ 337   1              wordageCha();   
+ 338   1          Delay(100); 
+ 339   1              
+ 340   1              
+ 341   1      for ( group = 0; group < 2; group++)  
+ 342   1      {
+ 343   2          for ( i = 0; i < count[group]; i++)
+ 344   2          {
+ 345   3              Display_8_16(start_x[group] + i, start_y[group], English_character, start_code[group] + i);
+ 346   3          }
+ 347   2      }
+ 348   1      
+ 349   1      
+ 350   1      }
+ 351          
+ 352          
+ 353          uchar start_x1[] = {5};   // 每组显示的起始X坐标
+ 354          uchar start_y1[] = {2};    // 每组显示的起始Y坐标
+ 355          uchar start_code1[] = {0};  // 每组显示的起始字符编码
+ 356          uchar count1[] = {10};     // 每组显示的字符数量
+ 357          void wordageCha(void)
+ 358          {   
+ 359   1              unsigned char i; 
+ 360   1          Delay(100); 
+ 361   1      for ( group = 0; group < 1; group++)  
+ 362   1      {
+ 363   2          for ( i = 0; i < count1[group]; i++)
+ 364   2          {
+C51 COMPILER V9.60.7.0   LCD24064                                                          11/28/2024 18:01:46 PAGE 7   
+
+ 365   3              Display_16_16(start_x1[group] + 2 * i, start_y1[group], Chinese_character, start_code1[group] + i)
+             -;
+ 366   3          }
+ 367   2      }
+ 368   1      }
+ 369          
+ 370          
+ 371          unsigned char ReadKey() 
+ 372          {
+ 373   1          if (Key == 1)           
+ 374   1              {  
+ 375   2              Delay(1);  
+ 376   2              if (Key == 1) 
+ 377   2                      {  
+ 378   3                  while (Key == 1); 
+ 379   3                  return 1;  
+ 380   3              }
+ 381   2          }
+ 382   1          return 0;  
+ 383   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1179    ----
+   CONSTANT SIZE    =      8    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     15      64
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

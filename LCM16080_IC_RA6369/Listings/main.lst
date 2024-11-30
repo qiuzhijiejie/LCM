@@ -1,0 +1,91 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              11/30/2024 10:51:03 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\m
+                    -ain.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "lcd16080.h"
+   3          #include "picture.h"
+   4          
+   5          
+   6          
+   7          unsigned char mode;
+   8          void Main( void )   
+   9          {
+  10   1              LCD_EN=0;  
+  11   1              LCD_FS=0; 
+  12   1              LcmInit(); 
+  13   1              LcmClear();
+  14   1              Delay(100);
+  15   1          DisplayDots(0x55,0xaa);
+  16   1          Delay(500); 
+  17   1              
+  18   1          DisplayDots(0xaa,0x55);
+  19   1          Delay(500);  
+  20   1          DisplayDots(0x55,0x55);
+  21   1          Delay(500);         
+  22   1          DisplayDots(0xaa,0xaa);
+  23   1          Delay(500); 
+  24   1          DisplayDots(0xff,0x00);
+  25   1          Delay(500); 
+  26   1          DisplayDots(0x00,0xff);
+  27   1          Delay(500); 
+  28   1                DisplayDots(0xff,0xff);
+  29   1          Delay(500);         
+  30   1                LcmClear();
+  31   1              LcmClear();
+  32   1              Display_FullCGROM();
+  33   1              Delay(500);     
+  34   1              LcmClear();
+  35   1              Show_Eng();
+  36   1              
+  37   1      
+  38   1       while(1)  
+  39   1      {
+  40   2      
+  41   2                      if(ReadKey1())
+  42   2                      mode++;
+  43   2                      mode%=8;
+  44   2                      LcmClear();
+  45   2                      switch(mode){   
+  46   3                      case 0:DisplayDots(0xff,0x00);
+  47   3                      break;
+  48   3                      case 1:DisplayDots(0x55,0xaa);
+  49   3                      break;
+  50   3                      case 2:DisplayDots(0x55,0x55);
+  51   3                      break;
+  52   3                      case 3:DisplayDots(0x00,0xff);
+  53   3                      break;
+  54   3                      case 4:DisplayDots(0xaa,0xaa);
+C51 COMPILER V9.60.7.0   MAIN                                                              11/30/2024 10:51:03 PAGE 2   
+
+  55   3                      break;
+  56   3                      case 5:Show_Eng();      
+  57   3                      break;
+  58   3                      case 6:Display_FullCGROM();     
+  59   3                      break;
+  60   3                      case 7:Show_Eng();      
+  61   3      
+  62   3      
+  63   3      }
+  64   2       }   
+  65   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    237    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

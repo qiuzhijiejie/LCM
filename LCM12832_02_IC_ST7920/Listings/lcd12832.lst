@@ -1,0 +1,310 @@
+C51 COMPILER V9.60.7.0   LCD12832                                                          11/23/2024 14:44:51 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD12832
+OBJECT MODULE PLACED IN .\Objects\lcd12832.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE lcd12832.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\
+                    -Listings\lcd12832.lst) OBJECT(.\Objects\lcd12832.obj)
+
+line level    source
+
+   1          #include <INTRINS.H>   
+   2          #include <reg52.h>
+   3          #include "lcd12832.h"
+   4          #include "picture.h"
+   5          sbit RS   = P3^0;             
+   6          sbit RW   = P3^1;                  
+   7          sbit E    = P3^2;              
+   8          sbit KEY     = P2^0; 
+   9          
+  10          unsigned char ROW,COL;             
+  11                  
+  12          
+  13          void charlcdfill(unsigned int c)        //整屏显示A代表的ASCII字符子程序
+  14          {   for(ROW=COL=0;1;)
+  15   1          {   putchar(c);                     //定位写字符
+  16   2              if((ROW==0) && (COL==0)) break;
+  17   2          }
+  18   1      }
+  19          
+  20          void putchar(unsigned int c)            //定位写字符子程序
+  21          {   unsigned char d;
+  22   1          if(c>128)                           //字符码大于128表示为汉字
+  23   1          {   if( (ROW&0x1)==1 )            //写汉字时,ROW字符位置在奇数位置,则
+  24   2              {   lcdwd(' ');                 //自动补添一个空格对齐后再显示汉字
+  25   3                  charcursornext();           //置字符位置为下一个有效位置
+  26   3              }
+  27   2              charlcdpos();
+  28   2              if((c&0xff00)==0xff00)          //若高位字节为0FFH则表示为自定义字符
+  29   2                  c=0xffff-c;                 //则转换为ST7920的字符码
+  30   2              lcdwd(c/256);                   //写高位字符
+  31   2              charcursornext();
+  32   2              lcdwd(c&0xff);                  //写低位字符
+  33   2              charcursornext();
+  34   2          }
+  35   1          else                                //字符码小于128表示为ASCII字符
+  36   1          {   charlcdpos();
+  37   2              if( (ROW&0x1)==1 )            //写ASCII字符时,ROW字符位置在奇数位置,则
+  38   2              {   d=lcdrd();                  //读高位字符
+  39   3                  charlcdpos();
+  40   3                  lcdwd(d);                   //重新写高位字符
+  41   3                  lcdwd(c);
+  42   3              }
+  43   2              else
+  44   2              {   lcdwd(c);                   //写ASCII字符时,ROW字符位置在偶数位置,则
+  45   3                  lcdwd(' ');                 //直接写入,同时自动补显一个空格.
+  46   3              }
+  47   2              charcursornext();               //置字符位置为下一个有效位置
+  48   2          }
+  49   1      }
+  50          
+  51          void putstr(unsigned char code *s)      //显示字符串子程序,字符码为0时退出
+  52          {   unsigned int c;
+  53   1          while(1)
+  54   1          {   c=*s;
+C51 COMPILER V9.60.7.0   LCD12832                                                          11/23/2024 14:44:51 PAGE 2   
+
+  55   2              s++;
+  56   2              if(c==0) break;
+  57   2              if(c<128)
+  58   2                  putchar(c);
+  59   2              else
+  60   2              {   putchar(c*256+*s);
+  61   3                  s++;
+  62   3              }
+  63   2          }
+  64   1      }
+  65          
+  66          void putstrxy(unsigned char cx,unsigned char cy,unsigned char code *s)
+  67          {                                       //在(cx,cy)字符位置写字符串子程序
+  68   1          ROW=cx;                           //置当前X位置为cx
+  69   1          COL=cy;                           //置当前Y位置为cy
+  70   1          putstr(s);
+  71   1      }
+  72          
+  73          void setcharcgram(unsigned char cindex,unsigned char code *s)
+  74          {   unsigned char i;
+  75   1          lcdwc(0x34);                        //扩充指令集,图形模式关闭
+  76   1          lcdwc(0x02);                        //SR=0 激活CGRAM
+  77   1          lcdwc(0x30);                        //恢复为基本指令集
+  78   1          lcdwc( ((cindex&0x3)<<4) | 0x40);   //设置CGRAM地址
+  79   1          for(i=0;i<32;i++,s++)               //写点阵数据
+  80   1              lcdwd(*s);
+  81   1      }
+  82          
+  83          void putsizeimage(unsigned char XSIZE,unsigned char YSIZE,unsigned char code *s)
+  84          {  unsigned char lx,ly,x;
+  85   1         x=ROW;
+  86   1         for(ly=0;ly<YSIZE;ly++,COL++)
+  87   1         {  for(ROW=x,lx=0;lx<XSIZE;)
+  88   2            {  if((ROW&0x08)==0) glcdpos();
+  89   3               lcdwd(*s);
+  90   3               s++;
+  91   3               lx+=8;
+  92   3               ROW+=8;
+  93   3            }
+  94   2         }
+  95   1         ROW=x;
+  96   1      }
+  97          
+  98          void putimage(unsigned char code *s)    //显示图形子程序
+  99          {   unsigned char XSIZE,YSIZE;
+ 100   1          XSIZE=*s;
+ 101   1          s++;
+ 102   1          YSIZE=*s;
+ 103   1          s++;
+ 104   1          putsizeimage(XSIZE,YSIZE,s);
+ 105   1      }
+ 106          
+ 107          void charlcdpos(void)                   //设置坐标点(ROW,COL)内部RAM地址的子程序
+ 108          {  unsigned char ddaddr;
+ 109   1         ROW&=0xf;                          //X位置范围(0到15)
+ 110   1         ddaddr=ROW/2;
+ 111   1          if(COL==0)                        //(第一行)X: 第0----15个字符
+ 112   1              lcdwc(ddaddr|0x80);             //    DDRAM:  80----87H
+ 113   1          else if(COL==1)                   //(第二行)X: 第0----19个字符
+ 114   1              lcdwc(ddaddr|0x90);             //    DDRAM:  90----07H
+ 115   1          else if(COL==2)                   //(第三行)X: 第0----19个字符
+ 116   1              lcdwc(ddaddr|0x88);             //    DDRAM:  88----8FH
+C51 COMPILER V9.60.7.0   LCD12832                                                          11/23/2024 14:44:51 PAGE 3   
+
+ 117   1          else                                //(第四行)X: 第0----19个字符
+ 118   1              lcdwc(ddaddr|0x98);             //    DDRAM:  98----9FH
+ 119   1      }
+ 120          
+ 121          void charcursornext(void)               //置字符位置为下一个有效位置子程序
+ 122          {
+ 123   1          ROW++;                            //字符位置加1
+ 124   1          ROW&=0x0f;                        //字符位置ROW的有效范围为(0到15)
+ 125   1          if(ROW==0)                        //字符位置ROW=0表示要换行
+ 126   1          {   COL++;                        //行位置加1
+ 127   2              COL&=0X3;                     //字符位置COL的有效范围为(0到3)
+ 128   2          }
+ 129   1      }
+ 130          
+ 131          void lcdreset(void)                     //液晶显示控制器初始化子程序
+ 132          {   lcdwc(0x33);                        //接口模式设置
+ 133   1          delay3ms();                         //延时3MS
+ 134   1          lcdwc(0x30);                        //基本指令集
+ 135   1          delay3ms();                         //延时3MS
+ 136   1          lcdwc(0x30);                        //重复送基本指令集
+ 137   1          delay3ms();                         //延时3MS
+ 138   1          lcdwc(0x01);                        //清屏控制字
+ 139   1          delay3ms();                         //延时3MS
+ 140   1          lcdon();                            //开显示
+ 141   1      }
+ 142          void delay3ms(void)                     //延时3MS子程序
+ 143          { unsigned char i,j,k;
+ 144   1        for(i=0;i<3;i++)
+ 145   1          for(j=0;j<64;j++)
+ 146   1            for(k=0;k<51;k++);
+ 147   1      }
+ 148          
+ 149          void glcdpos(void)                      //写入绘图区域内部RAM指针子程序
+ 150          {   
+ 151   1          lcdwc(0x36);                        //扩展指令集
+ 152   1          lcdwc((COL & 0x1F) | 0x80);       //送Y地址 (Y范围调整到 0~31)
+ 153   1          lcdwc((ROW / 16) | 0x80);         //送X地址 (删除对 COL 的 32 检查逻辑)
+ 154   1          lcdwc(0x30);                        //恢复为基本指令集
+ 155   1      }
+ 156          
+ 157          void lcdon(void)                        //LCD显示开启子程序
+ 158          {   lcdwc(0x30);                        //设置为基本指令集
+ 159   1          lcdwc(0x0c);
+ 160   1      }
+ 161          
+ 162          void lcdoff(void)                       //LCD显示关闭子程序
+ 163          {   lcdwc(0x30);                        //设置为基本指令集
+ 164   1          lcdwc(0x08);
+ 165   1      }
+ 166          
+ 167          void lcdgraphon(void)                  //绘图区域显示开启子程序
+ 168          {   lcdwc(0x36);
+ 169   1          lcdwc(0x30);                        //恢复为基本指令集
+ 170   1      }
+ 171          
+ 172          void lcdgraphoff(void)                  //绘图区域显示关闭子程序
+ 173          {   lcdwc(0x34);
+ 174   1          lcdwc(0x30);                        //恢复为基本指令集
+ 175   1      }
+ 176          
+ 177          unsigned char lcdrd(void)               //从液晶显示控制器读数据
+ 178          {   unsigned char d;
+C51 COMPILER V9.60.7.0   LCD12832                                                          11/23/2024 14:44:51 PAGE 4   
+
+ 179   1          lcdwaitidle();                      //ST7920液晶显示控制器忙检测
+ 180   1          RS=1;                            //RS=1 RW=1 E=高脉冲
+ 181   1          RW=1;
+ 182   1          E=1;
+ 183   1          _nop_();
+ 184   1          d=P1;
+ 185   1          E=0;
+ 186   1          return d;
+ 187   1      }
+ 188          
+ 189          void lcdwd(unsigned char d)             //向液晶显示控制器写数据
+ 190          {   lcdwaitidle();                      //ST7920液晶显示控制器忙检测
+ 191   1          P1=d;
+ 192   1          RS=1;                            //RS=1 RW=0 E=高脉冲
+ 193   1          RW=0;
+ 194   1          E=1;
+ 195   1          _nop_();
+ 196   1          E=0;
+ 197   1      }
+ 198          
+ 199          void lcdwc(unsigned char c)             //向液晶显示控制器送指令
+ 200          {   lcdwaitidle();                      //ST7920液晶显示控制器忙检测
+ 201   1          P1=c;
+ 202   1          RS=0;                            //RS=0 RW=0 E=高脉冲
+ 203   1          RW=0;
+ 204   1          E=1;
+ 205   1          _nop_();
+ 206   1          E=0;
+ 207   1      }
+ 208          
+ 209          void lcdwaitidle(void)                  //控制器忙检测子程序
+ 210          {   unsigned char i;
+ 211   1          P1=0xff;
+ 212   1          RS=0;
+ 213   1          RW=1;
+ 214   1          E=1;
+ 215   1          for(i=0;i<20;i++)                   //
+ 216   1              if( (P1&0x80) != 0x80 ) break;  //D7=0 空闲退出
+ 217   1          E=0;
+ 218   1      }
+ 219          
+ 220          void exdelay(void)                      //演示延时子程序
+ 221          { unsigned char i,j,k;                  //延时约300mS
+ 222   1        for(i=0;i<30;i++)
+ 223   1          for(j=0;j<64;j++)
+ 224   1            for(k=0;k<51;k++);
+ 225   1      }
+ 226          
+ 227          
+ 228          
+ 229          void glcdfill(unsigned char d)          //整屏显示d代表的字数据子程序
+ 230          {   unsigned char i;
+ 231   1          ROW=0;
+ 232   1          COL=0;
+ 233   1          while(COL<32)
+ 234   1          {   glcdpos();
+ 235   2              for(i=0;i<16;i++)
+ 236   2                  lcdwd(d);
+ 237   2              COL++;
+ 238   2          }
+ 239   1          COL=0;
+ 240   1      }
+C51 COMPILER V9.60.7.0   LCD12832                                                          11/23/2024 14:44:51 PAGE 5   
+
+ 241          
+ 242          void glcdfill_with_params(unsigned char oddData, unsigned char evenData)
+ 243          {
+ 244   1          unsigned char i;
+ 245   1          ROW = 0;
+ 246   1          COL = 0;
+ 247   1      
+ 248   1          while (COL < 32)  // 遍历屏幕的 32 行
+ 249   1          {
+ 250   2              glcdpos();  // 设置当前行的显示地址
+ 251   2      
+ 252   2              for (i = 0; i < 16; i++)  // 遍历当前行的16字节
+ 253   2              {
+ 254   3                  if (COL % 2 == 0)  // 偶数行
+ 255   3                  {
+ 256   4                      lcdwd(evenData);  // 写入偶数行数据
+ 257   4                  }
+ 258   3                  else  // 奇数行
+ 259   3                  {
+ 260   4                      lcdwd(oddData);  // 写入奇数行数据
+ 261   4                  }
+ 262   3              }
+ 263   2      
+ 264   2              COL++;  // 切换到下一行
+ 265   2          }
+ 266   1          COL = 0;  // 重置 Y 坐标
+ 267   1      }
+ 268          
+ 269          unsigned char key()
+ 270          {
+ 271   1              if(KEY==0)
+ 272   1              {
+ 273   2                      exdelay();
+ 274   2                      while(KEY==0);
+ 275   2                      return 1;
+ 276   2              }
+ 277   1              return 0;
+ 278   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1038    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      2      28
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
