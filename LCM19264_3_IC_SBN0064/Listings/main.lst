@@ -1,0 +1,111 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              12/05/2024 16:38:30 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\m
+                    -ain.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "lcd19264.h"
+   2          #include "picture.h"    
+   3          #include <REGX52.H>
+   4          sbit int0=P2^1;   
+   5          unsigned char mode;
+   6             
+   7          void main( void )   
+   8          {      
+   9   1              Delay(20); 
+  10   1              IE=0x81;
+  11   1              IP=0x01;
+  12   1              TCON=0x01;
+  13   1              int0=1;  
+  14   1      
+  15   1              LcmInit();   
+  16   1              LcmClear();  
+  17   1      
+  18   1              LcmPutDots(0x55,0xaa);
+  19   1              Delay(10); 
+  20   1              LcmPutDots(0xaa,0x55);
+  21   1              Delay(10);
+  22   1              LcmPutDots(0x55,0x55);
+  23   1              Delay(10); 
+  24   1              LcmPutDots(0xaa,0xaa);
+  25   1              Delay(10); 
+  26   1              LcmPutDots(0xff,0x00);
+  27   1              Delay(10); 
+  28   1              LcmPutDots(0x00,0xff);
+  29   1              Delay(10);
+  30   1              LcmPutDots(0xff,0x55);
+  31   1              Delay(10);
+  32   1              LcmPutDots(0x55,0xff);
+  33   1              Delay(10);
+  34   1              LcmPutDots(0xff,0xff);
+  35   1              Delay(10);
+  36   1              Display_character();  
+  37   1              Delay(10);
+  38   1              LcmPutBMP(BMP0); 
+  39   1              Display_Chinese();
+  40   1              Delay(10);
+  41   1              
+  42   1              while(1)   
+  43   1              {
+  44   2                      if(key())
+  45   2                      {
+  46   3                              mode++;
+  47   3                              mode%=9;                    
+  48   3                              switch(mode)
+  49   3                              {
+  50   4                              case 0:
+  51   4                              LcmPutDots(0x55,0xaa);
+  52   4                              break;
+  53   4                              case 1:
+  54   4                              LcmPutDots(0xaa,0x55);
+C51 COMPILER V9.60.7.0   MAIN                                                              12/05/2024 16:38:30 PAGE 2   
+
+  55   4                              break;  
+  56   4                              case 2:
+  57   4                              LcmPutDots(0x55,0x55);
+  58   4                              break;  
+  59   4                              case 3:
+  60   4                              LcmPutDots(0xaa,0xaa);
+  61   4                              break;  
+  62   4                              case 4:
+  63   4                              LcmPutDots(0xff,0x00);
+  64   4                              break;  
+  65   4                              case 5:
+  66   4                              LcmPutDots(0x00,0xff);
+  67   4                              break;  
+  68   4                              case 6:
+  69   4                              LcmPutDots(0x55,0xff);
+  70   4                              break;  
+  71   4                              case 7:
+  72   4                              LcmPutDots(0xff,0x55);
+  73   4                              break;  
+  74   4                              case 8:
+  75   4                              LcmPutBMP(BMP0); 
+  76   4                              Display_Chinese();
+  77   4                              break;  
+  78   4                      }                       
+  79   3                                              
+  80   3                              
+  81   3                      }
+  82   2      
+  83   2              }   
+  84   1      }   
+  85            
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    296    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
