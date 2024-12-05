@@ -251,7 +251,7 @@ void LcmPutDots( unsigned char DotByte,unsigned char DotByte1 )
    
 void LcmPutBMP( unsigned char *puts )   
 {   
-	 unsigned int X=0;   
+	 unsigned int X=0;         
 	 Page = 0;   
 	 Col  = 0;   
 	 for(Page=0;Page<8;Page++)   
