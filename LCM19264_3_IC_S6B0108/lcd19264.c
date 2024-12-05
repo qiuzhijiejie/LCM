@@ -214,9 +214,10 @@ void LcmClear( void )
 
   
 void LcmInit( void )   
-{  	RES=0; 
+{  	
+	RES=0; 
  	Delay(10);
-    RES=1;
+        RES=1;
 
 	 WriteCommandL(0x3f); //DISPALY ON
 	 WriteCommandM(0x3f);   
