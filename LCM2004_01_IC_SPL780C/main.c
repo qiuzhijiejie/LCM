@@ -25,12 +25,8 @@ int main()
 	displayCustomCharacter1(pattern6); 
 	Delay(80); 
 	displayCustomCharacter1(pattern7); // 显示麻点
-	Delay(80); 
-	write_CGROM(0x10);//内置
 	Delay(80);
-	write_CGROM(0x60);//内置
-	Delay(80);
-	write_CGROM(0xB0);//内置
+	write_CGROM(0x30);//内置
 	Delay(80);
 	Write_DDRAM(0xCE);//内置字符
 	Delay(80);
@@ -45,39 +41,33 @@ while (1)
 	  {  
 		LCD_Clear();
 		mode++;
-		mode %= 10;			
+		mode %= 8;			
 		switch (mode) 
 	  {
-        case 1:            
+        case 0:            
 			displayCustomCharacter1(pattern1); 
             break;
-        case 2:
+        case 1:
             displayCustomCharacter1(pattern2);  
             break;
-        case 3:
+        case 2:
             displayCustomCharacter1(pattern3); 
             break;
-        case 4:
+        case 3:
            displayCustomCharacter1(pattern4);  
             break;
-        case 5:
+        case 4:
             displayCustomCharacter1(pattern5);  
             break;
-        case 6:
+        case 5:
             displayCustomCharacter1(pattern6);  
             break;
-		case 7:
+		case 6:
 			displayCustomCharacter1(pattern7);
 			break;
-		case 8:
-			write_CGROM(0x10); 
+		case 7:
+			write_CGROM(0xb0); 
 		   break;
-		case 9:
-			write_CGROM(0x60); 
-		   break;
-        default://mode不等于1到9中的任意一个值,则执行write_CGROM(0xB0) 
-			write_CGROM(0xB0);
-            break;
     
 		}
 	}			

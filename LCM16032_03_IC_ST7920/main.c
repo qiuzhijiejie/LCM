@@ -39,12 +39,14 @@ while(1)
 {
     mode++;
     mode %= 10;
-    Clean(' '); 
+    Clean(' ');
+	fillLCD_OddColumn(0x00, 0x00);
+	lcdreset(); 
     switch (mode) 
 	
 	{
         case 0:
-            fillLCD_OddColumn(0xFF, 0x00);
+            fillLCD_OddColumn(0xff, 0x00);
             break;
         case 1:
             fillLCD_OddColumn(0x00, 0xFF);

@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              11/18/2024 16:51:53 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              12/07/2024 16:59:29 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -49,53 +49,55 @@ line level    source
   39   2      {
   40   3          mode++;
   41   3          mode %= 10;
-  42   3          Clean(' '); 
-  43   3          switch (mode) 
-  44   3              
-  45   3              {
-  46   4              case 0:
-  47   4                  fillLCD_OddColumn(0xFF, 0x00);
-  48   4                  break;
-  49   4              case 1:
-  50   4                  fillLCD_OddColumn(0x00, 0xFF);
-  51   4                  break;
-  52   4              case 2:
-  53   4                  fillLCD_OddColumn(0xAA, 0x55);
-  54   4                  break;
-C51 COMPILER V9.60.7.0   MAIN                                                              11/18/2024 16:51:53 PAGE 2   
+  42   3          Clean(' ');
+  43   3              fillLCD_OddColumn(0x00, 0x00);
+  44   3              lcdreset(); 
+  45   3          switch (mode) 
+  46   3              
+  47   3              {
+  48   4              case 0:
+  49   4                  fillLCD_OddColumn(0xff, 0x00);
+  50   4                  break;
+  51   4              case 1:
+  52   4                  fillLCD_OddColumn(0x00, 0xFF);
+  53   4                  break;
+  54   4              case 2:
+C51 COMPILER V9.60.7.0   MAIN                                                              12/07/2024 16:59:29 PAGE 2   
 
-  55   4              case 3:
-  56   4                  fillLCD_OddColumn(0x55, 0xAA);
-  57   4                  break;
-  58   4                      case 4:
-  59   4                  fillLCD_OddColumn(0xAA, 0xAA);
-  60   4                         break;
-  61   4                  case 5:
-  62   4                  fillLCD_OddColumn(0x55, 0x55);
-  63   4                  break;
-  64   4              case 6:
-  65   4                  fillLCD_OddColumn(0xFF, 0x55);
-  66   4                  break;
-  67   4              case 7:
-  68   4                  fillLCD_OddColumn(0x55, 0xFF);
-  69   4                  break;
-  70   4                      case 8:
-  71   4                  fillLCD_OddColumn(0xFF, 0xFF);
-  72   4                  break;
-  73   4              case 9:
-  74   4                  putstrxy(0,0,"广东烨辉科技有限公司"); 
-  75   4                              putstrxy(3,1," LCM16032_03 ");  
-  76   4                  break;
-  77   4      
-  78   4              }
-  79   3      }               
-  80   2          }
-  81   1      }
-  82          
+  55   4                  fillLCD_OddColumn(0xAA, 0x55);
+  56   4                  break;
+  57   4              case 3:
+  58   4                  fillLCD_OddColumn(0x55, 0xAA);
+  59   4                  break;
+  60   4                      case 4:
+  61   4                  fillLCD_OddColumn(0xAA, 0xAA);
+  62   4                         break;
+  63   4                  case 5:
+  64   4                  fillLCD_OddColumn(0x55, 0x55);
+  65   4                  break;
+  66   4              case 6:
+  67   4                  fillLCD_OddColumn(0xFF, 0x55);
+  68   4                  break;
+  69   4              case 7:
+  70   4                  fillLCD_OddColumn(0x55, 0xFF);
+  71   4                  break;
+  72   4                      case 8:
+  73   4                  fillLCD_OddColumn(0xFF, 0xFF);
+  74   4                  break;
+  75   4              case 9:
+  76   4                  putstrxy(0,0,"广东烨辉科技有限公司"); 
+  77   4                              putstrxy(3,1," LCM16032_03 ");  
+  78   4                  break;
+  79   4      
+  80   4              }
+  81   3      }               
+  82   2          }
+  83   1      }
+  84          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    281    ----
+   CODE SIZE        =    291    ----
    CONSTANT SIZE    =     35    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

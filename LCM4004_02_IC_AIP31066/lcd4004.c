@@ -1,16 +1,10 @@
 #include "LCD4004.h"
 #include <REGX52.H>
 
-
-
 sbit LCD_RS = P3^0; //寄存器选择线
-sbit LCD_RW = P3^1;//读/写线(R/W)
-sbit LCD_EN = P3^2;//使能线(EN)
+sbit LCD_RW = P3^1; //读/写线(R/W)
+sbit LCD_EN = P3^2; //使能线(EN)
 sbit  KEY1  =P2^0;	
-
-
-unsigned int i,j,Line,Column,row, col;
-
 
 unsigned int ReadKey1() 
 {
@@ -25,10 +19,6 @@ unsigned int ReadKey1()
     }
     return 0;  
 }
-
-
-
-
 
 void  Delay(xms)	//@12.000MHz
 {
@@ -83,8 +73,6 @@ void LCD_WriteCommand(unsigned char Command)
     LCD_EN = 0;   // 使能脚E后负跳变完成写入
 
 }
-
-
 
 /**
   * @brief  LCD4004写数据
@@ -184,8 +172,6 @@ void LCD_SetCursor(unsigned int Line, unsigned int Column)
         LCD_WriteCommand(0xC0 | (Column + 40));  // 第四行
     }
 }
-	
- 
 
 
 unsigned char LCD_Readdata(void)               //读数据子程序
@@ -218,7 +204,6 @@ void LCD_USER_ShowString(unsigned char Line, unsigned char Column, unsigned char
 }
 
 
-
 /**
  * @brief LCD4004显示字符串
  * @param Line 0-3行 Column 0-39列 *String 输入字符""
@@ -232,7 +217,6 @@ void LCD_ShowString(unsigned char Line, unsigned char Column, char *String)
       LCD_WriteData(String[i]);
     }
 }
-
 
 
 void write_CGROM(unsigned char a)//LCD内部固化字模存储器，内部含有常用字符
@@ -261,7 +245,6 @@ void write_CGROM(unsigned char a)//LCD内部固化字模存储器，内部含有常用字符
     Delay(1);                // 再次延时，确保数据全部写入
 	
 }
-
 
 
 /**
@@ -350,4 +333,3 @@ void displayCustomCharacter1(const unsigned char pattern[8])
         }
     }
 }
-
