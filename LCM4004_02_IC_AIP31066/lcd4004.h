@@ -17,6 +17,9 @@ void displayCustomCharacter1(const unsigned char pattern[8]) ;
 void write_CGROM(unsigned char a);
 void Write_DDRAM(unsigned char a);
 void Write_CGRAM(unsigned char a[]);
+void HandleKey() ;
+void DisplayPatterns() ;
+
 #endif
 
 

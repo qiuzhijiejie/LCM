@@ -29,4 +29,7 @@ void lcdwaitidle(void);                 //控制器忙检测子程序
 void fillLCD_OddColumn(unsigned char oddData, unsigned char evenData)  ;
 unsigned char ReadKey();  
 void Clean(unsigned int c) ;       //整屏显示ST7920内部的CGROMA程序
+
+void DisplayPatterns();
+void HandleKey() ;
 #endif

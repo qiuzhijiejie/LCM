@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   LCD12864                                                          11/22/2024 22:25:27 PAGE 1   
+C51 COMPILER V9.60.7.0   LCD12864                                                          12/11/2024 14:10:37 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD12864
@@ -62,7 +62,7 @@ line level    source
   52   2       E=1;
   53   2       _nop_();
   54   2       flag=P1;
-C51 COMPILER V9.60.7.0   LCD12864                                                          11/22/2024 22:25:27 PAGE 2   
+C51 COMPILER V9.60.7.0   LCD12864                                                          12/11/2024 14:10:37 PAGE 2   
 
   55   2       E=0;
   56   2       }  
@@ -126,7 +126,7 @@ line level    source
  114   1       RW = 0;   
  115   1       E  = 1;   
  116   1       _nop_();   
-C51 COMPILER V9.60.7.0   LCD12864                                                          11/22/2024 22:25:27 PAGE 3   
+C51 COMPILER V9.60.7.0   LCD12864                                                          12/11/2024 14:10:37 PAGE 3   
 
  117   1       E  = 0;   
  118   1       _nop_();   
@@ -190,7 +190,7 @@ line level    source
  176   1       WriteCommandR(0xc0);   
  177   1         
  178   1       WriteCommandL(0x3f); //DISPLAY ON  
-C51 COMPILER V9.60.7.0   LCD12864                                                          11/22/2024 22:25:27 PAGE 4   
+C51 COMPILER V9.60.7.0   LCD12864                                                          12/11/2024 14:10:37 PAGE 4   
 
  179   1       WriteCommandR(0x3f);   
  180   1           
@@ -254,7 +254,7 @@ line level    source
  238             temp = ReadData();   
  239          
  240             temp = ReadData();   
-C51 COMPILER V9.60.7.0   LCD12864                                                          11/22/2024 22:25:27 PAGE 5   
+C51 COMPILER V9.60.7.0   LCD12864                                                          12/11/2024 14:10:37 PAGE 5   
 
  241             temp = ~temp;   
  242             WriteData(temp);   
@@ -318,7 +318,7 @@ line level    source
  300   2       }
  301   1        Delay(500);
  302   1      
-C51 COMPILER V9.60.7.0   LCD12864                                                          11/22/2024 22:25:27 PAGE 6   
+C51 COMPILER V9.60.7.0   LCD12864                                                          12/11/2024 14:10:37 PAGE 6   
 
  303   1       for(c=0;c<8;c++)
  304   1       { Page = c; 
@@ -382,7 +382,7 @@ line level    source
  362   2       }  
  363   1       while(loge);
  364   1      }   
-C51 COMPILER V9.60.7.0   LCD12864                                                          11/22/2024 22:25:27 PAGE 7   
+C51 COMPILER V9.60.7.0   LCD12864                                                          12/11/2024 14:10:37 PAGE 7   
 
  365          
  366          
@@ -433,27 +433,64 @@ line level    source
  411   1      
  412   1      }
  413          
- 414          
- 415          
- 416          unsigned char key(void)
- 417          {
- 418   1              if(KEY==0)
- 419   1              {
- 420   2               Delay(1);
- 421   2               while(KEY==0);
- 422   2               return 1;              
- 423   2              }
- 424   1              return 0;
- 425   1              
- 426   1      }
-C51 COMPILER V9.60.7.0   LCD12864                                                          11/22/2024 22:25:27 PAGE 8   
+ 414          unsigned char key(void)
+ 415          {
+ 416   1              if(KEY==0)
+ 417   1              {
+ 418   2               Delay(1);
+ 419   2               while(KEY==0);
+ 420   2               return 1;              
+ 421   2              }
+ 422   1              return 0;
+ 423   1              
+ 424   1      }
+ 425          
+ 426          void DisplayPatterns() 
+C51 COMPILER V9.60.7.0   LCD12864                                                          12/11/2024 14:10:37 PAGE 8   
 
+ 427          {
+ 428   1          static int step = 0; 
+ 429   1      
+ 430   1          switch (step) 
+ 431   1          {
+ 432   2              case 0: LcmPutDots(0x55, 0xaa); Delay(100); break;
+ 433   2              case 1: LcmPutDots(0xaa, 0x55); Delay(100); break;
+ 434   2              case 2: LcmPutDots(0x55, 0x55); Delay(100); break;
+ 435   2              case 3: LcmPutDots(0xaa, 0xaa); Delay(100); break;
+ 436   2              case 4: LcmPutDots(0xff, 0x00); Delay(100); break;
+ 437   2              case 5: LcmPutDots(0x00, 0xff); Delay(100); break;
+ 438   2              case 6: LcmPutDots(0xff, 0xff); Delay(100); break;
+ 439   2              case 7: Display_Chinese();Delay(100); break;
+ 440   2          }
+ 441   1          step++;
+ 442   1          if (step > 7) step = 0;
+ 443   1      }
+ 444          
+ 445          void HandleKey() 
+ 446          {
+ 447   1              unsigned char mode;
+ 448   1          mode++;           
+ 449   1          mode%=6;    
+ 450   1          LcmClear();       
+ 451   1          switch (mode) 
+ 452   1          {   
+ 453   2              case 0: LcmPutDots(0xff, 0x00); Delay(1000); break;
+ 454   2              case 1: LcmPutDots(0x55, 0xaa); Delay(1000); break;
+ 455   2              case 2: LcmPutDots(0x55, 0x55); Delay(1000); break;
+ 456   2              case 3: LcmPutDots(0x00, 0xff); Delay(1000); break;
+ 457   2              case 4: LcmPutDots(0xaa, 0xaa); Delay(1000); break;
+ 458   2              case 5: Display_Chinese(); Delay(1000); break;
+ 459   2      
+ 460   2      
+ 461   2          }
+ 462   1      }
+ 463          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1054    ----
+   CODE SIZE        =   1273    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =      2      18
+   XDATA SIZE       =      4      19
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

@@ -22,6 +22,8 @@ void show_english(void);
 void Display_Picture(unsigned char pic[]);
 void Display16_16Chinese(unsigned char page, unsigned char col, unsigned char Character_coding,  unsigned char ft[]) ;
 void Display8_16English(unsigned char page, unsigned char col, unsigned char Character_coding,  unsigned char ft[]) ;
+void DisplayPatterns();
+void HandleKey() ;
 
 
 

@@ -411,8 +411,6 @@ void Step(void) interrupt 0 using 0
 
 }
 
-
-
 unsigned char key(void)
 {
 	if(KEY==0)
@@ -424,3 +422,42 @@ unsigned char key(void)
 	return 0;
 	
 }
+
+void DisplayPatterns() 
+{
+    static int step = 0; 
+
+    switch (step) 
+    {
+        case 0: LcmPutDots(0x55, 0xaa); Delay(100); break;
+        case 1: LcmPutDots(0xaa, 0x55); Delay(100); break;
+        case 2: LcmPutDots(0x55, 0x55); Delay(100); break;
+        case 3: LcmPutDots(0xaa, 0xaa); Delay(100); break;
+        case 4: LcmPutDots(0xff, 0x00); Delay(100); break;
+        case 5: LcmPutDots(0x00, 0xff); Delay(100); break;
+        case 6: LcmPutDots(0xff, 0xff); Delay(100); break;
+        case 7: Display_Chinese();Delay(100); break;
+    }
+    step++;
+    if (step > 7) step = 0;
+}
+
+void HandleKey() 
+{
+	unsigned char mode;
+    mode++;           
+    mode%=6;    
+    LcmClear();       
+    switch (mode) 
+    {	
+        case 0: LcmPutDots(0xff, 0x00); Delay(1000); break;
+        case 1: LcmPutDots(0x55, 0xaa); Delay(1000); break;
+        case 2: LcmPutDots(0x55, 0x55); Delay(1000); break;
+        case 3: LcmPutDots(0x00, 0xff); Delay(1000); break;
+        case 4: LcmPutDots(0xaa, 0xaa); Delay(1000); break;
+        case 5: Display_Chinese(); Delay(1000); break;
+
+
+    }
+}
+

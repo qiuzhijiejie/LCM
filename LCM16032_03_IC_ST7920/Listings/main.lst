@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              12/07/2024 16:59:29 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              12/11/2024 17:18:11 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -12,96 +12,111 @@ line level    source
    2          #include <intrins.h>
    3          #include "16032.h"
    4          #include "picture.h"
-   5          unsigned char mode;
+   5          //unsigned char mode;
    6          
-   7          void main(void)
-   8          { 
-   9   1              
-  10   1              lcdreset();                   
-  11   1          Clean(' '); 
-  12   1              charlcdfill(0x10);
-  13   1              exdelay(); 
-  14   1          Clean(' '); 
-  15   1              fillLCD_OddColumn(0xFF, 0x00);
-  16   1              exdelay(); 
-  17   1              fillLCD_OddColumn(0x00, 0xff);
-  18   1              exdelay(); 
-  19   1              fillLCD_OddColumn(0xaa, 0x55);
-  20   1              exdelay(); 
-  21   1              fillLCD_OddColumn(0x55, 0xaa);
-  22   1              exdelay(); 
-  23   1              fillLCD_OddColumn(0xaa, 0xaa);
-  24   1              exdelay(); 
-  25   1              fillLCD_OddColumn(0x55, 0x55);
-  26   1              exdelay();
-  27   1              fillLCD_OddColumn(0xff, 0x55);
-  28   1              exdelay();
-  29   1              fillLCD_OddColumn(0x55, 0xff);
-  30   1              exdelay();
-  31   1              fillLCD_OddColumn(0x00, 0x00);
-  32   1              putstrxy(0,0,"广东烨辉科技有限公司");   
-  33   1          putstrxy(3,1," LCM16032_03 ");   
-  34   1      
-  35   1      while(1)
-  36   1          { 
-  37   2                              
-  38   2              if (ReadKey()) 
-  39   2      {
-  40   3          mode++;
-  41   3          mode %= 10;
-  42   3          Clean(' ');
-  43   3              fillLCD_OddColumn(0x00, 0x00);
-  44   3              lcdreset(); 
-  45   3          switch (mode) 
-  46   3              
-  47   3              {
-  48   4              case 0:
-  49   4                  fillLCD_OddColumn(0xff, 0x00);
-  50   4                  break;
-  51   4              case 1:
-  52   4                  fillLCD_OddColumn(0x00, 0xFF);
-  53   4                  break;
-  54   4              case 2:
-C51 COMPILER V9.60.7.0   MAIN                                                              12/07/2024 16:59:29 PAGE 2   
+   7          //void main(void)
+   8          //{ 
+   9          //      
+  10          //      lcdreset();                   
+  11          //    Clean(' '); 
+  12          //      charlcdfill(0x10);
+  13          //      exdelay(); 
+  14          //    Clean(' '); 
+  15          //      fillLCD_OddColumn(0xFF, 0x00);
+  16          //      exdelay(); 
+  17          //      fillLCD_OddColumn(0x00, 0xff);
+  18          //      exdelay(); 
+  19          //      fillLCD_OddColumn(0xaa, 0x55);
+  20          //      exdelay(); 
+  21          //      fillLCD_OddColumn(0x55, 0xaa);
+  22          //      exdelay(); 
+  23          //      fillLCD_OddColumn(0xaa, 0xaa);
+  24          //      exdelay(); 
+  25          //      fillLCD_OddColumn(0x55, 0x55);
+  26          //      exdelay();
+  27          //      fillLCD_OddColumn(0xff, 0x55);
+  28          //      exdelay();
+  29          //      fillLCD_OddColumn(0x55, 0xff);
+  30          //      exdelay();
+  31          //      fillLCD_OddColumn(0x00, 0x00);
+  32          //      putstrxy(0,0,"广东烨辉科技有限公司");   
+  33          //    putstrxy(3,1," LCM16032_03 ");   
+  34          
+  35          //while(1)
+  36          //    { 
+  37          //                      
+  38          //      if (ReadKey()) 
+  39          //{
+  40          //    mode++;
+  41          //    mode %= 10;
+  42          //    Clean(' ');
+  43          //      fillLCD_OddColumn(0x00, 0x00);
+  44          //      lcdreset(); 
+  45          //    switch (mode) 
+  46          //      
+  47          //      {
+  48          //        case 0:
+  49          //            fillLCD_OddColumn(0xff, 0x00);
+  50          //            break;
+  51          //        case 1:
+  52          //            fillLCD_OddColumn(0x00, 0xFF);
+  53          //            break;
+  54          //        case 2:
+C51 COMPILER V9.60.7.0   MAIN                                                              12/11/2024 17:18:11 PAGE 2   
 
-  55   4                  fillLCD_OddColumn(0xAA, 0x55);
-  56   4                  break;
-  57   4              case 3:
-  58   4                  fillLCD_OddColumn(0x55, 0xAA);
-  59   4                  break;
-  60   4                      case 4:
-  61   4                  fillLCD_OddColumn(0xAA, 0xAA);
-  62   4                         break;
-  63   4                  case 5:
-  64   4                  fillLCD_OddColumn(0x55, 0x55);
-  65   4                  break;
-  66   4              case 6:
-  67   4                  fillLCD_OddColumn(0xFF, 0x55);
-  68   4                  break;
-  69   4              case 7:
-  70   4                  fillLCD_OddColumn(0x55, 0xFF);
-  71   4                  break;
-  72   4                      case 8:
-  73   4                  fillLCD_OddColumn(0xFF, 0xFF);
-  74   4                  break;
-  75   4              case 9:
-  76   4                  putstrxy(0,0,"广东烨辉科技有限公司"); 
-  77   4                              putstrxy(3,1," LCM16032_03 ");  
-  78   4                  break;
-  79   4      
-  80   4              }
-  81   3      }               
-  82   2          }
-  83   1      }
-  84          
+  55          //            fillLCD_OddColumn(0xAA, 0x55);
+  56          //            break;
+  57          //        case 3:
+  58          //            fillLCD_OddColumn(0x55, 0xAA);
+  59          //            break;
+  60          //              case 4:
+  61          //            fillLCD_OddColumn(0xAA, 0xAA);
+  62          //                 break;
+  63          //          case 5:
+  64          //            fillLCD_OddColumn(0x55, 0x55);
+  65          //            break;
+  66          //        case 6:
+  67          //            fillLCD_OddColumn(0xFF, 0x55);
+  68          //            break;
+  69          //        case 7:
+  70          //            fillLCD_OddColumn(0x55, 0xFF);
+  71          //            break;
+  72          //              case 8:
+  73          //            fillLCD_OddColumn(0xFF, 0xFF);
+  74          //            break;
+  75          //        case 9:
+  76          //            putstrxy(0,0,"广东烨辉科技有限公司"); 
+  77          //                      putstrxy(3,1," LCM16032_03 ");  
+  78          //            break;
+  79          //      }
+  80          //}             
+  81          //    }
+  82          //}
+  83          
+  84          void main(void)   
+  85          {
+  86   1              lcdreset();                   
+  87   1          Clean(' '); 
+  88   1          while (1)  
+  89   1          {      
+  90   2              if (ReadKey()) 
+  91   2              {
+  92   3                  HandleKey(); 
+  93   3              } 
+  94   2              else 
+  95   2              {          
+  96   3                  DisplayPatterns(); 
+  97   3              }
+  98   2          }   
+  99   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    291    ----
-   CONSTANT SIZE    =     35    ----
+   CODE SIZE        =     26    ----
+   CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =      1    ----
+   DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

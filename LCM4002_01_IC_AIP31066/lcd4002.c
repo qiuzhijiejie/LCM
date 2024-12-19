@@ -1,16 +1,10 @@
 #include "LCD4002.h"
 #include <REGX52.H>
 
-
-
 sbit LCD_RS = P3^0; //寄存器选择线
 sbit LCD_RW = P3^1;//读/写线(R/W)
 sbit LCD_EN = P3^2;//使能线(EN)
 sbit  KEY1  =P2^0;	
-
-
-extern unsigned int i,j,maxSteps,Line,Column,row, col;
-
 
 unsigned int ReadKey1() // 按键检测函数
 {
@@ -25,9 +19,6 @@ unsigned int ReadKey1() // 按键检测函数
     }
     return 0;  // 按键没有被按下
 }
-
-
-
 
 
 void  Delay(xms)	//@12.000MHz
@@ -64,8 +55,6 @@ void Busy()
 }					  /*对控制器每次进行读写操作之前， 
 					  都必须进行读写检测，确保STA7为0*/
 
-
-
 /**
   * @brief  LCD4002写命令
   * @param  Command 要写入的命令
@@ -81,7 +70,6 @@ void LCD_WriteCommand(unsigned char Command)
     Delay(0.1);
     LCD_EN = 0;   // 使能脚E后负跳变完成写入
 }
-
 
 
 /**
@@ -133,9 +121,6 @@ void LCD_Init()
     LCD_WriteCommand(0x06); // 当读或写一个字符后地址指针加一,不移动
     LCD_WriteCommand(0x01); // 光标复位，清屏
 	Delay(0.1); 
-	
-
-
 
 }
 
@@ -175,8 +160,6 @@ void LCD_SetCursor(unsigned int Line, unsigned int Column)
 
 }
 	
- 
-
 
 unsigned char LCD_Readdata(void)               //读数据子程序
 {   unsigned char d;
@@ -192,7 +175,6 @@ unsigned char LCD_Readdata(void)               //读数据子程序
 }
 
 
-
 // 
 /**
  * @brief  显示字符函数
@@ -204,7 +186,6 @@ void LCD_USER_ShowString(unsigned char Line, unsigned char Column, unsigned char
 	LCD_SetCursor(Line, Column); // 光标
 	LCD_WriteData(i);
 }
-
 
 
 /**
@@ -248,7 +229,6 @@ void write_CGROM(unsigned char a)//LCD内部固化字模存储器，内部含有常用字符
     
     Delay(1);                // 再次延时，确保数据全部写入
 }
-
 
 
 /**
@@ -298,7 +278,6 @@ void Write_CGRAM(unsigned char a[])
 }
 
    
-
 void displayCustomCharacter1(const unsigned char pattern[8]) 
 {
     unsigned char row, col;
@@ -326,3 +305,68 @@ void displayCustomCharacter1(const unsigned char pattern[8])
     }
 }
 
+unsigned char data pattern1[8] = {0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15}; 
+unsigned char data pattern2[8] = {0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A};	
+unsigned char data pattern3[8] = {0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15}; 
+unsigned char data pattern4[8] = {0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A}; 
+unsigned char data pattern5[8] = {0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00}; 
+unsigned char data pattern6[8] = {0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F}; 	
+unsigned char data pattern7[8] = {0x00, 0x15, 0x00, 0x15, 0x00, 0x15, 0x00, 0x15}; 
+void HandleKey() 
+{
+	unsigned char mode;
+	
+		if (ReadKey1()) 
+	  {  
+		LCD_Clear();
+		mode++;
+		mode %= 8;			
+		switch (mode) 
+	  {
+        case 0:            
+			displayCustomCharacter1(pattern1); 
+            break;
+        case 1:
+            displayCustomCharacter1(pattern2);  
+            break;
+        case 2:
+            displayCustomCharacter1(pattern3); 
+            break;
+        case 3:
+           displayCustomCharacter1(pattern4);  
+            break;
+        case 4:
+            displayCustomCharacter1(pattern5);  
+            break;
+        case 5:
+            displayCustomCharacter1(pattern6);  
+            break;
+		case 6:
+			displayCustomCharacter1(pattern7);
+			break;
+		case 7:
+			write_CGROM(0x21); 
+		   break;
+		}
+	}
+}
+
+void DisplayPatterns() 
+{
+    static int step = 0; // 当前显示图案步骤
+    switch (step) 
+    {
+        case 0: displayCustomCharacter1(pattern1);  Delay(80); break;
+        case 1: displayCustomCharacter1(pattern2);  Delay(80); break;
+        case 2: displayCustomCharacter1(pattern3);  Delay(80); break;
+        case 3: displayCustomCharacter1(pattern4);  Delay(80); break;
+        case 4: displayCustomCharacter1(pattern5);  Delay(80); break;
+        case 5: displayCustomCharacter1(pattern6);  Delay(80); break;
+        case 6: displayCustomCharacter1(pattern7);  Delay(80); break;
+        case 7: write_CGROM(0x10); Delay(80); break;
+        case 8: Write_DDRAM(0x60); Delay(80); break;
+        case 9:	LCD_Clear();LCD_ShowString(1,15,"LCM4002_01");LCD_ShowString(0,12,"YeHuiDisplay.com");Delay(80); break;
+    }
+    step++;
+    if (step > 9) step = 0; // 循环
+}

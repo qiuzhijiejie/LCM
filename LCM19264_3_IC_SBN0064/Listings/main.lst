@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              12/05/2024 16:38:30 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              12/13/2024 08:45:31 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -11,98 +11,126 @@ line level    source
    1          #include "lcd19264.h"
    2          #include "picture.h"    
    3          #include <REGX52.H>
-   4          sbit int0=P2^1;   
-   5          unsigned char mode;
-   6             
-   7          void main( void )   
-   8          {      
-   9   1              Delay(20); 
-  10   1              IE=0x81;
-  11   1              IP=0x01;
-  12   1              TCON=0x01;
-  13   1              int0=1;  
-  14   1      
-  15   1              LcmInit();   
-  16   1              LcmClear();  
-  17   1      
-  18   1              LcmPutDots(0x55,0xaa);
-  19   1              Delay(10); 
-  20   1              LcmPutDots(0xaa,0x55);
-  21   1              Delay(10);
-  22   1              LcmPutDots(0x55,0x55);
-  23   1              Delay(10); 
-  24   1              LcmPutDots(0xaa,0xaa);
-  25   1              Delay(10); 
-  26   1              LcmPutDots(0xff,0x00);
-  27   1              Delay(10); 
-  28   1              LcmPutDots(0x00,0xff);
-  29   1              Delay(10);
-  30   1              LcmPutDots(0xff,0x55);
-  31   1              Delay(10);
-  32   1              LcmPutDots(0x55,0xff);
-  33   1              Delay(10);
-  34   1              LcmPutDots(0xff,0xff);
-  35   1              Delay(10);
-  36   1              Display_character();  
-  37   1              Delay(10);
-  38   1              LcmPutBMP(BMP0); 
-  39   1              Display_Chinese();
-  40   1              Delay(10);
-  41   1              
-  42   1              while(1)   
-  43   1              {
-  44   2                      if(key())
-  45   2                      {
-  46   3                              mode++;
-  47   3                              mode%=9;                    
-  48   3                              switch(mode)
-  49   3                              {
-  50   4                              case 0:
-  51   4                              LcmPutDots(0x55,0xaa);
-  52   4                              break;
-  53   4                              case 1:
-  54   4                              LcmPutDots(0xaa,0x55);
-C51 COMPILER V9.60.7.0   MAIN                                                              12/05/2024 16:38:30 PAGE 2   
+   4          sbit int0=P3^1;   
+   5          //unsigned char mode;
+   6          //   
+   7          //void main( void )   
+   8          //{      
+   9          //      Delay(20); 
+  10          //      IE=0x81;
+  11          //      IP=0x01;
+  12          //      TCON=0x01;
+  13          //      int0=1;  
+  14          
+  15          //      LcmInit();   
+  16          //      LcmClear();  
+  17          
+  18          //      LcmPutDots(0x55,0xaa);
+  19          //      Delay(10); 
+  20          //      LcmPutDots(0xaa,0x55);
+  21          //      Delay(10);
+  22          //      LcmPutDots(0x55,0x55);
+  23          //      Delay(10); 
+  24          //      LcmPutDots(0xaa,0xaa);
+  25          //      Delay(10); 
+  26          //      LcmPutDots(0xff,0x00);
+  27          //      Delay(10); 
+  28          //      LcmPutDots(0x00,0xff);
+  29          //      Delay(10);
+  30          //      LcmPutDots(0xff,0x55);
+  31          //      Delay(10);
+  32          //      LcmPutDots(0x55,0xff);
+  33          //      Delay(10);
+  34          //      LcmPutDots(0xff,0xff);
+  35          //      Delay(10);
+  36          //      Display_character();  
+  37          //      Delay(10);
+  38          //      LcmPutBMP(BMP0); 
+  39          //      Display_Chinese();
+  40          //      Delay(10);
+  41          //      
+  42          //      while(1)   
+  43          //      {
+  44          //              if(key())
+  45          //              {
+  46          //                      mode++;
+  47          //                      mode%=9;                    
+  48          //                      switch(mode)
+  49          //                      {
+  50          //                      case 0:
+  51          //                      LcmPutDots(0x55,0xaa);
+  52          //                      break;
+  53          //                      case 1:
+  54          //                      LcmPutDots(0xaa,0x55);
+C51 COMPILER V9.60.7.0   MAIN                                                              12/13/2024 08:45:31 PAGE 2   
 
-  55   4                              break;  
-  56   4                              case 2:
-  57   4                              LcmPutDots(0x55,0x55);
-  58   4                              break;  
-  59   4                              case 3:
-  60   4                              LcmPutDots(0xaa,0xaa);
-  61   4                              break;  
-  62   4                              case 4:
-  63   4                              LcmPutDots(0xff,0x00);
-  64   4                              break;  
-  65   4                              case 5:
-  66   4                              LcmPutDots(0x00,0xff);
-  67   4                              break;  
-  68   4                              case 6:
-  69   4                              LcmPutDots(0x55,0xff);
-  70   4                              break;  
-  71   4                              case 7:
-  72   4                              LcmPutDots(0xff,0x55);
-  73   4                              break;  
-  74   4                              case 8:
-  75   4                              LcmPutBMP(BMP0); 
-  76   4                              Display_Chinese();
-  77   4                              break;  
-  78   4                      }                       
-  79   3                                              
-  80   3                              
-  81   3                      }
-  82   2      
-  83   2              }   
-  84   1      }   
+  55          //                      break;  
+  56          //                      case 2:
+  57          //                      LcmPutDots(0x55,0x55);
+  58          //                      break;  
+  59          //                      case 3:
+  60          //                      LcmPutDots(0xaa,0xaa);
+  61          //                      break;  
+  62          //                      case 4:
+  63          //                      LcmPutDots(0xff,0x00);
+  64          //                      break;  
+  65          //                      case 5:
+  66          //                      LcmPutDots(0x00,0xff);
+  67          //                      break;  
+  68          //                      case 6:
+  69          //                      LcmPutDots(0x55,0xff);
+  70          //                      break;  
+  71          //                      case 7:
+  72          //                      LcmPutDots(0xff,0x55);
+  73          //                      break;  
+  74          //                      case 8:
+  75          //                      LcmPutBMP(BMP0); 
+  76          //                      Display_Chinese();
+  77          //                      break;  
+  78          //              }                       
+  79          //                                      
+  80          //                      
+  81          //              }
+  82          
+  83          //      }   
+  84          //}   
   85            
+  86            
+  87          void main(void)   
+  88          {
+  89   1      
+  90   1              Delay(20); 
+  91   1              IE=0x81;
+  92   1              IP=0x01;
+  93   1              TCON=0x01;
+  94   1              int0=1;  
+  95   1              LcmInit();   
+  96   1              LcmClear(); 
+  97   1          while (1)  
+  98   1          {   
+  99   2              if (key()) 
+ 100   2              {
+ 101   3                  HandleKey(); 
+ 102   3              } 
+ 103   2              else 
+ 104   2              {
+ 105   3                
+ 106   3                  DisplayPatterns(); 
+ 107   3              }
+ 108   2          }   
+ 109   1      }
+ 110            
+ 111            
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    296    ----
+   CODE SIZE        =     40    ----
    CONSTANT SIZE    =   ----    ----
+C51 COMPILER V9.60.7.0   MAIN                                                              12/13/2024 08:45:31 PAGE 3   
+
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =      1    ----
+   DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

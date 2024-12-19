@@ -29,4 +29,6 @@ void lcdwc(unsigned char c);            //送指令子程序
 void lcdwaitidle(void);                 //控制器忙检测子程序
 void glcdfill_with_params(unsigned char oddData, unsigned char evenData);
 unsigned char key();
+void HandleKey();
+void DisplayPatterns();
 #endif

@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   LCD19264                                                          12/05/2024 16:18:53 PAGE 1   
+C51 COMPILER V9.60.7.0   LCD19264                                                          12/14/2024 11:22:52 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD19264
@@ -62,7 +62,7 @@ line level    source
   52   1          RS = 0;   
   53   1          RW = 1;    
   54   1      
-C51 COMPILER V9.60.7.0   LCD19264                                                          12/05/2024 16:18:53 PAGE 2   
+C51 COMPILER V9.60.7.0   LCD19264                                                          12/14/2024 11:22:52 PAGE 2   
 
   55   1          P1 = 0xFF;
   56   1      
@@ -126,7 +126,7 @@ line level    source
  114   1               RW = 0;   
  115   1               P1 = x;      
  116   1               E  = 1;   
-C51 COMPILER V9.60.7.0   LCD19264                                                          12/05/2024 16:18:53 PAGE 3   
+C51 COMPILER V9.60.7.0   LCD19264                                                          12/14/2024 11:22:52 PAGE 3   
 
  117   1               _nop_();   
  118   1               E  = 0;   
@@ -190,7 +190,7 @@ line level    source
  176   1      
  177   1               DataByte = P1;  
  178   1               E  = 0;   
-C51 COMPILER V9.60.7.0   LCD19264                                                          12/05/2024 16:18:53 PAGE 4   
+C51 COMPILER V9.60.7.0   LCD19264                                                          12/14/2024 11:22:52 PAGE 4   
 
  179   1               _nop_();  
  180   1               CSB=1;
@@ -233,7 +233,7 @@ line level    source
  217          {       
  218   1              RES=0; 
  219   1              Delay(10);
- 220   1              RES=1;
+ 220   1          RES=1;
  221   1      
  222   1               WriteCommandL(0x3f); //DISPALY ON
  223   1               WriteCommandM(0x3f);   
@@ -254,7 +254,7 @@ line level    source
  238   1               Page = 0;   
  239   1               Col  = 0;   
  240   1               for(Page=0;Page<8;Page++)   
-C51 COMPILER V9.60.7.0   LCD19264                                                          12/05/2024 16:18:53 PAGE 5   
+C51 COMPILER V9.60.7.0   LCD19264                                                          12/14/2024 11:22:52 PAGE 5   
 
  241   1               {   
  242   2                        for(Col=0;Col<192;Col++)   
@@ -318,7 +318,7 @@ line level    source
  300   1               unsigned char k=0;
  301   1               unsigned int num=0;
  302   1               num=i*0x20;
-C51 COMPILER V9.60.7.0   LCD19264                                                          12/05/2024 16:18:53 PAGE 6   
+C51 COMPILER V9.60.7.0   LCD19264                                                          12/14/2024 11:22:52 PAGE 6   
 
  303   1      
  304   1               for(k=0;k<0x10;k++)
@@ -382,7 +382,7 @@ line level    source
  362   1              unsigned char a=0;
  363   1      //       Page = 0;   
  364   1      //       Col  = 0;
-C51 COMPILER V9.60.7.0   LCD19264                                                          12/05/2024 16:18:53 PAGE 7   
+C51 COMPILER V9.60.7.0   LCD19264                                                          12/14/2024 11:22:52 PAGE 7   
 
  365   1      //       for(a=0;a<12;a++)
  366   1      //       {
@@ -446,7 +446,7 @@ line level    source
  424          
  425          
  426          void Step(void) interrupt 0 using 0
-C51 COMPILER V9.60.7.0   LCD19264                                                          12/05/2024 16:18:53 PAGE 8   
+C51 COMPILER V9.60.7.0   LCD19264                                                          12/14/2024 11:22:52 PAGE 8   
 
  427          { _nop_(); 
  428   1        _nop_(); 
@@ -493,30 +493,68 @@ line level    source
  469   1      
  470   1      }
  471          
- 472          
- 473          unsigned char key()
- 474          {
- 475   1          if (KEY == 0) 
- 476   1          {
- 477   2              Delay(1);  
- 478   2              if (KEY == 0) 
- 479   2              {
- 480   3                  while (KEY == 0);
- 481   3                  return 1; 
- 482   3              }
- 483   2          }
- 484   1          return 0; 
- 485   1      }
+ 472          unsigned char key()
+ 473          {
+ 474   1          if (KEY == 0) 
+ 475   1          {
+ 476   2              Delay(1);  
+ 477   2              if (KEY == 0) 
+ 478   2              {
+ 479   3                  while (KEY == 0);
+ 480   3                  return 1; 
+ 481   3              }
+ 482   2          }
+ 483   1          return 0; 
+ 484   1      }
+ 485          
+ 486          
+ 487          void DisplayPatterns() 
+ 488          {
+C51 COMPILER V9.60.7.0   LCD19264                                                          12/14/2024 11:22:52 PAGE 9   
+
+ 489   1          static int step = 0; 
+ 490   1      
+ 491   1          switch (step) 
+ 492   1          {
+ 493   2              case 0: LcmPutDots(0x55, 0xaa); Delay(100); break;
+ 494   2              case 1: LcmPutDots(0xaa, 0x55); Delay(100); break;
+ 495   2              case 2: LcmPutDots(0x55, 0x55); Delay(100); break;
+ 496   2              case 3: LcmPutDots(0xaa, 0xaa); Delay(100); break;
+ 497   2              case 4: LcmPutDots(0xff, 0x00); Delay(100); break;
+ 498   2              case 5: LcmPutDots(0x00, 0xff); Delay(100); break;
+ 499   2              case 6: LcmPutDots(0xff, 0xff); Delay(100); break;
+ 500   2              case 7: LcmPutBMP(BMP0);Display_Chinese();Delay(100); break;
+ 501   2          }
+ 502   1          step++;
+ 503   1          if (step > 7) step = 0;
+ 504   1      }
+ 505          
+ 506          void HandleKey() 
+ 507          {
+ 508   1              unsigned char mode;
+ 509   1          mode++;           
+ 510   1          mode%=6;    
+ 511   1          LcmClear();       
+ 512   1          switch (mode) 
+ 513   1          {   
+ 514   2              case 0: LcmPutDots(0xff, 0x00); Delay(1000); break;
+ 515   2              case 1: LcmPutDots(0x55, 0xaa); Delay(1000); break;
+ 516   2              case 2: LcmPutDots(0x55, 0x55); Delay(1000); break;
+ 517   2              case 3: LcmPutDots(0x00, 0xff); Delay(1000); break;
+ 518   2              case 4: LcmPutDots(0xaa, 0xaa); Delay(1000); break;
+ 519   2              case 5: LcmPutBMP(BMP0);Display_Chinese(); Delay(1000); break;
+ 520   2      
+ 521   2      
+ 522   2          }
+ 523   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-C51 COMPILER V9.60.7.0   LCD19264                                                          12/05/2024 16:18:53 PAGE 9   
-
-   CODE SIZE        =    848    ----
+   CODE SIZE        =   1049    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =      2      10
+   DATA SIZE        =      4      11
    IDATA SIZE       =   ----    ----
    BIT SIZE         =      1    ----
 END OF MODULE INFORMATION.

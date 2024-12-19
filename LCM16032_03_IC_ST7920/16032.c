@@ -283,12 +283,12 @@ void charcursornext(void)    //置字符位置为下一个有效位置子程序
 
 unsigned char ReadKey() //按键函数
 {
-    if (KEY == 1) 
+    if (KEY == 0) 
 		{  // 按键被按下
 			exdelay();  // 简单的去抖动处理
-			if (KEY == 1) 
+			if (KEY == 0) 
 				{
-					while (KEY == 1);  // 等待按键释放
+					while (KEY == 0);  // 等待按键释放
 					return 1;  // 返回按键被按下
 				}
     }
@@ -296,3 +296,48 @@ unsigned char ReadKey() //按键函数
 }
 
 
+void HandleKey() 
+{
+	unsigned char mode;
+	
+		if (ReadKey()) 
+	  {  
+		mode++;
+		mode %= 7;			
+		switch (mode) 
+	  {
+        case 0:            
+			fillLCD_OddColumn(0xAA,0xAA);exdelay(); break;
+        case 1:
+            fillLCD_OddColumn(0x55,0xAA);exdelay();break;
+        case 2:
+            fillLCD_OddColumn(0xAA,0x55);exdelay();break;
+        case 3:
+            fillLCD_OddColumn(0x00,0xFF);exdelay();break;
+        case 4:
+            fillLCD_OddColumn(0xFF,0x00);exdelay();break;
+        case 5:
+            fillLCD_OddColumn(0x55,0x55);exdelay();break;
+		case 6:
+			fillLCD_OddColumn(0xFF,0xFF);exdelay();break;
+		}
+	}
+}
+
+void DisplayPatterns() 
+{
+    static int step = 0; // 当前显示图案步骤
+    switch (step) 
+    {
+        case 0: fillLCD_OddColumn(0x00,0xFF);exdelay(); break;
+        case 1: fillLCD_OddColumn(0x55,0xAA);exdelay(); break;
+        case 2: fillLCD_OddColumn(0xAA,0xAA);exdelay(); break;
+        case 3: fillLCD_OddColumn(0xAA,0x55);exdelay(); break;
+        case 4: fillLCD_OddColumn(0x55,0x55);exdelay(); break;
+        case 5: fillLCD_OddColumn(0xFF,0x00);exdelay(); break;
+        case 6: fillLCD_OddColumn(0xFF,0xFF);exdelay(); break;
+        case 7: fillLCD_OddColumn(0x00, 0x00);putstrxy(0,0,"广东烨辉科技有限公司");putstrxy(3,1," LCM16032_03 "); exdelay(); break;
+    }
+    step++;
+    if (step > 7) step = 0; // 循环
+}

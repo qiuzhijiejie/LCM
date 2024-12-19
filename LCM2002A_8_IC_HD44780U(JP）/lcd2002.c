@@ -1,34 +1,26 @@
 #include "LCD2002.h"
 #include <REGX52.H>
 
-
-
 sbit LCD_RS = P3^0; 
 sbit LCD_RW = P3^1;
 sbit LCD_EN = P3^2;
 sbit   KEY1  =P2^0;	
 
+unsigned char mode;
 
-extern unsigned int i,j,maxSteps,Line,Column,row, col;
-
-
-unsigned int ReadKey1() // 按键检测函数
+unsigned int ReadKey1() 
 {
     if (KEY1 == 0) 
-	{  // 按键被按下
-        Delay(1);  // 简单的去抖动处理
+	{  
+        Delay(5);  
         if (KEY1 == 0) 
-		{  // 检查按键是否仍然按下
-            while (KEY1 == 0);  // 等待按键释放
-            return 1;  // 返回按键被按下
+		{  
+            while (KEY1 == 0);  
+            return 1; 
         }
     }
-    return 0;  // 按键没有被按下
+    return 0; 
 }
-
-
-
-
 
 void  Delay(xms)	//@12.000MHz
 {
@@ -44,7 +36,6 @@ while(xms--){
 }
 	}
 
-
 //判断忙不忙
 void Busy()
 {
@@ -56,9 +47,9 @@ void Busy()
 		LCD_EN=1;
 		temp=LCD_DataPort;
 		LCD_EN=0;
-	}while(temp&0x80);}/*对控制器每次进行读写操作之前， 
+	}while(temp&0x80);/*对控制器每次进行读写操作之前， 
 					  都必须进行读写检测，确保STA7为0*/
-
+}					  
 
 
 /**
@@ -77,8 +68,6 @@ void LCD_WriteCommand(unsigned char Command)
     LCD_EN = 0;   // 使能脚E后负跳变完成写入
 }
 
-
-
 /**
   * @brief  LCD2002写数据
   * @param  Data 要写入的数据,搭配LCD_SetCursor()光标使用。
@@ -96,7 +85,6 @@ void LCD_WriteData(unsigned char Data)
   
 }
 
-
 /**
   * @brief  LCD2002读数据
   * @param  Data 要写入的数据,搭配LCD_SetCursor()光标使用。
@@ -113,8 +101,6 @@ void LCD_ReadData(unsigned char Data)
     LCD_EN = 0;   // 使能脚E后负跳变完成写入
 }
 
-
-
 /**
   * @brief  LCD2002初始化函数
   * @param  无
@@ -124,14 +110,10 @@ void LCD_Init()
 {
     LCD_WriteCommand(0x38); // 设置20×4显示,5X7点阵,8位数据接口 
     LCD_WriteCommand(0x0c); // 显示开,光标关,闪烁关
-//	LCD_WriteCommand(0x0f);//显示开,光标开.闪烁开
+//	LCD_WriteCommand(0x0f); //显示开,光标开.闪烁开
     LCD_WriteCommand(0x06); // 当读或写一个字符后地址指针加一,不移动
     LCD_WriteCommand(0x01); // 光标复位，清屏
 	Delay(0.1); 
-	
-
-
-
 }
 
 /**
@@ -169,9 +151,6 @@ void LCD_SetCursor(unsigned int Line, unsigned int Column)
     } 
 
 }
-	
- 
-
 
 unsigned char LCD_Readdata(void)               //读数据子程序
 {   unsigned char d;
@@ -185,8 +164,6 @@ unsigned char LCD_Readdata(void)               //读数据子程序
     LCD_EN=0;
     return d;
 }
-
-
 
 // 
 /**
@@ -245,7 +222,6 @@ void write_CGROM(unsigned char a)
 }
 
 
-
 /**
  * @brief  全屏显示HD44780 内置字符
  * @param  Line 0-3  Column 0-19  输入16进制0X...
@@ -293,7 +269,6 @@ void Write_CGRAM(unsigned char a[])
     }
 }
 
-   
 
 void displayCustomCharacter1(const unsigned char pattern[8]) 
 {
@@ -322,3 +297,74 @@ void displayCustomCharacter1(const unsigned char pattern[8])
     }
 }
 
+unsigned char data pattern1[8] = {0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15}; // 棋盘
+unsigned char data pattern2[8] = {0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A};	
+unsigned char data pattern3[8] = {0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15}; //竖线
+unsigned char data pattern4[8] = {0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A}; 
+unsigned char data pattern5[8] = {0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00};//横线 
+unsigned char data pattern6[8] = {0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F}; 	
+unsigned char data pattern7[8] = {0x00, 0x15, 0x00, 0x15, 0x00, 0x15, 0x00, 0x15}; //麻点
+void HandleKey() 
+{
+		if (ReadKey1()) 
+	  {  
+		LCD_Clear();
+		mode++;
+		mode %= 10;			
+		switch (mode) 
+	  {
+        case 0:            
+			displayCustomCharacter1(pattern1); 
+            break;
+        case 1:
+            displayCustomCharacter1(pattern2);  
+            break;
+        case 2:
+            displayCustomCharacter1(pattern3); 
+            break;
+        case 3:
+           displayCustomCharacter1(pattern4);  
+            break;
+        case 4:
+            displayCustomCharacter1(pattern5);  
+            break;
+        case 5:
+            displayCustomCharacter1(pattern6);  
+            break;
+		case 6:
+			displayCustomCharacter1(pattern7);
+			break;
+		case 7:
+			write_CGROM(0x21); 
+		   break;
+		case 8:
+			write_CGROM(0xA1); 
+		   break;
+		case 9:
+			Write_DDRAM(0xFF); 
+		   break;  
+		}
+	}
+}
+
+void DisplayPatterns() 
+{
+    static int step = 0; // 当前显示图案步骤
+
+    switch (step) 
+    {
+        case 0: displayCustomCharacter1(pattern1);  Delay(80); break;
+        case 1: displayCustomCharacter1(pattern2);  Delay(80); break;
+        case 2: displayCustomCharacter1(pattern3);  Delay(80); break;
+        case 3: displayCustomCharacter1(pattern4);  Delay(80); break;
+        case 4: displayCustomCharacter1(pattern5);  Delay(80); break;
+        case 5: displayCustomCharacter1(pattern6);  Delay(80); break;
+        case 6: displayCustomCharacter1(pattern7);  Delay(80); break;
+        case 7: write_CGROM(0x21); Delay(80); break;
+        case 8: Write_DDRAM(0xCE); Delay(80); break;
+        case 9: LCD_Clear();LCD_ShowString(1,5,"LCM2002A_8");LCD_ShowString(0,2,"YeHuiDisplay.com"); Delay(80); break;
+    }
+
+    step++;
+    if (step > 9) step = 0; // 循环
+}

@@ -64,4 +64,9 @@ void ReverseFillVerticalStripePattern(void);
 void ReverseFillHorizontalStripePattern(void);
 
 
+void HandleKey();
+void DisplayPatterns();
+
+
+
 #endif

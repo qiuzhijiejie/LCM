@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   LCD12864                                                          11/23/2024 09:15:19 PAGE 1   
+C51 COMPILER V9.60.7.0   LCD12864                                                          12/13/2024 08:46:50 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD12864
@@ -15,18 +15,18 @@ line level    source
    5          sbit CS   =P3^0;  //片选
    6          sbit STD  =P3^1;  //串行数据
    7          sbit SCLK =P3^2;  //串口时钟
-   8          sbit KEY1 = P2^0;
+   8          sbit KEY = P2^0;
    9          
   10          unsigned char i,X,Y,XPosition,YPosition,FCHARBUF;
   11          
   12          unsigned int ReadKey1() // 按键检测函数
   13          {
-  14   1          if (KEY1 == 1)           
+  14   1          if (KEY == 0)           
   15   1              {  // 按键被按下
   16   2              Delay(1);  // 简单的去抖动处理
-  17   2              if (KEY1 == 1) 
+  17   2              if (KEY == 0) 
   18   2                      {  // 检查按键是否仍然按下
-  19   3                  while (KEY1 == 1);  // 等待按键释放
+  19   3                  while (KEY == 0);  // 等待按键释放
   20   3                  return 1;  // 返回按键被按下
   21   3              }
   22   2          }
@@ -62,7 +62,7 @@ line level    source
   52   1         //_nop_();        
   53   1         SCLK = 0;      // 将时钟引脚 SCLKPIN 置低（结束负脉冲的下降沿）
   54   1         //_nop_();       
-C51 COMPILER V9.60.7.0   LCD12864                                                          11/23/2024 09:15:19 PAGE 2   
+C51 COMPILER V9.60.7.0   LCD12864                                                          12/13/2024 08:46:50 PAGE 2   
 
   55   1         SCLK = 1;      // 将时钟引脚 SCLKPIN 置高（准备下一次数据传输）
   56   1      }
@@ -126,7 +126,7 @@ line level    source
  114            * @brief  向LCD12864读状态  
  115            * @param  
  116            * @retval None
-C51 COMPILER V9.60.7.0   LCD12864                                                          11/23/2024 09:15:19 PAGE 3   
+C51 COMPILER V9.60.7.0   LCD12864                                                          12/13/2024 08:46:50 PAGE 3   
 
  117            */
  118          void Write_Status(unsigned char e)
@@ -190,7 +190,7 @@ line level    source
  176          
  177          /**
  178            * @brief  显示关
-C51 COMPILER V9.60.7.0   LCD12864                                                          11/23/2024 09:15:19 PAGE 4   
+C51 COMPILER V9.60.7.0   LCD12864                                                          12/13/2024 08:46:50 PAGE 4   
 
  179            * @param  None
  180            * @retval None
@@ -254,7 +254,7 @@ line level    source
  238          
  239          /**
  240            * @brief  设置绘图区域内部RAM指针
-C51 COMPILER V9.60.7.0   LCD12864                                                          11/23/2024 09:15:19 PAGE 5   
+C51 COMPILER V9.60.7.0   LCD12864                                                          12/13/2024 08:46:50 PAGE 5   
 
  241            * @param  None
  242            * @retval None
@@ -318,7 +318,7 @@ line level    source
  300   1              Write_Command(0x0c);
  301   1              Delay(1);
  302   1              Write_Command(0x01);
-C51 COMPILER V9.60.7.0   LCD12864                                                          11/23/2024 09:15:19 PAGE 6   
+C51 COMPILER V9.60.7.0   LCD12864                                                          12/13/2024 08:46:50 PAGE 6   
 
  303   1              Delay(1);
  304   1              Write_Command(0x06);
@@ -382,7 +382,7 @@ line level    source
  362   1          // 获取图像的高度
  363   1          height = *imgeData;
  364   1          imgeData++;  // 指针向前移动，指向实际图像数据
-C51 COMPILER V9.60.7.0   LCD12864                                                          11/23/2024 09:15:19 PAGE 7   
+C51 COMPILER V9.60.7.0   LCD12864                                                          12/13/2024 08:46:50 PAGE 7   
 
  365   1          
  366   1          // 显示图像
@@ -446,7 +446,7 @@ line level    source
  424   1              X=x;
  425   1              Y=y;
  426   1              DisplayString(s);
-C51 COMPILER V9.60.7.0   LCD12864                                                          11/23/2024 09:15:19 PAGE 8   
+C51 COMPILER V9.60.7.0   LCD12864                                                          12/13/2024 08:46:50 PAGE 8   
 
  427   1      }
  428          
@@ -510,7 +510,7 @@ line level    source
  486   3                  c = 0xffff - c; // 转换为ST7920的字符码
  487   3              }
  488   2              Write_Data(c / 256); // 256写高位字符
-C51 COMPILER V9.60.7.0   LCD12864                                                          11/23/2024 09:15:19 PAGE 9   
+C51 COMPILER V9.60.7.0   LCD12864                                                          12/13/2024 08:46:50 PAGE 9   
 
  489   2              moveToNextCharPosition(); // 置字符位置为下一个有效位置
  490   2              Write_Data(c & 0xff); // 写低位字符
@@ -574,7 +574,7 @@ line level    source
  548   1      }
  549          
  550          
-C51 COMPILER V9.60.7.0   LCD12864                                                          11/23/2024 09:15:19 PAGE 10  
+C51 COMPILER V9.60.7.0   LCD12864                                                          12/13/2024 08:46:50 PAGE 10  
 
  551          
  552          //麻点
@@ -638,7 +638,7 @@ line level    source
  610   3                  Write_Data(0xaa);  // 每个字节上半部分全亮，下半部分全暗
  611   3              }           //1010 1010
  612   2          }               //0x55->01010 01010
-C51 COMPILER V9.60.7.0   LCD12864                                                          11/23/2024 09:15:19 PAGE 11  
+C51 COMPILER V9.60.7.0   LCD12864                                                          12/13/2024 08:46:50 PAGE 11  
 
  613   1      }
  614          void ReverseFillVerticalStripePattern(void)
@@ -702,7 +702,7 @@ line level    source
  672   4                  }
  673   3              }
  674   2          }
-C51 COMPILER V9.60.7.0   LCD12864                                                          11/23/2024 09:15:19 PAGE 12  
+C51 COMPILER V9.60.7.0   LCD12864                                                          12/13/2024 08:46:50 PAGE 12  
 
  675   1      }
  676          
@@ -725,16 +725,65 @@ line level    source
  693   1      }
  694          
  695          
- 696          
- 697          
+ 696          void DisplayPatterns() 
+ 697          {
+ 698   1          static int step = 0; 
+ 699   1      
+ 700   1          switch (step) 
+ 701   1          {
+ 702   2              case 0: FillScreenWithPattern(0xff); Delay(100); break;
+ 703   2              case 1: FillCheckerboardPattern(); Delay(100); break;
+ 704   2              case 2: ReverseFillCheckerboardPattern(); Delay(100); break;
+ 705   2              case 3: FillVerticalStripePattern(); Delay(100); break;
+ 706   2              case 4: ReverseFillVerticalStripePattern(); Delay(100); break;
+ 707   2              case 5: ReverseFillHorizontalStripePattern(); Delay(100); break;
+ 708   2              case 6: FillHorizontalStripePattern(); Delay(100); break;       
+ 709   2                      case 7: FillDiagonalLinePattern(); Delay(100); break;
+ 710   2              case 8: FillScreenWithPattern(0x00);drawimge(Img_SUNMAN_128x64); Delay(100); break;
+ 711   2              case 9:DisplaystringAtposition(0,1,"烨辉科技有限公司");DisplaystringAtposition(2,2,"YT-LCD12864");
+             - Delay(100); break;
+ 712   2      
+ 713   2          }
+ 714   1          step++;
+ 715   1          if (step > 9) step = 0;
+ 716   1      }
+ 717          
+ 718          void HandleKey() 
+ 719          {
+ 720   1              unsigned char mode;
+ 721   1              mode++;
+ 722   1              mode%=10;
+ 723   1              Display_Clear();
+ 724   1              charlcdfill(' ');      
+ 725   1          switch (mode) 
+ 726   1          {   
+ 727   2              case 0: FillScreenWithPattern(0xff); Delay(100); break;
+ 728   2              case 1: FillCheckerboardPattern(); Delay(100); break;
+ 729   2              case 2: ReverseFillCheckerboardPattern(); Delay(100); break;
+ 730   2              case 3: FillVerticalStripePattern(); Delay(100); break;
+ 731   2              case 4: ReverseFillVerticalStripePattern(); Delay(100); break;
+ 732   2              case 5: ReverseFillHorizontalStripePattern(); Delay(100); break;
+ 733   2              case 6: FillHorizontalStripePattern(); Delay(100); break;       
+ 734   2                      case 7: FillDiagonalLinePattern(); Delay(100); break;
+ 735   2              case 8: FillScreenWithPattern(0x00);drawimge(Img_SUNMAN_128x64); Delay(100); break;
+C51 COMPILER V9.60.7.0   LCD12864                                                          12/13/2024 08:46:50 PAGE 13  
+
+ 736   2              case 9:DisplaystringAtposition(0,1,"烨辉科技有限公司");DisplaystringAtposition(2,2,"YT-LCD12864");
+             - Delay(100); break;
+ 737   2      
+ 738   2      
+ 739   2          }
+ 740   1      }
+ 741          
+ 742          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1038    ----
-   CONSTANT SIZE    =   ----    ----
+   CODE SIZE        =   1335    ----
+   CONSTANT SIZE    =     29    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =      6       9
+   DATA SIZE        =      8      10
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----       1
 END OF MODULE INFORMATION.

@@ -36,5 +36,8 @@ void Display_FullCGROM();
 void Display_8_16(uchar x, uchar y, uchar code *English_character, uchar character_code);
 void Display_FullCGROM_SpecifiedPositions();
 unsigned char ReadKey() ;
+void DisplayPatterns();
+void HandleKey();
+
 
 #endif

@@ -276,3 +276,50 @@ unsigned char key()
 	}
 	return 0;
 }
+
+void HandleKey() 
+{
+	unsigned char mode;
+	
+		if (key()) 
+	  {  
+		mode++;
+		mode %= 7;			
+		switch (mode) 
+	  {
+        case 0:            
+			glcdfill_with_params(0xAA,0xAA);break;
+        case 1:
+            glcdfill_with_params(0x55,0xAA);break;
+        case 2:
+            glcdfill_with_params(0xAA,0x55);break;
+        case 3:
+            glcdfill_with_params(0x00,0xFF);break;
+        case 4:
+            glcdfill_with_params(0xFF,0x00);break;
+        case 5:
+            glcdfill_with_params(0x55,0x55);break;
+		case 6:
+			glcdfill_with_params(0xFF,0xFF);break;
+
+		}
+	}
+}
+
+void DisplayPatterns() 
+{
+    static int step = 0; // 当前显示图案步骤
+    switch (step) 
+    {
+        case 0: glcdfill_with_params(0x00,0xFF); exdelay(); break;
+        case 1: glcdfill_with_params(0x55,0xAA); exdelay(); break;
+        case 2: glcdfill_with_params(0xAA,0xAA); exdelay(); break;
+        case 3: glcdfill_with_params(0xAA,0x55); exdelay(); break;
+        case 4: glcdfill_with_params(0x55,0x55); exdelay(); break;
+        case 5: glcdfill_with_params(0xFF,0x00); exdelay(); break;
+        case 6: glcdfill_with_params(0xFF,0xFF); exdelay(); break;
+        case 7: lcdreset();charlcdfill(' ');putstrxy(0,0,"烨辉科技有限公司");putstrxy(2,1,"LCM12832_02 "); exdelay(); 
+    }
+    step++;
+    if (step > 7) step = 0; // 循环
+}

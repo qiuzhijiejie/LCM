@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   LCD240128                                                         11/26/2024 16:54:32 PAGE 1   
+C51 COMPILER V9.60.7.0   LCD240128                                                         12/13/2024 10:22:02 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD240128
@@ -54,15 +54,15 @@ line level    source
   44          
   45          uint ReadKey1() // 按键检测函数
   46          {
-  47   1          if (LCD_KEY == 1)           
+  47   1          if (LCD_KEY == 0)           
   48   1              {  // 按键被按下
   49   2              Delay(1);  // 简单的去抖动处理
-  50   2              if (LCD_KEY == 1) 
+  50   2              if (LCD_KEY == 0) 
   51   2                      {  // 检查按键是否仍然按下
-  52   3                  while (LCD_KEY == 1);  // 等待按键释放
+  52   3                  while (LCD_KEY == 0);  // 等待按键释放
   53   3                  return 1;  // 返回按键被按下
   54   3              }
-C51 COMPILER V9.60.7.0   LCD240128                                                         11/26/2024 16:54:32 PAGE 2   
+C51 COMPILER V9.60.7.0   LCD240128                                                         12/13/2024 10:22:02 PAGE 2   
 
   55   2          }
   56   1          return 0;  // 按键没有被按下
@@ -126,7 +126,7 @@ line level    source
  114          写命令
  115          dat1: 第一个要写入的数据字节。
  116          dat2: 如果有第二个要写入的数据字节。
-C51 COMPILER V9.60.7.0   LCD240128                                                         11/26/2024 16:54:32 PAGE 3   
+C51 COMPILER V9.60.7.0   LCD240128                                                         12/13/2024 10:22:02 PAGE 3   
 
  117          command: 要发送的命令字节。
  118          parameters_num: 参数数量，指定要发送的数据字节数（1或2）。
@@ -190,7 +190,7 @@ line level    source
  176   2              }
  177   1      }
  178          
-C51 COMPILER V9.60.7.0   LCD240128                                                         11/26/2024 16:54:32 PAGE 4   
+C51 COMPILER V9.60.7.0   LCD240128                                                         12/13/2024 10:22:02 PAGE 4   
 
  179          
  180          /*
@@ -254,7 +254,7 @@ line level    source
  238   1          uchar charCode = 0x01;  
  239   1      
  240   1          uchar positions[][2] = 
-C51 COMPILER V9.60.7.0   LCD240128                                                         11/26/2024 16:54:32 PAGE 5   
+C51 COMPILER V9.60.7.0   LCD240128                                                         12/13/2024 10:22:02 PAGE 5   
 
  241   1              {
  242   1          {7, 4}, {0, 5}, {0, 6}, {0, 7},
@@ -318,7 +318,7 @@ line level    source
  300          x：字符在LCD上的起始横坐标
  301          
  302          y：字符在LCD上的起始纵坐标
-C51 COMPILER V9.60.7.0   LCD240128                                                         11/26/2024 16:54:32 PAGE 6   
+C51 COMPILER V9.60.7.0   LCD240128                                                         12/13/2024 10:22:02 PAGE 6   
 
  303          
  304          Chinese_character：指向字库中的汉字数据（点阵数据）的指针
@@ -382,7 +382,7 @@ line level    source
  362   1          {
  363   2              WriteCommand(*(English_character + num), 0, 0xc0, 1);  // 写入1个字节的点阵数据
  364   2              num++;  // 移动到字库中的下一个字节
-C51 COMPILER V9.60.7.0   LCD240128                                                         11/26/2024 16:54:32 PAGE 7   
+C51 COMPILER V9.60.7.0   LCD240128                                                         12/13/2024 10:22:02 PAGE 7   
 
  365   2              y += 1;  // 移动到下一行
  366   2              Locatexy(x, y, Graphic);  // 更新光标位置
@@ -446,7 +446,7 @@ line level    source
  424          void ReverseDisplayBMP(uchar x,uchar y,uchar W,uchar H,  uchar code *puts )   
  425          {       uchar i,j;
  426   1              Locatexy(x,y,Graphic); 
-C51 COMPILER V9.60.7.0   LCD240128                                                         11/26/2024 16:54:32 PAGE 8   
+C51 COMPILER V9.60.7.0   LCD240128                                                         12/13/2024 10:22:02 PAGE 8   
 
  427   1            
  428   1              for(j=0;j<H;j++)
@@ -510,23 +510,72 @@ line level    source
  486   2          {
  487   3              Display_8_16(start_x[group] + i, start_y[group], Chinese_character, start_code[group] + i);
  488   3          }
-C51 COMPILER V9.60.7.0   LCD240128                                                         11/26/2024 16:54:32 PAGE 9   
+C51 COMPILER V9.60.7.0   LCD240128                                                         12/13/2024 10:22:02 PAGE 9   
 
  489   2      }
- 490   1      
- 491   1      
- 492   1      }
+ 490   1      }
+ 491          
+ 492          
+ 493          // 图案循环函数
+ 494          void DisplayPatterns() 
+ 495          {
+ 496   1          static int step = 0; // 当前显示图案步骤
+ 497   1      
+ 498   1          switch (step) 
+ 499   1          {
+ 500   2              case 0: DisplayDots(0x55, 0xaa); Delay(1000); break;
+ 501   2              case 1: DisplayDots(0xaa, 0x55); Delay(1000); break;
+ 502   2              case 2: DisplayDots(0x55, 0x55); Delay(1000); break;
+ 503   2              case 3: DisplayDots(0xaa, 0xaa); Delay(1000); break;
+ 504   2              case 4: DisplayDots(0xff, 0x00); Delay(1000); break;
+ 505   2              case 5: DisplayDots(0x00, 0xff); Delay(1000); break;
+ 506   2              case 6: DisplayDots(0xff, 0xff); Delay(1000); break;
+ 507   2              case 7: LcmClear(); DisplayBMP(0, 0, 240, 128, BMP1); Delay(1000); break;
+ 508   2              case 8: ReverseDisplayBMP(0, 0, 240, 128, BMP1); Delay(1000); break;
+ 509   2              case 9: LcmClear(); Display_FullCGROM(); Delay(1000); break;
+ 510   2              case 10: LcmClear(); picture(); Delay(1000); break;
+ 511   2          }
+ 512   1      
+ 513   1          // 更新到下一步
+ 514   1          step++;
+ 515   1          if (step > 10) step = 0; // 循环
+ 516   1      }
+ 517          
+ 518          
+ 519          
+ 520          void HandleKey() 
+ 521          {
+ 522   1              unsigned char mode;
+ 523   1          mode++;           
+ 524   1          mode %= 10;    
+ 525   1          LcmClear();       
+ 526   1          switch (mode) 
+ 527   1          {   
+ 528   2              case 0: DisplayDots(0xff, 0x00); Delay(2000); break;
+ 529   2              case 1: DisplayDots(0x55, 0xaa); Delay(2000); break;
+ 530   2              case 2: DisplayDots(0x55, 0x55); Delay(2000); break;
+ 531   2              case 3: DisplayDots(0x00, 0xff); Delay(2000); break;
+ 532   2              case 4: DisplayDots(0xaa, 0xaa); Delay(2000); break;
+ 533   2              case 5: picture(); Delay(2000); break;
+ 534   2              case 6: Display_FullCGROM(); Delay(2000); break;
+ 535   2              case 7: DisplayBMP(0, 0, 240, 128, BMP1); Delay(2000); break;
+ 536   2              case 8: ReverseDisplayBMP(0, 0, 240, 128, BMP1); Delay(2000); break;
+ 537   2              case 9: ReverseDisplayBMP(0, 0, 240, 128, BMP0); Delay(2000); break;
+ 538   2          }
+ 539   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1196    ----
+   CODE SIZE        =   1501    ----
    CONSTANT SIZE    =     33    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =     15      72
+   DATA SIZE        =     17      73
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
+
+C51 COMPILER V9.60.7.0   LCD240128                                                         12/13/2024 10:22:02 PAGE 10  
 
 
 C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

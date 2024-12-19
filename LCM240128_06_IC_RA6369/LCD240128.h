@@ -16,7 +16,8 @@ sbit LCD_WR=P3^1;
 sbit LCD_RD=P3^2;
 sbit LCD_EN=P3^3;
 sbit LCD_KEY=P2^0;
-	
+
+
 void Delay(uint MS) ; 
 unsigned int ReadKey1(); // °´¼ü¼ì²âº¯Êý
 void CheckBusy();
@@ -38,7 +39,7 @@ void Display_FullCGROM();
 void Display_8_16(uchar x, uchar y, uchar code *English_character, uchar character_code);
 void Display_FullCGROM_SpecifiedPositions();
 void Display_FullCGROM_SpecifiedPositions2();
-
-
+void DisplayPatterns();
+void HandleKey() ;
 
 #endif

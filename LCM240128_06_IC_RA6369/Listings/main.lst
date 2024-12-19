@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              11/30/2024 10:10:15 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              12/13/2024 09:13:31 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -11,86 +11,94 @@ line level    source
    1          #include <REGX52.H>
    2          #include "lcd240128.h"
    3          #include "picture.h"
-   4          
-   5          unsigned char mode;
+   4          #include <stdio.h>
+   5          
    6          
-   7          void Main( void )   
-   8          {
-   9   1              LCD_EN=0;  
-  10   1              LCD_FS=0; 
-  11   1              LcmInit(); 
-  12   1              LcmClear();
-  13   1          DisplayDots(0x55,0xaa);
-  14   1          Delay(500);         
-  15   1          DisplayDots(0xaa,0x55);
-  16   1          Delay(500);  
-  17   1          DisplayDots(0x55,0x55);
-  18   1          Delay(500);         
-  19   1          DisplayDots(0xaa,0xaa);
-  20   1          Delay(500); 
-  21   1          DisplayDots(0xff,0x00);
-  22   1          Delay(500); 
-  23   1          DisplayDots(0x00,0xff);
-  24   1          Delay(500); 
-  25   1              DisplayDots(0xff,0xff);
-  26   1          Delay(500);         
-  27   1              LcmClear();
-  28   1              
-  29   1          DisplayBMP(0,0,240,128,BMP1);   
-  30   1          Delay(500);    
-  31   1          ReverseDisplayBMP(0,0,240,128,BMP1);   
-  32   1          Delay(500);
-  33   1              
-  34   1              LcmClear();
-  35   1              Display_FullCGROM();
-  36   1              Delay(500);
-  37   1              
-  38   1              LcmClear();
-  39   1              picture();
-  40   1              
-  41   1      
-  42   1       while(1)  
-  43   1      {
-  44   2      
-  45   2                      if(ReadKey1())
-  46   2                      mode++;
-  47   2                      mode%=10;
-  48   2                      LcmClear();
-  49   2                      switch(mode){   
-  50   3                      case 0:DisplayDots(0xff,0x00);
-  51   3                      break;
-  52   3                      case 1:DisplayDots(0x55,0xaa);
-  53   3                      break;
-  54   3                      case 2:DisplayDots(0x55,0x55);
-C51 COMPILER V9.60.7.0   MAIN                                                              11/30/2024 10:10:15 PAGE 2   
+   7          //void main( void )   
+   8          //{
+   9          //      LCD_EN=0;  
+  10          //      LCD_FS=0; 
+  11          //      LcmInit(); 
+  12          //      LcmClear();
+  13          
+  14          //      if(ReadKey1())
+  15          //      mode++;
+  16          //      mode%=10;
+  17          //      LcmClear();
+  18          //      switch(mode){   
+  19          //      case 0:DisplayDots(0xff,0x00);
+  20          //      Delay(2000);    
+  21          //      break;
+  22          //      case 1:DisplayDots(0x55,0xaa);
+  23          //      Delay(2000);    
+  24          //      break;
+  25          //      case 2:DisplayDots(0x55,0x55);
+  26          //      Delay(2000);    
+  27          //      break;
+  28          //      case 3:DisplayDots(0x00,0xff);
+  29          //      Delay(2000);    
+  30          //      break;
+  31          //      case 4:DisplayDots(0xaa,0xaa);
+  32          //      Delay(2000);    
+  33          //      break;
+  34          //      case 5:picture();
+  35          //      Delay(2000);            
+  36          //      break;
+  37          //      case 6:Display_FullCGROM();
+  38          //      Delay(2000);            
+  39          //      break;
+  40          //      case 7:DisplayBMP(0,0,240,128,BMP1); 
+  41          //      Delay(2000);
+  42          //      break;
+  43          //      case 8:ReverseDisplayBMP(0,0,240,128,BMP1);
+  44          //      Delay(2000);
+  45          //      break;
+  46          //      case 9:ReverseDisplayBMP(0,0,240,128,BMP0); 
+  47          //      Delay(2000);
+  48          //      break;
+  49          
+  50          //}
+  51          
+  52          // while(1)  
+  53          //{
+  54          //      DisplayPatterns(); 
+C51 COMPILER V9.60.7.0   MAIN                                                              12/13/2024 09:13:31 PAGE 2   
 
-  55   3                      break;
-  56   3                      case 3:DisplayDots(0x00,0xff);
-  57   3                      break;
-  58   3                      case 4:DisplayDots(0xaa,0xaa);
-  59   3                      break;
-  60   3                      case 5:picture();       
-  61   3                      break;
-  62   3                      case 6:Display_FullCGROM();     
-  63   3                      break;
-  64   3                      case 7:DisplayBMP(0,0,240,128,BMP1);    
-  65   3                      break;
-  66   3                      case 8:ReverseDisplayBMP(0,0,240,128,BMP1);
-  67   3                      break;
-  68   3                      case 9:ReverseDisplayBMP(0,0,240,128,BMP0); 
-  69   3                      break;
-  70   3      
-  71   3      }
-  72   2       }   
-  73   1      }
+  55          // }   
+  56          //}
+  57          
+  58          
+  59          
+  60          
+  61          void main(void)   
+  62          {
+  63   1          LCD_EN = 0;  
+  64   1          LCD_FS = 0; 
+  65   1          LcmInit(); 
+  66   1          LcmClear();
+  67   1      
+  68   1          while (1)  
+  69   1          {
+  70   2            
+  71   2              if (ReadKey1()) 
+  72   2              {
+  73   3                  HandleKey(); 
+  74   3              } 
+  75   2              else 
+  76   2              {
+  77   3                
+  78   3                  DisplayPatterns(); 
+  79   3              }
+  80   2          }   
+  81   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    344    ----
+   CODE SIZE        =     27    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =      1    ----
+   DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

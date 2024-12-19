@@ -32,12 +32,12 @@ void Delay(unsigned char ms)	//@12.000MHz
 
 uint ReadKey1() // 按键检测函数
 {
-    if (LCD_KEY == 1)           
+    if (LCD_KEY == 0)           
 	{  // 按键被按下
        Delay(1); // 简单的去抖动处理
-        if (LCD_KEY == 1) 
+        if (LCD_KEY == 0) 
 		{  // 检查按键是否仍然按下
-            while (LCD_KEY == 1);  // 等待按键释放
+            while (LCD_KEY == 0);  // 等待按键释放
             return 1;  // 返回按键被按下
         }
     }
@@ -398,7 +398,6 @@ void show_english(void)
 }
 
 
-
 //display Picture
 void Display_Picture(unsigned char pic[])
 {
@@ -420,4 +419,56 @@ void Display_Picture(unsigned char pic[])
 		}
 	}
     return;
+}
+
+
+void HandleKey() 
+{
+	unsigned char mode;
+	
+		if (ReadKey1()) 
+	  {  
+		mode++;
+		mode %= 9;			
+		switch (mode) 
+	  {
+        case 0:            
+			Display_dot(0xAA,0xAA);Delay(2000);break;
+        case 1:
+            Display_dot(0x55,0xAA);Delay(2000);break;
+        case 2:
+            Display_dot(0xAA,0x55);Delay(2000);break;
+        case 3:
+           Display_dot(0x00,0xFF);Delay(2000);break;
+        case 4:
+            Display_dot(0xFF,0x00);Delay(2000);break;
+        case 5:
+            Display_dot(0x55,0x55);Delay(2000);break;
+		case 6:
+			Display_dot(0xFF,0xFF);Delay(2000);break;
+		case 7:
+			show_english();Delay(8000);break;
+		case 8:
+			show_chinese();Delay(8000);break;
+		}
+	}
+}
+
+void DisplayPatterns() 
+{
+    static int step = 0; // 当前显示图案步骤
+    switch (step) 
+    {
+        case 0: Display_dot(0x00,0xFF);Delay(2000);   Delay(80); break;
+        case 1: Display_dot(0x55,0xAA);Delay(2000);   Delay(80); break;
+        case 2: Display_dot(0xAA,0xAA);Delay(2000);   Delay(80); break;
+        case 3: Display_dot(0xAA,0x55);Delay(2000);   Delay(80); break;
+        case 4: Display_dot(0x55,0x55);Delay(2000);   Delay(80); break;
+        case 5: Display_dot(0xFF,0x00);Delay(2000);   Delay(80); break;
+        case 6: Display_dot(0xFF,0xFF);Delay(2000);   Delay(80); break;
+        case 7: show_english(); Delay(300); break;
+        case 8:	Display_dot(0x00,0x00);show_chinese();Delay(300); break;
+    }
+    step++;
+    if (step > 8) step = 0; // 循环
 }

@@ -370,14 +370,59 @@ for ( group = 0; group < 1; group++)
 
 unsigned char ReadKey() 
 {
-    if (Key == 1)           
+    if (Key == 0)           
 	{  
         Delay(1);  
-        if (Key == 1) 
+        if (Key == 0) 
 		{  
-            while (Key == 1); 
+            while (Key == 0); 
             return 1;  
         }
     }
     return 0;  
+}
+
+
+
+
+void DisplayPatterns() 
+{
+    static int step = 0; 
+
+    switch (step) 
+    {
+        case 0: DisplayDots(0x55, 0xaa); Delay(1000); break;
+        case 1: DisplayDots(0xaa, 0x55); Delay(1000); break;
+        case 2: DisplayDots(0x55, 0x55); Delay(1000); break;
+        case 3: DisplayDots(0xaa, 0xaa); Delay(1000); break;
+        case 4: DisplayDots(0xff, 0x00); Delay(1000); break;
+        case 5: DisplayDots(0x00, 0xff); Delay(1000); break;
+        case 6: DisplayDots(0xff, 0xff); Delay(1000); break;
+        case 7: Display_FullCGROM();Delay(100); break;
+		case 8: LcmClear();wordageEng();Delay(100); break;
+    }
+    step++;
+    if (step > 8) step = 0;
+}
+
+void HandleKey() 
+{
+	unsigned char mode;
+    mode++;           
+    mode%=9;    
+    LcmClear();       
+    switch (mode) 
+    {	
+        case 0: DisplayDots(0x55, 0xaa); Delay(1000); break;
+        case 1: DisplayDots(0xaa, 0x55); Delay(1000); break;
+        case 2: DisplayDots(0x55, 0x55); Delay(1000); break;
+        case 3: DisplayDots(0xaa, 0xaa); Delay(1000); break;
+        case 4: DisplayDots(0xff, 0x00); Delay(1000); break;
+        case 5: DisplayDots(0x00, 0xff); Delay(1000); break;
+        case 6: DisplayDots(0xff, 0xff); Delay(1000); break;
+        case 7: Display_FullCGROM();Delay(100); break;
+		case 8: LcmClear();wordageEng();Delay(100); break;
+
+
+    }
 }

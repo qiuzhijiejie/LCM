@@ -24,6 +24,8 @@ void Display_16_16(unsigned char F[],unsigned char i);
 void Display_8_8(unsigned char C[],unsigned char i);
 void Display_character();
 unsigned char key(void);
+void HandleKey();
+void DisplayPatterns(); 
   
 
 

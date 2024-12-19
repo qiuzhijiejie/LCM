@@ -1,22 +1,18 @@
 #include "LCD0801a.h"
 #include <REGX52.H>
 
-
-
 sbit LCD_RS = P3^0; 
 sbit LCD_RW = P3^1;
 sbit LCD_EN = P3^2;
 sbit   KEY1  =P2^0;	
 
-
-extern unsigned int i,j,maxSteps,Line,Column,row, col;
-
+unsigned char mode;
 
 unsigned int ReadKey1() // 按键检测函数
 {
     if (KEY1 == 0) 
 	{  // 按键被按下
-        Delay(1);  // 简单的去抖动处理
+        Delay(5);  // 简单的去抖动处理
         if (KEY1 == 0) 
 		{  // 检查按键是否仍然按下
             while (KEY1 == 0);  // 等待按键释放
@@ -322,3 +318,73 @@ void displayCustomCharacter1(const unsigned char pattern[8])
     }
 }
 
+unsigned char data pattern1[8] = {0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15}; // 棋盘
+unsigned char data pattern2[8] = {0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A};	
+unsigned char data pattern3[8] = {0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15}; //竖线
+unsigned char data pattern4[8] = {0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A}; 
+unsigned char data pattern5[8] = {0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00};//横线 
+unsigned char data pattern6[8] = {0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F}; 	
+unsigned char data pattern7[8] = {0x00, 0x15, 0x00, 0x15, 0x00, 0x15, 0x00, 0x15}; //麻点
+
+void HandleKey() 
+{
+		if (ReadKey1()) 
+	  {  
+		LCD_Clear();
+		mode++;
+		mode %= 9;			
+		switch (mode) 
+	  {
+        case 0:            
+			displayCustomCharacter1(pattern1); 
+            break;
+        case 1:
+            displayCustomCharacter1(pattern2);  
+            break;
+        case 2:
+            displayCustomCharacter1(pattern3); 
+            break;
+        case 3:
+           displayCustomCharacter1(pattern4);  
+            break;
+        case 4:
+            displayCustomCharacter1(pattern5);  
+            break;
+        case 5:
+            displayCustomCharacter1(pattern6);  
+            break;
+		case 6:
+			displayCustomCharacter1(pattern7);
+			break;
+		case 7:
+			LCD_ShowString(0,0,"LCM0801A");
+		   break;
+		case 8:
+			LCD_ShowString(0,0,"YeHuiDis"); 
+		   break;  
+		}
+	}
+}
+void DisplayPatterns() 
+{
+    static int step = 0; // 当前显示图案步骤
+
+    switch (step) 
+    {
+        case 0: displayCustomCharacter1(pattern1);  Delay(80); break;
+        case 1: displayCustomCharacter1(pattern2);  Delay(80); break;
+        case 2: displayCustomCharacter1(pattern3);  Delay(80); break;
+        case 3: displayCustomCharacter1(pattern4);  Delay(80); break;
+        case 4: displayCustomCharacter1(pattern5);  Delay(80); break;
+        case 5: displayCustomCharacter1(pattern6);  Delay(80); break;
+        case 6: displayCustomCharacter1(pattern7);  Delay(80); break;
+        case 7: write_CGROM(0x21); Delay(80); break;
+        case 8: Write_DDRAM(0xCE); Delay(80); break;
+        case 9: LCD_ShowString(0,0,"LCM0801A");Delay(80); break;
+		case 10:LCD_ShowString(0,0,"YeHuiDis");Delay(80); break;
+
+    }
+
+    step++;
+    if (step > 10) step = 0; // 循环
+}

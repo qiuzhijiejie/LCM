@@ -5,18 +5,18 @@
 sbit CS   =P3^0;  //片选
 sbit STD  =P3^1;  //串行数据
 sbit SCLK =P3^2;  //串口时钟
-sbit KEY1 = P2^0;
+sbit KEY = P2^0;
 
 unsigned char i,X,Y,XPosition,YPosition,FCHARBUF;
 
 unsigned int ReadKey1() // 按键检测函数
 {
-    if (KEY1 == 1)           
+    if (KEY == 0)           
 	{  // 按键被按下
         Delay(1);  // 简单的去抖动处理
-        if (KEY1 == 1) 
+        if (KEY == 0) 
 		{  // 检查按键是否仍然按下
-            while (KEY1 == 1);  // 等待按键释放
+            while (KEY == 0);  // 等待按键释放
             return 1;  // 返回按键被按下
         }
     }
@@ -693,5 +693,50 @@ void FillDiagonalLinePattern(void)
 }
 
 
+void DisplayPatterns() 
+{
+    static int step = 0; 
+
+    switch (step) 
+    {
+        case 0: FillScreenWithPattern(0xff); Delay(100); break;
+        case 1: FillCheckerboardPattern(); Delay(100); break;
+        case 2: ReverseFillCheckerboardPattern(); Delay(100); break;
+        case 3: FillVerticalStripePattern(); Delay(100); break;
+        case 4: ReverseFillVerticalStripePattern(); Delay(100); break;
+        case 5: ReverseFillHorizontalStripePattern(); Delay(100); break;
+        case 6: FillHorizontalStripePattern(); Delay(100); break;	
+		case 7: FillDiagonalLinePattern(); Delay(100); break;
+        case 8: FillScreenWithPattern(0x00);drawimge(Img_SUNMAN_128x64); Delay(100); break;
+        case 9:DisplaystringAtposition(0,1,"烨辉科技有限公司");DisplaystringAtposition(2,2,"YT-LCD12864"); Delay(100); break;
+
+    }
+    step++;
+    if (step > 9) step = 0;
+}
+
+void HandleKey() 
+{
+	unsigned char mode;
+	mode++;
+	mode%=10;
+	Display_Clear();
+	charlcdfill(' ');      
+    switch (mode) 
+    {	
+        case 0: FillScreenWithPattern(0xff); Delay(100); break;
+        case 1: FillCheckerboardPattern(); Delay(100); break;
+        case 2: ReverseFillCheckerboardPattern(); Delay(100); break;
+        case 3: FillVerticalStripePattern(); Delay(100); break;
+        case 4: ReverseFillVerticalStripePattern(); Delay(100); break;
+        case 5: ReverseFillHorizontalStripePattern(); Delay(100); break;
+        case 6: FillHorizontalStripePattern(); Delay(100); break;	
+		case 7: FillDiagonalLinePattern(); Delay(100); break;
+        case 8: FillScreenWithPattern(0x00);drawimge(Img_SUNMAN_128x64); Delay(100); break;
+        case 9:DisplaystringAtposition(0,1,"烨辉科技有限公司");DisplaystringAtposition(2,2,"YT-LCD12864"); Delay(100); break;
+
+
+    }
+}
 
 

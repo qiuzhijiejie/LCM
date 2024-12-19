@@ -3,6 +3,8 @@
 #include "lcd240128.h"
 #include "picture.h"
 uchar  group,i,j;
+int mode = 0;           // 当前模式
+
 void Delay(uint MS)   
 {   
  unsigned char us,usn;   
@@ -20,17 +22,18 @@ void Delay(uint MS)
 }
 uint ReadKey1() 
 {
-    if (LCD_KEY == 1)           
-	{  
-        Delay(1);  
-        if (LCD_KEY == 1) 
-		{ 
-            while (LCD_KEY == 1); 
-            return 1; 
+    if (LCD_KEY == 0)  // 检测按键是否按下
+    {  
+        Delay(10);  // 去抖动延时，10ms
+        if (LCD_KEY == 0)  // 再次确认按键状态
+        { 
+            while (LCD_KEY == 0);  // 等待按键释放
+            return 1;  // 返回按键按下事件
         }
     }
-    return 0;  
+    return 0;  // 按键未按下
 }
+
 //忙信号判断
 void CheckBusy()
 {uchar b;
@@ -455,4 +458,51 @@ for ( group = 0; group < 3; group++)  // 共三个不同的显示区域
         Display_8_16(start_x[group] + i, start_y[group], Chinese_character, start_code[group] + i);
     }
 }
+}
+
+// 图案循环函数
+void DisplayPatterns() 
+{
+    static int step = 0; // 当前显示图案步骤
+
+    switch (step) 
+    {
+        case 0: DisplayDots(0x55, 0xaa); Delay(1000); break;
+        case 1: DisplayDots(0xaa, 0x55); Delay(1000); break;
+        case 2: DisplayDots(0x55, 0x55); Delay(1000); break;
+        case 3: DisplayDots(0xaa, 0xaa); Delay(1000); break;
+        case 4: DisplayDots(0xff, 0x00); Delay(1000); break;
+        case 5: DisplayDots(0x00, 0xff); Delay(1000); break;
+        case 6: DisplayDots(0xff, 0xff); Delay(1000); break;
+        case 7: LcmClear(); DisplayBMP(0, 0, 240, 128, BMP1); Delay(1000); break;
+        case 8: ReverseDisplayBMP(0, 0, 240, 128, BMP1); Delay(1000); break;
+        case 9: LcmClear(); Display_FullCGROM(); Delay(1000); break;
+        case 10: LcmClear(); picture(); Delay(1000); break;
+    }
+
+    // 更新到下一步
+    step++;
+    if (step > 10) step = 0; // 循环
+}
+
+
+
+void HandleKey() 
+{
+    mode++;           
+    mode %= 10;    
+    LcmClear();       
+    switch (mode) 
+    {	
+        case 0: DisplayDots(0xff, 0x00); Delay(2000); break;
+        case 1: DisplayDots(0x55, 0xaa); Delay(2000); break;
+        case 2: DisplayDots(0x55, 0x55); Delay(2000); break;
+        case 3: DisplayDots(0x00, 0xff); Delay(2000); break;
+        case 4: DisplayDots(0xaa, 0xaa); Delay(2000); break;
+        case 5: picture(); Delay(2000); break;
+        case 6: Display_FullCGROM(); Delay(2000); break;
+        case 7: DisplayBMP(0, 0, 240, 128, BMP1); Delay(2000); break;
+        case 8: ReverseDisplayBMP(0, 0, 240, 128, BMP1); Delay(2000); break;
+        case 9: ReverseDisplayBMP(0, 0, 240, 128, BMP0); Delay(2000); break;
+    }
 }

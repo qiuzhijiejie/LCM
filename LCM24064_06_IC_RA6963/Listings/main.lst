@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              11/28/2024 18:06:20 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              12/13/2024 09:13:17 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -8,74 +8,97 @@ COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROW
 
 line level    source
 
-   1               
-   2          #include <REG52.H>       
-   3          #include "lcd24064.h"
-   4          #include "picture.h"
-   5          
-   6          unsigned char mode;
-   7          void Main( void )   
-   8          {
-   9   1       
-  10   1        FS=0;
-  11   1        LcmInit();
-  12   1        LcmClear();   
-  13   1        DisplayDots(0xaa,0xaa);
-  14   1        Delay(1000); 
-  15   1        DisplayDots(0x55,0x55);
-  16   1        Delay(1000); 
-  17   1        DisplayDots(0xaa,0x55);
-  18   1        Delay(1000); 
-  19   1        DisplayDots(0x55,0xaa);
-  20   1        Delay(1000); 
-  21   1        DisplayDots(0xff,0x00);
-  22   1        Delay(1000); 
-  23   1        DisplayDots(0x00,0xff);
-  24   1        Delay(1000);
-  25   1        LcmClear();   
-  26   1        Display_FullCGROM();
-  27   1        Delay(1000);
-  28   1        LcmClear();
-  29   1        wordageEng();
-  30   1       while(1)  
-  31   1      {  
-  32   2              
-  33   2                      if(ReadKey())
-  34   2                      mode++;
-  35   2                      mode%=9;
-  36   2                      LcmClear();
-  37   2                      switch(mode){   
-  38   3                      case 0:DisplayDots(0xff,0x00);
-  39   3                      break;
-  40   3                      case 1:DisplayDots(0x00,0xff);
-  41   3                      break;
-  42   3                      case 2:DisplayDots(0xaa,0x55);
-  43   3                      break;
-  44   3                      case 3:DisplayDots(0x55,0xaa);
-  45   3                      break;
-  46   3                      case 4:DisplayDots(0x55,0x55);
-  47   3                      break;
-  48   3                      case 5:DisplayDots(0xaa,0xaa);
-  49   3                      break;                  
-  50   3                      case 6:DisplayDots(0xff,0xff);
-  51   3                      break;
-  52   3                      case 7:Display_FullCGROM();     
-  53   3                      break;
-  54   3                      case 8:wordageEng();    
-C51 COMPILER V9.60.7.0   MAIN                                                              11/28/2024 18:06:20 PAGE 2   
+   1          #include <REG52.H>       
+   2          #include "lcd24064.h"
+   3          #include "picture.h"
+   4          
+   5          //unsigned char mode;
+   6          //void main( void )   
+   7          //{
+   8          // 
+   9          //  FS=0;
+  10          //  LcmInit();
+  11          //  LcmClear(); 
+  12          //  DisplayDots(0xaa,0xaa);
+  13          //  Delay(1000); 
+  14          //  DisplayDots(0x55,0x55);
+  15          //  Delay(1000); 
+  16          //  DisplayDots(0xaa,0x55);
+  17          //  Delay(1000); 
+  18          //  DisplayDots(0x55,0xaa);
+  19          //  Delay(1000); 
+  20          //  DisplayDots(0xff,0x00);
+  21          //  Delay(1000); 
+  22          //  DisplayDots(0x00,0xff);
+  23          //  Delay(1000);
+  24          //  LcmClear(); 
+  25          //  Display_FullCGROM();
+  26          //  Delay(1000);
+  27          //  LcmClear();
+  28          //  wordageEng();
+  29          // while(1)  
+  30          //{  
+  31          //      
+  32          //              if(ReadKey())
+  33          //              mode++;
+  34          //              mode%=9;
+  35          //              LcmClear();
+  36          //              switch(mode){   
+  37          //              case 0:DisplayDots(0xff,0x00);
+  38          //              break;
+  39          //              case 1:DisplayDots(0x00,0xff);
+  40          //              break;
+  41          //              case 2:DisplayDots(0xaa,0x55);
+  42          //              break;
+  43          //              case 3:DisplayDots(0x55,0xaa);
+  44          //              break;
+  45          //              case 4:DisplayDots(0x55,0x55);
+  46          //              break;
+  47          //              case 5:DisplayDots(0xaa,0xaa);
+  48          //              break;                  
+  49          //              case 6:DisplayDots(0xff,0xff);
+  50          //              break;
+  51          //              case 7:Display_FullCGROM();     
+  52          //              break;
+  53          //              case 8:wordageEng();    
+  54          //              break;
+C51 COMPILER V9.60.7.0   MAIN                                                              12/13/2024 09:13:17 PAGE 2   
 
-  55   3                      break;
-  56   3       }   
-  57   2      }   
-  58   1      }
+  55          // }   
+  56          //}   
+  57          //}
+  58          
+  59          
+  60          
+  61          
+  62          void main(void)   
+  63          {
+  64   1      
+  65   1                FS=0;
+  66   1                LcmInit();
+  67   1                LcmClear();   
+  68   1          while (1)  
+  69   1          {   
+  70   2              if (ReadKey()) 
+  71   2              {
+  72   3                  HandleKey(); 
+  73   3              } 
+  74   2              else 
+  75   2              {
+  76   3                
+  77   3                  DisplayPatterns(); 
+  78   3              }
+  79   2          }   
+  80   1      }
+  81           
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    225    ----
+   CODE SIZE        =     24    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =      1    ----
+   DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

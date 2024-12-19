@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   LCD24064                                                          11/28/2024 18:01:46 PAGE 1   
+C51 COMPILER V9.60.7.0   LCD24064                                                          12/13/2024 09:18:18 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD24064
@@ -62,7 +62,7 @@ line level    source
   52   2               _RD=1; 
   53   2               }
   54   1               while(b&0x03==0);
-C51 COMPILER V9.60.7.0   LCD24064                                                          11/28/2024 18:01:46 PAGE 2   
+C51 COMPILER V9.60.7.0   LCD24064                                                          12/13/2024 09:18:18 PAGE 2   
 
   55   1                      
   56   1      }
@@ -126,7 +126,7 @@ line level    source
  114   1               _WR  = 1;   
  115   1      }   
  116             
-C51 COMPILER V9.60.7.0   LCD24064                                                          11/28/2024 18:01:46 PAGE 3   
+C51 COMPILER V9.60.7.0   LCD24064                                                          12/13/2024 09:18:18 PAGE 3   
 
  117          void LcmClear( void )   
  118          {   uint a;
@@ -190,7 +190,7 @@ line level    source
  176          void DisplayBMP(uchar x,uchar y,uchar W,uchar H,  uchar code *puts )   
  177          {       uchar k,j;
  178   1              Locatexy(x,y,Graphic); 
-C51 COMPILER V9.60.7.0   LCD24064                                                          11/28/2024 18:01:46 PAGE 4   
+C51 COMPILER V9.60.7.0   LCD24064                                                          12/13/2024 09:18:18 PAGE 4   
 
  179   1            
  180   1              for(j=0;j<H;j++)
@@ -254,7 +254,7 @@ line level    source
  238   1              WriteCommand(30,0,0x41,2 );    //Set Text Area Width
  239   1              WriteCommand(0,0x08,0x42,2 );   //Set Graphic Home Address
  240   1              WriteCommand(30,0,0x43,2 );     //Set Graphic Area Width
-C51 COMPILER V9.60.7.0   LCD24064                                                          11/28/2024 18:01:46 PAGE 5   
+C51 COMPILER V9.60.7.0   LCD24064                                                          12/13/2024 09:18:18 PAGE 5   
 
  241   1              WriteCommand(0,0,0xa7,0);               //Cursor Pattern Select
  242   1              WriteCommand(0,0,0x80,0);               //OR mode
@@ -318,7 +318,7 @@ line level    source
  300   1          uchar charCode = 0x01;  
  301   1      
  302   1          uchar positions[][2] = 
-C51 COMPILER V9.60.7.0   LCD24064                                                          11/28/2024 18:01:46 PAGE 6   
+C51 COMPILER V9.60.7.0   LCD24064                                                          12/13/2024 09:18:18 PAGE 6   
 
  303   1              {
  304   1          {7, 4},{0, 5},{0, 6},{0, 7},
@@ -382,7 +382,7 @@ line level    source
  362   1      {
  363   2          for ( i = 0; i < count1[group]; i++)
  364   2          {
-C51 COMPILER V9.60.7.0   LCD24064                                                          11/28/2024 18:01:46 PAGE 7   
+C51 COMPILER V9.60.7.0   LCD24064                                                          12/13/2024 09:18:18 PAGE 7   
 
  365   3              Display_16_16(start_x1[group] + 2 * i, start_y1[group], Chinese_character, start_code1[group] + i)
              -;
@@ -393,25 +393,72 @@ line level    source
  370          
  371          unsigned char ReadKey() 
  372          {
- 373   1          if (Key == 1)           
+ 373   1          if (Key == 0)           
  374   1              {  
  375   2              Delay(1);  
- 376   2              if (Key == 1) 
+ 376   2              if (Key == 0) 
  377   2                      {  
- 378   3                  while (Key == 1); 
+ 378   3                  while (Key == 0); 
  379   3                  return 1;  
  380   3              }
  381   2          }
  382   1          return 0;  
  383   1      }
+ 384          
+ 385          
+ 386          
+ 387          
+ 388          void DisplayPatterns() 
+ 389          {
+ 390   1          static int step = 0; 
+ 391   1      
+ 392   1          switch (step) 
+ 393   1          {
+ 394   2              case 0: DisplayDots(0x55, 0xaa); Delay(1000); break;
+ 395   2              case 1: DisplayDots(0xaa, 0x55); Delay(1000); break;
+ 396   2              case 2: DisplayDots(0x55, 0x55); Delay(1000); break;
+ 397   2              case 3: DisplayDots(0xaa, 0xaa); Delay(1000); break;
+ 398   2              case 4: DisplayDots(0xff, 0x00); Delay(1000); break;
+ 399   2              case 5: DisplayDots(0x00, 0xff); Delay(1000); break;
+ 400   2              case 6: DisplayDots(0xff, 0xff); Delay(1000); break;
+ 401   2              case 7: Display_FullCGROM();Delay(100); break;
+ 402   2                      case 8: LcmClear();wordageEng();Delay(100); break;
+ 403   2          }
+ 404   1          step++;
+ 405   1          if (step > 8) step = 0;
+ 406   1      }
+ 407          
+ 408          void HandleKey() 
+ 409          {
+ 410   1              unsigned char mode;
+ 411   1          mode++;           
+ 412   1          mode%=9;    
+ 413   1          LcmClear();       
+ 414   1          switch (mode) 
+ 415   1          {   
+ 416   2              case 0: DisplayDots(0x55, 0xaa); Delay(1000); break;
+ 417   2              case 1: DisplayDots(0xaa, 0x55); Delay(1000); break;
+ 418   2              case 2: DisplayDots(0x55, 0x55); Delay(1000); break;
+ 419   2              case 3: DisplayDots(0xaa, 0xaa); Delay(1000); break;
+ 420   2              case 4: DisplayDots(0xff, 0x00); Delay(1000); break;
+ 421   2              case 5: DisplayDots(0x00, 0xff); Delay(1000); break;
+ 422   2              case 6: DisplayDots(0xff, 0xff); Delay(1000); break;
+ 423   2              case 7: Display_FullCGROM();Delay(100); break;
+ 424   2                      case 8: LcmClear();wordageEng();Delay(100); break;
+ 425   2      
+C51 COMPILER V9.60.7.0   LCD24064                                                          12/13/2024 09:18:18 PAGE 8   
+
+ 426   2      
+ 427   2          }
+ 428   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1179    ----
+   CODE SIZE        =   1439    ----
    CONSTANT SIZE    =      8    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =     15      64
+   DATA SIZE        =     17      65
    IDATA SIZE       =   ----    ----
    BIT SIZE         =      1    ----
 END OF MODULE INFORMATION.
