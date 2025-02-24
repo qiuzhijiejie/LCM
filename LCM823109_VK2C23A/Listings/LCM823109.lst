@@ -1,0 +1,651 @@
+C51 COMPILER V9.60.7.0   LCM823109                                                         02/17/2025 16:15:07 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCM823109
+OBJECT MODULE PLACED IN .\Objects\LCM823109.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE LCM823109.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.
+                    -\Listings\LCM823109.lst) OBJECT(.\Objects\LCM823109.obj)
+
+line level    source
+
+   1          #include "LCM823109.h"
+   2          #include <intrins.h> 
+   3          
+   4          #define VK2C23A_CLK 1 //SCL信号线频率,由delay_nus实现 50->10kHz 10->50kHz 5->100kHz
+   5          
+   6          //VK2C23A 8com 
+   7          unsigned char VK2C23A_segtab[VK2C23A_SEGNUM]={
+   8                  5,6,7,8,9,                                      //SEG5-SEG9
+   9                  10,11,12,13,14,15,16,17,18,19,  //SEG10-SEG19
+  10                  20,21,22,23,24,25,26,27,28,29,  //SEG20-SEG29
+  11                  30,31,32,33,34,35,36,37,38,39,  //SEG30-SEG39
+  12                  40,41,42,43,44,45,46,47,48,49,  //SEG40-SEG49
+  13                  50,51,52,53,54                                  //SEG50-SEG54
+  14          };
+  15          
+  16          //8com
+  17          unsigned char VK2C23A_dispram[VK2C23A_SEGNUM];//8COM时每个字节数据对应1个SEG
+  18          //显示RAM buffer为8位对应1个SEG,bit7->com7,bit6->com6,...,bit0->com0
+  19          
+  20          unsigned char VK2C23A_segi,VK2C23A_comi;
+  21          unsigned char VK2C23A_maxcom;//驱动的com数VK2C23A可以是4com或者8com
+  22          unsigned char VK2C23A_readbuf[52];
+  23          void VK2C23A_InitSequence(void);
+  24          
+  25          /*******************************************************************************
+  26          * Function Name  : delay_nus
+  27          * Description    : 延时1uS程序
+  28          * Input          : x->延时时间xus
+  29          * Output         : None
+  30          * Return         : None
+  31          *******************************************************************************/
+  32          void delay_nus(unsigned int x)     
+  33          {
+  34   1              unsigned char i;
+  35   1              while(x--)
+  36   1              {
+  37   2                      i=10;
+  38   2                      while(i--)
+  39   2                      {//nop指令根据单片机做相应的修改
+  40   3                              _nop_();
+  41   3                      }
+  42   2              }
+  43   1      }
+  44          /*******************************************************************************
+  45          * Function Name  : delay_nms
+  46          * Description    : 延时1mS程序
+  47          * Input          : x->延时时间xms
+  48          * Output         : None
+  49          * Return         : None
+  50          *******************************************************************************/
+  51          void delay_nms(unsigned long int x)
+  52          {
+  53   1              while(x--)
+  54   1              {
+C51 COMPILER V9.60.7.0   LCM823109                                                         02/17/2025 16:15:07 PAGE 2   
+
+  55   2                      delay_nus(1000);
+  56   2              }
+  57   1      }
+  58          /*******************************************************************************
+  59          * Function Name  : I2CStart
+  60          * Description    : 时钟线高时，数据线由高到低的跳变，表示I2C开始信号
+  61          * Input          : None
+  62          * Output         : None
+  63          * Return         : None
+  64          *******************************************************************************/
+  65          void VK2C23A_I2CStart( void )
+  66          {
+  67   1        VK2C23A_SCL_H();
+  68   1        VK2C23A_SDA_H();
+  69   1        delay_nus(VK2C23A_CLK);
+  70   1        VK2C23A_SDA_L();
+  71   1        delay_nus(VK2C23A_CLK);
+  72   1      }
+  73          /*******************************************************************************
+  74          * Function Name  : I2CStop
+  75          * Description    : 时钟线高时，数据线由低到高的跳变，表示I2C停止信号
+  76          * Input          : None
+  77          * Output         : None
+  78          * Return         : None
+  79          *******************************************************************************/
+  80          void VK2C23A_I2CStop( void )
+  81          {
+  82   1        VK2C23A_SCL_H();
+  83   1        VK2C23A_SDA_L();
+  84   1        delay_nus(VK2C23A_CLK);
+  85   1        VK2C23A_SDA_H();
+  86   1        delay_nus(VK2C23A_CLK);
+  87   1      }
+  88          /*******************************************************************************
+  89          * Function Name  : I2CSlaveAck
+  90          * Description    : I2C从机设备应答查询
+  91          * Input          : None
+  92          * Output         : None
+  93          * Return         : 0-ok 1-fail
+  94          *******************************************************************************/
+  95          unsigned char VK2C23A_I2CSlaveAck( void )
+  96          {
+  97   1        unsigned int TimeOut;
+  98   1        unsigned char RetValue;
+  99   1              
+ 100   1        VK2C23A_SCL_L();
+ 101   1        delay_nus(VK2C23A_CLK);
+ 102   1        VK2C23A_SCL_H();//第9个sclk上升沿
+ 103   1        TimeOut = 10000;
+ 104   1        while( TimeOut-- > 0 )
+ 105   1        {
+ 106   2          if( VK2C23A_GET_SDA()!=0 )//读取ack
+ 107   2          {
+ 108   3            RetValue = 1;
+ 109   3          }
+ 110   2          else
+ 111   2          {
+ 112   3            RetValue = 0;
+ 113   3            break;
+ 114   3          }
+ 115   2        } 
+ 116   1              VK2C23A_SCL_L();
+C51 COMPILER V9.60.7.0   LCM823109                                                         02/17/2025 16:15:07 PAGE 3   
+
+ 117   1        
+ 118   1        return RetValue;
+ 119   1      }
+ 120          /*******************************************************************************
+ 121          * Function Name  : I2CSendAck
+ 122          * Description    : I2C主机发送ACK
+ 123          * Input          : None
+ 124          * Output         : None
+ 125          * Return         : None
+ 126          *******************************************************************************/
+ 127          void VK2C23A_I2CSendAck( void )
+ 128          {
+ 129   1        VK2C23A_SCL_L();
+ 130   1        VK2C23A_SDA_L();
+ 131   1        delay_nus(VK2C23A_CLK*2);
+ 132   1        VK2C23A_SCL_H();
+ 133   1        delay_nus(VK2C23A_CLK*2);
+ 134   1        VK2C23A_SCL_L();
+ 135   1        VK2C23A_SDA_H();
+ 136   1      }
+ 137          /*******************************************************************************
+ 138          * Function Name  : I2CSendNAck
+ 139          * Description    : I2C主机发送NACK
+ 140          * Input          : None
+ 141          * Output         : None
+ 142          * Return         : None
+ 143          *******************************************************************************/
+ 144          void VK2C23A_I2CSendNAck( void )
+ 145          {
+ 146   1        VK2C23A_SCL_L();
+ 147   1        VK2C23A_SDA_H();
+ 148   1        delay_nus(VK2C23A_CLK);
+ 149   1        VK2C23A_SCL_H();
+ 150   1        delay_nus(VK2C23A_CLK);
+ 151   1      }
+ 152          /*******************************************************************************
+ 153          * Function Name  : I2CWriteByte
+ 154          * Description    : I2C写一字节,先送高位
+ 155          * Input          : byte-要写入的数据
+ 156          * Output         : None
+ 157          * Return         : None
+ 158          *******************************************************************************/
+ 159          void VK2C23A_I2CWriteByte( unsigned char byte )
+ 160          {
+ 161   1              unsigned char i=8;
+ 162   1              while (i--)
+ 163   1              { 
+ 164   2                      VK2C23A_SCL_L();
+ 165   2                      if(byte&0x80)
+ 166   2                              VK2C23A_SDA_H();
+ 167   2                      else
+ 168   2                              VK2C23A_SDA_L();
+ 169   2                      byte<<=1; 
+ 170   2                      delay_nus(VK2C23A_CLK);
+ 171   2                      VK2C23A_SCL_H();     
+ 172   2                      delay_nus(VK2C23A_CLK);
+ 173   2              }
+ 174   1      }
+ 175          
+ 176          /*******************************************************************************
+ 177          * Function Name  : WriteCmd
+ 178          * Description    : 写1字节命令带参数
+C51 COMPILER V9.60.7.0   LCM823109                                                         02/17/2025 16:15:07 PAGE 4   
+
+ 179          * Input          : cmd-要写入的命令
+ 180          *                : data-要写入的参数
+ 181          * Output         : None
+ 182          * Return         : 0-ok 1-fail
+ 183          *******************************************************************************/
+ 184          unsigned char WriteCmdVK2C23A(unsigned char cmd, unsigned char Data )
+ 185          {
+ 186   1              VK2C23A_I2CStart();
+ 187   1      
+ 188   1              VK2C23A_I2CWriteByte( VK2C23A_ADDR );
+ 189   1              if( VK2C23A_I2CSlaveAck() == 1 )
+ 190   1              {
+ 191   2                      VK2C23A_I2CStop(); 
+ 192   2                      return 0;   
+ 193   2              }
+ 194   1              VK2C23A_I2CWriteByte( cmd );
+ 195   1              if(VK2C23A_I2CSlaveAck() ==1  )
+ 196   1              {
+ 197   2                      VK2C23A_I2CStop(); 
+ 198   2                      return 0;   
+ 199   2              }
+ 200   1              VK2C23A_I2CWriteByte( Data );
+ 201   1              if(VK2C23A_I2CSlaveAck() == 1 )
+ 202   1              {
+ 203   2                      VK2C23A_I2CStop(); 
+ 204   2                      return 0;   
+ 205   2              }
+ 206   1        VK2C23A_I2CStop();
+ 207   1       
+ 208   1        return 0;    //返回操作成败标志
+ 209   1      }
+ 210          /*******************************************************************************
+ 211          * Function Name  : I2CRDDatByte
+ 212          * Description    : I2C读一字节数据,数据先送低位
+ 213          * Input          : None
+ 214          * Output         : None
+ 215          * Return         : 读出的1字节数据
+ 216          *******************************************************************************/
+ 217          unsigned char VK2C23A_I2CRDDat( void )
+ 218          {
+ 219   1       unsigned char i,RetValue,Bit;
+ 220   1              
+ 221   1      //RetValue=0;   
+ 222   1        for( i=0; i<8; i++ )
+ 223   1        {
+ 224   2              VK2C23A_SCL_H(); 
+ 225   2          delay_nus(VK2C23A_CLK);
+ 226   2          if(VK2C23A_GET_SDA() == 1 )
+ 227   2            Bit = 0X01;
+ 228   2          else
+ 229   2            Bit = 0x00;
+ 230   2            
+ 231   2          RetValue = (RetValue<<1)|Bit;
+ 232   2          VK2C23A_SCL_L();
+ 233   2          delay_nus(VK2C23A_CLK);
+ 234   2              }
+ 235   1        
+ 236   1        return RetValue;
+ 237   1      }
+ 238          
+ 239          
+ 240          /*******************************************************************************
+C51 COMPILER V9.60.7.0   LCM823109                                                         02/17/2025 16:15:07 PAGE 5   
+
+ 241          * Function Name  : Write1Data
+ 242          * Description    : 写1字节数据到显示RAM
+ 243          * Input          : Addr-写入ram的地址
+ 244          *                : Dat->写入ram的数据
+ 245          * Output         : None
+ 246          * Return         : 0-ok 1-fail
+ 247          *******************************************************************************/
+ 248          unsigned char Write1DataVK2C23A(unsigned char Addr,unsigned char Dat)
+ 249          {
+ 250   1              //START 信号
+ 251   1              VK2C23A_I2CStart(); 
+ 252   1              //SLAVE地址
+ 253   1              VK2C23A_I2CWriteByte(VK2C23A_ADDR);  
+ 254   1              if( VK2C23A_I2CSlaveAck() == 1 )
+ 255   1              {               
+ 256   2                      VK2C23A_I2CStop();
+ 257   2                      return 1; 
+ 258   2              }       
+ 259   1              //写显示RAM命令
+ 260   1              VK2C23A_I2CWriteByte(VK2C23A_RWRAM);                                            
+ 261   1              if(VK2C23A_I2CSlaveAck() == 1 )
+ 262   1              {
+ 263   2                      VK2C23A_I2CStop();                                                                                                      
+ 264   2                      return 0;
+ 265   2              }       
+ 266   1              //显示RAM地址
+ 267   1              VK2C23A_I2CWriteByte(Addr); 
+ 268   1              if(VK2C23A_I2CSlaveAck() == 1 )
+ 269   1              {
+ 270   2                      VK2C23A_I2CStop();
+ 271   2                      return 1;
+ 272   2              }
+ 273   1              //显示数据,1字节数据包含2个SEG
+ 274   1              VK2C23A_I2CWriteByte(Dat);
+ 275   1              if( VK2C23A_I2CSlaveAck()==1 )
+ 276   1              {
+ 277   2                      VK2C23A_I2CStop();
+ 278   2                      return 1;
+ 279   2              }
+ 280   1              
+ 281   1       //STOP信号
+ 282   1       VK2C23A_I2CStop();
+ 283   1       return 0;   
+ 284   1      }
+ 285          
+ 286          
+ 287          /*******************************************************************************
+ 288          * Function Name  : WritenData
+ 289          * Description    : 写多个数据到显示RAM
+ 290          * Input          : Addr-写入ram的起始地址
+ 291          *                : Databuf->写入ram的数据buffer指针
+ 292          *                : Cnt->写入ram的数据个数
+ 293          * Output         : None
+ 294          * Return         : 0-ok 1-fail
+ 295          *******************************************************************************/
+ 296          unsigned char  WritenDataVK2C23A(unsigned char Addr,unsigned char *Databuf,unsigned char Cnt)
+ 297          {
+ 298   1              unsigned char i;
+ 299   1              
+ 300   1              //START信号     
+ 301   1              VK2C23A_I2CStart();                                                                     
+ 302   1              //SLAVE地址
+C51 COMPILER V9.60.7.0   LCM823109                                                         02/17/2025 16:15:07 PAGE 6   
+
+ 303   1              VK2C23A_I2CWriteByte(VK2C23A_ADDR);     
+ 304   1              if(VK2C23A_I2CSlaveAck() == 1 )
+ 305   1              {
+ 306   2                      VK2C23A_I2CStop();                                                                                                      
+ 307   2                      return 0;                                                                               
+ 308   2              }
+ 309   1              //写显示RAM命令
+ 310   1              VK2C23A_I2CWriteByte(VK2C23A_RWRAM);                                            
+ 311   1              if(VK2C23A_I2CSlaveAck() == 1 )
+ 312   1              {
+ 313   2                      VK2C23A_I2CStop();                                                                                                      
+ 314   2                      return 0;
+ 315   2              }
+ 316   1              //显示RAM起始地址
+ 317   1              VK2C23A_I2CWriteByte(Addr);                                             
+ 318   1              if(VK2C23A_I2CSlaveAck() == 1 )
+ 319   1              {
+ 320   2                      VK2C23A_I2CStop();                                                                                                      
+ 321   2                      return 0;
+ 322   2              }
+ 323   1              //发送Cnt个数据到显示RAM
+ 324   1              for(i=0;i<Cnt;i++)
+ 325   1              { 
+ 326   2                      VK2C23A_I2CWriteByte(*Databuf++);
+ 327   2                      if( VK2C23A_I2CSlaveAck()==1 )
+ 328   2                      {
+ 329   3                              VK2C23A_I2CStop();                                                                                                      
+ 330   3                              return 0;
+ 331   3                      }
+ 332   2              }
+ 333   1              //STOP信号
+ 334   1               VK2C23A_I2CStop();                                                                                     
+ 335   1               return 0;    
+ 336   1      }
+ 337          /*******************************************************************************
+ 338          * Function Name  : ReadnData
+ 339          * Description    : 从显示RAM读多个数据
+ 340          * Input          : Addr-读ram的起始地址
+ 341          *                : Databuf->读ram的数据buffer指针
+ 342          *                : Cnt->读ram的数据个数
+ 343          * Output         : None
+ 344          * Return         : 0-ok 1-fail
+ 345          *******************************************************************************/
+ 346          unsigned char  ReadnDataVK2C23A(unsigned char Addr,unsigned char *Databuf,unsigned char Cnt)
+ 347          {
+ 348   1              unsigned char n;
+ 349   1              
+ 350   1              //START信号     
+ 351   1              VK2C23A_I2CStart();                                                                     
+ 352   1              //SLAVE地址写
+ 353   1              VK2C23A_I2CWriteByte(VK2C23A_ADDR);     
+ 354   1              if( 1 == VK2C23A_I2CSlaveAck() )
+ 355   1              {
+ 356   2                      VK2C23A_I2CStop();                                                                                                      
+ 357   2                      return 0;                                                                               
+ 358   2              }       
+ 359   1              //写显示RAM命令
+ 360   1              VK2C23A_I2CWriteByte(VK2C23A_RWRAM);    
+ 361   1              if( 1 == VK2C23A_I2CSlaveAck() )
+ 362   1              {
+ 363   2                      VK2C23A_I2CStop();                                                                                                      
+ 364   2                      return 0;                                                                               
+C51 COMPILER V9.60.7.0   LCM823109                                                         02/17/2025 16:15:07 PAGE 7   
+
+ 365   2              }   
+ 366   1              //显示RAM起始地址
+ 367   1              VK2C23A_I2CWriteByte(Addr);                                             
+ 368   1              if( 1 == VK2C23A_I2CSlaveAck() )
+ 369   1              {
+ 370   2                      VK2C23A_I2CStop();                                                                                                      
+ 371   2                      return 0;
+ 372   2              }
+ 373   1              
+ 374   1              //STOP信号
+ 375   1              VK2C23A_I2CStop();      
+ 376   1              
+ 377   1              //START信号     
+ 378   1              VK2C23A_I2CStart();                                                                     
+ 379   1              //SLAVE地址读
+ 380   1              VK2C23A_I2CWriteByte(VK2C23A_ADDRRD);   
+ 381   1              if( 1 == VK2C23A_I2CSlaveAck() )
+ 382   1              {
+ 383   2                      VK2C23A_I2CStop();                                                                                                      
+ 384   2                      return 0;                                                                               
+ 385   2              }  
+ 386   1              //读Cnt个数据到显示RAM
+ 387   1              for(n=0;n<Cnt-1;n++)
+ 388   1              { 
+ 389   2                      *Databuf++=VK2C23A_I2CRDDat();
+ 390   2                      VK2C23A_I2CSendAck();
+ 391   2              }
+ 392   1              *Databuf++=VK2C23A_I2CRDDat();
+ 393   1              VK2C23A_I2CSendNAck();
+ 394   1              //STOP信号
+ 395   1              VK2C23A_I2CStop();                                                                                      
+ 396   1               return 0;    
+ 397   1      }
+ 398          /*******************************************************************************
+ 399          * Function Name  : VK2C23A_DisAll
+ 400          * Description    : 所有SEG显示同一个数据，bit7/bit3-COM3 bit6/bit2-COM2 bit5/bit1-COM1 bit4/bit0-COM0
+ 401          *                                : 例如：0xff全亮 0x00全灭 0x55灭亮灭亮 0xaa亮灭亮灭 0x33灭灭亮亮 
+ 402          * Input          ：dat->写入ram的数据(1个字节数据对应2个SEG)  
+ 403          * Output         : None
+ 404          * Return         : None
+ 405          *******************************************************************************/
+ 406          void VK2C23A_DisAll(unsigned char dat)
+ 407          {
+ 408   1              unsigned char segi;
+ 409   1              
+ 410   1              if(VK2C23A_maxcom==4)
+ 411   1              {
+ 412   2                      for(segi=0;segi<28;segi++)
+ 413   2                      {
+ 414   3                              VK2C23A_dispram[segi]=dat;
+ 415   3                      }
+ 416   2                      WritenDataVK2C23A(0,VK2C23A_dispram,28);//这里送8bit数据对应2个SEG，每8bit数据地址加1，每8位数据1个ACK
+ 417   2              }
+ 418   1              else
+ 419   1              {
+ 420   2                      for(segi=0;segi<52;segi++)
+ 421   2                      {
+ 422   3                              VK2C23A_dispram[segi]=dat;
+ 423   3                      }
+ 424   2                      
+ 425   2                      WritenDataVK2C23A(0,VK2C23A_dispram,52);//这里送8bit数据对应1个SEG，每8bit数据地址加1，每8位数据1个ACK
+ 426   2              }
+C51 COMPILER V9.60.7.0   LCM823109                                                         02/17/2025 16:15:07 PAGE 8   
+
+ 427   1      }
+ 428          /*******************************************************************************
+ 429          * Function Name  : DisSegComOn
+ 430          * Description    : 点亮1个点(1个seg和1个com交叉对应的显示点)
+ 431          * Input          ：seg->点对应的seg脚  
+ 432          *                        ：com->点对应com脚  
+ 433          * Output         : None
+ 434          * Return         : None
+ 435          *******************************************************************************/
+ 436          void VK2C23A_DisDotOn(unsigned char seg,unsigned char com)
+ 437          {
+ 438   1              unsigned char addrbit,tempdat;
+ 439   1              if(VK2C23A_maxcom==4)
+ 440   1              {
+ 441   2                      if(seg%2==0)
+ 442   2                              addrbit=(1<<com);//这里送8位数据低4bit有效，每8bit数据地址加1，每8位数据1个ACK
+ 443   2                      else
+ 444   2                              addrbit=(1<<(4+com));//这里送8位数据高4bit有效，每8bit数据地址加1，每8位数据1个ACK
+ 445   2                      tempdat=VK2C23A_dispram[seg/2]|addrbit;
+ 446   2                VK2C23A_dispram[seg/2]=tempdat;
+ 447   2                      WritenDataVK2C23A(seg/2,&tempdat,1);
+ 448   2              }
+ 449   1              else
+ 450   1              {
+ 451   2                      addrbit=(1<<com);
+ 452   2                      tempdat=VK2C23A_dispram[seg]|addrbit;
+ 453   2                      VK2C23A_dispram[seg]=tempdat;
+ 454   2                      WritenDataVK2C23A(seg,&tempdat,1);//这里送8位数据低4bit有效，每8bit数据地址加1，每8位数据1个ACK
+ 455   2              }
+ 456   1      }
+ 457          /*******************************************************************************
+ 458          * Function Name  : DisSegComOff
+ 459          * Description    : 关闭1个点(1个seg和1个com交叉对应的显示点)
+ 460          * Input          ：seg->点对应的seg脚  
+ 461          *                        ：com->点对应com脚  
+ 462          * Output         : None
+ 463          * Return         : None
+ 464          *******************************************************************************/
+ 465          void VK2C23A_DisDotOff(unsigned char seg,unsigned char com)
+ 466          {
+ 467   1              unsigned char addrbit,tempdat;
+ 468   1              if(VK2C23A_maxcom==4)
+ 469   1              {
+ 470   2                      if(seg%2==0)
+ 471   2                              addrbit=(1<<com);//这里送8位数据低4bit有效，每8bit数据地址加1，每8位数据1个ACK
+ 472   2                      else
+ 473   2                              addrbit=(1<<(4+com));//这里送8位数据高4bit有效，每8bit数据地址加1，每8位数据1个ACK
+ 474   2                      tempdat=VK2C23A_dispram[seg/2]&~addrbit;
+ 475   2                VK2C23A_dispram[seg/2]=tempdat;
+ 476   2                      WritenDataVK2C23A(seg/2,&tempdat,1);
+ 477   2              }
+ 478   1              else
+ 479   1              {
+ 480   2                      addrbit=(1<<com);
+ 481   2                      tempdat=VK2C23A_dispram[seg]&~addrbit;
+ 482   2                      VK2C23A_dispram[seg]=tempdat;
+ 483   2                      WritenDataVK2C23A(seg,&tempdat,1);
+ 484   2              }
+ 485   1      }
+ 486          /*******************************************************************************
+ 487          * Function Name  : Enter_Standby
+ 488          * Description    : 进入掉电低功耗模式,掉电无显示
+C51 COMPILER V9.60.7.0   LCM823109                                                         02/17/2025 16:15:07 PAGE 9   
+
+ 489          * Input          ：None 
+ 490          * Output         : None
+ 491          * Return         : 0-ok 1-fail
+ 492          *******************************************************************************/
+ 493          void VK2C23A_Enter_PowerOff(void)
+ 494          {               
+ 495   1              WriteCmdVK2C23A(VK2C23A_SYSSET,SYSOFF_LCDOFF);
+ 496   1      }
+ 497          /*******************************************************************************
+ 498          * Function Name  : Exit_Standby
+ 499          * Description    : 退出掉电低功耗模式
+ 500          * Input          ：None 
+ 501          * Output         : None
+ 502          * Return         : None
+ 503          *******************************************************************************/
+ 504          void VK2C23A_Exit_PowerOff(void)
+ 505          {       
+ 506   1              WriteCmdVK2C23A(VK2C23A_SYSSET,SYSON_LCDON);
+ 507   1      }
+ 508          
+ 509          /*******************************************************************************
+ 510          * Function Name  : Lowlevel_Init
+ 511          * Description    : 配置通信线GPIO
+ 512          * Input          ：None 
+ 513          * Output         : None
+ 514          * Return         : None
+ 515          *******************************************************************************/
+ 516          void VK2C23A_Lowlevel_Init(void)
+ 517          {
+ 518   1              //通信线电平不同，建议加电平转换电路
+ 519   1              //此函数根据客户单片机做相应的修改      
+ 520   1      //      GPIO_SetMode(VK2C23A_SCL_PORT, VK2C23A_SCL_PIN, GPIO_MODE_OUTPUT);
+ 521   1      //      GPIO_SetMode(VK2C23A_SDA_PORT, VK2C23A_SDA_PIN, GPIO_MODE_QUASI);
+ 522   1                            
+ 523   1              VK2C23A_SCL_H();  
+ 524   1              VK2C23A_SDA_H();        
+ 525   1      }
+ 526          /*******************************************************************************
+ 527          * Function Name  : Init
+ 528          * Description    : 初始化配置
+ 529          * Input          ：None 
+ 530          * Output         : None
+ 531          * Return         : None
+ 532          *******************************************************************************/
+ 533          void VK2C23A_InitSequence(void)
+ 534          {       
+ 535   1              //管脚配置根据客户单片机做相应的修改
+ 536   1              VK2C23A_Lowlevel_Init();
+ 537   1      //      WriteCmdVK2C23A(VK2C23A_MODESET,CCOM_1_3__4);   //模式设置  1/3 Bais 1/4 Duty
+ 538   1      //      WriteCmdVK2C23A(VK2C23A_MODESET,CCOM_1_4__4); //模式设置  1/4 Bais 1/4 Duty
+ 539   1      //      VK2C23A_maxcom=4;
+ 540   1      //      WriteCmdVK2C23A(VK2C23A_MODESET,CCOM_1_3__8); //模式设置  1/3 Bais 1/8 Duty
+ 541   1              WriteCmdVK2C23A(VK2C23A_MODESET,CCOM_1_4__8); //模式设置  1/4 Bais 1/8 Duty
+ 542   1              VK2C23A_maxcom=8;
+ 543   1              WriteCmdVK2C23A(VK2C23A_SYSSET,SYSON_LCDON);            //内部系统振荡器开，lcd开显示
+ 544   1              WriteCmdVK2C23A(VK2C23A_FRAMESET,FRAME_80HZ);   //帧频率80Hz
+ 545   1      //      WriteCmdVK2C23A(VK2C23A_FRAMESET,FRAME_160HZ); //帧频率160Hz
+ 546   1              WriteCmdVK2C23A(VK2C23A_BLINKSET,BLINK_OFF);            //闪烁关闭      
+ 547   1      //      WriteCmdVK2C23A(VK2C23A_BLINKSET,BLINK_2HZ);            //闪烁2HZ
+ 548   1      //      WriteCmdVK2C23A(VK2C23A_BLINKSET,BLINK_1HZ);            //闪烁1HZ
+ 549   1      //      WriteCmdVK2C23A(VK2C23A_BLINKSET,BLINK_0D5HZ);  //闪烁0.5HZ
+ 550   1              //SEG/VLCD共用脚设为VLCD，内部电压调整功能关闭,VLCD和VDD短接VR=0偏置电压=VDD
+C51 COMPILER V9.60.7.0   LCM823109                                                         02/17/2025 16:15:07 PAGE 10  
+
+ 551   1      //      WriteCmdVK2C23A(VK2C23A_IVASET,VLCDSEL_IVAOFF_R0); 
+ 552   1              //SEG/VLCD共用脚设为VLCD，内部电压调整功能关闭,VLCD和VDD串接电阻VR>0偏置电压=VLCD
+ 553   1      //      WriteCmdVK2C23A(VK2C23A_IVASET,VLCDSEL_IVAOFF_R1); 
+ 554   1              //SEG/VLCD共用脚设为SEG，内部偏置电压调整：1/3bias=0.652VDD 1/4bias=0.714VDD
+ 555   1              WriteCmdVK2C23A(VK2C23A_IVASET,SEGSEL_IVA00H);  
+ 556   1      }
+ 557          /*******************************************************************************
+ 558          * Function Name  : Init
+ 559          * Description    : 初始化配置
+ 560          * Input          ：None 
+ 561          * Output         : None
+ 562          * Return         : None
+ 563          *******************************************************************************/
+ 564          void VK2C23A_Init(void)
+ 565          {       
+ 566   1              //管脚配置根据客户单片机做相应的修改
+ 567   1              VK2C23A_Lowlevel_Init();
+ 568   1              //初始化时序
+ 569   1              VK2C23A_InitSequence();
+ 570   1      }
+ 571          
+ 572          unsigned char data shuzi_zimo[15]= //数字和字符字模
+ 573          {             
+ 574          // 0    1    2    3    4    5    6    7    8    9      
+ 575            0xEE,0x48,0xD6,0xDA,0x78,0XBA,0XBE,0XC8,0XFE,0XF8};
+ 576          void DisplayDigitOrChar(unsigned char pos, unsigned char index) 
+ 577          {
+ 578   1              unsigned char  Data;
+ 579   1          // 检查索引是否在数组范围内
+ 580   1          if (index >= sizeof(shuzi_zimo)) 
+ 581   1                      return;
+ 582   1      
+ 583   1          // 获取字模数据
+ 584   1          Data = shuzi_zimo[index];
+ 585   1      
+ 586   1          // 使用 Write1DataVk2c22 将数据写入显示 RAM 的指定位置
+ 587   1          Write1DataVK2C23A(pos, Data);
+ 588   1      }
+ 589          
+ 590          
+ 591          unsigned char data shuzi_zimo1[15]= //数字和字符字模
+ 592          {             
+ 593          // 0    1    2    3    4    5    6    7    8    9      
+ 594            0x77,0x12,0x6B,0x5B,0x1E,0X5D,0X7D,0X13,0X7F,0X1F};
+ 595          void DisplayDigitOrChar1(unsigned char pos, unsigned char index) 
+ 596          {
+ 597   1              unsigned char  Data;
+ 598   1          // 检查索引是否在数组范围内
+ 599   1          if (index >= sizeof(shuzi_zimo1)) 
+ 600   1                      return;
+ 601   1      
+ 602   1          // 获取字模数据
+ 603   1          Data = shuzi_zimo1[index];
+ 604   1      
+ 605   1          // 使用 Write1DataVk2c22 将数据写入显示 RAM 的指定位置
+ 606   1          Write1DataVK2C23A(pos, Data);
+ 607   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1214    ----
+   CONSTANT SIZE    =   ----    ----
+C51 COMPILER V9.60.7.0   LCM823109                                                         02/17/2025 16:15:07 PAGE 11  
+
+   XDATA SIZE       =    157      31
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     30    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

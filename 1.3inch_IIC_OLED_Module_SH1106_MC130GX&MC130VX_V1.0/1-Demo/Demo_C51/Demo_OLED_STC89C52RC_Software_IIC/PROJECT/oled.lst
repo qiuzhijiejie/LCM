@@ -1,0 +1,257 @@
+C51 COMPILER V9.60.7.0   OLED                                                              12/13/2024 17:02:31 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE OLED
+OBJECT MODULE PLACED IN ..\OBJ\oled.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE ..\HARDWARE\OLED\oled.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\FONT;..\GU
+                    -I;..\HARDWARE\OLED;..\SYSTEM;..\TEST;..\USER;..\HARDWARE\IIC) DEBUG OBJECTEXTEND PRINT(.\oled.lst) OBJECT(..\OBJ\oled.ob
+                    -j)
+
+line level    source
+
+   1          //////////////////////////////////////////////////////////////////////////////////       
+   2          //本程序只供学习使用，未经作者许可，不得用于其它任何用途
+   3          //测试硬件：单片机STC89C52RC,晶振12M  单片机工作电压3.3V或5V
+   4          //QDtech-OLED液晶驱动 for C51
+   5          //xiao冯@ShenZhen QDtech co.,LTD
+   6          //公司网站:www.qdtft.com
+   7          //淘宝网站：http://qdtech.taobao.com
+   8          //wiki技术网站：http://www.lcdwiki.com
+   9          //我司提供技术支持，任何技术问题欢迎随时交流学习
+  10          //固话(传真) :+86 0755-23594567 
+  11          //手机:15989313508（冯工） 
+  12          //邮箱:lcdwiki01@gmail.com    support@lcdwiki.com    goodtft@163.com
+  13          //技术支持QQ:3002773612  3002778157
+  14          //技术交流QQ群:324828016
+  15          //创建日期:2018/9/14
+  16          //版本：V1.0
+  17          //版权所有，盗版必究。
+  18          //Copyright(C) 深圳市全动电子技术有限公司 2018-2028
+  19          //All rights reserved
+  20          /****************************************************************************************************
+  21          //=========================================电源接线================================================//
+  22          // OLED模块                C51单片机
+  23          //   VCC         接       DC 5V/3.3V      //OLED屏电源正
+  24          //   GND         接          GND          //OLED屏电源地
+  25          //=======================================液晶屏数据线接线==========================================//
+  26          //本模块默认数据总线类型为IIC
+  27          // OLED模块                C51单片机
+  28          //   SDA        接           P15          //OLED屏SPI写信号
+  29          //=======================================液晶屏控制线接线==========================================//
+  30          // OLED模块                C51单片机
+  31          //   SCL        接           P17          //OLED屏SPI时钟信号
+  32          //=========================================触摸屏接线=========================================//
+  33          //本模块不带触摸功能，所以不需要触摸屏接线
+  34          ****************************************************************************************************/   
+  35          /***************************************************************************************************
+  36            * @attention
+  37            *
+  38            * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+  39            * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE
+  40            * TIME. AS A RESULT, QD electronic SHALL NOT BE HELD LIABLE FOR ANY
+  41            * DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING
+  42            * FROM THE CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE
+  43            * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+  44          ****************************************************************************************************/   
+  45          #include "oled.h"
+  46          #include "stdlib.h"
+  47          #include "string.h"      
+  48          #include "iic.h"
+  49          
+  50          //OLED显存总共分为8页
+  51          //每页8行，一行128个像素点
+  52          //OLED的显存
+  53          //存放格式如下.
+C51 COMPILER V9.60.7.0   OLED                                                              12/13/2024 17:02:31 PAGE 2   
+
+  54          //[0]0 1 2 3 ... 127 (0~7)行       
+  55          //[1]0 1 2 3 ... 127 (8~15)行   
+  56          //[2]0 1 2 3 ... 127 (16~23)行  
+  57          //[3]0 1 2 3 ... 127 (24~31)行  
+  58          //[4]0 1 2 3 ... 127 (32~39)行  
+  59          //[5]0 1 2 3 ... 127 (40~47)行  
+  60          //[6]0 1 2 3 ... 127 (48~55)行  
+  61          //[7]0 1 2 3 ... 127 (56~63)行                     
+  62          
+  63          /*******************************************************************
+  64           * @name       :void OLED_WR_Byte(unsigned dat,unsigned cmd)
+  65           * @date       :2018-08-27
+  66           * @function   :Write a byte of content to the OLED screen
+  67           * @parameters :dat:Content to be written
+  68                          cmd:0-write command
+  69                                                                              1-write data
+  70           * @retvalue   :None
+  71          ********************************************************************/
+  72          void OLED_WR_Byte(unsigned dat,unsigned cmd)
+  73          {
+  74   1              if(cmd)
+  75   1              {
+  76   2                      Write_IIC_Data(dat);
+  77   2              }
+  78   1              else
+  79   1              {
+  80   2                      Write_IIC_Command(dat);
+  81   2              }
+  82   1      }
+  83          
+  84          /*******************************************************************
+  85           * @name       :void OLED_Set_Pos(unsigned char x, unsigned char y) 
+  86           * @date       :2018-08-27
+  87           * @function   :Set coordinates in the OLED screen
+  88           * @parameters :x:x coordinates
+  89                          y:y coordinates
+  90           * @retvalue   :None
+  91          ********************************************************************/
+  92          void OLED_Set_Pos(unsigned char x, unsigned char y) 
+  93          {
+  94   1              OLED_WR_Byte(YLevel+y,OLED_CMD);
+  95   1              OLED_WR_Byte((((x+2)&0xf0)>>4)|0x10,OLED_CMD);
+  96   1              OLED_WR_Byte(((x+2)&0x0f),OLED_CMD); 
+  97   1      }  
+  98          
+  99          /*******************************************************************
+ 100           * @name       :void OLED_Display_On(void) 
+ 101           * @date       :2018-08-27
+ 102           * @function   :Turn on OLED display
+ 103           * @parameters :None
+ 104           * @retvalue   :None
+ 105          ********************************************************************/     
+ 106          /*
+ 107          void OLED_Display_On(void)
+ 108          {
+ 109                  OLED_WR_Byte(0X8D,OLED_CMD);  //SET DCDC命令
+ 110                  OLED_WR_Byte(0X14,OLED_CMD);  //DCDC ON
+ 111                  OLED_WR_Byte(0XAF,OLED_CMD);  //DISPLAY ON
+ 112          }*/
+ 113          
+ 114          /*******************************************************************
+ 115           * @name       :void OLED_Display_Off(void)
+C51 COMPILER V9.60.7.0   OLED                                                              12/13/2024 17:02:31 PAGE 3   
+
+ 116           * @date       :2018-08-27
+ 117           * @function   :Turn off OLED display
+ 118           * @parameters :None
+ 119           * @retvalue   :None
+ 120          ********************************************************************/    
+ 121          /*
+ 122          void OLED_Display_Off(void)
+ 123          {
+ 124                  OLED_WR_Byte(0X8D,OLED_CMD);  //SET DCDC命令
+ 125                  OLED_WR_Byte(0X10,OLED_CMD);  //DCDC OFF
+ 126                  OLED_WR_Byte(0XAE,OLED_CMD);  //DISPLAY OFF
+ 127          }*/
+ 128                                          
+ 129          /*******************************************************************
+ 130           * @name       :void OLED_Clear(unsigned dat)  
+ 131           * @date       :2018-08-27
+ 132           * @function   :clear OLED screen
+ 133           * @parameters :dat:0-Display full black
+ 134                              1-Display full white
+ 135           * @retvalue   :None
+ 136          ********************************************************************/ 
+ 137          void OLED_Clear(unsigned dat)  
+ 138          { 
+ 139   1              u8 i,n,color;   
+ 140   1              if(dat)
+ 141   1              {
+ 142   2                      color = 0xff;
+ 143   2              }
+ 144   1              else
+ 145   1              {
+ 146   2                      color = 0;
+ 147   2              }
+ 148   1              for(i=0;i<PAGE_SIZE;i++)  
+ 149   1              {  
+ 150   2                      OLED_WR_Byte(YLevel+i,OLED_CMD);    //设置页地址（0~7）
+ 151   2                      OLED_WR_Byte(XLevelL,OLED_CMD);      //设置显示位置—列低地址
+ 152   2                      OLED_WR_Byte(XLevelH,OLED_CMD);      //设置显示位置—列高地址   
+ 153   2                      for(n=0;n<WIDTH;n++)
+ 154   2                      {
+ 155   3                              OLED_WR_Byte(color,OLED_DATA); 
+ 156   3                      }
+ 157   2              }   //更新显示
+ 158   1      }
+ 159          
+ 160          /*******************************************************************
+ 161           * @name       :void OLED_Init(void)
+ 162           * @date       :2018-08-27
+ 163           * @function   :initialise OLED SH1106 control IC
+ 164           * @parameters :None
+ 165           * @retvalue   :None
+ 166          ********************************************************************/                               
+ 167          void OLED_Init(void)
+ 168          {
+ 169   1      /**************初始化SH1106*****************/   
+ 170   1              OLED_WR_Byte(0xAE,OLED_CMD);    /*display off*/       
+ 171   1              OLED_WR_Byte(0x02,OLED_CMD);    /*set lower column address*/       
+ 172   1              OLED_WR_Byte(0x10,OLED_CMD);    /*set higher column address*/     
+ 173   1              OLED_WR_Byte(0x40,OLED_CMD);    /*set display start line*/     
+ 174   1              OLED_WR_Byte(0xB0,OLED_CMD);    /*set page address*/     
+ 175   1              OLED_WR_Byte(0x81,OLED_CMD);    /*contract control*/
+ 176   1              OLED_WR_Byte(0xFF,OLED_CMD);    /*128*/     
+ 177   1              OLED_WR_Byte(0xA1,OLED_CMD);    /*set segment remap*/    
+C51 COMPILER V9.60.7.0   OLED                                                              12/13/2024 17:02:31 PAGE 4   
+
+ 178   1              OLED_WR_Byte(0xA6,OLED_CMD);    /*normal / reverse*/     
+ 179   1              OLED_WR_Byte(0xA8,OLED_CMD);    /*multiplex ratio*/
+ 180   1              OLED_WR_Byte(0x3F,OLED_CMD);    /*duty = 1/64*/     
+ 181   1              OLED_WR_Byte(0xAD,OLED_CMD);    /*set charge pump enable*/
+ 182   1              OLED_WR_Byte(0x8B,OLED_CMD);     /*    0x8B    内供VCC   */     
+ 183   1              OLED_WR_Byte(0x32,OLED_CMD);    /*0X30---0X33  set VPP   8V */     
+ 184   1              OLED_WR_Byte(0xC8,OLED_CMD);    /*Com scan direction*/     
+ 185   1              OLED_WR_Byte(0xD3,OLED_CMD);    /*set display offset*/
+ 186   1              OLED_WR_Byte(0x00,OLED_CMD);   /*   0x20  */     
+ 187   1              OLED_WR_Byte(0xD5,OLED_CMD);    /*set osc division*/
+ 188   1              OLED_WR_Byte(0x80,OLED_CMD);         
+ 189   1              OLED_WR_Byte(0xD9,OLED_CMD);    /*set pre-charge period*/
+ 190   1              OLED_WR_Byte(0x1F,OLED_CMD);    /*0x22*/     
+ 191   1              OLED_WR_Byte(0xDA,OLED_CMD);    /*set COM pins*/
+ 192   1              OLED_WR_Byte(0x12,OLED_CMD);     
+ 193   1              OLED_WR_Byte(0xDB,OLED_CMD);    /*set vcomh*/
+ 194   1              OLED_WR_Byte(0x40,OLED_CMD);                
+ 195   1              OLED_WR_Byte(0xAF,OLED_CMD);    /*display ON*/    
+ 196   1      }
+ 197            
+ 198          
+ 199          
+ 200          
+ 201          
+ 202          
+ 203          
+ 204          
+ 205          
+ 206          
+ 207          
+ 208          
+ 209          
+ 210          
+ 211          
+ 212          
+ 213          
+ 214          
+ 215          
+ 216          
+ 217          
+ 218          
+ 219          
+ 220          
+ 221          
+ 222          
+ 223          
+ 224          
+ 225          
+ 226          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    372    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

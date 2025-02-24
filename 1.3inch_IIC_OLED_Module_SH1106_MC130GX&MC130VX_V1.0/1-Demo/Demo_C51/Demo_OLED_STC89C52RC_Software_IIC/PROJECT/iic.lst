@@ -1,0 +1,184 @@
+C51 COMPILER V9.60.7.0   IIC                                                               12/13/2024 17:02:31 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE IIC
+OBJECT MODULE PLACED IN ..\OBJ\iic.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE ..\HARDWARE\IIC\iic.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\FONT;..\GUI;
+                    -..\HARDWARE\OLED;..\SYSTEM;..\TEST;..\USER;..\HARDWARE\IIC) DEBUG OBJECTEXTEND PRINT(.\iic.lst) OBJECT(..\OBJ\iic.obj)
+
+line level    source
+
+   1          //////////////////////////////////////////////////////////////////////////////////       
+   2          //本程序只供学习使用，未经作者许可，不得用于其它任何用途
+   3          //测试硬件：单片机STC89C52RC,晶振12M  单片机工作电压3.3V或5V
+   4          //QDtech-OLED液晶驱动 for C51
+   5          //xiao冯@ShenZhen QDtech co.,LTD
+   6          //公司网站:www.qdtft.com
+   7          //淘宝网站：http://qdtech.taobao.com
+   8          //wiki技术网站：http://www.lcdwiki.com
+   9          //我司提供技术支持，任何技术问题欢迎随时交流学习
+  10          //固话(传真) :+86 0755-23594567 
+  11          //手机:15989313508（冯工） 
+  12          //邮箱:lcdwiki01@gmail.com    support@lcdwiki.com    goodtft@163.com
+  13          //技术支持QQ:3002773612  3002778157
+  14          //技术交流QQ群:324828016
+  15          //创建日期:2018/9/14
+  16          //版本：V1.0
+  17          //版权所有，盗版必究。
+  18          //Copyright(C) 深圳市全动电子技术有限公司 2018-2028
+  19          //All rights reserved
+  20          /****************************************************************************************************
+  21          //=========================================电源接线================================================//
+  22          // OLED模块                C51单片机
+  23          //   VCC         接       DC 5V/3.3V      //OLED屏电源正
+  24          //   GND         接          GND          //OLED屏电源地
+  25          //=======================================液晶屏数据线接线==========================================//
+  26          //本模块默认数据总线类型为IIC
+  27          // OLED模块                C51单片机
+  28          //   SDA        接           P15          //OLED屏SPI写信号
+  29          //=======================================液晶屏控制线接线==========================================//
+  30          // OLED模块                C51单片机
+  31          //   SCL        接           P17          //OLED屏SPI时钟信号
+  32          //=========================================触摸屏接线=========================================//
+  33          //本模块不带触摸功能，所以不需要触摸屏接线
+  34          ****************************************************************************************************/   
+  35          /***************************************************************************************************
+  36            * @attention
+  37            *
+  38            * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+  39            * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE
+  40            * TIME. AS A RESULT, QD electronic SHALL NOT BE HELD LIABLE FOR ANY
+  41            * DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING
+  42            * FROM THE CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE
+  43            * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+  44          ****************************************************************************************************/           
+  45          #include "iic.h"
+  46          
+  47          /*****************************************************************************
+  48           * @name       :void IIC_Start(void)
+  49           * @date       :2018-09-13 
+  50           * @function   :start iic bus
+  51           * @parameters :None
+  52           * @retvalue   :None
+  53          ******************************************************************************/
+  54          void IIC_Start(void)
+C51 COMPILER V9.60.7.0   IIC                                                               12/13/2024 17:02:31 PAGE 2   
+
+  55          {
+  56   1              OLED_SCL_SET();
+  57   1              OLED_SDA_SET();
+  58   1              OLED_SDA_CLR();
+  59   1              OLED_SCL_CLR();
+  60   1      }
+  61          
+  62          /*****************************************************************************
+  63           * @name       :void IIC_Stop(void)
+  64           * @date       :2018-09-13 
+  65           * @function   :stop iic bus
+  66           * @parameters :None
+  67           * @retvalue   :None
+  68          ******************************************************************************/
+  69          void IIC_Stop(void)
+  70          {
+  71   1      //      OLED_SCL_SET();
+  72   1              OLED_SDA_CLR();
+  73   1              OLED_SDA_SET();
+  74   1      }
+  75          
+  76          /*****************************************************************************
+  77           * @name       :void IIC_Wait_Ack(void)
+  78           * @date       :2018-09-13 
+  79           * @function   :wait iic ack
+  80           * @parameters :None
+  81           * @retvalue   :None
+  82          ******************************************************************************/
+  83          void IIC_Wait_Ack(void)
+  84          {
+  85   1              OLED_SCL_SET();
+  86   1              OLED_SCL_CLR();
+  87   1      }
+  88          
+  89          /*****************************************************************************
+  90           * @name       :void Write_IIC_Byte(u8 IIC_Byte)
+  91           * @date       :2018-09-13 
+  92           * @function   :Write a byte of content with iic bus
+  93           * @parameters :IIC_Byte
+  94           * @retvalue   :None
+  95          ******************************************************************************/
+  96          void Write_IIC_Byte(u8 IIC_Byte)
+  97          {
+  98   1              u8 i;
+  99   1              u8 m,da;
+ 100   1              da=IIC_Byte;
+ 101   1              OLED_SCL_CLR();
+ 102   1              for(i=0;i<8;i++)                
+ 103   1              {
+ 104   2                      m=da;
+ 105   2                      m=m&0x80;
+ 106   2                      if(m==0x80)
+ 107   2                      {
+ 108   3                              OLED_SDA_SET();
+ 109   3                      }
+ 110   2                      else
+ 111   2                      {
+ 112   3                              OLED_SDA_CLR();
+ 113   3                      }
+ 114   2                      da=da<<1;
+ 115   2                      OLED_SCL_SET();
+ 116   2                      OLED_SCL_CLR();
+C51 COMPILER V9.60.7.0   IIC                                                               12/13/2024 17:02:31 PAGE 3   
+
+ 117   2                      }
+ 118   1      }
+ 119          
+ 120          /*****************************************************************************
+ 121           * @name       :void Write_IIC_Command(u8 IIC_Command)
+ 122           * @date       :2018-09-13 
+ 123           * @function   :Write a byte of command to oled screen
+ 124           * @parameters :IIC_Command:command to be written
+ 125           * @retvalue   :None
+ 126          ******************************************************************************/
+ 127          void Write_IIC_Command(u8 IIC_Command)
+ 128          {
+ 129   1              IIC_Start();
+ 130   1              Write_IIC_Byte(IIC_SLAVE_ADDR);            //Slave address,SA0=0
+ 131   1              IIC_Wait_Ack(); 
+ 132   1              Write_IIC_Byte(0x00);                   //write command
+ 133   1              IIC_Wait_Ack(); 
+ 134   1              Write_IIC_Byte(IIC_Command); 
+ 135   1              IIC_Wait_Ack(); 
+ 136   1              IIC_Stop();
+ 137   1      }
+ 138          
+ 139          /*****************************************************************************
+ 140           * @name       :void Write_IIC_Data(u8 IIC_Data)
+ 141           * @date       :2018-09-13 
+ 142           * @function   :Write a byte of data to oled screen
+ 143           * @parameters :IIC_Data:data to be written
+ 144           * @retvalue   :None
+ 145          ******************************************************************************/
+ 146          void Write_IIC_Data(u8 IIC_Data)
+ 147          {
+ 148   1              IIC_Start();
+ 149   1              Write_IIC_Byte(IIC_SLAVE_ADDR);                 //D/C#=0; R/W#=0
+ 150   1              IIC_Wait_Ack(); 
+ 151   1              Write_IIC_Byte(0x40);                   //write data
+ 152   1              IIC_Wait_Ack(); 
+ 153   1              Write_IIC_Byte(IIC_Data);
+ 154   1              IIC_Wait_Ack(); 
+ 155   1              IIC_Stop();
+ 156   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     96    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

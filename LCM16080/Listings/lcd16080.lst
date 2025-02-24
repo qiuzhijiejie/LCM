@@ -1,0 +1,852 @@
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/30/2024 10:37:51 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD16080
+OBJECT MODULE PLACED IN .\Objects\lcd16080.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE lcd16080.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
+                    -gs\lcd16080.lst) OBJECT(.\Objects\lcd16080.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include <INTRINS.H>
+   3          #include "lcd16080.h"
+   4          #include "picture.h"
+   5          
+   6          // LCD 控制引脚定义
+   7          sbit LCM_CD     = P3^0;   // 命令/数据选择引脚 (1: 数据, 0: 命令)
+   8          sbit LCM_FS     = P3^5;   // 字体选择 (1: 6x8, 0: 8x8)
+   9          sbit LCM_RESET  = P3^4;   // 复位引脚
+  10          sbit LCM_CE     = P3^3;   // 芯片使能 (低电平有效)
+  11          sbit LCM_WR     = P3^1;   // 写入引脚 (低电平写数据)
+  12          sbit LCM_RD     = P3^2;   // 读取引脚 (低电平读数据)
+  13          sbit KEY1       = P2^0;
+  14          bit CharImageReverse; 
+  15          #define LCM_PORT P1
+  16          unsigned char data Y; 
+  17          unsigned char data X; 
+  18          #define XDOTS   160                     //图形空间X方向大小
+  19          #define YDOTS   80                      //图形空间X方向大小
+  20          #define ENGLISHCHARNUMBER  8       //精简版英文字符库中的英文字符的个数
+  21          #define CHINESECHARNUMBER  11      //精简版中文字符库中的中文字符的个数
+  22          #define ENGLISHCHARSIZE    8       //英文字符X方向显示点的个数
+  23          #define CHINESECHARSIZE    16      //中文字符X方向及中英文字符Y方向显示点的个数
+  24          #define ENGLISHCHARDOTSIZE 16      //单个英文字符点阵的字节数
+  25          #define CHINESECHARDOTSIZE 32      //单个中文字符点阵的字节数
+  26          
+  27          void Delay(unsigned char xms)   //@12.000MHz
+  28          {
+  29   1              while(xms--){
+  30   2              unsigned char data i, j;
+  31   2      
+  32   2              i = 12;
+  33   2              j = 169;
+  34   2              do
+  35   2              {
+  36   3                      while (--j);
+  37   3              } while (--i);
+  38   2      }
+  39   1      }
+  40          
+  41          unsigned int ReadKey1() // 按键检测函数
+  42          {
+  43   1          if (KEY1 == 1)           
+  44   1              {  // 按键被按下
+  45   2              Delay(1);  // 简单的去抖动处理
+  46   2              if (KEY1 == 1) 
+  47   2                      {  // 检查按键是否仍然按下
+  48   3                  while (KEY1 == 1);  // 等待按键释放
+  49   3                  return 1;  // 返回按键被按下
+  50   3              }
+  51   2          }
+  52   1          return 0;  // 按键没有被按下
+  53   1      }
+  54          
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/30/2024 10:37:51 PAGE 2   
+
+  55          
+  56          
+  57          /**
+  58           * @brief  等待LCD控制器空闲
+  59           * @param  None
+  60           * @retval None
+  61           */
+  62          void lcdwaitBusy(void)// 6-5-1
+  63          {
+  64   1              unsigned char i ,status;
+  65   1              LCM_PORT=0xff;
+  66   1              
+  67   1              LCM_CD=1;
+  68   1              LCM_CE=0;
+  69   1              for(i=0;i<20;i++)
+  70   1              {
+  71   2                      LCM_RD=0;
+  72   2                      _nop_();
+  73   2                      status=LCM_PORT;
+  74   2                      LCM_RD=1;
+  75   2                      if((status&0x3)==0x3)  //STAO,STA1地两位为1. Table6-4
+  76   2                      break;  
+  77   2              }
+  78   1              LCM_CE=1;
+  79   1      }
+  80          
+  81          /**
+  82           * @brief  发送数据到LCD
+  83           * @param  data: 要发送的数据字节
+  84           * @retval None
+  85           */
+  86          void lcdWriteData(unsigned char Data)  //< Table 5-1 >
+  87          {   
+  88   1          lcdwaitBusy();          // 检测LCD控制器是否空闲
+  89   1          LCM_PORT = Data;        // 将数据写入P1端口
+  90   1          LCM_CD = 0;             // CD=0 表示发送数据
+  91   1          LCM_CE = 0;             // 激活LCD
+  92   1          LCM_WR = 0;             // 开始写入
+  93   1          _nop_();                // 延迟
+  94   1          LCM_WR = 1;             // 结束写入
+  95   1          LCM_CE = 1;             // 取消LCD选择
+  96   1      }
+  97          
+  98          
+  99          /**
+ 100           * @brief  从LCD读取数据
+ 101           * @param  None
+ 102           * @retval 读取的数据字节
+ 103           */
+ 104          unsigned char lcdReadData(void)//< Table 5-1 >         
+ 105          {   
+ 106   1          unsigned char Data;
+ 107   1      
+ 108   1          lcdwaitBusy();         // 检测LCD控制器是否空闲
+ 109   1      
+ 110   1          LCM_PORT = 0xFF;       // 设置P1为输入模式
+ 111   1      
+ 112   1          LCM_CD = 0;            // 设置为数据读取模式
+ 113   1          LCM_CE = 0;            // 激活LCD
+ 114   1          LCM_RD = 0;            // 开始读取数据
+ 115   1          _nop_();               // 延迟
+ 116   1      
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/30/2024 10:37:51 PAGE 3   
+
+ 117   1          Data = LCM_PORT;       // 从P1读取数据
+ 118   1      
+ 119   1          LCM_RD = 1;            // 结束读取
+ 120   1          LCM_CE = 1;            // 取消LCD选择
+ 121   1          return Data;           // 返回读取的数据
+ 122   1      }
+ 123          
+ 124          /**
+ 125           * @brief  发送2字节指令到LCD
+ 126           * @param  command: 要发送的指令码
+ 127           * @param  param1: 指令的第1个参数
+ 128           * @param  param2: 指令的第2个参数
+ 129           * @retval None
+ 130           */
+ 131          void lcdWriteCommand2(unsigned char command, unsigned char param1, unsigned char param2) // 发送3字节指令
+ 132          {   
+ 133   1          lcdWriteData(param1);          // 发送第1个指令参数
+ 134   1          lcdWriteData(param2);          // 发送第2个指令参数
+ 135   1          lcdWriteCommand(command);      // 发送指令码
+ 136   1      }
+ 137          
+ 138          /**
+ 139           * @brief  发送1字节指令到LCD
+ 140           * @param  command: 要发送的指令码
+ 141           * @param  param1: 指令的第1个参数
+ 142           * @retval None
+ 143           */
+ 144          void lcdWriteCommand1(unsigned char command, unsigned char param) // 发送2字节指令
+ 145          {   
+ 146   1          lcdWriteData(param);        // 发送第1个指令参数
+ 147   1          lcdWriteCommand(command);   // 发送指令码
+ 148   1      }
+ 149          
+ 150          
+ 151          
+ 152          /**
+ 153           * @brief  发送指令到LCD
+ 154           * @param  command: 要发送的指令字节
+ 155           * @retval None
+ 156           */
+ 157          void lcdWriteCommand(unsigned char command)
+ 158          {   
+ 159   1          lcdwaitBusy();         // 检测LCD控制器是否空闲      
+ 160   1          LCM_PORT = command;    // 将指令字节写入数据端口
+ 161   1          LCM_CD = 1;            // 设置为命令模式 (CD=0)
+ 162   1          LCM_CE = 0;            // 激活LCD (CE=0)
+ 163   1          LCM_WR = 0;            // 开始写入 (WR=0)
+ 164   1          _nop_();               // 短暂延迟
+ 165   1          LCM_WR = 1;            // 结束写入 (WR=1)
+ 166   1          LCM_CE = 1;            // 取消LCD选择 (CE=1)
+ 167   1      }
+ 168          
+ 169          
+ 170          /**
+ 171           * @brief  从LCD读取图形数据
+ 172           * @retval 读取到的图形数据
+ 173           */
+ 174          unsigned char lcdReadGraphicData(void)
+ 175          {
+ 176   1          lcdWriteCommand(0xC1);   //  (0xC1) Table6-19
+ 177   1              //Data Read and Increment ADP
+ 178   1          return lcdReadData();    // 读取数据并返回
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/30/2024 10:37:51 PAGE 4   
+
+ 179   1      }
+ 180          
+ 181          /**
+ 182           * @brief  发送图形数据到LCD
+ 183           * @param  data: 要发送的图形数据
+ 184           * @retval None
+ 185           */
+ 186          void lcdWriteGraphicData(unsigned char Data)
+ 187          {
+ 188   1          lcdWriteCommand1(0xC0, Data);//  Table6-19
+ 189   1      }   //Data Write and Increment ADP
+ 190          
+ 191          
+ 192          
+ 193          /**
+ 194           * @brief  初始化液晶显示控制器
+ 195           * @retval None
+ 196           */
+ 197          void lcdInitialize(void)
+ 198          {
+ 199   1          lcdWriteCommand(0x80);      // 设置为 OR 模式 6-8
+ 200   1      //      lcdWriteCommand(0x81);      // 设置为 EXOR 模式
+ 201   1      //      lcdWriteCommand(0x83);      // 设置为 AND 模式
+ 202   1      //      lcdWriteCommand(0x84);      // 设置为内部字符生成器模式模式
+ 203   1      //      lcdWriteCommand(0x90);      // 设置为外部字符生成器模式模式
+ 204   1      
+ 205   1              
+ 206   1          lcdWriteCommand(0x98);       // 开启图形模式 6-9
+ 207   1      //      lcdWriteCommand(0x90);           //Display off 
+ 208   1      //      lcdWriteCommand(0x92);           //Cursor on, Blink off 
+ 209   1      //      lcdWriteCommand(0x93);           //Cursor on, Blink on 
+ 210   1      //      lcdWriteCommand(0x94);           //Text on, Graphic off
+ 211   1      //      lcdWriteCommand(0x9c);           //Text on, Graphic on
+ 212   1      
+ 213   1              
+ 214   1      //      lcdWriteCommand2(0x40, 0, 0); // 设置文本显示区首地址为 0  6-7 
+ 215   1      //  lcdWriteCommand2(0x41, 20, 0); // 设置文本显示区宽度为 20 字节，共 160 点
+ 216   1      //  lcdWriteCommand2(0x41, 26, 0); // 设置文本显示区宽度为 26 字节，共 160 点
+ 217   1              
+ 218   1          lcdWriteCommand2(0x42, 0, 0); // 设置图形显示区首地址为 0  6-7 
+ 219   1          lcdWriteCommand2(0x43, 30, 0); // 设置图形显示区宽度为 30 字节，共 160 点
+ 220   1      }
+ 221          
+ 222          
+ 223          
+ 224          /**
+ 225           * @brief  设置内部 RAM 地址的坐标点 (XPOS, YPOS)
+ 226           * @retval None
+ 227           */
+ 228          void lcdSetPosition(void)
+ 229          {
+ 230   1          unsigned int currentAddress;
+ 231   1          
+ 232   1          // 计算当前地址: LCDRAM 地址 = 30 * YPOS + (XPOS / 8)
+ 233   1          currentAddress = Y * 30;           // 每行 30 字节
+ 234   1          currentAddress += (X / 8);         // 添加 X 坐标的偏移量
+ 235   1       
+ 236   1          // 发送坐标地址                     获取低8位              获取高8位
+ 237   1          lcdWriteCommand2(0x24, currentAddress & 0xFF, currentAddress / 256); // 发送低字节和高字节
+ 238   1      }           //0x24-Set Address drawPointer
+ 239          
+ 240          
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/30/2024 10:37:51 PAGE 5   
+
+ 241          
+ 242          
+ 243          
+ 244          /**
+ 245           * @brief 填充整个 LCD 显示屏为指定的字节数据
+ 246           * @param data 要显示的字节数据，范围为 0x00 到 0xFF。
+ 247           */
+ 248          void lcdFill(unsigned char Data)         // 整屏显示指定字节数据的子程序
+ 249          {
+ 250   1          unsigned char row, column;           // 行和列的循环变量
+ 251   1      
+ 252   1          // 设置内部 RAM 地址为 0
+ 253   1          lcdWriteCommand2(0x24, 0, 0);                  
+ 254   1      
+ 255   1          // 循环遍历每一行
+ 256   1          for(row = 0; row < 80; row++)        // 80 行
+ 257   1          
+ 258   1              // 循环遍历每一列
+ 259   1              for(column = 0; column < 30; column++) // 30 个字节数据
+ 260   1              
+ 261   1                  lcdWriteGraphicData(Data);                   // 送图形数据
+ 262   1              
+ 263   1          
+ 264   1      }
+ 265          
+ 266          
+ 267          /**
+ 268           * @brief 绘制一个矩形
+ 269           * 
+ 270           * 此函数在 LCD 屏幕上绘制一个矩形，矩形的左上角和右下角坐标
+ 271           * 由参数 (x0, y0) 和 (x1, y1) 指定。矩形的边框由四条线段组成，
+ 272           * 线条的状态由参数 b 控制。
+ 273           * 
+ 274           * @param x0 矩形左上角的 X 坐标
+ 275           * @param y0 矩形左上角的 Y 坐标
+ 276           * @param x1 矩形右下角的 X 坐标
+ 277           * @param y1 矩形右下角的 Y 坐标
+ 278           * @param b 线条的状态，通常为 0 或 1，表示不同的显示状态
+ 279           */
+ 280          void rect(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1, bit b)
+ 281          {
+ 282   1          line(x0, y0, x1, y0, b); // 绘制上边界
+ 283   1          line(x1, y0, x1, y1, b); // 绘制右边界
+ 284   1          line(x1, y1, x0, y1, b); // 绘制下边界
+ 285   1          line(x0, y1, x0, y0, b); // 绘制左边界
+ 286   1      }
+ 287          
+ 288          
+ 289          
+ 290          /**
+ 291           * @brief 绘制从当前坐标到指定坐标的直线
+ 292           * 
+ 293           * 此函数在 LCD 屏幕上绘制一条直线，从当前坐标 (XPOS, YPOS)
+ 294           * 到目标坐标 (x1, y1)。线条的状态由参数 b 控制。
+ 295           * 
+ 296           * @param x1 目标坐标的 X 坐标
+ 297           * @param y1 目标坐标的 Y 坐标
+ 298           * @param b 线条的状态，通常为 0 或 1，表示不同的显示状态
+ 299           */
+ 300          void lineto(unsigned char x1, unsigned char y1, bit b) // 绘制 (XPOS, YPOS) 到 (x1, y1) 的直线
+ 301          {
+ 302   1          line(X, Y, x1, y1, b); // 调用 line 函数绘制直线
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/30/2024 10:37:51 PAGE 6   
+
+ 303   1      }
+ 304          
+ 305          
+ 306          
+ 307          /**
+ 308           * @brief 绘制一条直线
+ 309           * 
+ 310           * 此函数使用 Bresenham 算法在 LCD 屏幕上绘制一条从起点 (x0, y0)
+ 311           * 到终点 (x1, y1) 的直线。线条的状态由参数 b 控制。
+ 312           * 
+ 313           * @param x0 起点的 X 坐标
+ 314           * @param y0 起点的 Y 坐标
+ 315           * @param x1 终点的 X 坐标
+ 316           * @param y1 终点的 Y 坐标
+ 317           * @param b 线条的状态，通常为 0 或 1，表示不同的显示状态
+ 318           */
+ 319          void line(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1, bit b)
+ 320          {
+ 321   1          unsigned char dx, dy;          // 存储 X 和 Y 方向的增量
+ 322   1          unsigned int dk;               // 用于计算斜率
+ 323   1      
+ 324   1          X = x0;                     // 设置起始坐标
+ 325   1          Y = y0;
+ 326   1          drawdrawPoint(b);                      // 在起始点绘制点
+ 327   1      
+ 328   1          dx = (x1 >= x0) ? x1 - x0 : x0 - x1; // 计算 X 方向的增量
+ 329   1          dy = (y1 >= y0) ? y1 - y0 : y0 - y1; // 计算 Y 方向的增量
+ 330   1      
+ 331   1          if (dx == dy)                  // 斜率为 1 的情况
+ 332   1          {
+ 333   2              while (X != x1)         // 循环直到到达终点
+ 334   2              {
+ 335   3                  if (x1 > x0) X++;   // 更新 X 坐标
+ 336   3                  else X--;
+ 337   3      
+ 338   3                  if (y1 > y0) Y++;   // 更新 Y 坐标
+ 339   3                  else Y--;
+ 340   3      
+ 341   3                  drawdrawPoint(b);              // 绘制当前点
+ 342   3              }
+ 343   2          }
+ 344   1          else if (dx > dy)              // X 方向增量大于 Y 方向增量
+ 345   1          {
+ 346   2              dk = dy;
+ 347   2              dy = 0;
+ 348   2      
+ 349   2              while (X != x1)         // 循环直到到达终点
+ 350   2              {
+ 351   3                  if (x1 > x0) X++;   // 更新 X 坐标
+ 352   3                  else X--;
+ 353   3      
+ 354   3                  dy++;
+ 355   3                  // 根据斜率计算新的 Y 坐标
+ 356   3                  if (y1 > y0)
+ 357   3                      Y = y0 + (dk * dy + dx / 2) / dx;
+ 358   3                  else
+ 359   3                      Y = y0 - (dk * dy + dx / 2) / dx;
+ 360   3      
+ 361   3                  drawdrawPoint(b);              // 绘制当前点
+ 362   3              }
+ 363   2          }
+ 364   1          else                            // Y 方向增量大于 X 方向增量
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/30/2024 10:37:51 PAGE 7   
+
+ 365   1          {
+ 366   2              dk = dx;
+ 367   2              dx = 0;
+ 368   2      
+ 369   2              while (Y != y1)         // 循环直到到达终点
+ 370   2              {
+ 371   3                  if (y1 > y0) Y++;   // 更新 Y 坐标
+ 372   3                  else Y--;
+ 373   3      
+ 374   3                  dx++;
+ 375   3                  // 根据斜率计算新的 X 坐标
+ 376   3                  if (x1 > x0)
+ 377   3                      X = x0 + (dk * dx + dy / 2) / dy;
+ 378   3                  else
+ 379   3                      X = x0 - (dk * dx + dy / 2) / dy;
+ 380   3      
+ 381   3                  drawdrawPoint(b);              // 绘制当前点
+ 382   3              }
+ 383   2          }
+ 384   1      }
+ 385          
+ 386          /**
+ 387           * @brief 在当前坐标点绘制一个像素。
+ 388           * 
+ 389           * @param isEnabled 像素状态：1 表示点亮，0 表示熄灭。
+ 390           */
+ 391          void drawdrawPoint(bit isEnabled)
+ 392          {
+ 393   1          unsigned char bitPosition, lcdMask, currentData;
+ 394   1      
+ 395   1          // 设置初始掩码为最高位
+ 396   1          lcdMask = 0x80;//OR Mode
+ 397   1      
+ 398   1          // 计算当前像素在字节中的位置
+ 399   1          bitPosition = X & 0x07; // XPOS的低三位表示位置 (0-7)
+ 400   1          
+ 401   1          // 将掩码右移到相应位置
+ 402   1          while (bitPosition > 0)
+ 403   1          {
+ 404   2              lcdMask >>= 1; // 右移掩码
+ 405   2              bitPosition--;
+ 406   2          }
+ 407   1      
+ 408   1          // 设置当前坐标点
+ 409   1          lcdSetPosition(); 
+ 410   1          currentData = lcdReadGraphicData(); // 读取当前字节数据
+ 411   1      
+ 412   1          // 设置当前坐标点（可能会根据不同的硬件需要再设置一次）
+ 413   1          lcdSetPosition(); 
+ 414   1      
+ 415   1          // 根据状态更新当前字节
+ 416   1          if (isEnabled) {
+ 417   2              lcdWriteGraphicData(currentData | lcdMask); // 点亮像素
+ 418   2          } else {
+ 419   2              lcdWriteGraphicData(currentData & (~lcdMask)); // 熄灭像素
+ 420   2          }
+ 421   1      }
+ 422          
+ 423          
+ 424          
+ 425          /**
+ 426           * @brief 显示图形子程序
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/30/2024 10:37:51 PAGE 8   
+
+ 427           * @param s 指向图像数据的指针，图像的第一个字节表示宽度，第二个字节表示高度，后面是像素数据
+ 428           */
+ 429          void displayImage(unsigned char code *imageData)
+ 430          {
+ 431   1          unsigned char imageWidth, imageHeight;
+ 432   1          
+ 433   1          // 提取图像的宽度
+ 434   1          imageWidth = *imageData;
+ 435   1          imageData++;  // 移动到下一个字节
+ 436   1          
+ 437   1          // 提取图像的高度
+ 438   1          imageHeight = *imageData;
+ 439   1          imageData++;  // 移动到图像像素数据的起始位置
+ 440   1          
+ 441   1          // 调用函数显示图像，传递宽度、高度和图像像素数据
+ 442   1          displaySizedImage(imageWidth, imageHeight, imageData);
+ 443   1      }
+ 444          
+ 445          
+ 446          
+ 447          /**
+ 448           * @brief 在屏幕上显示指定大小的图像数据
+ 449           * @param imageWidth 图像的宽度（以字节为单位）
+ 450           * @param imageHeight 图像的高度
+ 451           * @param imageData 指向图像像素数据的指针
+ 452           */
+ 453          void displaySizedImage(unsigned char imageWidth, unsigned char imageHeight, unsigned char code *imageData)
+ 454          {
+ 455   1          unsigned char xOffsetBits, currentX, currentY, byte1, byte2, startX, lcdMask;
+ 456   1      
+ 457   1          // 计算起始位置的位偏移
+ 458   1          xOffsetBits = X & 0x07;
+ 459   1          imageWidth += xOffsetBits;
+ 460   1          startX = X;
+ 461   1          imageData--; // 移动数据指针以匹配后续使用
+ 462   1      
+ 463   1          // 遍历每行
+ 464   1          for (currentY = 0; currentY < imageHeight; currentY++, Y++)
+ 465   1          {
+ 466   2              for (X = startX, currentX = xOffsetBits; currentX < imageWidth;)
+ 467   2              {
+ 468   3                  unsigned char bitPos;
+ 469   3      
+ 470   3                  // 读取两个字节的数据
+ 471   3                  byte1 = *imageData;
+ 472   3                  imageData++;
+ 473   3                  byte2 = *imageData;
+ 474   3      
+ 475   3                  // 如果启用了反向显示，取反数据
+ 476   3                  if (CharImageReverse)
+ 477   3                  {
+ 478   4                      byte1 = ~byte1;
+ 479   4                      byte2 = ~byte2;
+ 480   4                  }
+ 481   3      
+ 482   3                  // 对齐像素数据
+ 483   3                  for (bitPos = 0; bitPos < xOffsetBits; bitPos++)
+ 484   3                  {
+ 485   4                      byte2 >>= 1;
+ 486   4                      if (byte1 & 0x01)
+ 487   4                          byte2 |= 0x80;
+ 488   4                      byte1 >>= 1;
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/30/2024 10:37:51 PAGE 9   
+
+ 489   4                  }
+ 490   3      
+ 491   3                  // 如果位移为0，且剩余宽度小于8位，则直接写入
+ 492   3                  if ((xOffsetBits == 0) && (imageWidth < currentX + 8))
+ 493   3                  {
+ 494   4                      lcdSetPosition();
+ 495   4                      currentX += 8;
+ 496   4                      X += 8;
+ 497   4                  }
+ 498   3                  else
+ 499   3                  {
+ 500   4                      // 否则，读取当前LCD内容并更新像素
+ 501   4                      lcdSetPosition();
+ 502   4                      byte1 = lcdReadGraphicData();
+ 503   4                      lcdSetPosition();
+ 504   4                      currentX += 8;
+ 505   4                      X += 8;
+ 506   4      
+ 507   4                      lcdMask = 0xff;
+ 508   4                      bitPos = imageWidth & 0x07;
+ 509   4      
+ 510   4                      // 处理宽度不足8位的情况
+ 511   4                      while (bitPos > 0)
+ 512   4                      {
+ 513   5                          lcdMask >>= 1;
+ 514   5                          X--;
+ 515   5                          bitPos--;
+ 516   5                      }
+ 517   4      
+ 518   4                      // 将像素数据与LCD内容混合
+ 519   4                      bitPos = 0xff;
+ 520   4                      while (imageWidth < currentX)
+ 521   4                      {
+ 522   5                          currentX--;
+ 523   5                          X--;
+ 524   5                          bitPos <<= 1;
+ 525   5                      }
+ 526   4      
+ 527   4                      lcdMask &= bitPos;
+ 528   4                      byte2 &= lcdMask;
+ 529   4                      byte2 |= byte1 & (~lcdMask);
+ 530   4                  }
+ 531   3      
+ 532   3                  // 写入图形数据
+ 533   3                  lcdWriteGraphicData(byte2);
+ 534   3              }
+ 535   2      
+ 536   2              // 如果需要补齐数据的情况
+ 537   2              if ((xOffsetBits != 0) && ((imageWidth & 0x07) != 0) && (xOffsetBits >= (imageWidth & 0x07)))
+ 538   2                  imageData--;
+ 539   2          }
+ 540   1      
+ 541   1          // 更新X和Y坐标
+ 542   1          if (XDOTS - startX < imageWidth - xOffsetBits)
+ 543   1              X = 0;
+ 544   1          else
+ 545   1              Y -= imageHeight;
+ 546   1      }
+ 547          
+ 548          
+ 549          
+ 550          /**
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/30/2024 10:37:51 PAGE 10  
+
+ 551           * @brief 获取给定英文字母字符在点阵中的位置
+ 552           * 
+ 553           * 该函数使用二分查找法在 EnglishCode 数组中查找目标字符的位置，
+ 554           * 并返回对应点阵数据的起始地址指针。
+ 555           * 
+ 556           * @param targetChar 要查找的英文字母字符
+ 557           * @return unsigned char* 返回指向该字符点阵数据的指针
+ 558           */
+ 559          unsigned char code *getEnglishCodePosition(unsigned char targetChar)
+ 560          {
+ 561   1          unsigned char minIndex = 0, maxIndex = ENGLISHCHARNUMBER - 1;
+ 562   1          unsigned char midIndex, midChar;
+ 563   1      
+ 564   1          // 使用二分查找法定位字符
+ 565   1          while (1)
+ 566   1          {
+ 567   2              // 如果查找范围小于2，直接检查min和max位置
+ 568   2              if (maxIndex - minIndex < 2)
+ 569   2              {
+ 570   3                  if (EnglishCode[minIndex] == targetChar)
+ 571   3                      midIndex = minIndex;
+ 572   3                  else if (EnglishCode[maxIndex] == targetChar)
+ 573   3                      midIndex = maxIndex;
+ 574   3                  else
+ 575   3                      midIndex = 0;  // 如果未找到字符，返回默认值0
+ 576   3                  break;
+ 577   3              }
+ 578   2      
+ 579   2              // 计算中间位置
+ 580   2              midIndex = (maxIndex + minIndex) / 2;
+ 581   2              midChar = EnglishCode[midIndex];
+ 582   2      
+ 583   2              // 如果找到了目标字符
+ 584   2              if (midChar == targetChar)
+ 585   2                  break;
+ 586   2      
+ 587   2              // 如果中间字符比目标字符大，则在左半部分查找
+ 588   2              else if (midChar > targetChar)
+ 589   2                  maxIndex = midIndex - 1;
+ 590   2      
+ 591   2              // 否则在右半部分查找
+ 592   2              else
+ 593   2                  minIndex = midIndex + 1;
+ 594   2          }
+ 595   1      
+ 596   1          // 返回字符点阵数据的指针
+ 597   1          return EnglishCharDot + midIndex * ENGLISHCHARDOTSIZE;
+ 598   1      }
+ 599          
+ 600          /**
+ 601           * @brief 获取给定中文字符在点阵中的位置
+ 602           * 
+ 603           * 该函数使用二分查找法在 ChineseCode 数组中查找目标字符的编码位置，
+ 604           * 并返回对应点阵数据的起始地址指针。
+ 605           * 
+ 606           * @param targetChar 要查找的中文字符编码（2字节）。
+ 607           * @return unsigned char* 返回指向该字符点阵数据的指针
+ 608           */
+ 609          unsigned char code *getChineseCodePosition(unsigned int targetChar)
+ 610          {
+ 611   1          unsigned int minIndex = 0, maxIndex = CHINESECHARNUMBER - 1;
+ 612   1          unsigned int midIndex, midChar;
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/30/2024 10:37:51 PAGE 11  
+
+ 613   1      
+ 614   1          // 使用二分查找法定位字符
+ 615   1          while (1)
+ 616   1          {
+ 617   2              // 如果查找范围小于2，直接检查min和max位置
+ 618   2              if (maxIndex - minIndex < 2)
+ 619   2              {
+ 620   3                  if (ChineseCode[minIndex] == targetChar)
+ 621   3                      midIndex = minIndex;
+ 622   3                  else if (ChineseCode[maxIndex] == targetChar)
+ 623   3                      midIndex = maxIndex;
+ 624   3                  else
+ 625   3                      midIndex = 0;  // 如果未找到字符，返回默认值0
+ 626   3                  break;
+ 627   3              }
+ 628   2      
+ 629   2              // 计算中间位置
+ 630   2              midIndex = (maxIndex + minIndex) / 2;
+ 631   2              midChar = ChineseCode[midIndex];
+ 632   2      
+ 633   2              // 如果找到了目标字符
+ 634   2              if (midChar == targetChar)
+ 635   2                  break;
+ 636   2      
+ 637   2              // 如果中间字符比目标字符大，则在左半部分查找
+ 638   2              else if (midChar > targetChar)
+ 639   2                  maxIndex = midIndex - 1;
+ 640   2      
+ 641   2              // 否则在右半部分查找
+ 642   2              else
+ 643   2                  minIndex = midIndex + 1;
+ 644   2          }
+ 645   1      
+ 646   1          // 返回字符点阵数据的指针
+ 647   1          return ChineseCharDot + midIndex * CHINESECHARDOTSIZE;
+ 648   1      }
+ 649          
+ 650          
+ 651          /**
+ 652           * @brief 显示字符串，遇到字符码为 0 时退出。
+ 653           * @param s 指向字符串的指针，字符码为 0 表示结束。
+ 654           */
+ 655          void putstr(unsigned char code *s)
+ 656          {
+ 657   1          unsigned int charCode;
+ 658   1          while (1)
+ 659   1          {
+ 660   2              charCode = *s; // 获取当前字符
+ 661   2              s++; // 移动到下一个字符
+ 662   2              
+ 663   2              if (charCode == 0) break; // 遇到空字符则退出
+ 664   2      
+ 665   2              // 处理ASCII字符 (0-127)
+ 666   2              if (charCode < 128)
+ 667   2              {
+ 668   3                  putchar(charCode); // 显示单字节字符
+ 669   3              }
+ 670   2              // 处理双字节字符 (汉字等)
+ 671   2              else
+ 672   2              {
+ 673   3                  charCode = charCode * 256 + *s; // 组合两个字节成完整的字符编码
+ 674   3                  s++; // 跳过第二个字节
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/30/2024 10:37:51 PAGE 12  
+
+ 675   3                  putchar(charCode); // 显示双字节字符
+ 676   3              }
+ 677   2          }
+ 678   1      }
+ 679          
+ 680          
+ 681          /**
+ 682           * @brief 在屏幕上显示一个字符（支持ASCII字符和汉字）。
+ 683           * @param c 要显示的字符的编码（单字节ASCII或双字节汉字）。
+ 684           */
+ 685          void putchar(unsigned int c)
+ 686          {
+ 687   1          // 判断是汉字还是ASCII字符
+ 688   1          if (c > 128)
+ 689   1          {
+ 690   2              // 汉字字符：按汉字的尺寸显示
+ 691   2              displaySizedImage(CHINESECHARSIZE, CHINESECHARSIZE, getChineseCodePosition(c));
+ 692   2          }
+ 693   1          else
+ 694   1          {
+ 695   2              // ASCII字符：按英文字母的尺寸显示
+ 696   2              displaySizedImage(ENGLISHCHARSIZE, CHINESECHARSIZE, getChineseCodePosition(c));
+ 697   2          }
+ 698   1      }
+ 699          
+ 700          void FillHorizontalStripePattern1(void)
+ 701          {
+ 702   1          unsigned char x, y;
+ 703   1      
+ 704   1          for (y = 0; y < 80; y++)  // 遍历Y轴
+ 705   1          {
+ 706   2              Y = y;             // 将当前行赋值给 YPOS
+ 707   2              lcdSetPosition();             // 设置当前行的起始位置
+ 708   2      
+ 709   2              for (x = 0; x < 30; x++)  // 遍历X轴
+ 710   2              {
+ 711   3                  if (y % 2 == 0)  // 偶数行显示交替亮
+ 712   3                  {
+ 713   4                      lcdWriteGraphicData(0xff);  // 发送 0xAA, 即 10101010
+ 714   4                  }
+ 715   3                  else  // 奇数行显示全暗
+ 716   3                  {
+ 717   4                      lcdWriteGraphicData(0x00);  // 发送 0x00，全暗
+ 718   4                  }
+ 719   3              }
+ 720   2          }
+ 721   1      }
+ 722          
+ 723          
+ 724          void FillHorizontalStripePattern2(void)
+ 725          {
+ 726   1          unsigned char x, y;
+ 727   1      
+ 728   1          for (y = 0; y < 80; y++)  // 遍历Y轴
+ 729   1          {
+ 730   2              Y = y;             // 将当前行赋值给 YPOS
+ 731   2              lcdSetPosition();             // 设置当前行的起始位置
+ 732   2      
+ 733   2              for (x = 0; x < 30; x++)  // 遍历X轴
+ 734   2              {
+ 735   3                  if (y % 2 == 0)  // 偶数行显示交替亮
+ 736   3                  {
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/30/2024 10:37:51 PAGE 13  
+
+ 737   4                      lcdWriteGraphicData(0x55);  // 发送 0xAA, 即 10101010
+ 738   4                  }
+ 739   3                  else  // 奇数行显示全暗
+ 740   3                  {
+ 741   4                      lcdWriteGraphicData(0xaa);  // 发送 0x00，全暗
+ 742   4                  }
+ 743   3              }
+ 744   2          }
+ 745   1      }
+ 746          void draw_more_nested_rectangles()
+ 747          {
+ 748   1          // 最外层矩形，覆盖整个 160x80 的屏幕
+ 749   1          rect(0, 0, 159, 79, 1);   // 最外层矩形
+ 750   1          // 逐步缩进，保持每次缩小 5 像素的间距
+ 751   1          rect(5, 5, 154, 74, 1);   // 外层矩形
+ 752   1          rect(10, 10, 149, 69, 1); // 第二个矩形
+ 753   1          rect(15, 15, 144, 64, 1); // 第三个矩形
+ 754   1          rect(20, 20, 139, 59, 1); // 第四个矩形
+ 755   1          rect(25, 25, 134, 54, 1); // 第五个矩形
+ 756   1          rect(30, 30, 129, 49, 1); // 第六个矩形
+ 757   1          rect(35, 35, 124, 44, 1); // 第七个矩形
+ 758   1          rect(40, 40, 119, 38, 1); // 第八个矩形
+ 759   1                              
+ 760   1      }
+ 761          
+ 762          
+ 763          
+ 764          void circle(unsigned char x_center, unsigned char y_center, unsigned char radius, bit b) {
+ 765   1          int x = 0;          // 当前点的 x 坐标
+ 766   1          int y = radius;     // 当前点的 y 坐标
+ 767   1          int d = 3 - 2 * radius; // 决策参数
+ 768   1      
+ 769   1          // 绘制圆的八个对称点
+ 770   1          while (x <= y) {
+ 771   2              // 绘制圆的八个象限的点
+ 772   2              line(x_center + x, y_center + y, x_center + x, y_center + y, b); // 第1象限
+ 773   2              line(x_center + y, y_center + x, x_center + y, y_center + x, b); // 第2象限
+ 774   2              line(x_center - x, y_center + y, x_center - x, y_center + y, b); // 第3象限
+ 775   2              line(x_center - y, y_center + x, x_center - y, y_center + x, b); // 第4象限
+ 776   2              line(x_center - x, y_center - y, x_center - x, y_center - y, b); // 第5象限
+ 777   2              line(x_center - y, y_center - x, x_center - y, y_center - x, b); // 第6象限
+ 778   2              line(x_center + x, y_center - y, x_center + x, y_center - y, b); // 第7象限
+ 779   2              line(x_center + y, y_center - x, x_center + y, y_center - x, b); // 第8象限
+ 780   2      
+ 781   2              // 更新决策参数
+ 782   2              if (d < 0) {
+ 783   3                  d += 4 * x + 6;
+ 784   3              } else {
+ 785   3                  d += 4 * (x - y) + 10;
+ 786   3                  y--;
+ 787   3              }
+ 788   2              x++;
+ 789   2          }
+ 790   1      }
+ 791          unsigned char r;
+ 792          void drawNestedCircles(unsigned char x_center, unsigned char y_center, unsigned char max_radius, bit b) {
+ 793   1          // 确保半径不为负数
+ 794   1          if (max_radius > 0) {
+ 795   2              for (r = max_radius; r > 0; r -= 5) { // 每次减少半径5
+ 796   3                  circle(x_center, y_center, r, b); // 绘制圆形
+ 797   3              }
+ 798   2          }
+C51 COMPILER V9.60.7.0   LCD16080                                                          11/30/2024 10:37:51 PAGE 14  
+
+ 799   1      }
+ 800          
+ 801          
+ 802          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   2013    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      3      54
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1       6
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

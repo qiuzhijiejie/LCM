@@ -1,0 +1,50 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              02/18/2025 18:56:32 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\m
+                    -ain.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "lcm9832a.h"
+   3          #include "pic.h"
+   4          
+   5          void main(void)
+   6          {
+   7   1      //      TMOD=0x01;      //16 bit Timer 
+   8   1      //      TH0=0xff;   //(65536-250)/256;  Timer high byte   1s=1000000us  1000000/4000=250
+   9   1      //      TL0=0xE4;   //(65536-250)%256;  Timer low  byte
+  10   1      //      IE=0x83;        // Turn on timer interrupt and external interrupt
+  11   1      //      IP=0x02;        //Timer interrupt priority response  PT0=1;
+  12   1      //      IT0=1;          //External interrupt  trigger
+  13   1      //      TR0=1;          //Turn on Timer
+  14   1      
+  15   1          Initial();
+  16   1      //      MAPPING(1);
+  17   1              while(1)
+  18   1              {               
+  19   2                      Display_pic();
+  20   2                      Show_chinese();
+  21   2                      Delay(800);
+  22   2                      Display_dot(0x00,0x00); 
+  23   2                      Display_One_Emglish();
+  24   2                      Delay(800);
+  25   2              }       
+  26   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     34    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

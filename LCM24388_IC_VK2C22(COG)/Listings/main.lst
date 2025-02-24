@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              11/29/2024 14:37:45 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              02/13/2025 11:16:25 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -8,89 +8,126 @@ COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROW
 
 line level    source
 
-   1          #include <REGX52.H>
-   2          #include "lcd24388.h"
-   3          unsigned char seg,com,i,j;
-   4          unsigned char mode=0;
-   5          unsigned char vk2c22_segi,vk2c22_comi;
-   6          unsigned char vk2c22_maxcom;
-   7          
-   8          
-   9          
-  10          void main(void)
-  11          {       
-  12   1              Vk2c22_Init();
-  13   1              Vk2c22_DisAll(0x00);            
+   1          #include "lcd24388.h"
+   2          unsigned char seg,com,i,j;
+   3          unsigned char mode=0;
+   4          unsigned char vk2c22_segi,vk2c22_comi;
+   5          unsigned char vk2c22_maxcom;
+   6          
+   7          void main(void)
+   8          {       
+   9   1              Vk2c22_Init();
+  10   1              
+  11   1              
+  12   1              Vk2c22_DisAll(0x00);
+  13   1      
   14   1      
-  15   1      for ( i = 0; i <= 15; i++) 
-  16   1      {
-  17   2          for ( j = 0; j <= 6; j++) 
-  18   2              {  
-  19   3              DisplayDigitOrChar(j, i);
-  20   3          }
-  21   2                  for ( j = 7; j <= 20; j++) 
-  22   2              {  
-  23   3              DisplayDigitOrChar2(j, i);
-  24   3          }
-  25   2      }
+  15   1              for ( i = 0; i <= 15; i++) 
+  16   1              {
+  17   2                      for ( j = 0; j <= 6; j++) 
+  18   2                      {  
+  19   3                              DisplayDigitOrChar(j, i);
+  20   3                      }
+  21   2                              for ( j = 7; j <= 20; j++) 
+  22   2                      {  
+  23   3                              DisplayDigitOrChar2(j, i);
+  24   3                      }
+  25   2              }
   26   1      
   27   1              while(1)
   28   1              {
-  29   2      
-  30   2                      if (Key()) 
-  31   2                      {
-  32   3                       mode++;
-  33   3                       mode%=2;                
-  34   3                              switch (mode) 
-  35   3                       {
-  36   4                               
-  37   4                              case 0: 
-  38   4                              for ( seg = 0; seg < 42; seg++)
-  39   4                              {
-  40   5                                      Vk2c22_DisSegComOn(seg, 1); 
-  41   5                                      Vk2c22_DisSegComOn(seg, 3);
-  42   5                              }
-  43   4                              
-  44   4                              break;
-  45   4                              case 1: 
-  46   4                              for ( seg = 0; seg < 42; seg++)
-  47   4                              {   
-  48   5                                      
-  49   5                                      Vk2c22_DisSegComOn(seg, 0);
-  50   5                                      Vk2c22_DisSegComOn(seg, 2); 
-  51   5                              }
-  52   4                              break;
-  53   4      //                      case 2:
-  54   4      //                      for ( seg = 0; seg < 42; seg++)
-C51 COMPILER V9.60.7.0   MAIN                                                              11/29/2024 14:37:45 PAGE 2   
+  29   2                      if (Key()) 
+  30   2                      {
+  31   3                       mode++;
+  32   3                       mode%=2;       
+  33   3                              switch (mode) 
+  34   3                       {                       
+  35   4                              case 0:
+  36   4                              for ( seg = 0; seg < 42; seg++)
+  37   4                              {
+  38   5                              
+  39   5                                      Vk2c22_DisSegComOn(seg, 0); 
+  40   5                                      Vk2c22_DisSegComOn(seg, 2);
+  41   5                              }
+  42   4                              for ( seg = 0; seg < 42; seg++)
+  43   4                              {
+  44   5                              
+  45   5                                      Vk2c22_DisSegComOff(seg,1);
+  46   5                                      Vk2c22_DisSegComOff(seg,3);     
+  47   5                              }
+  48   4                              
+  49   4                              break;
+  50   4                              case 1: 
+  51   4                              for ( seg = 0; seg < 42; seg++)
+  52   4                              {   
+  53   5                                      Vk2c22_DisSegComOn(seg, 1);
+  54   5                                      Vk2c22_DisSegComOn(seg, 3); 
+C51 COMPILER V9.60.7.0   MAIN                                                              02/13/2025 11:16:25 PAGE 2   
 
-  55   4      //                      {
-  56   4      //                              Vk2c22_DisSegComOn(seg, 2); 
-  57   4      
-  58   4      //                      }
-  59   4      //                      break;
-  60   4      //                      case 3:
-  61   4      //                      for ( seg = 0; seg < 42; seg++)
-  62   4      //                      {
-  63   4      //                              Vk2c22_DisSegComOn(seg, 9); 
-  64   4      
-  65   4      //                      }
-  66   4      //                      break;
-  67   4                       }
-  68   3                      }               
-  69   2                      
-  70   2              }
-  71   1      }
-  72                  
+  55   5                              }               
+  56   4                              for ( seg = 0; seg < 42; seg++)
+  57   4                              {   
+  58   5                                      Vk2c22_DisSegComOff(seg,0);
+  59   5                                      Vk2c22_DisSegComOff(seg,2);
+  60   5                              }
+  61   4      
+  62   4                              break;
+  63   4      //                      case 2:
+  64   4      //                      Vk2c22_Init();
+  65   4      //                      Vk2c22_DisAll(0x00);    
+  66   4      //                      for ( seg = 0; seg < 42; seg++)
+  67   4      //                      {
+  68   4      //                              Vk2c22_DisSegComOn(seg, 0); 
+  69   4      
+  70   4      //                      }
+  71   4      //                      break;
+  72   4      //                      case 3:
+  73   4      //                      Vk2c22_Init();
+  74   4      //                      Vk2c22_DisAll(0x00);    
+  75   4      //                      for ( seg = 0; seg < 42; seg++)
+  76   4      //                      {
+  77   4      //                              Vk2c22_DisSegComOn(seg, 1); 
+  78   4      
+  79   4      //                      }
+  80   4      
+  81   4      //                      break;
+  82   4      //                      case 4:
+  83   4      //                      Vk2c22_Init();
+  84   4      //                      Vk2c22_DisAll(0x00);    
+  85   4      //                      for ( seg = 0; seg < 42; seg++)
+  86   4      //                      {
+  87   4      //                              Vk2c22_DisSegComOn(seg, 2); 
+  88   4      
+  89   4      //                      }
+  90   4      
+  91   4      //                      break;
+  92   4      //                      case 5:
+  93   4      //                      Vk2c22_Init();
+  94   4      //                      Vk2c22_DisAll(0x00);    
+  95   4      //                      for ( seg = 0; seg < 42; seg++)
+  96   4      //                      {
+  97   4      //                              Vk2c22_DisSegComOn(seg, 3); 
+  98   4      
+  99   4      //                      }
+ 100   4      
+ 101   4      //                      break;
+ 102   4                       }
+ 103   3                      }               
+ 104   2                      
+ 105   2              }
+ 106   1      }
+ 107                  
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    133    ----
+   CODE SIZE        =    185    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =      8    ----
    IDATA SIZE       =   ----    ----
+C51 COMPILER V9.60.7.0   MAIN                                                              02/13/2025 11:16:25 PAGE 3   
+
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
 

@@ -1,0 +1,109 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              02/17/2025 17:14:29 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\main.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "LCM823109.h"
+   2          unsigned char seg,i,j;
+   3          void main(void)
+   4          {       
+   5   1              VK2C23A_Init();
+   6   1              VK2C23A_DisAll(0x00);
+   7   1              while(1)
+   8   1              {
+   9   2                      
+  10   2      //      for(i=0;i<8;i++)
+  11   2      //      {
+  12   2      //              for ( seg = 0; seg < VK2C23A_SEGNUM; seg++){VK2C23A_DisDotOn(seg,i);}
+  13   2      //      }
+  14   2      //      VK2C23A_DisAll(0x00);
+  15   2              
+  16   2              for ( i = 10; i > 0; i-- ) 
+  17   2              {
+  18   3                      for ( j = 0; j < 24; j++) 
+  19   3                      {  
+  20   4                              DisplayDigitOrChar(j, i);
+  21   4                      }
+  22   3                      
+  23   3                      for ( j = 24; j < 51; j++) 
+  24   3                      {  
+  25   4                              DisplayDigitOrChar1(j, i);
+  26   4                      }
+  27   3              }
+  28   2              
+  29   2              
+  30   2      
+  31   2      //      VK2C23A_DisAll(0x00);
+  32   2                      
+  33   2      //         for ( seg = 0; seg < VK2C23A_SEGNUM; seg++){VK2C23A_DisDotOn(seg,7);}
+  34   2      //              VK2C23A_DisAll(0xff);                   //LCD全显
+  35   2      //              delay_nms(3000);                                        //延时1S
+  36   2      //      
+  37   2      //              VK2C23A_DisAll(0x00);                   //LCD全关
+  38   2      //              delay_nms(3000);                                        //延时1S
+  39   2      //              
+  40   2      //              //LCD半显
+  41   2      //              VK2C23A_DisAll(0x55);                   
+  42   2      //              ReadnDataVK2C23A(0,VK2C23A_readbuf,52); //读回RAM数据
+  43   2      //              delay_nms(1500);                                        //延时
+  44   2      //              VK2C23A_DisAll(0xAA);
+  45   2      //              delay_nms(500);         
+  46   2      //              ReadnDataVK2C23A(0,VK2C23A_readbuf,52); //读回RAM数据
+  47   2      //              delay_nms(500);                                 //延时
+  48   2      //              
+  49   2      //              //掉电
+  50   2      //              VK2C23A_DisAll(0x00);                   //LCD全关               
+  51   2      //              VK2C23A_Enter_PowerOff();       //进入掉电模式
+  52   2      //              delay_nms(5000);                                        //延时5S                
+  53   2      //              VK2C23A_Exit_PowerOff();        //退出掉电模式
+  54   2      //              
+C51 COMPILER V9.60.7.0   MAIN                                                              02/17/2025 17:14:29 PAGE 2   
+
+  55   2      //              VK2C23A_DisAll(0x00);                   //LCD全关
+  56   2      //              delay_nms(500);                                   //延时
+  57   2      //              for(VK2C23A_segi=0;VK2C23A_segi<VK2C23A_SEGNUM;VK2C23A_segi++)//seg
+  58   2      //              {
+  59   2      //                      for(VK2C23A_comi=0;VK2C23A_comi<8;VK2C23A_comi++)//com
+  60   2      //                      {
+  61   2      //                                      VK2C23A_DisDotOn(VK2C23A_segtab[VK2C23A_segi]-4,VK2C23A_comi);  //LCD单点点亮
+  62   2      //                              delay_nms(300);                         //延时300mS
+  63   2      //                              VK2C23A_DisDotOff(VK2C23A_segtab[VK2C23A_segi]-4,VK2C23A_comi);   //此行配合单点点亮函数实现单点点亮
+             -，屏蔽此行顺序点亮
+  64   2      //                      }
+  65   2      //              }
+  66   2      //              
+  67   2      //              VK2C23A_DisAll(0xff);                   //LCD全显
+  68   2      //              delay_nms(500);                                   //延时
+  69   2      //              for(VK2C23A_segi=0;VK2C23A_segi<VK2C23A_SEGNUM;VK2C23A_segi++)//seg
+  70   2      //              {
+  71   2      //                      for(VK2C23A_comi=0;VK2C23A_comi<8;VK2C23A_comi++)//com
+  72   2      //                      {
+  73   2      //                                      VK2C23A_DisDotOff(VK2C23A_segtab[VK2C23A_segi]-4,VK2C23A_comi); //LCD单点关闭
+  74   2      //                              delay_nms(300);                         //延时300mS
+  75   2      //                              VK2C23A_DisDotOn(VK2C23A_segtab[VK2C23A_segi]-4,VK2C23A_comi);  //此行配合单点关闭函数实现单点关闭，
+             -屏蔽此行顺序关闭
+  76   2      //                      }
+  77   2      //              }
+  78   2      //              delay_nms(1000);                                          //延时
+  79   2              }
+  80   1      }
+  81          /************************END OF FILE****/
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     91    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      3    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

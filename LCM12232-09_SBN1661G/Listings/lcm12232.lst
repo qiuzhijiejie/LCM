@@ -1,0 +1,653 @@
+C51 COMPILER V9.60.7.0   LCM12232                                                          01/14/2025 19:50:34 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCM12232
+OBJECT MODULE PLACED IN .\Objects\lcm12232.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE lcm12232.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
+                    -gs\lcm12232.lst) OBJECT(.\Objects\lcm12232.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "lcm12232.h"
+   3          #include <intrins.h>
+   4          #include "pic.h"
+   5          sbit int0=P2^3;                                         //external interrup input
+   6          bit  log=0;                                                     //display stop mark
+   7          
+   8          void Step(void) interrupt 0 using 0
+   9          {
+  10   1              Delay1(3000);
+  11   1              if(int0==0)     log=!log;
+  12   1          while(!int0)
+  13   1                 Delay1(3000);
+  14   1          return;
+  15   1      }
+  16          
+  17          
+  18          void Delay1(uint n)
+  19          {
+  20   1              while(n--);  
+  21   1      }
+  22          
+  23          void Delay2(uint x)
+  24          {
+  25   1              while(x)
+  26   1              {   
+  27   2                x--;   
+  28   2              
+  29   2                      for(;log==1;);
+  30   2              }
+  31   1      }
+  32          
+  33          void Delay(uint MS)
+  34          {       unsigned char j;
+  35   1              while(MS--)
+  36   1              {
+  37   2             for(j=0;j<5;j++)
+  38   2                 Delay2(10);
+  39   2      
+  40   2              }
+  41   1      }
+  42          
+  43          ////////////////////////Timer interrupt   Produce 2 KHZ clock signal
+  44          void clock_timer(void) interrupt 1 using 1  //
+  45          {
+  46   1              TH0=0xff;   //(65536-250)/256;  Timer high byte   1s=1000000us  1000000/4000=250    250us H  250us L   A 
+             -cycle for 500 us
+  47   1              TL0=0x83;   //(65536-250)%256;  Timer low  byte
+  48   1              CL=~CL;
+  49   1        return;
+  50   1      }
+  51           
+  52          
+  53           /*
+C51 COMPILER V9.60.7.0   LCM12232                                                          01/14/2025 19:50:34 PAGE 2   
+
+  54           ////////////////////////Timer interrupt   Produce 10 KHZ clock signal
+  55          void clock_timer(void) interrupt 1 using 1  //
+  56          {
+  57                  TH0=0xff;   //(65536-50)/256;   Timer high byte   1s=1000000us  1000000/10000=100    50us H  50us L   A cy
+             -cle for 100 us
+  58                  TL0=0xCE;   //(65536-50)%256;   Timer low  byte
+  59                  CL=~CL;
+  60            return;
+  61          }
+  62          
+  63           */
+  64          
+  65          #if (TIMING==6800)
+  66          //6800 interface  //check left half screen busy  
+  67          void Busy_L() 
+  68          {
+  69   1          unsigned char flag=0xff;
+  70   1          A0=0;CS1=0;E_RD=0;RW_WR=1;
+  71   1              while ((flag&0x80)==0x80)
+  72   1              {
+  73   2                      E_RD=1;
+  74   2                      _nop_();
+  75   2                  flag=DATA_BUS;
+  76   2              E_RD=0;
+  77   2              }
+  78   1              CS1=1;
+  79   1      }
+  80          
+  81          #else
+              //8080 interface  //check left half screen busy  
+              void Busy_L()
+              {
+                  unsigned char flag=0xff;
+                  A0=0;CS1=0;E_RD=1;RW_WR=1;
+                      while ((flag&0x80)==0x80)
+                      {
+                              E_RD=0;
+                              _nop_();
+                          flag=DATA_BUS;
+                      E_RD=1;
+                      }
+                      CS1=1;
+              }
+              
+              #endif
+  98          
+  99          #if (TIMING==6800)
+ 100          //6800 interface  //check right half screen busy  
+ 101          void Busy_R()
+ 102          {
+ 103   1          unsigned char flag=0xff;
+ 104   1          A0=0;CS2=0;E_RD=0;RW_WR=1;
+ 105   1              while ((flag&0x80)==0x80)
+ 106   1              {
+ 107   2                      E_RD=1;
+ 108   2                      _nop_();
+ 109   2                  flag=DATA_BUS;
+ 110   2              E_RD=0;
+ 111   2              }
+ 112   1              CS2=1;
+ 113   1      }
+ 114          
+C51 COMPILER V9.60.7.0   LCM12232                                                          01/14/2025 19:50:34 PAGE 3   
+
+ 115          #else
+              //8080 interface  //check right half screen busy 
+              void Busy_R()
+              {
+                  unsigned char flag=0xff;
+                  A0=0;CS2=0;E_RD=1;RW_WR=1;
+                      while ((flag&0x80)==0x80)
+                      {
+                              E_RD=0;
+                              _nop_();
+                          flag=DATA_BUS;
+                      E_RD=1;
+                      }
+                      CS2=1;
+              }
+              
+              #endif
+ 132          
+ 133          #if (TIMING==6800)
+ 134          //6800 interface  //write data to left half screen 
+ 135          void Write_Data_L(unsigned char dat) 
+ 136          {
+ 137   1          Busy_L();
+ 138   1          A0=1;
+ 139   1              CS1=0;
+ 140   1          RW_WR=0;
+ 141   1              DATA_BUS=dat;
+ 142   1          E_RD=1;
+ 143   1          _nop_();
+ 144   1          E_RD=0;
+ 145   1          RW_WR=1;
+ 146   1              CS1=1;
+ 147   1              return;
+ 148   1      }
+ 149          
+ 150          #else
+              //8080 interface  //write data to left half screen 
+              void Write_Data_L(unsigned char dat)
+              {
+                  Busy_L();
+                  A0=1;
+                      CS1=0;
+                  E_RD=1;
+                  RW_WR=0;
+                      DATA_BUS=dat;
+                  _nop_();
+                  RW_WR=1;
+                      CS1=1;
+                      return;
+              }
+              
+              #endif
+ 167          
+ 168          
+ 169          #if (TIMING==6800)
+ 170          //6800 interface  //write data to right half screen 
+ 171          void Write_Data_R(unsigned char dat) 
+ 172          {
+ 173   1         Busy_R();
+ 174   1          A0=1;
+ 175   1              CS2=0;
+ 176   1          RW_WR=0;
+C51 COMPILER V9.60.7.0   LCM12232                                                          01/14/2025 19:50:34 PAGE 4   
+
+ 177   1              DATA_BUS=dat;
+ 178   1          E_RD=1;
+ 179   1          _nop_();
+ 180   1          E_RD=0;
+ 181   1          RW_WR=1;
+ 182   1              CS2=1;
+ 183   1              return;
+ 184   1      }
+ 185          
+ 186          #else
+              //8080 interface  //write data to right half screen
+              void Write_Data_R(unsigned char dat)
+              {
+                  Busy_L();
+                  A0=1;
+                      CS2=0;
+                  E_RD=1;
+                  RW_WR=0;
+                      DATA_BUS=dat;
+                  _nop_();
+                  RW_WR=1;
+                      CS2=1;
+                      return;
+              }
+              
+              #endif
+ 203          
+ 204          
+ 205          #if (TIMING==6800)
+ 206          //6800 interface  //write command to left half screen
+ 207          void Write_Instruction_L(unsigned char cmd)
+ 208          {
+ 209   1          Busy_L();
+ 210   1          A0=0;
+ 211   1              CS1=0;
+ 212   1          RW_WR=0;
+ 213   1              DATA_BUS=cmd;
+ 214   1          E_RD=1;
+ 215   1              _nop_();
+ 216   1          E_RD=0;
+ 217   1          RW_WR=1;
+ 218   1              CS1=1;
+ 219   1              return;
+ 220   1      }
+ 221          
+ 222          #else
+              //8080 interface  //write command to left half screen
+              void Write_Instruction_L(unsigned char cmd)
+              {
+                  Busy_L();
+                  A0=0;
+                      CS1=0;
+                  E_RD=1;
+                  RW_WR=0;
+                      DATA_BUS=cmd;
+                      _nop_();
+                  RW_WR=1;
+                      CS1=1;
+                      return;
+              }
+              
+              #endif
+C51 COMPILER V9.60.7.0   LCM12232                                                          01/14/2025 19:50:34 PAGE 5   
+
+ 239          
+ 240          #if (TIMING==6800)
+ 241          //6800 interface  //write command to right half screen
+ 242          void Write_Instruction_R(unsigned char cmd)
+ 243          {
+ 244   1      //    Busy_R();
+ 245   1          A0=0;
+ 246   1              CS2=0;
+ 247   1          RW_WR=0;
+ 248   1              DATA_BUS=cmd;
+ 249   1          E_RD=1;
+ 250   1              _nop_();
+ 251   1          E_RD=0;
+ 252   1          RW_WR=1;
+ 253   1              CS2=1;
+ 254   1              return;
+ 255   1      }
+ 256          
+ 257          #else
+              //8080 interface  //write command to right half screen
+              void Write_Instruction_R(unsigned char cmd)
+              {
+                  Busy_R();
+                  A0=0;
+                      CS2=0;
+                  E_RD=1;
+                  RW_WR=0;
+                      DATA_BUS=cmd;
+                      _nop_();
+                  RW_WR=1;
+                      CS2=1;
+                      return;
+              }
+              
+              #endif
+ 274          
+ 275          
+ 276          
+ 277          
+ 278          // Set page address 0~4
+ 279          void Set_Page_Address(unsigned char add)
+ 280          {
+ 281   1          add=0xb8|add;
+ 282   1          Write_Instruction_L(add);
+ 283   1          Write_Instruction_R(add);
+ 284   1              return;
+ 285   1      }
+ 286          
+ 287          
+ 288          //Set left half screen column address
+ 289          void Set_Column_Address_L(unsigned char address)
+ 290          {
+ 291   1          Write_Instruction_L(address&0x7F);
+ 292   1      }
+ 293          
+ 294          //Set right half screen column address
+ 295          void Set_Column_Address_R(unsigned char address)
+ 296          {
+ 297   1          Write_Instruction_R(address&0x7F);
+ 298   1      }
+ 299          
+ 300          
+C51 COMPILER V9.60.7.0   LCM12232                                                          01/14/2025 19:50:34 PAGE 6   
+
+ 301          // Initial LCM
+ 302          void Initial(void)
+ 303          {       //RESET///////////////
+ 304   1              RST=0;
+ 305   1              Delay(2);
+ 306   1              RST=1;
+ 307   1              Delay(10);
+ 308   1              //////////////////////
+ 309   1         /* RST rising edge edge 6800 interface  
+ 310   1              /* ///////////////////////////////////////////////
+ 311   1              The hardware RESET is edge-sensitive. It is not level-sensitive. That is, either a
+ 312   1              falling edge or a rising edge on this pin can reset the chip. The voltage level after
+ 313   1              the reset pulse selects the type of interface timing. If the voltage level after the reset
+ 314   1              pulse stays at HIGH, interface timing for the 68-type microcontroller is selected. If
+ 315   1              the voltage level after the reset pulse stays at LOW, then interface timing for the
+ 316   1              80-type microcontroller is selected.
+ 317   1              Therefore, a positive RESET pulse selects the 80-type microcontroller for interface
+ 318   1              and a negative RESET pulse selects the 68-type microcontroller for interface.
+ 319   1              */////////////////////////////////////////////////
+ 320   1      
+ 321   1              Write_Instruction_L(0xE2);              //Software RESET left half screen
+ 322   1              Write_Instruction_R(0xE2);              //Software RESET right half screen
+ 323   1      
+ 324   1              Write_Instruction_L(0xA4);              //Static Drive OFF 
+ 325   1              Write_Instruction_R(0xA4);              //Static Drive OFF 
+ 326   1      
+ 327   1              Write_Instruction_L(0xA9);              //Select Duty Register 1/32
+ 328   1              Write_Instruction_R(0xA9);              //Select Duty Register 1/32
+ 329   1      
+ 330   1              Write_Instruction_L(0xA0);              //Memory/Segment Mapping Register  Normal Mapping
+ 331   1              Write_Instruction_R(0xA0);              //Memory/Segment Mapping Register  Normal Mapping
+ 332   1      
+ 333   1              Write_Instruction_L(0xC0);              //Start line
+ 334   1              Write_Instruction_R(0xC0);              //Start line
+ 335   1      
+ 336   1      
+ 337   1              Write_Instruction_L(0xAF);              //Turn on display
+ 338   1              Write_Instruction_R(0xAF);              //Turn on display
+ 339   1      
+ 340   1      }
+ 341          
+ 342          void Display_dot(unsigned char value,unsigned char value1)
+ 343          {
+ 344   1          unsigned char i,j;
+ 345   1          for(i=0;i<0x04;i++)
+ 346   1              {
+ 347   2                      Set_Page_Address(i);
+ 348   2              Set_Column_Address_L(0x00);
+ 349   2              Set_Column_Address_R(0x00);
+ 350   2      
+ 351   2                      for(j=0;j<32;j++)
+ 352   2                      {
+ 353   3                              Write_Data_L(value);
+ 354   3                              Write_Data_L(value1);
+ 355   3                              Write_Data_R(value1);
+ 356   3                              Write_Data_R(value);
+ 357   3                      }
+ 358   2              }
+ 359   1          return;
+ 360   1      }
+ 361          //Show some Chinese characters
+ 362          void show_chinese(void)
+C51 COMPILER V9.60.7.0   LCM12232                                                          01/14/2025 19:50:34 PAGE 7   
+
+ 363          {       
+ 364   1              unsigned char start_page = 0;  // 起始页
+ 365   1              unsigned char start_col = 16; // 起始列
+ 366   1              unsigned char spacing = 16;   // 每个字符之间的间距
+ 367   1              unsigned char chars_per_page = 5; // 每页显示的字符数量
+ 368   1              unsigned char total_pages = 2;    // 总页数
+ 369   1          unsigned char page,i;
+ 370   1              unsigned char character_code = 0; // 起始字符编码
+ 371   1      
+ 372   1              Display_Picture(pic2);
+ 373   1              for ( page = 0; page < total_pages; page++) 
+ 374   1              {
+ 375   2                      for (i = 0; i < chars_per_page; i++) 
+ 376   2                      {
+ 377   3                              unsigned char col = start_col + i * spacing; // 计算列位置
+ 378   3                              Display_One_Chinese_16x16(start_page + page * 2, col, character_code, ft);
+ 379   3                              character_code++; // 每次显示后编码递增
+ 380   3                      }
+ 381   2              }
+ 382   1      
+ 383   1              
+ 384   1              
+ 385   1              
+ 386   1      
+ 387   1      }
+ 388          
+ 389          void Display_One_Emglish(void)
+ 390          {
+ 391   1              
+ 392   1              unsigned char i;
+ 393   1              unsigned char start_col = 3; // 起始列
+ 394   1              unsigned char char_count = 16; // 显示的字符数量
+ 395   1              unsigned char spacing = 7; // 每个字符之间的间距
+ 396   1              unsigned char page = 1; // 起始页
+ 397   1              Display_Picture(pic1);
+ 398   1              for ( i = 0; i < char_count; i++) 
+ 399   1              {
+ 400   2                      Display_One_Chinese_8x16(page, start_col + i * spacing, i, ft0);
+ 401   2              }
+ 402   1      
+ 403   1      }
+ 404          
+ 405          void Display_One_Number(void)
+ 406          {
+ 407   1              unsigned char i;
+ 408   1              unsigned char start_col = 15;    // 起始列号
+ 409   1              unsigned char char_count = 11; // 显示的字符数量
+ 410   1              unsigned char spacing = 8;     // 每个字符之间的列间距
+ 411   1              unsigned char start_code = 16; // 起始字符编码
+ 412   1              unsigned char page = 1;        // 起始页
+ 413   1      
+ 414   1              Display_Picture(pic1);
+ 415   1              for ( i = 0; i < char_count; i++) 
+ 416   1              {
+ 417   2                      Display_One_Chinese_8x16(page, start_col + i * spacing, start_code + i, ft0);
+ 418   2              }
+ 419   1      }
+ 420          
+ 421          //display one 16*16 dot character
+ 422          void Display_One_Chinese_16x16(unsigned char page, unsigned char col, unsigned char Character_coding,  uns
+             -igned char ft[]) 
+ 423          {
+C51 COMPILER V9.60.7.0   LCM12232                                                          01/14/2025 19:50:34 PAGE 8   
+
+ 424   1          unsigned char i,columnaddress=col;
+ 425   1      
+ 426   1              Set_Page_Address(page);
+ 427   1              if(col<61) 
+ 428   1              {                      
+ 429   2                      for(i=0;i<16;i++)
+ 430   2                      {
+ 431   3                       if(columnaddress<61)            
+ 432   3                              {Set_Column_Address_L(columnaddress);
+ 433   4                              Write_Data_L(ft[Character_coding*32+i]);
+ 434   4                              }
+ 435   3                      else
+ 436   3                              {Set_Column_Address_R(columnaddress-61);
+ 437   4                              Write_Data_R(ft[Character_coding*32+i]);
+ 438   4                              }
+ 439   3                       columnaddress+=1;
+ 440   3                      }
+ 441   2      
+ 442   2                      columnaddress=col;
+ 443   2                      Set_Page_Address(page+1);       
+ 444   2                      for(i=16;i<32;i++)
+ 445   2                      {
+ 446   3                       if(columnaddress<61)            
+ 447   3                              {Set_Column_Address_L(columnaddress);
+ 448   4                              Write_Data_L(ft[Character_coding*32+i]);
+ 449   4                              }
+ 450   3                      else
+ 451   3                              {Set_Column_Address_R(columnaddress-61);
+ 452   4                              Write_Data_R(ft[Character_coding*32+i]);
+ 453   4                              }
+ 454   3                       columnaddress+=1;
+ 455   3                      }
+ 456   2              }
+ 457   1      
+ 458   1      
+ 459   1              else  
+ 460   1              {                      
+ 461   2                      for(i=0;i<16;i++)
+ 462   2                      {
+ 463   3                              if(columnaddress<122)            
+ 464   3                              {Set_Column_Address_R(columnaddress-61);
+ 465   4                              Write_Data_R(ft[Character_coding*32+i]);
+ 466   4                              }
+ 467   3                              else
+ 468   3                              {if(page<=1)
+ 469   4                                              {Set_Page_Address(page+2);
+ 470   5                                              Set_Column_Address_L(columnaddress-122);
+ 471   5                                              Write_Data_L(ft[Character_coding*32+i]);
+ 472   5                                              }
+ 473   4                              }       
+ 474   3                       columnaddress+=1;
+ 475   3                      }
+ 476   2      
+ 477   2                      columnaddress=col;
+ 478   2                      Set_Page_Address(page+1);       
+ 479   2                      for(i=16;i<32;i++)
+ 480   2                      {
+ 481   3                               if(columnaddress<122)           
+ 482   3                              {Set_Column_Address_R(columnaddress-61);
+ 483   4                              Write_Data_R(ft[Character_coding*32+i]);
+ 484   4                              }
+ 485   3                              else
+C51 COMPILER V9.60.7.0   LCM12232                                                          01/14/2025 19:50:34 PAGE 9   
+
+ 486   3                              {if(page<=1){Set_Page_Address(page+3);
+ 487   5                                                      Set_Column_Address_L(columnaddress-122);
+ 488   5                                                      Write_Data_L(ft[Character_coding*32+i]);
+ 489   5                                                      }
+ 490   4                              }
+ 491   3                       columnaddress+=1;
+ 492   3                      }
+ 493   2              }
+ 494   1      
+ 495   1      }
+ 496          
+ 497          
+ 498          
+ 499          void Display_One_Chinese_8x16(unsigned char page, unsigned char col, unsigned char Character_coding, unsig
+             -ned char ft[]) 
+ 500          {
+ 501   1          unsigned char i, columnaddress = col;
+ 502   1      
+ 503   1          Set_Page_Address(page);
+ 504   1          if (col < 61) 
+ 505   1          {                  
+ 506   2              for (i = 0; i < 8; i++)  // 每次写入 8 列
+ 507   2              {
+ 508   3                  if (columnaddress < 61)              
+ 509   3                  {
+ 510   4                      Set_Column_Address_L(columnaddress);
+ 511   4                      Write_Data_L(ft[Character_coding * 16 + i]);
+ 512   4                  }
+ 513   3                  else
+ 514   3                  {
+ 515   4                      Set_Column_Address_R(columnaddress - 61);
+ 516   4                      Write_Data_R(ft[Character_coding * 16 + i]);
+ 517   4                  }
+ 518   3                  columnaddress += 1;
+ 519   3              }
+ 520   2      
+ 521   2              columnaddress = col;
+ 522   2              Set_Page_Address(page + 1);     
+ 523   2              for (i = 8; i < 16; i++)  // 第二部分数据（第 8 到 16 行）
+ 524   2              {
+ 525   3                  if (columnaddress < 61)              
+ 526   3                  {
+ 527   4                      Set_Column_Address_L(columnaddress);
+ 528   4                      Write_Data_L(ft[Character_coding * 16 + i]);
+ 529   4                  }
+ 530   3                  else
+ 531   3                  {
+ 532   4                      Set_Column_Address_R(columnaddress - 61);
+ 533   4                      Write_Data_R(ft[Character_coding * 16 + i]);
+ 534   4                  }
+ 535   3                  columnaddress += 1;
+ 536   3              }
+ 537   2          }
+ 538   1          else  
+ 539   1          {                  
+ 540   2              for (i = 0; i < 8; i++)  // 每次写入 8 列
+ 541   2              {
+ 542   3                  if (columnaddress < 122)             
+ 543   3                  {
+ 544   4                      Set_Column_Address_R(columnaddress - 61);
+ 545   4                      Write_Data_R(ft[Character_coding * 16 + i]);
+ 546   4                  }
+C51 COMPILER V9.60.7.0   LCM12232                                                          01/14/2025 19:50:34 PAGE 10  
+
+ 547   3                  else
+ 548   3                  {
+ 549   4                      if (page <= 1)
+ 550   4                      {
+ 551   5                          Set_Page_Address(page + 2);
+ 552   5                          Set_Column_Address_L(columnaddress - 122);
+ 553   5                          Write_Data_L(ft[Character_coding * 16 + i]);
+ 554   5                      }
+ 555   4                  }   
+ 556   3                  columnaddress += 1;
+ 557   3              }
+ 558   2      
+ 559   2              columnaddress = col;
+ 560   2              Set_Page_Address(page + 1);     
+ 561   2              for (i = 8; i < 16; i++)  // 第二部分数据（第 8 到 16 行）
+ 562   2              {
+ 563   3                  if (columnaddress < 122)             
+ 564   3                  {
+ 565   4                      Set_Column_Address_R(columnaddress - 61);
+ 566   4                      Write_Data_R(ft[Character_coding * 16 + i]);
+ 567   4                  }
+ 568   3                  else
+ 569   3                  {
+ 570   4                      if (page <= 1)
+ 571   4                      {
+ 572   5                          Set_Page_Address(page + 3);
+ 573   5                          Set_Column_Address_L(columnaddress - 122);
+ 574   5                          Write_Data_L(ft[Character_coding * 16 + i]);
+ 575   5                      }
+ 576   4                  }
+ 577   3                  columnaddress += 1;
+ 578   3              }
+ 579   2          }
+ 580   1      }
+ 581          
+ 582          
+ 583          
+ 584          //display Picture
+ 585          void Display_Picture(unsigned char pic[])
+ 586          {
+ 587   1          unsigned char i,j;
+ 588   1      
+ 589   1              for(i=0;i<0x04;i++)
+ 590   1              {
+ 591   2              Set_Page_Address(i);
+ 592   2          Set_Column_Address_L(0x00);
+ 593   2          Set_Column_Address_R(0x00);
+ 594   2      
+ 595   2              for(j=0;j<61;j++)                               //display left half screen
+ 596   2                      {
+ 597   3                          Write_Data_L(pic[i*122+j]);
+ 598   3                      }
+ 599   2              for(j=61;j<122;j++)                             //display right half screen
+ 600   2                      {
+ 601   3                          Write_Data_R(pic[i*122+j]);
+ 602   3                      }
+ 603   2              }
+ 604   1          return;
+ 605   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+C51 COMPILER V9.60.7.0   LCM12232                                                          01/14/2025 19:50:34 PAGE 11  
+
+   CODE SIZE        =   1201    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      37
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

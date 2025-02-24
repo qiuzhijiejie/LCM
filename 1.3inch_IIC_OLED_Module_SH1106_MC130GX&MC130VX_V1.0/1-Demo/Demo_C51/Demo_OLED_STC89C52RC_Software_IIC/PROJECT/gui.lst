@@ -1,0 +1,491 @@
+C51 COMPILER V9.60.7.0   GUI                                                               12/13/2024 17:02:31 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE GUI
+OBJECT MODULE PLACED IN ..\OBJ\gui.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE ..\GUI\gui.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\FONT;..\GUI;..\HARDWA
+                    -RE\OLED;..\SYSTEM;..\TEST;..\USER;..\HARDWARE\IIC) DEBUG OBJECTEXTEND PRINT(.\gui.lst) OBJECT(..\OBJ\gui.obj)
+
+line level    source
+
+   1          //////////////////////////////////////////////////////////////////////////////////       
+   2          //本程序只供学习使用，未经作者许可，不得用于其它任何用途
+   3          //测试硬件：单片机STC89C52RC,晶振12M  单片机工作电压3.3V或5V
+   4          //QDtech-OLED液晶驱动 for C51
+   5          //xiao冯@ShenZhen QDtech co.,LTD
+   6          //公司网站:www.qdtft.com
+   7          //淘宝网站：http://qdtech.taobao.com
+   8          //wiki技术网站：http://www.lcdwiki.com
+   9          //我司提供技术支持，任何技术问题欢迎随时交流学习
+  10          //固话(传真) :+86 0755-23594567 
+  11          //手机:15989313508（冯工） 
+  12          //邮箱:lcdwiki01@gmail.com    support@lcdwiki.com    goodtft@163.com
+  13          //技术支持QQ:3002773612  3002778157
+  14          //技术交流QQ群:324828016
+  15          //创建日期:2018/9/14
+  16          //版本：V1.0
+  17          //版权所有，盗版必究。
+  18          //Copyright(C) 深圳市全动电子技术有限公司 2018-2028
+  19          //All rights reserved
+  20          /****************************************************************************************************
+  21          //=========================================电源接线================================================//
+  22          // OLED模块                C51单片机
+  23          //   VCC         接       DC 5V/3.3V      //OLED屏电源正
+  24          //   GND         接          GND          //OLED屏电源地
+  25          //=======================================液晶屏数据线接线==========================================//
+  26          //本模块默认数据总线类型为IIC
+  27          // OLED模块                C51单片机
+  28          //   SDA        接           P15          //OLED屏SPI写信号
+  29          //=======================================液晶屏控制线接线==========================================//
+  30          // OLED模块                C51单片机
+  31          //   SCL        接           P17          //OLED屏SPI时钟信号
+  32          //=========================================触摸屏接线=========================================//
+  33          //本模块不带触摸功能，所以不需要触摸屏接线
+  34          ****************************************************************************************************/   
+  35          /***************************************************************************************************
+  36            * @attention
+  37            *
+  38            * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+  39            * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE
+  40            * TIME. AS A RESULT, QD electronic SHALL NOT BE HELD LIABLE FOR ANY
+  41            * DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING
+  42            * FROM THE CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE
+  43            * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+  44          ****************************************************************************************************/
+  45          #include "oled.h"
+  46          #include "string.h"
+  47          #include "oledfont.h" 
+  48          #include "gui.h"
+  49          
+  50          /*******************************************************************
+  51           * @name       :void GUI_Fill(u8 sx,u8 sy,u8 ex,u8 ey,u8 color)
+  52           * @date       :2018-08-27 
+  53           * @function   :fill the specified area
+  54           * @parameters :sx:the bebinning x coordinate of the specified area
+C51 COMPILER V9.60.7.0   GUI                                                               12/13/2024 17:02:31 PAGE 2   
+
+  55                          sy:the bebinning y coordinate of the specified area，
+  56                                                                             it must be set 0~7
+  57                                                                          ex:the ending x coordinate of the specified area
+  58                                                                          ey:the ending y coordinate of the specified area,
+  59                                                                             it must be set 0~7
+  60                                                                          color:the color value of the the specified area
+  61                                                                                1-white
+  62                                                                                                  0-black
+  63           * @retvalue   :None
+  64          ********************************************************************/
+  65          void GUI_Fill(u8 sx,u8 sy,u8 ex,u8 ey,u8 color)
+  66          {       
+  67   1              u8 i,j,dat;                     
+  68   1              u8 width=ex-sx+1;               //得到填充的宽度
+  69   1              u8 height=ey-sy+1;              //高度
+  70   1              if(color)
+  71   1              {
+  72   2                      dat = 0xff;
+  73   2              }
+  74   1              else
+  75   1              {
+  76   2                      dat = 0;
+  77   2              }
+  78   1              for(i=0;i<height;i++)
+  79   1              {
+  80   2                      OLED_Set_Pos(sx, sy+i); 
+  81   2                      for(j=0;j<width;j++)
+  82   2                      {
+  83   3                                      OLED_WR_Byte(dat,OLED_DATA);
+  84   3                      }               
+  85   2              }
+  86   1      }
+  87          
+  88          /*****************************************************************************
+  89           * @name       :void GUI_ShowChar(u8 x,u8 y,u8 chr,u8 Char_Size,u8 mode)
+  90           * @date       :2018-08-27 
+  91           * @function   :Display a single English character
+  92           * @parameters :x:the bebinning x coordinate of the Character display position
+  93                          y:the bebinning y coordinate of the Character display position,
+  94                                                                            it must be set 0~7
+  95                                                                          chr:the ascii code of display character(0~94)
+  96                                                                          Char_Size:the size of display character(8,16)
+  97                                                                          mode:0-white background and black character
+  98                                                                               1-black background and white character
+  99           * @retvalue   :None
+ 100          ******************************************************************************/ 
+ 101          void GUI_ShowChar(u8 x,u8 y,u8 chr,u8 Char_Size,u8 mode)
+ 102          {       
+ 103   1                unsigned char c=0,i=0,j=0;    
+ 104   1                      c=chr-' ';//得到偏移后的值                      
+ 105   1                      if(x>WIDTH-1)
+ 106   1                      {
+ 107   2                              x=0;
+ 108   2                              y=y+2;
+ 109   2                      }
+ 110   1                      if(Char_Size ==16)
+ 111   1                      {
+ 112   2                        for(j=0;j<2;j++)
+ 113   2                              {
+ 114   3                                      OLED_Set_Pos(x,y+j);
+ 115   3                                      for(i=0;i<8;i++)
+ 116   3                                      {
+C51 COMPILER V9.60.7.0   GUI                                                               12/13/2024 17:02:31 PAGE 3   
+
+ 117   4                                              if(mode)
+ 118   4                                              {
+ 119   5                                                      OLED_WR_Byte(F8X16[c*16+i+j*8],OLED_DATA);
+ 120   5                                              }
+ 121   4                                              else
+ 122   4                                              {
+ 123   5                                                      OLED_WR_Byte(~(F8X16[c*16+i+j*8]),OLED_DATA);
+ 124   5                                              }
+ 125   4                                      }
+ 126   3                              }
+ 127   2                       }
+ 128   1                       else 
+ 129   1                       {      
+ 130   2                                      OLED_Set_Pos(x,y);
+ 131   2                                      for(i=0;i<6;i++)
+ 132   2                                      {
+ 133   3                                        if(mode)
+ 134   3                                              {
+ 135   4                                                      OLED_WR_Byte(F6x8[c][i],OLED_DATA);
+ 136   4                                              }
+ 137   3                                              else
+ 138   3                                              {
+ 139   4                                                      OLED_WR_Byte(~(F6x8[c][i]),OLED_DATA);
+ 140   4                                              }
+ 141   3                                      }
+ 142   2                      }
+ 143   1      }
+ 144          
+ 145          /*****************************************************************************
+ 146           * @name       :void GUI_ShowString(u8 x,u8 y,u8 *chr,u8 Char_Size,u8 mode)
+ 147           * @date       :2018-08-27 
+ 148           * @function   :Display English string
+ 149           * @parameters :x:the bebinning x coordinate of the English string
+ 150                          y:the bebinning y coordinate of the English string
+ 151                                                                            it must be set 0~7
+ 152                                                                          chr:the start address of the English string
+ 153                                                                          Char_Size:the size of display character
+ 154                                                                          mode:0-white background and black character
+ 155                                                                               1-black background and white character
+ 156           * @retvalue   :None
+ 157          ******************************************************************************/           
+ 158          void GUI_ShowString(u8 x,u8 y,u8 *chr,u8 Char_Size,u8 mode)
+ 159          {
+ 160   1              unsigned char j=0,csize;
+ 161   1              if(Char_Size == 16)
+ 162   1        {
+ 163   2                csize = Char_Size/2;
+ 164   2              }
+ 165   1        else if(Char_Size == 8)
+ 166   1        {
+ 167   2                csize = Char_Size/2+2;
+ 168   2              }
+ 169   1              else
+ 170   1              {
+ 171   2                      return;
+ 172   2              }
+ 173   1              while (chr[j]!='\0')
+ 174   1              {               
+ 175   2                      GUI_ShowChar(x,y,chr[j],Char_Size,mode);
+ 176   2                      x+=csize;
+ 177   2                      if(x>120)
+ 178   2                      {
+C51 COMPILER V9.60.7.0   GUI                                                               12/13/2024 17:02:31 PAGE 4   
+
+ 179   3                              x=0;
+ 180   3                              y+=Char_Size/8;
+ 181   3                      }
+ 182   2                      j++;
+ 183   2              }
+ 184   1      }
+ 185          
+ 186          /*****************************************************************************
+ 187           * @name       :u32 mypow(u8 m,u8 n)
+ 188           * @date       :2018-08-27 
+ 189           * @function   :get the nth power of m (internal call)
+ 190           * @parameters :m:the multiplier
+ 191                          n:the power
+ 192           * @retvalue   :the nth power of m
+ 193          ******************************************************************************/ 
+ 194          static u32 mypow(u8 m,u8 n)
+ 195          {
+ 196   1              u32 result=1;    
+ 197   1              while(n--)result*=m;    
+ 198   1              return result;
+ 199   1      }
+ 200          
+ 201          /*****************************************************************************
+ 202           * @name       :void GUI_ShowNum(u8 x,u8 y,u32 num,u8 len,u8 Size,u8 mode)
+ 203           * @date       :2018-08-27 
+ 204           * @function   :Display number
+ 205           * @parameters :x:the bebinning x coordinate of the number
+ 206                          y:the bebinning y coordinate of the number
+ 207                                                                            it must be set 0~7
+ 208                                                                          num:the number(0~4294967295)
+ 209                                                                          len:the length of the display number
+ 210                                                                          Size:the size of display number
+ 211                                                                          mode:0-white background and black character
+ 212                                                                               1-black background and white character
+ 213           * @retvalue   :None
+ 214          ******************************************************************************/                          
+ 215          void GUI_ShowNum(u8 x,u8 y,u32 num,u8 len,u8 Size,u8 mode)
+ 216          {               
+ 217   1              u8 t,temp;
+ 218   1              u8 enshow=0,csize;
+ 219   1        if(Size == 16)
+ 220   1        {
+ 221   2                csize = Size/2;
+ 222   2              }
+ 223   1        else if(Size == 8)
+ 224   1        {
+ 225   2                csize = Size/2+2;
+ 226   2              }       
+ 227   1              else
+ 228   1              {
+ 229   2                      return;
+ 230   2              }
+ 231   1              for(t=0;t<len;t++)
+ 232   1              {
+ 233   2                      temp=(num/mypow(10,len-t-1))%10;
+ 234   2                      if(enshow==0&&t<(len-1))
+ 235   2                      {
+ 236   3                              if(temp==0)
+ 237   3                              {
+ 238   4                                      GUI_ShowChar(x+csize*t,y,' ',Size,mode);
+ 239   4                                      continue;
+ 240   4                              }
+C51 COMPILER V9.60.7.0   GUI                                                               12/13/2024 17:02:31 PAGE 5   
+
+ 241   3                              else 
+ 242   3                              {
+ 243   4                                      enshow=1; 
+ 244   4                              }
+ 245   3                      }
+ 246   2                      GUI_ShowChar(x+csize*t,y,temp+'0',Size,mode); 
+ 247   2              }
+ 248   1      }  
+ 249          
+ 250          /*****************************************************************************
+ 251           * @name       :void GUI_ShowFont16(u8 x,u8 y,u8 *s,u8 mode)
+ 252           * @date       :2018-08-27 
+ 253           * @function   :Display a single 16x16 Chinese character
+ 254           * @parameters :x:the bebinning x coordinate of the Chinese character
+ 255                          y:the bebinning y coordinate of the Chinese character
+ 256                                                                            it must be set 0~7
+ 257                                                                          s:the start address of the Chinese character
+ 258                                                                          mode:0-white background and black character
+ 259                                                                               1-black background and white character
+ 260           * @retvalue   :None
+ 261          ******************************************************************************/ 
+ 262          void GUI_ShowFont16(u8 x,u8 y,u8 *s,u8 mode)
+ 263          {
+ 264   1              u8 i,j,k,tmp;
+ 265   1              u16 num;
+ 266   1              num = sizeof(cfont16)/sizeof(typFNT_GB16);
+ 267   1        for(i=0;i<num;i++)
+ 268   1              {
+ 269   2                      if((cfont16[i].Index[0]==*s)&&(cfont16[i].Index[1]==*(s+1)))
+ 270   2                      {
+ 271   3                              for(k=0;k<2;k++)
+ 272   3                              {
+ 273   4                                OLED_Set_Pos(x,y+k);
+ 274   4                                      for(j=0;j<16;j++)
+ 275   4                                      {
+ 276   5                                              if(mode)
+ 277   5                                              {
+ 278   6                                                      tmp = cfont16[i].Msk[j+k*16];
+ 279   6                                              }
+ 280   5                                              else
+ 281   5                                              {
+ 282   6                                                      tmp = ~(cfont16[i].Msk[j+k*16]);
+ 283   6                                              }
+ 284   5                                              OLED_WR_Byte(tmp,OLED_DATA);
+ 285   5                                      }
+ 286   4                              }       
+ 287   3                              break;
+ 288   3                      }       
+ 289   2              }
+ 290   1      }
+ 291          
+ 292          /*****************************************************************************
+ 293           * @name       :void GUI_ShowFont24(u8 x,u8 y,u8 *s,u8 mode)
+ 294           * @date       :2018-08-27 
+ 295           * @function   :Display a single 24x24 Chinese character
+ 296           * @parameters :x:the bebinning x coordinate of the Chinese character
+ 297                          y:the bebinning y coordinate of the Chinese character
+ 298                                                                            it must be set 0~7
+ 299                                                                          s:the start address of the Chinese character
+ 300                                                                          mode:0-white background and black character
+ 301                                                                               1-black background and white character
+ 302           * @retvalue   :None
+C51 COMPILER V9.60.7.0   GUI                                                               12/13/2024 17:02:31 PAGE 6   
+
+ 303          ******************************************************************************/ 
+ 304          void GUI_ShowFont24(u8 x,u8 y,u8 *s,u8 mode)
+ 305          {
+ 306   1              u8 i,j,k,tmp;
+ 307   1              u16 num;
+ 308   1              num = sizeof(cfont24)/sizeof(typFNT_GB24);
+ 309   1        for(i=0;i<num;i++)
+ 310   1              {
+ 311   2                      if((cfont24[i].Index[0]==*s)&&(cfont24[i].Index[1]==*(s+1)))
+ 312   2                      {
+ 313   3                              for(k=0;k<3;k++)
+ 314   3                              {
+ 315   4                                OLED_Set_Pos(x,y+k);
+ 316   4                                      for(j=0;j<24;j++)
+ 317   4                                      {
+ 318   5                                              if(mode)
+ 319   5                                              {
+ 320   6                                                      tmp = cfont24[i].Msk[j+k*24];
+ 321   6                                              }
+ 322   5                                              else
+ 323   5                                              {
+ 324   6                                                      tmp = ~(cfont24[i].Msk[j+k*24]);
+ 325   6                                              }
+ 326   5                                              OLED_WR_Byte(tmp,OLED_DATA);
+ 327   5                                      }
+ 328   4                              }       
+ 329   3                              break;
+ 330   3                      }       
+ 331   2              }
+ 332   1      }
+ 333          
+ 334          /*****************************************************************************
+ 335           * @name       :void GUI_ShowFont32(u8 x,u8 y,u8 *s,u8 mode)
+ 336           * @date       :2018-08-27 
+ 337           * @function   :Display a single 32x32 Chinese character
+ 338           * @parameters :x:the bebinning x coordinate of the Chinese character
+ 339                          y:the bebinning y coordinate of the Chinese character
+ 340                                                                            it must be set 0~7
+ 341                                                                          s:the start address of the Chinese character
+ 342                                                                          mode:0-white background and black character
+ 343                                                                               1-black background and white character
+ 344           * @retvalue   :None
+ 345          ******************************************************************************/ 
+ 346          void GUI_ShowFont32(u8 x,u8 y,u8 *s,u8 mode)
+ 347          {
+ 348   1              u8 i,j,k,tmp;
+ 349   1              u16 num;
+ 350   1              num = sizeof(cfont32)/sizeof(typFNT_GB32);
+ 351   1        for(i=0;i<num;i++)
+ 352   1              {
+ 353   2                      if((cfont32[i].Index[0]==*s)&&(cfont32[i].Index[1]==*(s+1)))
+ 354   2                      {
+ 355   3                              for(k=0;k<4;k++)
+ 356   3                              {
+ 357   4                                OLED_Set_Pos(x,y+k);
+ 358   4                                      for(j=0;j<32;j++)
+ 359   4                                      {
+ 360   5                                              if(mode)
+ 361   5                                              {
+ 362   6                                                      tmp = cfont32[i].Msk[j+k*32];
+ 363   6                                              }
+ 364   5                                              else
+C51 COMPILER V9.60.7.0   GUI                                                               12/13/2024 17:02:31 PAGE 7   
+
+ 365   5                                              {
+ 366   6                                                      tmp = ~(cfont32[i].Msk[j+k*32]);
+ 367   6                                              }
+ 368   5                                              OLED_WR_Byte(tmp,OLED_DATA);
+ 369   5                                      }
+ 370   4                              }       
+ 371   3                              break;
+ 372   3                      }       
+ 373   2              }
+ 374   1      }
+ 375          
+ 376          /*****************************************************************************
+ 377           * @name       :void GUI_ShowCHinese(u8 x,u8 y,u8 hsize,u8 *str,u8 mode)
+ 378           * @date       :2018-08-27 
+ 379           * @function   :Display Chinese strings
+ 380           * @parameters :x:the bebinning x coordinate of the Chinese strings
+ 381                          y:the bebinning y coordinate of the Chinese strings
+ 382                                                                            it must be set 0~7
+ 383                                                                          size:the size of Chinese strings
+ 384                                                                          str:the start address of the Chinese strings
+ 385                                                                          mode:0-white background and black character
+ 386                                                                               1-black background and white character
+ 387           * @retvalue   :None
+ 388          ******************************************************************************/                    
+ 389          void GUI_ShowCHinese(u8 x,u8 y,u8 hsize,u8 *str,u8 mode)
+ 390          { 
+ 391   1              while(*str!='\0')
+ 392   1              {
+ 393   2                      if(hsize == 16)
+ 394   2                      {
+ 395   3                              GUI_ShowFont16(x,y,str,mode);
+ 396   3                      }
+ 397   2                      else if(hsize == 24)
+ 398   2                      {
+ 399   3                              GUI_ShowFont24(x,y,str,mode);
+ 400   3                      }
+ 401   2                      else if(hsize == 32)
+ 402   2                      {
+ 403   3                              GUI_ShowFont32(x,y,str,mode);
+ 404   3                      }
+ 405   2                      else
+ 406   2                      {
+ 407   3                              return;
+ 408   3                      }
+ 409   2                      x+=hsize;
+ 410   2                      if(x>WIDTH-hsize)
+ 411   2                      {
+ 412   3                              x=0;
+ 413   3                              y+=hsize/8;
+ 414   3                      }
+ 415   2                      str+=2;
+ 416   2              }                       
+ 417   1      }
+ 418          
+ 419          /*****************************************************************************
+ 420           * @name       :void GUI_DrawBMP(u8 x,u8 y,u8 width, u8 height, u8 BMP[], u8 mode)
+ 421           * @date       :2018-08-27 
+ 422           * @function   :Display a BMP monochromatic picture
+ 423           * @parameters :x:the bebinning x coordinate of the BMP monochromatic picture
+ 424                          y:the bebinning y coordinate of the BMP monochromatic picture
+ 425                                                                            it must be set 0~7
+ 426                                                                          width:the width of BMP monochromatic picture
+C51 COMPILER V9.60.7.0   GUI                                                               12/13/2024 17:02:31 PAGE 8   
+
+ 427                                                                          height:the height of BMP monochromatic picture
+ 428                                                                          BMP:the start address of BMP monochromatic picture array
+ 429                                                                          mode:0-white background and black character
+ 430                                                                               1-black background and white character                                                             
+ 431           * @retvalue   :None
+ 432          ******************************************************************************/ 
+ 433          void GUI_DrawBMP(u8 x,u8 y,u8 width, u8 height, u8 BMP[], u8 mode)
+ 434          {       
+ 435   1       u8 i,j;
+ 436   1       u8 tmp;
+ 437   1       for(i=0;i<(height+7)/8;i++)
+ 438   1       {
+ 439   2                      OLED_Set_Pos(x,y+i);
+ 440   2                      for(j=0;j<width;j++)
+ 441   2                      {
+ 442   3                          if(mode)
+ 443   3                                      {
+ 444   4                                              tmp = BMP[i*width+j];
+ 445   4                                      }
+ 446   3                                      else
+ 447   3                                      {
+ 448   4                                              tmp = ~(BMP[i*width+j]);
+ 449   4                                      }
+ 450   3                                      OLED_WR_Byte(tmp,OLED_DATA);
+ 451   3                      }
+ 452   2       } 
+ 453   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1638    ----
+   CONSTANT SIZE    =   3110    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----     100
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

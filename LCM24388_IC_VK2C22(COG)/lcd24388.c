@@ -303,7 +303,7 @@ void Vk2c22_DisAll(unsigned char dat)
 * Function Name  : DisSegComOn
 * Description    : 点亮1个点(1个seg和1个com交叉对应的显示点)
 * Input          ：seg->点对应的seg脚  
-* 		           ：com->点对应com脚  
+* 		         ：com->点对应com脚  
 * Output         : None
 * Return         : None
 *******************************************************************************/
@@ -333,13 +333,26 @@ void Vk2c22_DisSegComOn(unsigned char seg,unsigned char com)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void Vk2c22_DisSegComOff(unsigned char seg,unsigned char com)
+
+void Vk2c22_DisSegComOff(unsigned char seg, unsigned char com)
 {
-	if(seg%2==0)
-		Write1DataVk2c22(seg/2,~(1<<com));//这里送8位数据低4bit有效，每8bit数据地址加1，每8位数据1个ACK
-	else
-		Write1DataVk2c22(seg/2,~(1<<(4+com)));//这里送8位数据高4bit有效，每8bit数据地址加1，每8位数据1个ACK	
+    unsigned char addrbit, tempdat;
+
+    // 判断是低4位还是高4位
+    if (seg % 2 == 0)
+        addrbit = ~(1 << com); // 清除低4位中的目标位
+    else
+        addrbit = ~(1 << (4 + com)); // 清除高4位中的目标位
+
+    // 读取当前的段码状态
+    tempdat = vk2c22_dispram[seg / 2];
+    tempdat &= addrbit; // 清除目标位
+    vk2c22_dispram[seg / 2] = tempdat; // 更新内存
+
+    // 将新的状态写入显示RAM
+    WritenDataVk2c22(seg / 2, &tempdat, 1);
 }
+
 /*******************************************************************************
 * Function Name  : Enter_Standby
 * Description    : 进入掉电低功耗模式,掉电无显示
@@ -352,7 +365,7 @@ void Vk2c22_Enter_Standby(void)
 //	WriteCmdVk2c22(Vk2c22_MODESET|BIAS_1_2|F_80HZ|RCOFF_LCDOFF);  //模式设置  1/2 Bais 1/4 Duty帧频率80Hz,内部系统振荡器开，lcd关显示
 	WriteCmdVk2c22(Vk2c22_MODESET|BIAS_1_3|F_80HZ|RCOFF_LCDOFF);  //模式设置  1/3 Bais 1/4 Duty帧频率80Hz,内部系统振荡器开，lcd关显示
 //	WriteCmdVk2c22(Vk2c22_MODESET|BIAS_1_2|F_160HZ|RCOFF_LCDOFF); //模式设置  1/2 Bais 1/4 Duty帧频率160Hz,内部系统振荡器开，lcd关显示
-//	WriteCmdVk2c22(Vk2c22_MODESET|BIAS_1_3|F_160HZ|RCOFF_LCDOFF); //模式设置  1/3 Bais 1/4 Duty帧频?60Hz,内部系统振荡器开，lcd关显示
+//	WriteCmdVk2c22(Vk2c22_MODESET|BIAS_1_3|F_160HZ|RCOFF_LCDOFF); //模式设置  1/3 Bais 1/4 Duty帧频率60Hz,内部系统振荡器开，lcd关显示
 }
 /*******************************************************************************
 * Function Name  : Exit_Standby
@@ -422,45 +435,45 @@ void Vk2c22_Init(void)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-//void disp_3num(unsigned int dat)
-//{		
-//	unsigned dat8;
-//		
-//	dat8=dat/100%10;	//显示百位
-//	vk2c22_dispram[2]&=0xf0;
-//	vk2c22_dispram[2]|=shuzi_zimo[dat8]&0x0f;
-//	vk2c22_dispram[2]&=0x8f;
-//	vk2c22_dispram[2]|=shuzi_zimo[dat8]&0xf0;
-//	
-//	dat8=dat/10%10; 	//显示十位
-//	vk2c22_dispram[3]&=0xf0;
-//	vk2c22_dispram[3]|=shuzi_zimo[dat8]&0x0f;
-//	vk2c22_dispram[3]&=0x8f;
-//	vk2c22_dispram[3]|=shuzi_zimo[dat8]&0xf0;
-//	
-//	dat8=dat%10;			//显示个位
-//	vk2c22_dispram[4]&=0xf0;
-//	vk2c22_dispram[4]|=shuzi_zimo[dat8]&0x0f;
-//	vk2c22_dispram[4]&=0x8f;
-//	vk2c22_dispram[4]|=shuzi_zimo[dat8]&0xf0;
-//		
-//	if(dat<100)				//数字小于100，百位不显示
-//	{
-//	vk2c22_dispram[2]&=0xf0;
-//	vk2c22_dispram[2]&=0x8f;
-//	}
-//	if(dat<10) 	//数字小于10，十位不显示
-//	{
-//	vk2c22_dispram[3]&=0xf0;
-//	vk2c22_dispram[3]&=0x8f;
-//	}
-//	//SEG不连续1个1个数据送
+void disp_3num(unsigned int dat)
+{		
+	unsigned dat8;
+		
+	dat8=dat/100%10;	//显示百位
+	vk2c22_dispram[2]&=0xf0;
+	vk2c22_dispram[2]|=shuzi_zimo[dat8]&0x0f;
+	vk2c22_dispram[2]&=0x8f;
+	vk2c22_dispram[2]|=shuzi_zimo[dat8]&0xf0;
+	
+	dat8=dat/10%10; 	//显示十位
+	vk2c22_dispram[3]&=0xf0;
+	vk2c22_dispram[3]|=shuzi_zimo[dat8]&0x0f;
+	vk2c22_dispram[3]&=0x8f;
+	vk2c22_dispram[3]|=shuzi_zimo[dat8]&0xf0;
+	
+	dat8=dat%10;			//显示个位
+	vk2c22_dispram[4]&=0xf0;
+	vk2c22_dispram[4]|=shuzi_zimo[dat8]&0x0f;
+	vk2c22_dispram[4]&=0x8f;
+	vk2c22_dispram[4]|=shuzi_zimo[dat8]&0xf0;
+		
+	if(dat<100)				//数字小于100，百位不显示
+	{
+	vk2c22_dispram[2]&=0xf0;
+	vk2c22_dispram[2]&=0x8f;
+	}
+	if(dat<10) 	//数字小于10，十位不显示
+	{
+	vk2c22_dispram[3]&=0xf0;
+	vk2c22_dispram[3]&=0x8f;
+	}
+	//SEG不连续1个1个数据送
 //		Write1DataVk2c22(2,vk2c22_dispram[2]);
 //		Write1DataVk2c22(3,vk2c22_dispram[3]);
 //		Write1DataVk2c22(4,vk2c22_dispram[4]);
-//	//SEG连续送多个数据
-////	WritenDataVk2c22(2,&vk2c22_dispram[2],3);	
-//}	
+	//SEG连续送多个数据
+	WritenDataVk2c22(0,&vk2c22_dispram[0],5);	
+}	
 
 
 
@@ -520,6 +533,3 @@ void DisplayDigitOrChar2(unsigned char pos, unsigned char index)
     // 使用 Write1DataVk2c22 将数据写入显示 RAM 的指定位置
     Write1DataVk2c22(pos, Data);
 }
-
-
-

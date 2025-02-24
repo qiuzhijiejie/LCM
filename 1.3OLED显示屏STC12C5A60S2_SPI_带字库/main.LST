@@ -1,0 +1,99 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              12/17/2024 18:15:11 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\OLED) DEBUG OBJECTEXTE
+                    -ND
+
+line level    source
+
+   1          #include <reg52.H>
+   2          #include "oled.h"
+   3          #include "bmp.h"
+   4          
+   5          int main(void)
+   6          {
+   7   1              float t=0;
+   8   1              OLED_Init();
+   9   1              OLED_ColorTurn(1);              //0正常显示,1 反色显示
+  10   1              OLED_DisplayTurn(0);    //0正常显示,1 屏幕翻转显示
+  11   1              OLED_Clear();
+  12   1      
+  13   1      
+  14   1              
+  15   1              while(1)
+  16   1              {       
+  17   2      //          t+=0.01;
+  18   2      //          OLED_ShowNum(0,0,t,5);
+  19   2      //          OLED_Display_8x16(1,1,C);           
+  20   2                      Picture_display(picture_tab);
+  21   2                      OLED_Display_GB2312_string(0,1," 广 东 烨 辉 科");
+  22   2                      OLED_Display_GB2312_string(0,5," 技 有 限 公 司");
+  23   2                      delay_ms(500);
+  24   2                      PerformScreenFillSequence();
+  25   2                      delay_ms(500);  
+  26   2                      OLED_Display_128x64(bmp1);
+  27   2                      delay_ms(500);
+  28   2                      OLED_Display_GB2312_string(0,0,"12864,带中文字库");     /*在第1页，第1列，显示一串16x16点阵汉字或8x16的ASCII
+             -字*/
+  29   2                      OLED_Display_GB2312_string(0,2,"16X16简体汉字库,");  /*显示一串16x16点阵汉字或8x16的ASCII字.以下雷同*/
+  30   2                      OLED_Display_GB2312_string(0,4,"或8X16点阵ASCII,");
+  31   2                      OLED_Display_GB2312_string(0,6,"或5X7点阵ASCII码");
+  32   2                      delay_ms(500);                          
+  33   2                      OLED_Clear();
+  34   2                      OLED_Display_GB2312_string(0,0,"烨辉科技有限公司");     
+  35   2                      OLED_Display_GB2312_string(0,2,"主要生产OLED模块");
+  36   2                      OLED_Display_GB2312_string(0,4,"顾客至上真诚服务");
+  37   2                      OLED_Display_GB2312_string(0,6,"诚信与质量第一！");
+  38   2                      delay_ms(500);  
+  39   2                      OLED_Clear();           
+  40   2                      OLED_Display_GB2312_string(0,0,"GB2312简体字库及");     
+  41   2                      OLED_Display_GB2312_string(0,2,"有图型功能,可自");      
+  42   2                      OLED_Display_GB2312_string(0,4,"编大字或图像或生");
+  43   2                      OLED_Display_GB2312_string(0,6,"僻字,例如：");
+  44   2                      OLED_Display_16x16(97,6,jiong1);                                        /*在第7页，第81列显示单个自编生僻汉字“囧”*/
+  45   2                      OLED_Display_16x16(113,6,lei1);
+  46   2                      delay_ms(500);
+  47   2                      OLED_Clear();
+  48   2                      OLED_Display_GB2312_string(0,0,"<!@#$%^&*()_-+]/");     /*在第1页，第1列，显示一串16x16点阵汉字或8*16的ASCII
+             -字*/
+  49   2                      OLED_Display_string_5x7(0,2,"<!@#$%^&*()_-+]/;.,?[");/*在第3页，第1列，显示一串5x7点阵的ASCII字*/
+  50   2                      OLED_Display_string_5x7(0,3,"XY electronics Co., ");/*显示一串5x7点阵的ASCII字*/
+  51   2                      OLED_Display_string_5x7(0,4,"Ltd. established at  ");/*显示一串5x7点阵的ASCII字*/       
+  52   2                      OLED_Display_string_5x7(0,5,"year 2024.Focus OLED ");/*显示一串5x7点阵的ASCII字*/
+C51 COMPILER V9.60.7.0   MAIN                                                              12/17/2024 18:15:11 PAGE 2   
+
+  53   2                      OLED_Display_string_5x7(0,6,"Mobile:13622496694");/*显示一串5x7点阵的ASCII字*/
+  54   2                      OLED_Display_string_5x7(0,7,"Tel:0762-32910715");/*显示一串5x7点阵的ASCII字*/
+  55   2                      delay_ms(500);
+  56   2                      OLED_Clear();   
+  57   2                      OLED_Display_GB2312_string(0,0,"啊阿埃挨哎唉哀皑");     /*在第1页，第1列，显示一串16x16点阵汉字或8x16的ASCII
+             -字*/
+  58   2                      OLED_Display_GB2312_string(0,2,"癌蔼矮艾碍爱隘鞍");  /*显示一串16x16点阵汉字或8x16的ASCII字.以下雷同*/
+  59   2                      OLED_Display_GB2312_string(0,4,"氨安俺按暗岸胺案");
+  60   2                      OLED_Display_GB2312_string(0,6,"肮昂盎凹敖熬翱袄");                     
+  61   2                      delay_ms(500);
+  62   2                      OLED_Clear();   
+  63   2                      OLED_Display_GB2312_string(0,0,"鬟鬣麽麾縻麂麇麈");
+  64   2                      OLED_Display_GB2312_string(0,2,"麋麒鏖麝麟黛黜黝");
+  65   2                      OLED_Display_GB2312_string(0,4,"黠黟黢黩黧黥黪黯");
+  66   2                      OLED_Display_GB2312_string(0,6,"齄鼬鼹鼷鼽鼢癌蔼");
+  67   2                      delay_ms(500);
+  68   2                      OLED_Clear();
+  69   2        }
+  70   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    528    ----
+   CONSTANT SIZE    =   2842    ----
+   XDATA SIZE       =   ----       4
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

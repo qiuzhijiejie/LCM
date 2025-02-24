@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<project>
+  <fileVersion>2</fileVersion>
+  <fileChecksum>559018842</fileChecksum>
+  <configuration>
+    <name>Debug</name>
+    <outputs>
+      <file>$PROJ_DIR$\IIC\iic.c</file>
+      <file>$PROJ_DIR$\OLED\bmp.h</file>
+      <file>$PROJ_DIR$\IIC\iic.h</file>
+      <file>$PROJ_DIR$\OLED\oled.c</file>
+      <file>$PROJ_DIR$\OLED\oled.h</file>
+      <file>$PROJ_DIR$\OLED\oledfont.h</file>
+      <file>$PROJ_DIR$\SYSTEM\delay.c</file>
+      <file>$PROJ_DIR$\SYSTEM\delay.h</file>
+      <file>$PROJ_DIR$\SYSTEM\type.h</file>
+      <file>$PROJ_DIR$\USER\gui.c</file>
+      <file>$PROJ_DIR$\USER\gui.h</file>
+      <file>$PROJ_DIR$\USER\test.c</file>
+      <file>$PROJ_DIR$\USER\test.h</file>
+      <file>$PROJ_DIR$\main.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\iic.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\gui.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\gui.r43</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Defaults.h</file>
+      <file>$TOOLKIT_DIR$\config\multiplier.xcl</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Threads.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\delay.r43</file>
+      <file>$TOOLKIT_DIR$\lib\dlib\dl430fn.r43</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\yvals.h</file>
+      <file>$TOOLKIT_DIR$\inc\intrinsics.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\oled.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\test.r43</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\DLib_Product.h</file>
+      <file>$TOOLKIT_DIR$\inc\io430x14x.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\ycheck.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\stdio.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\OLED.pbd</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\ysizet.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\string.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\stdlib.h</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\ystdio.h</file>
+      <file>$PROJ_DIR$\Debug\Exe\OLED.txt</file>
+      <file>$TOOLKIT_DIR$\inc\io430.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\iic.pbi</file>
+      <file>$PROJ_DIR$\Debug\Exe\OLED.d43</file>
+      <file>$TOOLKIT_DIR$\inc\dlib\c\xencoding_limits.h</file>
+      <file>$TOOLKIT_DIR$\inc\in430.h</file>
+      <file>$TOOLKIT_DIR$\config\lnk430F149.xcl</file>
+      <file>$PROJ_DIR$\Debug\Obj\test.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\oled.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\delay.pbi</file>
+      <file>$TOOLKIT_DIR$\lib\dlib\dl430fn.h</file>
+    </outputs>
+    <file>
+      <name>$PROJ_DIR$\IIC\iic.c</name>
+      <outputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 14</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 38</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 2 37 27 41 23 8</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 2 8</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\OLED\oled.c</name>
+      <outputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 24</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 44</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 4 8 34 29 22 17 47 26 40 19 32 33 2 37 27 41 23 7</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 4 8 2 7</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\SYSTEM\delay.c</name>
+      <outputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 20</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 46</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 7 8</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 7 8</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\USER\gui.c</name>
+      <outputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 16</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 15</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 4 8 33 29 22 17 47 26 40 19 32 5 10</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 4 8 5 10</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\USER\test.c</name>
+      <outputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 25</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 43</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 34 29 22 17 47 26 40 19 32 30 35 4 8 10 12 7 1</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 4 8 10 12 7 1</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\main.c</name>
+      <outputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 45</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 28</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 37 27 41 23 7 8 4 10 12</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 7 8 4 10 12</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>[ROOT_NODE]</name>
+      <outputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 39</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Debug\Obj\OLED.pbd</name>
+      <inputs>
+        <tool>
+          <name>BILINK</name>
+          <file> 46 15 38 28 44 43</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Debug\Exe\OLED.txt</name>
+      <inputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 42 18 20 16 14 45 24 25 21</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Debug\Exe\OLED.d43</name>
+      <inputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 42 18 20 16 14 45 24 25 21</file>
+        </tool>
+      </inputs>
+    </file>
+  </configuration>
+  <configuration>
+    <name>Release</name>
+    <outputs>
+      <file>$PROJ_DIR$\IIC\iic.c</file>
+      <file>$PROJ_DIR$\OLED\bmp.h</file>
+      <file>$PROJ_DIR$\IIC\iic.h</file>
+      <file>$PROJ_DIR$\OLED\oled.c</file>
+      <file>$PROJ_DIR$\OLED\oled.h</file>
+      <file>$PROJ_DIR$\OLED\oledfont.h</file>
+      <file>$PROJ_DIR$\SYSTEM\delay.c</file>
+      <file>$PROJ_DIR$\SYSTEM\delay.h</file>
+      <file>$PROJ_DIR$\SYSTEM\type.h</file>
+      <file>$PROJ_DIR$\USER\gui.c</file>
+      <file>$PROJ_DIR$\USER\gui.h</file>
+      <file>$PROJ_DIR$\USER\test.c</file>
+      <file>$PROJ_DIR$\USER\test.h</file>
+      <file>$PROJ_DIR$\main.c</file>
+      <file>$TOOLKIT_DIR$\config\multiplier.xcl</file>
+      <file>$TOOLKIT_DIR$\inc\intrinsics.h</file>
+      <file>$TOOLKIT_DIR$\inc\io430x14x.h</file>
+      <file>$TOOLKIT_DIR$\inc\io430.h</file>
+      <file>$TOOLKIT_DIR$\inc\in430.h</file>
+      <file>$TOOLKIT_DIR$\config\lnk430F149.xcl</file>
+      <file>$PROJ_DIR$\Release\Obj\delay.r43</file>
+      <file>$PROJ_DIR$\Release\Obj\oled.r43</file>
+      <file>$PROJ_DIR$\Release\Obj\gui.pbi</file>
+      <file>$TOOLKIT_DIR$\inc\clib\stdio.h</file>
+      <file>$PROJ_DIR$\Release\Exe\OLED.txt</file>
+      <file>$PROJ_DIR$\Release\Obj\test.r43</file>
+      <file>$TOOLKIT_DIR$\inc\clib\sysmac.h</file>
+      <file>$PROJ_DIR$\Release\Obj\test.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\main.pbi</file>
+      <file>$PROJ_DIR$\Release\Obj\OLED.pbd</file>
+      <file>$PROJ_DIR$\Release\Obj\iic.pbi</file>
+      <file>$TOOLKIT_DIR$\inc\clib\stdarg.h</file>
+      <file>$PROJ_DIR$\Release\Obj\gui.r43</file>
+      <file>$PROJ_DIR$\Release\Obj\iic.r43</file>
+      <file>$TOOLKIT_DIR$\lib\clib\cl430f.r43</file>
+      <file>$PROJ_DIR$\Release\Obj\main.r43</file>
+      <file>$PROJ_DIR$\Release\Obj\delay.pbi</file>
+      <file>$TOOLKIT_DIR$\inc\clib\stdlib.h</file>
+      <file>$TOOLKIT_DIR$\inc\clib\string.h</file>
+      <file>$PROJ_DIR$\Release\Exe\OLED.d43</file>
+      <file>$PROJ_DIR$\Release\Obj\oled.pbi</file>
+    </outputs>
+    <file>
+      <name>$PROJ_DIR$\IIC\iic.c</name>
+      <outputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 33</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 30</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 2 17 16 18 15 8</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 2 8</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\OLED\oled.c</name>
+      <outputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 21</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 40</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 4 8 37 26 38 2 17 16 18 15 7</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 4 8 2 7</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\SYSTEM\delay.c</name>
+      <outputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 20</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 36</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 7 8</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 7 8</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\USER\gui.c</name>
+      <outputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 32</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 22</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 4 8 38 26 5 10</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 4 8 5 10</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\USER\test.c</name>
+      <outputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 25</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 27</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 37 26 23 31 4 8 10 12 7 1</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 4 8 10 12 7 1</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\main.c</name>
+      <outputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 35</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 28</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC430</name>
+          <file> 17 16 18 15 7 8 4 10 12</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 7 8 4 10 12</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>[ROOT_NODE]</name>
+      <outputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 24</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Release\Exe\OLED.txt</name>
+      <inputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 19 14 20 32 33 35 21 25 34</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Release\Obj\OLED.pbd</name>
+      <inputs>
+        <tool>
+          <name>BILINK</name>
+          <file> 36 22 30 28 40 27</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Release\Exe\OLED.d43</name>
+      <inputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 19 14 20 32 33 35 21 25 34</file>
+        </tool>
+      </inputs>
+    </file>
+  </configuration>
+</project>
+
+

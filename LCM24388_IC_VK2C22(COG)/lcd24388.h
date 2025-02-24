@@ -4,7 +4,7 @@
 #include <REGX52.H>
 #define VK2c22_CLK 2 //SCL信号线频率,由delay_nus实现 50->10kHz 10->50kHz 5->100kHz
 
-#define Vk2c22_ADDR   			0x7e    // IIC地址
+#define Vk2c22_ADDR   			0x7E    // IIC地址
 //基本设置
 #define Vk2c22_MODESET		  0x80    // BIAS,帧频，显示开关设置
 	#define BIAS_1_2					0x01  	// 1/2bias 4com
@@ -59,10 +59,6 @@
 
 //驱动seg数
 //4com 
-//
-//Vk2c22a 
-//#define 	Vk2c22_SEGNUM					44
-//Vk2c22b 
 #define 	Vk2c22_SEGNUM					42
 
 //以下管脚配置根据客户单片机做相应的修改 
@@ -132,5 +128,3 @@ void DisplayDigitOrChar(unsigned char pos, unsigned char index) ;
 void DisplayDigitOrChar2(unsigned char pos, unsigned char index) ;
 
 #endif  
-
-
