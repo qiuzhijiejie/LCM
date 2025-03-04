@@ -1,0 +1,590 @@
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    03/04/2025  09:07:24  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.4.0, INVOKED BY:
+D:\KEIL_STM32\C51\BIN\BL51.EXE .\Objects\vk2c24a.obj, .\Objects\main.obj TO .\Objects\project PRINT (.\Listings\project.
+>> m51) RAMSIZE (256) DISABLEWARNING (16)
+
+
+MEMORY MODEL: LARGE
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\vk2c24a.obj (VK2C24A)
+  .\Objects\main.obj (MAIN)
+  D:\KEIL_STM32\C51\LIB\C51L.LIB (?C_STARTUP)
+  D:\KEIL_STM32\C51\LIB\C51L.LIB (?C?CLDPTR)
+  D:\KEIL_STM32\C51\LIB\C51L.LIB (?C?UIDIV)
+  D:\KEIL_STM32\C51\LIB\C51L.LIB (?C?ILDIX)
+  D:\KEIL_STM32\C51\LIB\C51L.LIB (?C?LLDIXDATA)
+  D:\KEIL_STM32\C51\LIB\C51L.LIB (?C?LSTXDATA)
+  D:\KEIL_STM32\C51\LIB\C51L.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\project (VK2C24A)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            IDATA   0008H     0001H     UNIT         ?STACK
+
+            * * * * * * *  X D A T A   M E M O R Y  * * * * * * *
+            XDATA   0000H     0082H     UNIT         _XDATA_GROUP_
+            XDATA   0082H     007EH     UNIT         ?XD?VK2C24A
+            XDATA   0100H     0004H     UNIT         ?XD?_DELAY_NMS?VK2C24A
+            XDATA   0104H     0004H     UNIT         ?XD?_DISP_3NUM?VK2C24A
+            XDATA   0108H     0002H     UNIT         ?XD?_WRITE1DATAVK2C24A?VK2C24A
+            XDATA   010AH     0002H     UNIT         ?XD?_VK2C24A_DISSEGCOMOFF?VK2C24A
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     01EEH     UNIT         ?PR?_DISP_3NUM?VK2C24A
+            CODE    01F1H     00C5H     UNIT         ?C?LIB_CODE
+            CODE    02B6H     00BEH     UNIT         ?PR?_VK2C24A_DISALL?VK2C24A
+            CODE    0374H     008CH     UNIT         ?C_C51STARTUP
+            CODE    0400H     007EH     UNIT         ?PR?MAIN?MAIN
+            CODE    047EH     006EH     UNIT         ?PR?_WRITENDATAVK2C24A?VK2C24A
+            CODE    04ECH     0063H     UNIT         ?C_INITSEG
+            CODE    054FH     0062H     UNIT         ?PR?_VK2C24A_DISSEGCOMON?VK2C24A
+            CODE    05B1H     0059H     UNIT         ?PR?_VK2C24A_DISSEGCOMOFF?VK2C24A
+            CODE    060AH     0042H     UNIT         ?PR?_WRITE1DATAVK2C24A?VK2C24A
+            CODE    064CH     0035H     UNIT         ?PR?VK2C24A_I2CSLAVEACK?VK2C24A
+            CODE    0681H     002CH     UNIT         ?PR?_WRITECMDVK2C24A?VK2C24A
+            CODE    06ADH     0025H     UNIT         ?PR?_VK2C24A_I2CWRITEBYTE?VK2C24A
+            CODE    06D2H     001EH     UNIT         ?PR?_DELAY_NMS?VK2C24A
+            CODE    06F0H     001EH     UNIT         ?PR?VK2C24A_INIT?VK2C24A
+            CODE    070EH     001AH     UNIT         ?PR?_DELAY_NUS?VK2C24A
+            CODE    0728H     0010H     UNIT         ?PR?VK2C24A_I2CSTART?VK2C24A
+            CODE    0738H     0010H     UNIT         ?PR?VK2C24A_I2CSTOP?VK2C24A
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/04/2025  09:07:24  PAGE 2
+
+
+            CODE    0748H     0007H     UNIT         ?PR?VK2C24A_ENTER_STANDBY?VK2C24A
+            CODE    074FH     0007H     UNIT         ?PR?VK2C24A_EXIT_STANDBY?VK2C24A
+            CODE    0756H     0005H     UNIT         ?PR?VK2C24A_LOWLEVEL_INIT?VK2C24A
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\project (VK2C24A)
+
+
+SEGMENT                                     XDATA_GROUP
+  +--> CALLED SEGMENT                     START    LENGTH
+---------------------------------------------------------
+?C_C51STARTUP                             -----    -----
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN                             0000H    0002H
+  +--> ?PR?VK2C24A_INIT?VK2C24A
+  +--> ?PR?_VK2C24A_DISALL?VK2C24A
+  +--> ?PR?_VK2C24A_DISSEGCOMON?VK2C24A
+
+?PR?VK2C24A_INIT?VK2C24A                  -----    -----
+  +--> ?PR?VK2C24A_LOWLEVEL_INIT?VK2C24A
+  +--> ?PR?_WRITECMDVK2C24A?VK2C24A
+
+?PR?_WRITECMDVK2C24A?VK2C24A              0002H    0002H
+  +--> ?PR?VK2C24A_I2CSLAVEACK?VK2C24A
+  +--> ?PR?_VK2C24A_I2CWRITEBYTE?VK2C24A
+  +--> ?PR?VK2C24A_I2CSTOP?VK2C24A
+
+?PR?VK2C24A_I2CSLAVEACK?VK2C24A           -----    -----
+  +--> ?PR?VK2C24A_I2CSTART?VK2C24A
+  +--> ?PR?_VK2C24A_I2CWRITEBYTE?VK2C24A
+  +--> ?PR?_DELAY_NUS?VK2C24A
+
+?PR?VK2C24A_I2CSTART?VK2C24A              -----    -----
+  +--> ?PR?_DELAY_NUS?VK2C24A
+
+?PR?_VK2C24A_I2CWRITEBYTE?VK2C24A         -----    -----
+  +--> ?PR?_DELAY_NUS?VK2C24A
+
+?PR?VK2C24A_I2CSTOP?VK2C24A               -----    -----
+  +--> ?PR?_DELAY_NUS?VK2C24A
+
+?PR?_VK2C24A_DISALL?VK2C24A               0002H    007AH
+  +--> ?PR?_WRITENDATAVK2C24A?VK2C24A
+
+?PR?_WRITENDATAVK2C24A?VK2C24A            007CH    0006H
+  +--> ?PR?VK2C24A_I2CSLAVEACK?VK2C24A
+  +--> ?PR?_VK2C24A_I2CWRITEBYTE?VK2C24A
+  +--> ?PR?VK2C24A_I2CSTOP?VK2C24A
+
+?PR?_VK2C24A_DISSEGCOMON?VK2C24A          0002H    0002H
+  +--> ?PR?_WRITENDATAVK2C24A?VK2C24A
+
+
+
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/04/2025  09:07:24  PAGE 3
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\project (VK2C24A)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        VK2C24A
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:05B1H         PUBLIC        _Vk2c24a_DisSegComOff
+  B:00B0H.0       PUBLIC        P3_0
+  B:00B0H.1       PUBLIC        P3_1
+  X:0082H         PUBLIC        vk2c24a_dispram
+  C:06F0H         PUBLIC        Vk2c24a_Init
+  C:0003H         PUBLIC        _disp_3num
+  C:047EH         PUBLIC        _WritenDataVk2c24a
+  C:054FH         PUBLIC        _Vk2c24a_DisSegComOn
+  X:00A6H         PUBLIC        vk2c24a_maxcom
+  C:0748H         PUBLIC        Vk2c24a_Enter_Standby
+  C:02B6H         PUBLIC        _Vk2c24a_DisAll
+  C:06D2H         PUBLIC        _delay_nms
+  C:0681H         PUBLIC        _WriteCmdVk2c24a
+  C:0756H         PUBLIC        Vk2c24a_Lowlevel_Init
+  C:0712H         PUBLIC        _delay_nus
+  X:00A7H         PUBLIC        vk2c24a_comi
+  X:00A8H         PUBLIC        vk2c24a_segi
+  C:0659H         PUBLIC        Vk2c24a_I2CSlaveAck
+  C:0728H         PUBLIC        Vk2c24a_I2CStart
+  C:074FH         PUBLIC        Vk2c24a_Exit_Standby
+  X:00A9H         PUBLIC        shuzi_zimo
+  C:060AH         PUBLIC        _Write1DataVk2c24a
+  C:06ADH         PUBLIC        _Vk2c24a_I2CWriteByte
+  C:0738H         PUBLIC        Vk2c24a_I2CStop
+  X:00B8H         PUBLIC        Vk2c24a_segtab
+  C:070EH         SYMBOL        L?0102
+  -------         PROC          L?0101
+  -------         ENDPROC       L?0101
+  C:070EH         SYMBOL        L?0102
+  -------         PROC          _DELAY_NUS
+  D:0006H         SYMBOL        n
+  -------         DO            
+  D:0005H         SYMBOL        i
+  -------         ENDDO         
+  C:0712H         LINE#         70
+  C:0712H         LINE#         71
+  C:0712H         LINE#         73
+  C:071CH         LINE#         74
+  C:071CH         LINE#         75
+  C:071EH         LINE#         76
+  C:0724H         LINE#         77
+  C:0724H         LINE#         78
+  C:0725H         LINE#         79
+  C:0727H         LINE#         80
+  C:0727H         LINE#         81
+  -------         ENDPROC       _DELAY_NUS
+  -------         PROC          _DELAY_NMS
+  X:0100H         SYMBOL        n
+  C:06D2H         LINE#         89
+  C:06D8H         LINE#         90
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/04/2025  09:07:24  PAGE 4
+
+
+  C:06D8H         LINE#         91
+  C:06E6H         LINE#         92
+  C:06E6H         LINE#         93
+  C:06EDH         LINE#         94
+  C:06EFH         LINE#         95
+  -------         ENDPROC       _DELAY_NMS
+  -------         PROC          VK2C24A_I2CSTART
+  C:0728H         LINE#         103
+  C:0728H         LINE#         104
+  C:0728H         LINE#         105
+  C:072AH         LINE#         106
+  C:072CH         LINE#         107
+  C:072FH         LINE#         108
+  C:0731H         LINE#         109
+  -------         ENDPROC       VK2C24A_I2CSTART
+  -------         PROC          VK2C24A_I2CSTOP
+  C:0738H         LINE#         118
+  C:0738H         LINE#         119
+  C:0738H         LINE#         120
+  C:073AH         LINE#         121
+  C:073CH         LINE#         122
+  C:073FH         LINE#         123
+  C:0741H         LINE#         124
+  -------         ENDPROC       VK2C24A_I2CSTOP
+  C:064FH         SYMBOL        L?0100
+  -------         PROC          L?0099
+  -------         ENDPROC       L?0099
+  C:064FH         SYMBOL        L?0100
+  -------         PROC          VK2C24A_I2CSLAVEACK
+  -------         DO            
+  D:0006H         SYMBOL        TimeOut
+  D:0003H         SYMBOL        RetValue
+  -------         ENDDO         
+  C:0659H         LINE#         133
+  C:0659H         LINE#         134
+  C:0659H         LINE#         138
+  C:065BH         LINE#         141
+  C:065EH         LINE#         142
+  C:0660H         LINE#         144
+  C:0664H         LINE#         145
+  C:0673H         LINE#         146
+  C:0673H         LINE#         147
+  C:0676H         LINE#         148
+  C:0676H         LINE#         149
+  C:0678H         LINE#         150
+  C:067AH         LINE#         152
+  C:067AH         LINE#         153
+  C:067CH         LINE#         154
+  C:067CH         LINE#         155
+  C:067CH         LINE#         156
+  C:067CH         LINE#         157
+  C:067EH         LINE#         161
+  C:0680H         LINE#         162
+  -------         ENDPROC       VK2C24A_I2CSLAVEACK
+  -------         PROC          _VK2C24A_I2CWRITEBYTE
+  D:0003H         SYMBOL        byte
+  -------         DO            
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/04/2025  09:07:24  PAGE 5
+
+
+  D:0001H         SYMBOL        i
+  -------         ENDDO         
+  C:06ADH         LINE#         170
+  C:06AFH         LINE#         171
+  C:06AFH         LINE#         172
+  C:06B1H         LINE#         173
+  C:06B7H         LINE#         174
+  C:06B7H         LINE#         175
+  C:06B9H         LINE#         176
+  C:06BDH         LINE#         177
+  C:06C1H         LINE#         179
+  C:06C3H         LINE#         180
+  C:06C7H         LINE#         181
+  C:06CAH         LINE#         182
+  C:06CCH         LINE#         183
+  C:06CFH         LINE#         184
+  C:06D1H         LINE#         185
+  -------         ENDPROC       _VK2C24A_I2CWRITEBYTE
+  -------         PROC          _WRITECMDVK2C24A
+  X:0002H         SYMBOL        cmd
+  X:0003H         SYMBOL        Data
+  C:0681H         LINE#         195
+  C:0684H         LINE#         196
+  C:0684H         LINE#         197
+  C:0684H         LINE#         199
+  C:0684H         LINE#         200
+  C:068AH         LINE#         201
+  C:068AH         LINE#         202
+  C:068AH         LINE#         203
+  C:068CH         LINE#         204
+  C:068CH         LINE#         205
+  C:0694H         LINE#         206
+  C:069AH         LINE#         207
+  C:069AH         LINE#         208
+  C:069AH         LINE#         209
+  C:069CH         LINE#         210
+  C:069CH         LINE#         211
+  C:06A4H         LINE#         212
+  C:06A7H         LINE#         213
+  C:06A7H         LINE#         214
+  C:06A7H         LINE#         215
+  C:06A7H         LINE#         216
+  C:06A7H         LINE#         217
+  C:06AAH         LINE#         219
+  C:06ACH         LINE#         220
+  -------         ENDPROC       _WRITECMDVK2C24A
+  -------         PROC          _WRITE1DATAVK2C24A
+  X:0108H         SYMBOL        Addr
+  X:0109H         SYMBOL        Dat
+  C:060AH         LINE#         229
+  C:060DH         LINE#         230
+  C:060DH         LINE#         232
+  C:060DH         LINE#         234
+  C:060DH         LINE#         235
+  C:0613H         LINE#         236
+  C:0613H         LINE#         237
+  C:0613H         LINE#         238
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/04/2025  09:07:24  PAGE 6
+
+
+  C:0615H         LINE#         239
+  C:0615H         LINE#         241
+  C:061AH         LINE#         242
+  C:0620H         LINE#         243
+  C:0620H         LINE#         244
+  C:0620H         LINE#         245
+  C:0622H         LINE#         246
+  C:0622H         LINE#         248
+  C:062AH         LINE#         249
+  C:0630H         LINE#         250
+  C:0630H         LINE#         251
+  C:0630H         LINE#         252
+  C:0632H         LINE#         253
+  C:0632H         LINE#         255
+  C:063AH         LINE#         256
+  C:0640H         LINE#         257
+  C:0640H         LINE#         258
+  C:0643H         LINE#         259
+  C:0646H         LINE#         260
+  C:0646H         LINE#         262
+  C:0649H         LINE#         263
+  C:064BH         LINE#         264
+  -------         ENDPROC       _WRITE1DATAVK2C24A
+  -------         PROC          _WRITENDATAVK2C24A
+  X:007CH         SYMBOL        Addr
+  X:007DH         SYMBOL        Databuf
+  X:0080H         SYMBOL        Cnt
+  -------         DO            
+  X:0081H         SYMBOL        n
+  -------         ENDDO         
+  C:047EH         LINE#         274
+  C:048AH         LINE#         275
+  C:048AH         LINE#         279
+  C:048AH         LINE#         281
+  C:048AH         LINE#         282
+  C:0490H         LINE#         283
+  C:0490H         LINE#         284
+  C:0490H         LINE#         285
+  C:0492H         LINE#         286
+  C:0492H         LINE#         288
+  C:0497H         LINE#         289
+  C:049DH         LINE#         290
+  C:049DH         LINE#         291
+  C:049DH         LINE#         292
+  C:049FH         LINE#         293
+  C:049FH         LINE#         295
+  C:04A7H         LINE#         296
+  C:04ADH         LINE#         297
+  C:04ADH         LINE#         298
+  C:04ADH         LINE#         299
+  C:04AFH         LINE#         300
+  C:04AFH         LINE#         302
+  C:04BFH         LINE#         303
+  C:04BFH         LINE#         304
+  C:04D6H         LINE#         305
+  C:04DCH         LINE#         306
+  C:04DCH         LINE#         307
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/04/2025  09:07:24  PAGE 7
+
+
+  C:04DCH         LINE#         308
+  C:04DEH         LINE#         309
+  C:04DEH         LINE#         310
+  C:04E6H         LINE#         312
+  C:04E9H         LINE#         313
+  C:04EBH         LINE#         314
+  -------         ENDPROC       _WRITENDATAVK2C24A
+  -------         PROC          _VK2C24A_DISALL
+  X:0002H         SYMBOL        dat
+  -------         DO            
+  X:0003H         SYMBOL        segi
+  X:0004H         SYMBOL        dispram
+  -------         ENDDO         
+  C:02B6H         LINE#         323
+  C:02BBH         LINE#         324
+  C:02BBH         LINE#         328
+  C:02C3H         LINE#         329
+  C:02C3H         LINE#         330
+  C:02D1H         LINE#         331
+  C:02D1H         LINE#         332
+  C:02E2H         LINE#         333
+  C:02EAH         LINE#         334
+  C:02F5H         LINE#         335
+  C:02F7H         LINE#         336
+  C:02FFH         LINE#         337
+  C:02FFH         LINE#         338
+  C:030DH         LINE#         339
+  C:030DH         LINE#         340
+  C:031EH         LINE#         341
+  C:0326H         LINE#         342
+  C:0331H         LINE#         343
+  C:0333H         LINE#         344
+  C:033BH         LINE#         345
+  C:033BH         LINE#         346
+  C:0349H         LINE#         347
+  C:0349H         LINE#         348
+  C:035AH         LINE#         349
+  C:0362H         LINE#         350
+  C:0373H         LINE#         351
+  C:0373H         LINE#         352
+  -------         ENDPROC       _VK2C24A_DISALL
+  -------         PROC          _VK2C24A_DISSEGCOMON
+  D:0003H         SYMBOL        seg
+  D:0005H         SYMBOL        com
+  -------         DO            
+  X:0002H         SYMBOL        addrbit
+  X:0003H         SYMBOL        tempdat
+  -------         ENDDO         
+  C:054FH         LINE#         361
+  C:0551H         LINE#         362
+  C:0551H         LINE#         376
+  C:0555H         LINE#         377
+  C:0562H         LINE#         379
+  C:0574H         LINE#         381
+  C:058EH         LINE#         382
+  C:059CH         LINE#         383
+  -------         ENDPROC       _VK2C24A_DISSEGCOMON
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/04/2025  09:07:24  PAGE 8
+
+
+  -------         PROC          _VK2C24A_DISSEGCOMOFF
+  X:010AH         SYMBOL        seg
+  X:010BH         SYMBOL        com
+  C:05B1H         LINE#         393
+  C:05B9H         LINE#         394
+  C:05B9H         LINE#         395
+  C:05C1H         LINE#         396
+  C:05C1H         LINE#         397
+  C:05C8H         LINE#         398
+  C:05DAH         LINE#         400
+  C:05F0H         LINE#         401
+  C:05F2H         LINE#         403
+  C:05F2H         LINE#         404
+  C:0609H         LINE#         405
+  C:0609H         LINE#         406
+  -------         ENDPROC       _VK2C24A_DISSEGCOMOFF
+  -------         PROC          VK2C24A_ENTER_STANDBY
+  C:0748H         LINE#         414
+  C:0748H         LINE#         415
+  C:0748H         LINE#         416
+  -------         ENDPROC       VK2C24A_ENTER_STANDBY
+  -------         PROC          VK2C24A_EXIT_STANDBY
+  C:074FH         LINE#         425
+  C:074FH         LINE#         426
+  C:074FH         LINE#         427
+  -------         ENDPROC       VK2C24A_EXIT_STANDBY
+  -------         PROC          VK2C24A_LOWLEVEL_INIT
+  C:0756H         LINE#         437
+  C:0756H         LINE#         438
+  C:0756H         LINE#         445
+  C:0758H         LINE#         446
+  C:075AH         LINE#         447
+  -------         ENDPROC       VK2C24A_LOWLEVEL_INIT
+  -------         PROC          VK2C24A_INIT
+  C:06F0H         LINE#         455
+  C:06F0H         LINE#         456
+  C:06F0H         LINE#         458
+  C:06F3H         LINE#         460
+  C:06FAH         LINE#         463
+  C:0700H         LINE#         472
+  C:0707H         LINE#         484
+  -------         ENDPROC       VK2C24A_INIT
+  -------         PROC          _DISP_3NUM
+  X:0104H         SYMBOL        dat
+  -------         DO            
+  X:0106H         SYMBOL        dat8
+  -------         ENDDO         
+  C:0003H         LINE#         495
+  C:000BH         LINE#         496
+  C:000BH         LINE#         499
+  C:0016H         LINE#         500
+  C:0016H         LINE#         501
+  C:0035H         LINE#         502
+  C:003DH         LINE#         503
+  C:0056H         LINE#         504
+  C:005AH         LINE#         505
+  C:005FH         LINE#         507
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/04/2025  09:07:24  PAGE 9
+
+
+  C:0079H         LINE#         508
+  C:0081H         LINE#         509
+  C:009AH         LINE#         510
+  C:009EH         LINE#         511
+  C:00A3H         LINE#         513
+  C:00B8H         LINE#         514
+  C:00C0H         LINE#         515
+  C:00D9H         LINE#         516
+  C:00DDH         LINE#         517
+  C:00E2H         LINE#         519
+  C:00EBH         LINE#         520
+  C:00EBH         LINE#         521
+  C:00F2H         LINE#         522
+  C:00F5H         LINE#         523
+  C:00F5H         LINE#         524
+  C:0104H         LINE#         525
+  C:0104H         LINE#         526
+  C:010BH         LINE#         527
+  C:010EH         LINE#         528
+  C:010EH         LINE#         534
+  C:010EH         LINE#         535
+  C:0111H         LINE#         537
+  C:0111H         LINE#         538
+  C:0130H         LINE#         539
+  C:0138H         LINE#         540
+  C:014EH         LINE#         542
+  C:0168H         LINE#         543
+  C:0170H         LINE#         544
+  C:0186H         LINE#         546
+  C:019BH         LINE#         547
+  C:01A3H         LINE#         548
+  C:01B9H         LINE#         550
+  C:01C2H         LINE#         551
+  C:01C2H         LINE#         552
+  C:01C9H         LINE#         553
+  C:01C9H         LINE#         554
+  C:01D8H         LINE#         555
+  C:01D8H         LINE#         556
+  C:01DFH         LINE#         557
+  C:01DFH         LINE#         563
+  C:01F0H         LINE#         564
+  C:01F0H         LINE#         565
+  -------         ENDPROC       _DISP_3NUM
+  -------         ENDMOD        VK2C24A
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:0400H         PUBLIC        main
+  -------         PROC          MAIN
+  -------         DO            
+  X:0000H         SYMBOL        vk2c24a_maxcom
+  X:0001H         SYMBOL        seg
+  -------         ENDDO         
+  C:0400H         LINE#         4
+  C:0400H         LINE#         5
+  C:0400H         LINE#         6
+  C:0406H         LINE#         8
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/04/2025  09:07:24  PAGE 10
+
+
+  C:0409H         LINE#         9
+  C:040EH         LINE#         11
+  C:040EH         LINE#         12
+  C:040EH         LINE#         13
+  C:041DH         LINE#         14
+  C:041DH         LINE#         15
+  C:0422H         LINE#         17
+  C:042AH         LINE#         19
+  C:0439H         LINE#         20
+  C:0439H         LINE#         22
+  C:043EH         LINE#         24
+  C:0446H         LINE#         26
+  C:0455H         LINE#         27
+  C:0455H         LINE#         29
+  C:045AH         LINE#         31
+  C:0462H         LINE#         33
+  C:0471H         LINE#         34
+  C:0471H         LINE#         36
+  C:0476H         LINE#         38
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        ?C?CLDPTR
+  C:01F1H         PUBLIC        ?C?CLDPTR
+  -------         ENDMOD        ?C?CLDPTR
+
+  -------         MODULE        ?C?UIDIV
+  C:020AH         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+
+  -------         MODULE        ?C?ILDIX
+  C:025FH         PUBLIC        ?C?ILDIX
+  -------         ENDMOD        ?C?ILDIX
+
+  -------         MODULE        ?C?LLDIXDATA
+  C:027EH         PUBLIC        ?C?LLDIXDATA
+  C:0275H         PUBLIC        ?C?LLDIXDATA1
+  C:0277H         PUBLIC        ?C?LLDIXDATA8
+  -------         ENDMOD        ?C?LLDIXDATA
+
+  -------         MODULE        ?C?LSTXDATA
+  C:02AAH         PUBLIC        ?C?LSTXDATA
+  -------         ENDMOD        ?C?LSTXDATA
+
+Program Size: data=9.0 xdata=268 code=1883
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

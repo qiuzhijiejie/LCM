@@ -1,0 +1,590 @@
+C51 COMPILER V9.60.7.0   VK2C24A                                                           01/06/2025 16:22:12 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE VK2C24A
+OBJECT MODULE PLACED IN .\Objects\vk2c24a.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE vk2c24a.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\L
+                    -istings\vk2c24a.lst) OBJECT(.\Objects\vk2c24a.obj)
+
+line level    source
+
+   1          #include "vk2c24a.h"
+   2          #include <intrins.h>
+   3          #define Vk2c24a_CLK 2 //SCL信号线频率,由delay_nus实现 50->10kHz 10->50kHz 5->100kHz
+   4          
+   5          //8com
+   6          unsigned char Vk2c24a_segtab[Vk2c24a_SEGNUM]={//vk2c24A
+   7                  1,2,3,4, 5, 6, 7, 8, 9,10,11,12,13,14,15,
+   8                  16,17,18,19
+   9          };
+  10          
+  11          
+  12          //8com
+  13          unsigned char vk2c24a_dispram[Vk2c24a_SEGNUM];//8COM时每个字节数据对应1个SEG
+  14          
+  15          unsigned char data shuzi_zimo[15]= //数字和字符字模
+  16          {             
+  17          // 0    1    2    3    4    5    6    7    8    9    -    L    H    
+  18            0X6F,0x24,0x6B,0x6D,0x3C,0X6C,0X5F,0X64,0X7F,0X7C,0X08,0X13,0X3E
+  19          };
+  20          
+  21          unsigned char Vk2c24a_InitSequence(void);
+  22          /*******************************************************************************
+  23          * Function Name  : delay_nus
+  24          * Description    : 延时1uS程序
+  25          * Input          : n->延时时间nuS
+  26          * Output         : None
+  27          * Return         : None
+  28          *******************************************************************************/
+  29          void delay_nus(unsigned int n)     
+  30          {
+  31   1              unsigned char i;
+  32   1              while(n--)
+  33   1              {
+  34   2                      i=20;
+  35   2                      while(i--)
+  36   2                      {//nop指令根据单片机做相应的修改
+  37   3                              _nop_();
+  38   3                      }
+  39   2              }
+  40   1      }
+  41          /*******************************************************************************
+  42          * Function Name  : delay_nms
+  43          * Description    : 延时1mS程序
+  44          * Input          : n->延时时间nmS
+  45          * Output         : None
+  46          * Return         : None
+  47          *******************************************************************************/
+  48          void delay_nms(unsigned long int n)
+  49          {
+  50   1              while(n--)
+  51   1              {
+  52   2                      delay_nus(1000);
+  53   2              }
+  54   1      }
+C51 COMPILER V9.60.7.0   VK2C24A                                                           01/06/2025 16:22:12 PAGE 2   
+
+  55          /*******************************************************************************
+  56          * Function Name  : I2CStart
+  57          * Description    : 时钟线高时，数据线由高到低的跳变，表示I2C开始信号
+  58          * Input          : None
+  59          * Output         : None
+  60          * Return         : None
+  61          *******************************************************************************/
+  62          void Vk2c24a_I2CStart( void )
+  63          {
+  64   1        Vk2c24a_SCL_H();
+  65   1        Vk2c24a_SDA_H();
+  66   1        delay_nus(Vk2c24a_CLK);
+  67   1        Vk2c24a_SDA_L();
+  68   1        delay_nus(Vk2c24a_CLK);
+  69   1      }
+  70          /*******************************************************************************
+  71          * Function Name  : I2CStop
+  72          * Description    : 时钟线高时，数据线由低到高的跳变，表示I2C停止信号
+  73          * Input          : None
+  74          * Output         : None
+  75          * Return         : None
+  76          *******************************************************************************/
+  77          void Vk2c24a_I2CStop( void )
+  78          {
+  79   1        Vk2c24a_SCL_H();
+  80   1        Vk2c24a_SDA_L();
+  81   1        delay_nus(Vk2c24a_CLK);
+  82   1        Vk2c24a_SDA_H();
+  83   1        delay_nus(Vk2c24a_CLK);
+  84   1      }
+  85          /*******************************************************************************
+  86          * Function Name  : I2CSlaveAck
+  87          * Description    : I2C从机设备应答查询
+  88          * Input          : None
+  89          * Output         : None
+  90          * Return         : 0-ok 1-fail
+  91          *******************************************************************************/
+  92          unsigned char Vk2c24a_I2CSlaveAck( void )
+  93          {
+  94   1        unsigned int TimeOut;
+  95   1        unsigned char RetValue;
+  96   1              
+  97   1        Vk2c24a_SCL_L();
+  98   1              //单片机SDA脚为单向IO要设为输入脚
+  99   1      //      Vk2c24a_SET_SDA_IN();
+ 100   1        delay_nus(Vk2c24a_CLK);
+ 101   1        Vk2c24a_SCL_H();//第9个sclk上升沿
+ 102   1      
+ 103   1        TimeOut = 10000;
+ 104   1        while( TimeOut-- > 0 )
+ 105   1        {
+ 106   2          if( Vk2c24a_GET_SDA()!=0 )//读取ack
+ 107   2          {
+ 108   3            RetValue = 1;
+ 109   3          }
+ 110   2          else
+ 111   2          {
+ 112   3            RetValue = 0;
+ 113   3            break;
+ 114   3          }
+ 115   2        } 
+ 116   1              Vk2c24a_SCL_L();
+C51 COMPILER V9.60.7.0   VK2C24A                                                           01/06/2025 16:22:12 PAGE 3   
+
+ 117   1              //单片机SDA脚为单向IO要设为输出脚
+ 118   1      //      Vk2c24a_SET_SDA_OUT(); 
+ 119   1        
+ 120   1        return RetValue;
+ 121   1      }
+ 122          /*******************************************************************************
+ 123          * Function Name  : I2CWriteByte
+ 124          * Description    : I2C写一字节,先送高位
+ 125          * Input          : byte-要写入的数据
+ 126          * Output         : None
+ 127          * Return         : None
+ 128          *******************************************************************************/
+ 129          void Vk2c24a_I2CWriteByte( unsigned char byte )
+ 130          {
+ 131   1              unsigned char i=8;
+ 132   1              while (i--)
+ 133   1              { 
+ 134   2                      Vk2c24a_SCL_L();
+ 135   2                      if(byte&0x80)
+ 136   2                              Vk2c24a_SDA_H();
+ 137   2                      else
+ 138   2                              Vk2c24a_SDA_L();
+ 139   2                      byte<<=1; 
+ 140   2                      delay_nus(Vk2c24a_CLK);
+ 141   2                      Vk2c24a_SCL_H();     
+ 142   2                      delay_nus(Vk2c24a_CLK);
+ 143   2              }
+ 144   1      }
+ 145          
+ 146          /*******************************************************************************
+ 147          * Function Name  : WriteCmd
+ 148          * Description    : 写1字节命令带参数
+ 149          * Input          : cmd-要写入的命令
+ 150          *                : data-要写入的参数
+ 151          * Output         : None
+ 152          * Return         : 0-ok 1-fail
+ 153          *******************************************************************************/
+ 154          unsigned char WriteCmdVk2c24a(unsigned char cmd, unsigned char Data )
+ 155          {
+ 156   1              Vk2c24a_I2CStart();
+ 157   1      
+ 158   1              Vk2c24a_I2CWriteByte( Vk2c24a_ADDR|0x00 );
+ 159   1              if( 1 == Vk2c24a_I2CSlaveAck() )
+ 160   1              {
+ 161   2                      Vk2c24a_I2CStop(); 
+ 162   2                      return 0;   
+ 163   2              }
+ 164   1              Vk2c24a_I2CWriteByte( cmd );
+ 165   1              if( 1 == Vk2c24a_I2CSlaveAck() )
+ 166   1              {
+ 167   2                      Vk2c24a_I2CStop(); 
+ 168   2                      return 0;   
+ 169   2              }
+ 170   1              Vk2c24a_I2CWriteByte( Data );
+ 171   1              if( 1 == Vk2c24a_I2CSlaveAck() )
+ 172   1              {
+ 173   2                      Vk2c24a_I2CStop(); 
+ 174   2                      return 0;   
+ 175   2              }
+ 176   1        Vk2c24a_I2CStop();
+ 177   1       
+ 178   1        return 0;    //返回操作成败标志
+C51 COMPILER V9.60.7.0   VK2C24A                                                           01/06/2025 16:22:12 PAGE 4   
+
+ 179   1      }
+ 180          /*******************************************************************************
+ 181          * Function Name  : Write1Data
+ 182          * Description    : 写1字节数据到显示RAM
+ 183          * Input          : Addr-写入ram的地址
+ 184          *                : Dat->写入ram的数据
+ 185          * Output         : None
+ 186          * Return         : 0-ok 1-fail
+ 187          *******************************************************************************/
+ 188          unsigned char Write1DataVk2c24a(unsigned char Addr,unsigned char Dat)
+ 189          {
+ 190   1              //START 信号
+ 191   1              Vk2c24a_I2CStart(); 
+ 192   1              //SLAVE地址
+ 193   1              Vk2c24a_I2CWriteByte(Vk2c24a_ADDR); 
+ 194   1              if( 1 == Vk2c24a_I2CSlaveAck() )
+ 195   1              {               
+ 196   2                      Vk2c24a_I2CStop();
+ 197   2                      return 1; 
+ 198   2              }
+ 199   1              //写显示RAM命令
+ 200   1              Vk2c24a_I2CWriteByte(Vk2c24a_RWRAM);                                            
+ 201   1              if( 1 == Vk2c24a_I2CSlaveAck() )
+ 202   1              {
+ 203   2                      Vk2c24a_I2CStop();                                                                                                      
+ 204   2                      return 0;
+ 205   2              }
+ 206   1              //显示RAM地址
+ 207   1              Vk2c24a_I2CWriteByte(Addr); 
+ 208   1              if( 1 == Vk2c24a_I2CSlaveAck() )
+ 209   1              {
+ 210   2                      Vk2c24a_I2CStop();
+ 211   2                      return 1;
+ 212   2              }
+ 213   1              //显示数据，1字节数据包含2个SEG
+ 214   1              Vk2c24a_I2CWriteByte(Dat);
+ 215   1              if( Vk2c24a_I2CSlaveAck()==1 )
+ 216   1              {
+ 217   2                      Vk2c24a_I2CStop();
+ 218   2                      return 1;
+ 219   2              }
+ 220   1              //STOP信号
+ 221   1       Vk2c24a_I2CStop();
+ 222   1       return 0;   
+ 223   1      }
+ 224          /*******************************************************************************
+ 225          * Function Name  : WritenData
+ 226          * Description    : 写多个数据到显示RAM
+ 227          * Input          : Addr-写入ram的起始地址
+ 228          *                : Databuf->写入ram的数据buffer指针
+ 229          *                : Cnt->写入ram的数据个数
+ 230          * Output         : None
+ 231          * Return         : 0-ok 1-fail
+ 232          *******************************************************************************/
+ 233          unsigned char  WritenDataVk2c24a(unsigned char Addr,unsigned char *Databuf,unsigned char Cnt)
+ 234          {
+ 235   1              unsigned char n;
+ 236   1              
+ 237   1              //START信号     
+ 238   1              Vk2c24a_I2CStart();                                                                     
+ 239   1              //SLAVE地址
+ 240   1              Vk2c24a_I2CWriteByte(Vk2c24a_ADDR);     
+C51 COMPILER V9.60.7.0   VK2C24A                                                           01/06/2025 16:22:12 PAGE 5   
+
+ 241   1              if( 1 == Vk2c24a_I2CSlaveAck() )
+ 242   1              {
+ 243   2                      Vk2c24a_I2CStop();                                                                                                      
+ 244   2                      return 0;                                                                               
+ 245   2              }
+ 246   1              //写显示RAM命令
+ 247   1              Vk2c24a_I2CWriteByte(Vk2c24a_RWRAM);                                            
+ 248   1              if( 1 == Vk2c24a_I2CSlaveAck() )
+ 249   1              {
+ 250   2                      Vk2c24a_I2CStop();                                                                                                      
+ 251   2                      return 0;
+ 252   2              }
+ 253   1              //显示RAM起始地址
+ 254   1              Vk2c24a_I2CWriteByte(Addr);                                             
+ 255   1              if( 1 == Vk2c24a_I2CSlaveAck() )
+ 256   1              {
+ 257   2                      Vk2c24a_I2CStop();                                                                                                      
+ 258   2                      return 0;
+ 259   2              }
+ 260   1              //发送Cnt个数据到显示RAM
+ 261   1              for(n=0;n<Cnt;n++)
+ 262   1              { 
+ 263   2                      Vk2c24a_I2CWriteByte(*Databuf++);
+ 264   2                      if( Vk2c24a_I2CSlaveAck()==1 )
+ 265   2                      {
+ 266   3                              Vk2c24a_I2CStop();                                                                                                      
+ 267   3                              return 0;
+ 268   3                      }
+ 269   2              }
+ 270   1              //STOP信号
+ 271   1               Vk2c24a_I2CStop();                                                                                     
+ 272   1               return 0;    
+ 273   1      }
+ 274          /*******************************************************************************
+ 275          * Function Name  : Vk2c24a_DisAll
+ 276          * Description    : 所有SEG显示同一个数据，bit7/bit3-COM3 bit6/bit2-COM2 bit5/bit1-COM1 bit4/bit0-COM0
+ 277          *                                            : 例如：0xff全亮 0x00全灭 0x55灭亮灭亮 0xaa亮灭亮灭 0x33灭灭亮亮 
+ 278          * Input          ：dat->写入ram的数据(1个字节数据对应2个SEG)  
+ 279          * Output         : None
+ 280          * Return         : None
+ 281          *******************************************************************************/
+ 282          void Vk2c24a_DisAll(unsigned char dat)
+ 283          {
+ 284   1              unsigned char segi;
+ 285   1              unsigned char dispram[120];
+ 286   1              
+ 287   1              if(vk2c24a_maxcom==4)
+ 288   1              {
+ 289   2                      for(segi=0;segi<36;segi++)
+ 290   2                      {
+ 291   3                              dispram[segi]=dat;
+ 292   3                      }
+ 293   2                      WritenDataVk2c24a(0,dispram,36);//这里送8bit数据对应2个SEG，每8bit数据地址加1，每8位数据1个ACK
+ 294   2              }
+ 295   1              else if(vk2c24a_maxcom==8)
+ 296   1              {
+ 297   2                      for(segi=0;segi<68;segi++)
+ 298   2                      {
+ 299   3                              dispram[segi]=dat;
+ 300   3                      }
+ 301   2                      WritenDataVk2c24a(0,dispram,68);//这里送8bit数据对应1个SEG，每8bit数据地址加1，每8位数据1个ACK
+ 302   2              }
+C51 COMPILER V9.60.7.0   VK2C24A                                                           01/06/2025 16:22:12 PAGE 6   
+
+ 303   1              else if(vk2c24a_maxcom==16)
+ 304   1              {
+ 305   2                      for(segi=0;segi<120;segi++)
+ 306   2                      {
+ 307   3                              dispram[segi]=dat;
+ 308   3                      }
+ 309   2                      WritenDataVk2c24a(0,dispram,120);//这里送8bit数据对应1个SEG，每8bit数据地址加1，每8位数据1个ACK
+ 310   2              }
+ 311   1      }
+ 312          /*******************************************************************************
+ 313          * Function Name  : DisSegComOn
+ 314          * Description    : 点亮1个点(1个seg和1个com交叉对应的显示点)
+ 315          * Input          ：seg->点对应的seg脚  
+ 316          *                        ：com->点对应com脚  
+ 317          * Output         : None
+ 318          * Return         : None
+ 319          *******************************************************************************/
+ 320          void Vk2c24a_DisSegComOn(unsigned char seg,unsigned char com)
+ 321          {
+ 322   1              if(vk2c24a_maxcom==4)
+ 323   1              {
+ 324   2                      if(seg%2==0)
+ 325   2                              Write1DataVk2c24a(seg/2,(1<<(com)));//这里送8位数据低4bit有效，每8bit数据地址加1，每8位数据1个ACK)
+ 326   2                      else
+ 327   2                              Write1DataVk2c24a(seg/2,(1<<(4+com)));//这里送8位数据高4bit有效，每8bit数据地址加1，每8位数据1个ACK
+ 328   2              }
+ 329   1              else
+ 330   1              {
+ 331   2                      Write1DataVk2c24a(seg,(1<<(com)));//这里送8位数据低4bit有效，每8bit数据地址加1，每8位数据1个ACK
+ 332   2              }
+ 333   1              
+ 334   1              
+ 335   1      //        unsigned char addrbit, tempdat;
+ 336   1      //        if (seg % 2 == 0)//判断是不是偶数
+ 337   1      //        addrbit = (1 << com); // 对应低 4 位
+ 338   1      //    else
+ 339   1      //        addrbit = (1 << (4 + com)); // 对应高 4 位
+ 340   1      //    // 将显示状态累加，而不是覆盖
+ 341   1      //    tempdat = vk2c24a_dispram[seg / 2] | addrbit;
+ 342   1      //    vk2c24a_dispram[seg / 2] = tempdat;
+ 343   1      //    WritenDataVk2c24a(seg / 2, &tempdat, 1);  
+ 344   1      }
+ 345          /*******************************************************************************
+ 346          * Function Name  : DisSegComOff
+ 347          * Description    : 关闭1个点(1个seg和1个com交叉对应的显示点)
+ 348          * Input          ：seg->点对应的seg脚  
+ 349          *                          ：com->点对应com脚  
+ 350          * Output         : None
+ 351          * Return         : None
+ 352          *******************************************************************************/
+ 353          void Vk2c24a_DisSegComOff(unsigned char seg,unsigned char com)
+ 354          {
+ 355   1              if(vk2c24a_maxcom==4)
+ 356   1              {
+ 357   2                      if(seg%2==0)
+ 358   2                              Write1DataVk2c24a(seg/2,~(1<<com));//这里送8位数据低4bit有效，每8bit数据地址加1，每8位数据1个ACK
+ 359   2                      else
+ 360   2                              Write1DataVk2c24a(seg/2,~(1<<(4+com)));//这里送8位数据高4bit有效，每8bit数据地址加1，每8位数据1个ACK
+ 361   2              }
+ 362   1              else
+ 363   1              {
+ 364   2                      Write1DataVk2c24a(seg,~(1<<com));//这里送8位数据低4bit有效，每8bit数据地址加1，每8位数据1个ACK
+C51 COMPILER V9.60.7.0   VK2C24A                                                           01/06/2025 16:22:12 PAGE 7   
+
+ 365   2              }
+ 366   1      }
+ 367          /*******************************************************************************
+ 368          * Function Name  : Enter_Standby
+ 369          * Description    : 进入掉电低功耗模式,掉电无显示
+ 370          * Input          ：None 
+ 371          * Output         : None
+ 372          * Return         : 0-ok 1-fail
+ 373          *******************************************************************************/
+ 374          void Vk2c24a_Enter_Standby(void)
+ 375          {               
+ 376   1              WriteCmdVk2c24a(Vk2c24a_SYSSET,SYSOFF_LCDOFF);
+ 377   1      }
+ 378          /*******************************************************************************
+ 379          * Function Name  : Exit_Standby
+ 380          * Description    : 退出掉电低功耗模式
+ 381          * Input          ：None 
+ 382          * Output         : None
+ 383          * Return         : None
+ 384          *******************************************************************************/
+ 385          void Vk2c24a_Exit_Standby(void)
+ 386          {       
+ 387   1              WriteCmdVk2c24a(Vk2c24a_SYSSET,SYSON_LCDON);
+ 388   1      }
+ 389          
+ 390          /*******************************************************************************
+ 391          * Function Name  : Lowlevel_Init
+ 392          * Description    : 配置通信线GPIO
+ 393          * Input          ：None 
+ 394          * Output         : None
+ 395          * Return         : None
+ 396          *******************************************************************************/
+ 397          void Vk2c24a_Lowlevel_Init(void)
+ 398          {
+ 399   1              //通信线电平不同，建议加电平转换电路
+ 400   1              //此函数根据客户单片机做相应的修改      
+ 401   1      //      Vk2c24a_SET_SDA_DIR();
+ 402   1      //      GPIO_SetMode(Vk2c24a_SCL_PORT, Vk2c24a_SCL_PIN, GPIO_MODE_OUTPUT);
+ 403   1      //      GPIO_SetMode(Vk2c24a_SDA_PORT, Vk2c24a_SDA_PIN, GPIO_MODE_QUASI);
+ 404   1                            
+ 405   1              Vk2c24a_SCL_H();  
+ 406   1              Vk2c24a_SDA_H();        
+ 407   1      }
+ 408          /*******************************************************************************
+ 409          * Function Name  : Init
+ 410          * Description    : 初始化配置
+ 411          * Input          ：None 
+ 412          * Output         : None
+ 413          * Return         : None
+ 414          *******************************************************************************/
+ 415          void Vk2c24a_Init(void)
+ 416          {       
+ 417   1              //管脚配置根据客户单片机做相应的修改
+ 418   1              Vk2c24a_Lowlevel_Init();
+ 419   1      //      WriteCmdVk2c24a(Vk2c24a_MODESET,BIAS_1_2|COM_4);        //模式设置  1/2 Bais 1/8 Duty
+ 420   1      //      WriteCmdVk2c24a(Vk2c24a_MODESET,BIAS_1_3|COM_4);        //模式设置  1/3 Bais 1/4 Duty
+ 421   1      //      WriteCmdVk2c24a(Vk2c24a_MODESET,BIAS_1_4|COM_4);        //模式设置  1/4 Bais 1/4 Duty
+ 422   1      //      WriteCmdVk2c24a(Vk2c24a_MODESET,BIAS_1_5|COM_4);        //模式设置  1/5 Bais 1/4 Duty
+ 423   1      //      vk2c24a_maxcom=4;
+ 424   1              
+ 425   1      //      WriteCmdVk2c24a(Vk2c24a_MODESET,BIAS_1_2|COM_8);        //模式设置  1/2 Bais 1/8 Duty
+ 426   1              WriteCmdVk2c24a(Vk2c24a_MODESET,BIAS_1_3|COM_8);        //模式设置  1/3 Bais 1/8 Duty
+C51 COMPILER V9.60.7.0   VK2C24A                                                           01/06/2025 16:22:12 PAGE 8   
+
+ 427   1      //      WriteCmdVk2c24a(Vk2c24a_MODESET,BIAS_1_4|COM_8);        //模式设置  1/4 Bais 1/8 Duty
+ 428   1      //      WriteCmdVk2c24a(Vk2c24a_MODESET,BIAS_1_5|COM_8);        //模式设置  1/5 Bais 1/8 Duty
+ 429   1              vk2c24a_maxcom=8;
+ 430   1      //      WriteCmdVk2c24a(Vk2c24a_MODESET,BIAS_1_3|COM_16); //模式设置  1/3 Bais 1/16 Duty
+ 431   1      //      WriteCmdVk2c24a(Vk2c24a_MODESET,BIAS_1_4|COM_16); //模式设置  1/3 Bais 1/16 Duty
+ 432   1      //      WriteCmdVk2c24a(Vk2c24a_MODESET,BIAS_1_5|COM_16); //模式设置  1/3 Bais 1/16 Duty
+ 433   1      //      vk2c24a_maxcom=16;
+ 434   1              WriteCmdVk2c24a(Vk2c24a_SYSSET,SYSON_LCDON);    //内部系统振荡器开，lcd开显示
+ 435   1      //      WriteCmdVk2c24a(Vk2c24a_FRAMESET,FRAME_80HZ);   //帧频率80Hz
+ 436   1      //      WriteCmdVk2c24a(Vk2c24a_FRAMESET,FRAME_160HZ);  //帧频率160Hz
+ 437   1              
+ 438   1      //      WriteCmdVk2c24a(Vk2c24a_BLINKSET,BLINK_OFF);            //闪烁关闭      
+ 439   1      //      WriteCmdVk2c24a(Vk2c24a_BLINKSET,BLINK_2HZ);            //闪烁2HZ
+ 440   1      //      WriteCmdVk2c24a(Vk2c24a_BLINKSET,BLINK_1HZ);            //闪烁1HZ
+ 441   1      //      WriteCmdVk2c24a(Vk2c24a_BLINKSET,BLINK_0D5HZ);    //闪烁0.5HZ
+ 442   1      
+ 443   1      
+ 444   1              //SEG/VLCD共用脚设为VLCD，内部电压调整功能关闭,VLCD和VDD短接VR=0偏置电压=VDD
+ 445   1      //      WriteCmdVk2c24a(Vk2c24a_IVASET,VLCDSEL_IVAOFF_R0); 
+ 446   1              //SEG/VLCD共用脚设为VLCD，内部电压调整功能关闭,VLCD和VDD串接电阻VR>0偏置电压=VLCD
+ 447   1      //      WriteCmdVk2c24a(Vk2c24a_IVASET,VLCDSEL_IVAOFF_R1); 
+ 448   1              //SEG/VLCD共用脚设为SEG，内部偏置电压调整：1/3bias=0.652VDD 1/4bias=0.714VDD
+ 449   1              WriteCmdVk2c24a(Vk2c24a_IVASET,SEGSEL_IVA00H);  
+ 450   1              
+ 451   1      
+ 452   1      
+ 453   1      
+ 454   1      
+ 455   1      }
+ 456          /*******************************************************************************
+ 457          * Function Name  : disp_3num
+ 458          * Description    : 显示3位数字
+ 459          * Input          ：dat->3位数字 十进制 
+ 460          * Output         : None
+ 461          * Return         : None
+ 462          *******************************************************************************/
+ 463          void disp_3num(unsigned int dat)
+ 464          {               
+ 465   1              unsigned dat8;
+ 466   1                      
+ 467   1              if(vk2c24a_maxcom==4)
+ 468   1              {
+ 469   2                      dat8=dat/100%10;        //显示百位
+ 470   2                      vk2c24a_dispram[2]&=0xf0;
+ 471   2                      vk2c24a_dispram[2]|=shuzi_zimo[dat8]&0x0f;
+ 472   2                      vk2c24a_dispram[2]&=0x8f;
+ 473   2                      vk2c24a_dispram[2]|=shuzi_zimo[dat8]&0xf0;
+ 474   2                      
+ 475   2                      dat8=dat/10%10;         //显示十位
+ 476   2                      vk2c24a_dispram[3]&=0xf0;
+ 477   2                      vk2c24a_dispram[3]|=shuzi_zimo[dat8]&0x0f;
+ 478   2                      vk2c24a_dispram[3]&=0x8f;
+ 479   2                      vk2c24a_dispram[3]|=shuzi_zimo[dat8]&0xf0;
+ 480   2                      
+ 481   2                      dat8=dat%10;                    //显示个位
+ 482   2                      vk2c24a_dispram[4]&=0xf0;
+ 483   2                      vk2c24a_dispram[4]|=shuzi_zimo[dat8]&0x0f;
+ 484   2                      vk2c24a_dispram[4]&=0x8f;
+ 485   2                      vk2c24a_dispram[4]|=shuzi_zimo[dat8]&0xf0;
+ 486   2                              
+ 487   2                      if(dat<100)                             //数字小于100，百位不显示
+ 488   2                      {
+C51 COMPILER V9.60.7.0   VK2C24A                                                           01/06/2025 16:22:12 PAGE 9   
+
+ 489   3                      vk2c24a_dispram[2]&=0xf0;
+ 490   3                      vk2c24a_dispram[2]&=0x8f;
+ 491   3                      }
+ 492   2                      if(dat<10)      //数字小于10，十位不显示
+ 493   2                      {
+ 494   3                      vk2c24a_dispram[3]&=0xf0;
+ 495   3                      vk2c24a_dispram[3]&=0x8f;
+ 496   3                      }
+ 497   2                      //SEG不连续1个1个数据送
+ 498   2      //              Write1DataVk2c24a(2,vk2c24a_dispram[2]);
+ 499   2      //              Write1DataVk2c24a(3,vk2c24a_dispram[3]);
+ 500   2      //              Write1DataVk2c24a(4,vk2c24a_dispram[4]);
+ 501   2                      //SEG连续送多个数据
+ 502   2                      WritenDataVk2c24a(2,&vk2c24a_dispram[2],3);
+ 503   2              }
+ 504   1              else
+ 505   1              {
+ 506   2                      dat8=dat/100%10;        //显示百位
+ 507   2                      vk2c24a_dispram[2]&=0x80;
+ 508   2                      vk2c24a_dispram[2]|=shuzi_zimo[dat8];
+ 509   2                      
+ 510   2                      dat8=dat/10%10;         //显示十位
+ 511   2                      vk2c24a_dispram[3]&=0x80;
+ 512   2                      vk2c24a_dispram[3]|=shuzi_zimo[dat8];
+ 513   2                      
+ 514   2                      dat8=dat%10;                    //显示个位
+ 515   2                      vk2c24a_dispram[4]&=0x80;
+ 516   2                      vk2c24a_dispram[4]|=shuzi_zimo[dat8];
+ 517   2                              
+ 518   2                      if(dat<100)                             //数字小于100，百位不显示
+ 519   2                      {
+ 520   3                              vk2c24a_dispram[2]&=0x80;
+ 521   3                      }
+ 522   2                      if(dat<10)      //数字小于10，十位不显示
+ 523   2                      {
+ 524   3                              vk2c24a_dispram[3]&=0x80;
+ 525   3                      }
+ 526   2                      //SEG不连续1个1个数据送
+ 527   2      //              Write1DataVk2c24a(2,vk2c24a_dispram[2]);
+ 528   2      //              Write1DataVk2c24a(3,vk2c24a_dispram[3]);
+ 529   2      //              Write1DataVk2c24a(4,vk2c24a_dispram[4]);
+ 530   2                      //SEG连续送多个数据
+ 531   2                      WritenDataVk2c24a(2,&vk2c24a_dispram[2],3);
+ 532   2              }
+ 533   1      }       
+ 534          
+ 535          
+ 536          void DisplayDigitOrChar(unsigned char pos, unsigned char index) 
+ 537          {
+ 538   1              unsigned char  Data;
+ 539   1          // 检查索引是否在数组范围内
+ 540   1          if (index >= sizeof(shuzi_zimo)) 
+ 541   1                      return;
+ 542   1      
+ 543   1          // 获取字模数据
+ 544   1          Data = shuzi_zimo[index];
+ 545   1      
+ 546   1          // 使用 Write1DataVk2c22 将数据写入显示 RAM 的指定位置
+ 547   1          Write1DataVk2c24a(pos, Data);
+ 548   1      }
+
+
+C51 COMPILER V9.60.7.0   VK2C24A                                                           01/06/2025 16:22:12 PAGE 10  
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1262    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =    136     144
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     15    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
