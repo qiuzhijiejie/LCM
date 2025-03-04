@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              02/18/2025 18:56:32 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              02/26/2025 20:21:00 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -25,15 +25,16 @@ line level    source
   15   1          Initial();
   16   1      //      MAPPING(1);
   17   1              while(1)
-  18   1              {               
-  19   2                      Display_pic();
-  20   2                      Show_chinese();
-  21   2                      Delay(800);
-  22   2                      Display_dot(0x00,0x00); 
-  23   2                      Display_One_Emglish();
-  24   2                      Delay(800);
-  25   2              }       
-  26   1      }
+  18   1              {
+  19   2      
+  20   2                      Display_pic();
+  21   2                      Show_chinese();
+  22   2                      Delay(3000);
+  23   2                      Display_dot(0x00,0x00); 
+  24   2                      Display_One_Emglish();
+  25   2                      Delay(3000);
+  26   2              }       
+  27   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

@@ -2,8 +2,8 @@
 #include "lcm9832a.h"
 #include <intrins.h>
 #include "pic.h"
-sbit int0=P2^2;		//external interrup input
-bit  log=0;			//display stop mark
+sbit int0=P2^2;		//External Interrup Input
+bit  log=0;			//Display Stop Mark
 
 void Step(void) interrupt 0 using 0
 {
@@ -364,7 +364,7 @@ void Display_dot(unsigned char value,unsigned char value1)
     return;
 }
 //Show some Chinese characters
-void Show_chinese(void) 
+ void Show_chinese(void) 
 {
     unsigned char page, col, index;
 	Display_Picture(pic1);
@@ -372,19 +372,19 @@ void Show_chinese(void)
 	//Display_One_Chinese_16x16(0,16,1,ft); 
     // 显示第一页的汉字
     page = 0;
-    for (index = 0, col = 10; index < 5; index++, col += 16) {
+    for (index = 0, col = 15; index < 4; index++, col += 16) {
         Display_One_Chinese_16x16(page, col, index, ft);
     }
 
     // 显示第二页的汉字
     page = 2;
-    for (index = 5, col = 10; index < 10; index++, col += 16) {
+    for (index = 4, col = 15; index < 8; index++, col += 16) {
         Display_One_Chinese_16x16(page, col, index, ft);
     }
 }
 
 
-//display one 16*16 dot character
+//Display One 16*16 Dot Character
 void Display_One_Chinese_16x16(unsigned char page, unsigned char col, unsigned char Character_coding,  unsigned char ft[]) 
 {
     unsigned char i,columnaddress=col;
@@ -420,8 +420,6 @@ void Display_One_Chinese_16x16(unsigned char page, unsigned char col, unsigned c
 		 columnaddress+=1;
 		}
 	}
-
-
 	else  
 	{		       
 		for(i=0;i<16;i++)
@@ -461,7 +459,7 @@ void Display_One_Chinese_16x16(unsigned char page, unsigned char col, unsigned c
 }
 
 
-
+//Display One 8*16 Dot Character
 void Display_One_Chinese_8x16(unsigned char page, unsigned char col, unsigned char Character_coding, unsigned char ft[]) 
 {
     unsigned char i, columnaddress = col;
@@ -545,7 +543,7 @@ void Display_One_Chinese_8x16(unsigned char page, unsigned char col, unsigned ch
     }
 }
 
-//display Picture
+//Display Picture
 void Display_Picture(unsigned char pic[])
 {
     unsigned char i,j;
@@ -595,17 +593,17 @@ void Display_One_Emglish(void)
 void Display_pic(void)
 {
 		Display_dot(0xAA,0x55);
-		Delay(400);
+		Delay(4000);
 		Display_dot(0x55,0xAA);
-		Delay(400);
+		Delay(4000);
 		Display_dot(0x55,0x55);
-		Delay(400);
+		Delay(4000);
 		Display_dot(0xAA,0xAA);
-		Delay(400);
+		Delay(4000);
 		Display_dot(0xFF,0x00);
-		Delay(400);
+		Delay(4000);
 		Display_dot(0x00,0xFF);
-		Delay(400);
+		Delay(4000);
 }
 
 

@@ -77,6 +77,9 @@
 #define VK2C23A_SDA_PORT   P3
 #define VK2C23A_SDA_IO     P3_1
 
+
+#define KEY     P2_0
+
 //以下管脚输出定义根据客户单片机做相应的修改  
 #define VK2C23A_SCL_H() 				VK2C23A_SCL_IO = 1 
 #define VK2C23A_SCL_L() 				VK2C23A_SCL_IO = 0 
@@ -94,83 +97,7 @@ void VK2C23A_DisDotOn(unsigned char seg,unsigned char com);
 void VK2C23A_DisDotOff(unsigned char seg,unsigned char com);
 void DisplayDigitOrChar(unsigned char pos, unsigned char index) ;
 void delay_nms(unsigned long int n);
-void delay_nus(unsigned int n)	;
+void delay_nus(unsigned int n);
 void DisplayDigitOrChar1(unsigned char pos, unsigned char index) ;
-
+unsigned int ReadKey() ;
 #endif  /*__VK2C23A_H*/
-
-
-
-
-
-
-//#include <avr/io.h>
-//#include <util/delay.h>
-
-//// 定义引脚
-//#define DATA_PORT PORTB
-//#define DATA_DDR  DDRB
-//#define RS_PIN    PORTC0
-//#define RW_PIN    PORTC1
-//#define EN_PIN    PORTC2
-
-//// 函数声明
-//void LCD_Command(unsigned char command);
-//void LCD_Data(unsigned char data);
-//void LCD_Init();
-//void LCD_String(char *str);
-
-//int main(void) {
-//    // 初始化LCD
-//    LCD_Init();
-//    
-//    // 显示字符串
-//    LCD_String("Hello, World!");
-//    
-//    while (1) {
-//        // 主循环
-//    }
-//}
-
-//// 发送命令到LCD
-//void LCD_Command(unsigned char command) {
-//    DATA_PORT = command;
-//    PORTC &= ~(1 << RS_PIN); // RS = 0 (命令模式)
-//    PORTC &= ~(1 << RW_PIN); // RW = 0 (写模式)
-//    PORTC |= (1 << EN_PIN);  // EN = 1
-//    _delay_ms(1);
-//    PORTC &= ~(1 << EN_PIN); // EN = 0
-//    _delay_ms(1);
-//}
-
-//// 发送数据到LCD
-//void LCD_Data(unsigned char data) {
-//    DATA_PORT = data;
-//    PORTC |= (1 << RS_PIN);  // RS = 1 (数据模式)
-//    PORTC &= ~(1 << RW_PIN); // RW = 0 (写模式)
-//    PORTC |= (1 << EN_PIN);  // EN = 1
-//    _delay_ms(1);
-//    PORTC &= ~(1 << EN_PIN); // EN = 0
-//    _delay_ms(1);
-//}
-
-//// 初始化LCD
-//void LCD_Init() {
-//    DATA_DDR = 0xFF; // 设置数据端口为输出
-//    DDRC |= (1 << RS_PIN) | (1 << RW_PIN) | (1 << EN_PIN); // 设置控制引脚为输出
-//    
-//    _delay_ms(20); // 等待LCD上电稳定
-//    
-//    LCD_Command(0x38); // 8位数据接口，2行显示，5x7点阵
-//    LCD_Command(0x0C); // 显示开，光标关，光标不闪烁
-//    LCD_Command(0x06); // 地址自动递增，不移屏
-//    LCD_Command(0x01); // 清屏
-//    _delay_ms(2);
-//}
-
-//// 显示字符串
-//void LCD_String(char *str) {
-//    while (*str) {
-//        LCD_Data(*str++);
-//    }
-//}

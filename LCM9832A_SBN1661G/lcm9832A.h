@@ -15,7 +15,6 @@
 #define KEY                    P2_0	    //KEY PIN;
 #define DATA_BUS               P1		//Data Bus
 
-
 void MAPPING(unsigned char bit_value);
 void Display_One_Emglish(void);
 void Display_One_Chinese_8x16(unsigned char page, unsigned char col, unsigned char Character_coding, unsigned char ft[]) ;
@@ -38,6 +37,5 @@ void Delay1(uint x);
 void Delay(uint MS);
 unsigned char Key();
 void Display_pic(void);
-
 
 #endif

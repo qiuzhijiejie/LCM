@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   LCM9832A                                                          02/18/2025 18:51:14 PAGE 1   
+C51 COMPILER V9.60.7.0   LCM9832A                                                          02/26/2025 20:20:59 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCM9832A
@@ -12,8 +12,8 @@ line level    source
    2          #include "lcm9832a.h"
    3          #include <intrins.h>
    4          #include "pic.h"
-   5          sbit int0=P2^2;         //external interrup input
-   6          bit  log=0;                     //display stop mark
+   5          sbit int0=P2^2;         //External Interrup Input
+   6          bit  log=0;                     //Display Stop Mark
    7          
    8          void Step(void) interrupt 0 using 0
    9          {
@@ -62,7 +62,7 @@ line level    source
   51          
   52           /*
   53           ////////////////////////Timer interrupt   Produce 10 KHZ clock signal
-C51 COMPILER V9.60.7.0   LCM9832A                                                          02/18/2025 18:51:14 PAGE 2   
+C51 COMPILER V9.60.7.0   LCM9832A                                                          02/26/2025 20:20:59 PAGE 2   
 
   54          void clock_timer(void) interrupt 1 using 1  //
   55          {
@@ -126,7 +126,7 @@ line level    source
  112   2                      E_RD=1;
  113   2                      _nop_();
  114   2                  flag=DATA_BUS;
-C51 COMPILER V9.60.7.0   LCM9832A                                                          02/18/2025 18:51:14 PAGE 3   
+C51 COMPILER V9.60.7.0   LCM9832A                                                          02/26/2025 20:20:59 PAGE 3   
 
  115   2              E_RD=0;
  116   2              }
@@ -190,7 +190,7 @@ line level    source
  174          #if (TIMING==6800)
  175          //6800 interface  //write data to right half screen 
  176          void Write_Data_R(unsigned char dat) 
-C51 COMPILER V9.60.7.0   LCM9832A                                                          02/18/2025 18:51:14 PAGE 4   
+C51 COMPILER V9.60.7.0   LCM9832A                                                          02/26/2025 20:20:59 PAGE 4   
 
  177          {
  178   1         Busy_R();
@@ -254,7 +254,7 @@ line level    source
                       DATA_BUS=cmd;
                       _nop_();
                   RW_WR=1;
-C51 COMPILER V9.60.7.0   LCM9832A                                                          02/18/2025 18:51:14 PAGE 5   
+C51 COMPILER V9.60.7.0   LCM9832A                                                          02/26/2025 20:20:59 PAGE 5   
 
                       CS1=1;
                       return;
@@ -318,7 +318,7 @@ line level    source
  298          
  299          //Set right half screen column address
  300          void Set_Column_Address_R(unsigned char address)
-C51 COMPILER V9.60.7.0   LCM9832A                                                          02/18/2025 18:51:14 PAGE 6   
+C51 COMPILER V9.60.7.0   LCM9832A                                                          02/26/2025 20:20:59 PAGE 6   
 
  301          {
  302   1          Write_Instruction_R(address&0x7F);
@@ -382,13 +382,13 @@ line level    source
  360   3                              Write_Data_R(value1);
  361   3                              Write_Data_R(value);
  362   3                      }
-C51 COMPILER V9.60.7.0   LCM9832A                                                          02/18/2025 18:51:14 PAGE 7   
+C51 COMPILER V9.60.7.0   LCM9832A                                                          02/26/2025 20:20:59 PAGE 7   
 
  363   2              }
  364   1          return;
  365   1      }
  366          //Show some Chinese characters
- 367          void Show_chinese(void) 
+ 367           void Show_chinese(void) 
  368          {
  369   1          unsigned char page, col, index;
  370   1              Display_Picture(pic1);
@@ -396,19 +396,19 @@ line level    source
  372   1              //Display_One_Chinese_16x16(0,16,1,ft); 
  373   1          // 显示第一页的汉字
  374   1          page = 0;
- 375   1          for (index = 0, col = 10; index < 5; index++, col += 16) {
+ 375   1          for (index = 0, col = 15; index < 4; index++, col += 16) {
  376   2              Display_One_Chinese_16x16(page, col, index, ft);
  377   2          }
  378   1      
  379   1          // 显示第二页的汉字
  380   1          page = 2;
- 381   1          for (index = 5, col = 10; index < 10; index++, col += 16) {
+ 381   1          for (index = 4, col = 15; index < 8; index++, col += 16) {
  382   2              Display_One_Chinese_16x16(page, col, index, ft);
  383   2          }
  384   1      }
  385          
  386          
- 387          //display one 16*16 dot character
+ 387          //Display One 16*16 Dot Character
  388          void Display_One_Chinese_16x16(unsigned char page, unsigned char col, unsigned char Character_coding,  uns
              -igned char ft[]) 
  389          {
@@ -445,232 +445,230 @@ line level    source
  420   3                       columnaddress+=1;
  421   3                      }
  422   2              }
- 423   1      
-C51 COMPILER V9.60.7.0   LCM9832A                                                          02/18/2025 18:51:14 PAGE 8   
+ 423   1              else  
+C51 COMPILER V9.60.7.0   LCM9832A                                                          02/26/2025 20:20:59 PAGE 8   
 
- 424   1      
- 425   1              else  
- 426   1              {                      
- 427   2                      for(i=0;i<16;i++)
- 428   2                      {
- 429   3                              if(columnaddress<122)            
- 430   3                              {Set_Column_Address_R(columnaddress-61);
- 431   4                              Write_Data_R(ft[Character_coding*32+i]);
- 432   4                              }
- 433   3                              else
- 434   3                              {if(page<=1)
- 435   4                                              {Set_Page_Address(page+2);
- 436   5                                              Set_Column_Address_L(columnaddress-122);
- 437   5                                              Write_Data_L(ft[Character_coding*32+i]);
- 438   5                                              }
- 439   4                              }       
- 440   3                       columnaddress+=1;
- 441   3                      }
- 442   2      
- 443   2                      columnaddress=col;
- 444   2                      Set_Page_Address(page+1);       
- 445   2                      for(i=16;i<32;i++)
- 446   2                      {
- 447   3                               if(columnaddress<122)           
- 448   3                              {Set_Column_Address_R(columnaddress-61);
- 449   4                              Write_Data_R(ft[Character_coding*32+i]);
- 450   4                              }
- 451   3                              else
- 452   3                              {if(page<=1){Set_Page_Address(page+3);
- 453   5                                                      Set_Column_Address_L(columnaddress-122);
- 454   5                                                      Write_Data_L(ft[Character_coding*32+i]);
- 455   5                                                      }
- 456   4                              }
- 457   3                       columnaddress+=1;
- 458   3                      }
- 459   2              }
- 460   1      
- 461   1      }
- 462          
- 463          
- 464          
- 465          void Display_One_Chinese_8x16(unsigned char page, unsigned char col, unsigned char Character_coding, unsig
+ 424   1              {                      
+ 425   2                      for(i=0;i<16;i++)
+ 426   2                      {
+ 427   3                              if(columnaddress<122)            
+ 428   3                              {Set_Column_Address_R(columnaddress-61);
+ 429   4                              Write_Data_R(ft[Character_coding*32+i]);
+ 430   4                              }
+ 431   3                              else
+ 432   3                              {if(page<=1)
+ 433   4                                              {Set_Page_Address(page+2);
+ 434   5                                              Set_Column_Address_L(columnaddress-122);
+ 435   5                                              Write_Data_L(ft[Character_coding*32+i]);
+ 436   5                                              }
+ 437   4                              }       
+ 438   3                       columnaddress+=1;
+ 439   3                      }
+ 440   2      
+ 441   2                      columnaddress=col;
+ 442   2                      Set_Page_Address(page+1);       
+ 443   2                      for(i=16;i<32;i++)
+ 444   2                      {
+ 445   3                               if(columnaddress<122)           
+ 446   3                              {Set_Column_Address_R(columnaddress-61);
+ 447   4                              Write_Data_R(ft[Character_coding*32+i]);
+ 448   4                              }
+ 449   3                              else
+ 450   3                              {if(page<=1){Set_Page_Address(page+3);
+ 451   5                                                      Set_Column_Address_L(columnaddress-122);
+ 452   5                                                      Write_Data_L(ft[Character_coding*32+i]);
+ 453   5                                                      }
+ 454   4                              }
+ 455   3                       columnaddress+=1;
+ 456   3                      }
+ 457   2              }
+ 458   1      
+ 459   1      }
+ 460          
+ 461          
+ 462          //Display One 8*16 Dot Character
+ 463          void Display_One_Chinese_8x16(unsigned char page, unsigned char col, unsigned char Character_coding, unsig
              -ned char ft[]) 
- 466          {
- 467   1          unsigned char i, columnaddress = col;
- 468   1      
- 469   1          Set_Page_Address(page);
- 470   1          if (col < 61) 
- 471   1          {                  
- 472   2              for (i = 0; i < 8; i++)  // 每次写入 8 列
- 473   2              {
- 474   3                  if (columnaddress < 61)              
- 475   3                  {
- 476   4                      Set_Column_Address_L(columnaddress);
- 477   4                      Write_Data_L(ft[Character_coding * 16 + i]);
- 478   4                  }
- 479   3                  else
- 480   3                  {
- 481   4                      Set_Column_Address_R(columnaddress - 61);
- 482   4                      Write_Data_R(ft[Character_coding * 16 + i]);
- 483   4                  }
- 484   3                  columnaddress += 1;
-C51 COMPILER V9.60.7.0   LCM9832A                                                          02/18/2025 18:51:14 PAGE 9   
+ 464          {
+ 465   1          unsigned char i, columnaddress = col;
+ 466   1      
+ 467   1          Set_Page_Address(page);
+ 468   1          if (col < 61) 
+ 469   1          {                  
+ 470   2              for (i = 0; i < 8; i++)  // 每次写入 8 列
+ 471   2              {
+ 472   3                  if (columnaddress < 61)              
+ 473   3                  {
+ 474   4                      Set_Column_Address_L(columnaddress);
+ 475   4                      Write_Data_L(ft[Character_coding * 16 + i]);
+ 476   4                  }
+ 477   3                  else
+ 478   3                  {
+ 479   4                      Set_Column_Address_R(columnaddress - 61);
+ 480   4                      Write_Data_R(ft[Character_coding * 16 + i]);
+ 481   4                  }
+ 482   3                  columnaddress += 1;
+ 483   3              }
+ 484   2      
+C51 COMPILER V9.60.7.0   LCM9832A                                                          02/26/2025 20:20:59 PAGE 9   
 
- 485   3              }
- 486   2      
- 487   2              columnaddress = col;
- 488   2              Set_Page_Address(page + 1);     
- 489   2              for (i = 8; i < 16; i++)  // 第二部分数据（第 8 到 16 行）
- 490   2              {
- 491   3                  if (columnaddress < 61)              
- 492   3                  {
- 493   4                      Set_Column_Address_L(columnaddress);
- 494   4                      Write_Data_L(ft[Character_coding * 16 + i]);
- 495   4                  }
- 496   3                  else
- 497   3                  {
- 498   4                      Set_Column_Address_R(columnaddress - 61);
- 499   4                      Write_Data_R(ft[Character_coding * 16 + i]);
- 500   4                  }
- 501   3                  columnaddress += 1;
- 502   3              }
- 503   2          }
- 504   1          else  
- 505   1          {                  
- 506   2              for (i = 0; i < 8; i++)  // 每次写入 8 列
- 507   2              {
- 508   3                  if (columnaddress < 122)             
- 509   3                  {
- 510   4                      Set_Column_Address_R(columnaddress - 61);
- 511   4                      Write_Data_R(ft[Character_coding * 16 + i]);
- 512   4                  }
- 513   3                  else
- 514   3                  {
- 515   4                      if (page <= 1)
- 516   4                      {
- 517   5                          Set_Page_Address(page + 2);
- 518   5                          Set_Column_Address_L(columnaddress - 122);
- 519   5                          Write_Data_L(ft[Character_coding * 16 + i]);
- 520   5                      }
- 521   4                  }   
- 522   3                  columnaddress += 1;
- 523   3              }
- 524   2      
- 525   2              columnaddress = col;
- 526   2              Set_Page_Address(page + 1);     
- 527   2              for (i = 8; i < 16; i++)  // 第二部分数据（第 8 到 16 行）
- 528   2              {
- 529   3                  if (columnaddress < 122)             
- 530   3                  {
- 531   4                      Set_Column_Address_R(columnaddress - 61);
- 532   4                      Write_Data_R(ft[Character_coding * 16 + i]);
- 533   4                  }
- 534   3                  else
- 535   3                  {
- 536   4                      if (page <= 1)
- 537   4                      {
- 538   5                          Set_Page_Address(page + 3);
- 539   5                          Set_Column_Address_L(columnaddress - 122);
- 540   5                          Write_Data_L(ft[Character_coding * 16 + i]);
- 541   5                      }
- 542   4                  }
- 543   3                  columnaddress += 1;
- 544   3              }
- 545   2          }
- 546   1      }
-C51 COMPILER V9.60.7.0   LCM9832A                                                          02/18/2025 18:51:14 PAGE 10  
+ 485   2              columnaddress = col;
+ 486   2              Set_Page_Address(page + 1);     
+ 487   2              for (i = 8; i < 16; i++)  // 第二部分数据（第 8 到 16 行）
+ 488   2              {
+ 489   3                  if (columnaddress < 61)              
+ 490   3                  {
+ 491   4                      Set_Column_Address_L(columnaddress);
+ 492   4                      Write_Data_L(ft[Character_coding * 16 + i]);
+ 493   4                  }
+ 494   3                  else
+ 495   3                  {
+ 496   4                      Set_Column_Address_R(columnaddress - 61);
+ 497   4                      Write_Data_R(ft[Character_coding * 16 + i]);
+ 498   4                  }
+ 499   3                  columnaddress += 1;
+ 500   3              }
+ 501   2          }
+ 502   1          else  
+ 503   1          {                  
+ 504   2              for (i = 0; i < 8; i++)  // 每次写入 8 列
+ 505   2              {
+ 506   3                  if (columnaddress < 122)             
+ 507   3                  {
+ 508   4                      Set_Column_Address_R(columnaddress - 61);
+ 509   4                      Write_Data_R(ft[Character_coding * 16 + i]);
+ 510   4                  }
+ 511   3                  else
+ 512   3                  {
+ 513   4                      if (page <= 1)
+ 514   4                      {
+ 515   5                          Set_Page_Address(page + 2);
+ 516   5                          Set_Column_Address_L(columnaddress - 122);
+ 517   5                          Write_Data_L(ft[Character_coding * 16 + i]);
+ 518   5                      }
+ 519   4                  }   
+ 520   3                  columnaddress += 1;
+ 521   3              }
+ 522   2      
+ 523   2              columnaddress = col;
+ 524   2              Set_Page_Address(page + 1);     
+ 525   2              for (i = 8; i < 16; i++)  // 第二部分数据（第 8 到 16 行）
+ 526   2              {
+ 527   3                  if (columnaddress < 122)             
+ 528   3                  {
+ 529   4                      Set_Column_Address_R(columnaddress - 61);
+ 530   4                      Write_Data_R(ft[Character_coding * 16 + i]);
+ 531   4                  }
+ 532   3                  else
+ 533   3                  {
+ 534   4                      if (page <= 1)
+ 535   4                      {
+ 536   5                          Set_Page_Address(page + 3);
+ 537   5                          Set_Column_Address_L(columnaddress - 122);
+ 538   5                          Write_Data_L(ft[Character_coding * 16 + i]);
+ 539   5                      }
+ 540   4                  }
+ 541   3                  columnaddress += 1;
+ 542   3              }
+ 543   2          }
+ 544   1      }
+ 545          
+ 546          //Display Picture
+C51 COMPILER V9.60.7.0   LCM9832A                                                          02/26/2025 20:20:59 PAGE 10  
 
- 547          
- 548          //display Picture
- 549          void Display_Picture(unsigned char pic[])
- 550          {
- 551   1          unsigned char i,j;
- 552   1      
- 553   1              for(i=0;i<0x04;i++)
- 554   1              {
- 555   2              Set_Page_Address(i);
- 556   2          Set_Column_Address_L(0x00);
- 557   2          Set_Column_Address_R(0x00);
- 558   2      
- 559   2              for(j=0;j<61;j++)                               //display left half screen
- 560   2                      {
- 561   3                          Write_Data_L(pic[i*98+j]);
- 562   3                      }
- 563   2              for(j=61;j<98;j++)                              //display right half screen
- 564   2                      {
- 565   3                          Write_Data_R(pic[i*98+j]);
- 566   3                      }
- 567   2              }
- 568   1          return;
- 569   1      }
- 570          
- 571          
- 572          void Display_One_Emglish(void)
- 573          {       
- 574   1          unsigned char col, index;
- 575   1      
- 576   1              Display_Picture(pic2);
- 577   1              
- 578   1          for (index = 0, col = 15; index < 8; index++, col += 8) {
- 579   2              Display_One_Chinese_8x16(1, col, index, ft0);
- 580   2          }
- 581   1      
- 582   1      }
- 583          //unsigned char Key()
- 584          //{
- 585          //      if(KEY==0)
- 586          //      {
- 587          //              Delay(1000);
- 588          //              while(KEY==0);  
- 589          //              return 1;
- 590          //      }
- 591          //      return 1;
- 592          //}
- 593          
- 594          
- 595          void Display_pic(void)
- 596          {
- 597   1                      Display_dot(0xAA,0x55);
- 598   1                      Delay(400);
- 599   1                      Display_dot(0x55,0xAA);
- 600   1                      Delay(400);
- 601   1                      Display_dot(0x55,0x55);
- 602   1                      Delay(400);
- 603   1                      Display_dot(0xAA,0xAA);
- 604   1                      Delay(400);
- 605   1                      Display_dot(0xFF,0x00);
- 606   1                      Delay(400);
- 607   1                      Display_dot(0x00,0xFF);
- 608   1                      Delay(400);
-C51 COMPILER V9.60.7.0   LCM9832A                                                          02/18/2025 18:51:14 PAGE 11  
+ 547          void Display_Picture(unsigned char pic[])
+ 548          {
+ 549   1          unsigned char i,j;
+ 550   1      
+ 551   1              for(i=0;i<0x04;i++)
+ 552   1              {
+ 553   2              Set_Page_Address(i);
+ 554   2          Set_Column_Address_L(0x00);
+ 555   2          Set_Column_Address_R(0x00);
+ 556   2      
+ 557   2              for(j=0;j<61;j++)                               //display left half screen
+ 558   2                      {
+ 559   3                          Write_Data_L(pic[i*98+j]);
+ 560   3                      }
+ 561   2              for(j=61;j<98;j++)                              //display right half screen
+ 562   2                      {
+ 563   3                          Write_Data_R(pic[i*98+j]);
+ 564   3                      }
+ 565   2              }
+ 566   1          return;
+ 567   1      }
+ 568          
+ 569          
+ 570          void Display_One_Emglish(void)
+ 571          {       
+ 572   1          unsigned char col, index;
+ 573   1      
+ 574   1              Display_Picture(pic2);
+ 575   1              
+ 576   1          for (index = 0, col = 15; index < 8; index++, col += 8) {
+ 577   2              Display_One_Chinese_8x16(1, col, index, ft0);
+ 578   2          }
+ 579   1      
+ 580   1      }
+ 581          //unsigned char Key()
+ 582          //{
+ 583          //      if(KEY==0)
+ 584          //      {
+ 585          //              Delay(1000);
+ 586          //              while(KEY==0);  
+ 587          //              return 1;
+ 588          //      }
+ 589          //      return 1;
+ 590          //}
+ 591          
+ 592          
+ 593          void Display_pic(void)
+ 594          {
+ 595   1                      Display_dot(0xAA,0x55);
+ 596   1                      Delay(4000);
+ 597   1                      Display_dot(0x55,0xAA);
+ 598   1                      Delay(4000);
+ 599   1                      Display_dot(0x55,0x55);
+ 600   1                      Delay(4000);
+ 601   1                      Display_dot(0xAA,0xAA);
+ 602   1                      Delay(4000);
+ 603   1                      Display_dot(0xFF,0x00);
+ 604   1                      Delay(4000);
+ 605   1                      Display_dot(0x00,0xFF);
+ 606   1                      Delay(4000);
+ 607   1      }
+ 608          
+C51 COMPILER V9.60.7.0   LCM9832A                                                          02/26/2025 20:20:59 PAGE 11  
 
- 609   1      }
- 610          
- 611          
- 612          void MAPPING(unsigned char bit_value) // bit_value: 1 or 0
- 613          {
- 614   1          unsigned char flag = 0xff;
- 615   1          A0_RS = 0;  // command
- 616   1          CS1 = 0;    // Left
- 617   1          E_RD = 0;
- 618   1          RW_WR = 1;
- 619   1      
- 620   1          if (bit_value == 1) {
- 621   2              // Set the 6th bit to 1
- 622   2              while ((flag & 0x40) == 0x40) { // Check the 6th bit (0x40)
- 623   3                  E_RD = 1;
- 624   3                  _nop_();
- 625   3                  flag = DATA_BUS;
- 626   3                  E_RD = 0;
- 627   3              }
- 628   2          } else {
- 629   2              // Set the 6th bit to 0
- 630   2              while ((flag & 0x40) != 0x40) { // Check the 6th bit (0x40)
- 631   3                  E_RD = 1;
- 632   3                  _nop_();
- 633   3                  flag = DATA_BUS;
- 634   3                  E_RD = 0;
- 635   3              }
- 636   2          }
- 637   1      
- 638   1          CS1 = 1;
- 639   1      }
+ 609          
+ 610          void MAPPING(unsigned char bit_value) // bit_value: 1 or 0
+ 611          {
+ 612   1          unsigned char flag = 0xff;
+ 613   1          A0_RS = 0;  // command
+ 614   1          CS1 = 0;    // Left
+ 615   1          E_RD = 0;
+ 616   1          RW_WR = 1;
+ 617   1      
+ 618   1          if (bit_value == 1) {
+ 619   2              // Set the 6th bit to 1
+ 620   2              while ((flag & 0x40) == 0x40) { // Check the 6th bit (0x40)
+ 621   3                  E_RD = 1;
+ 622   3                  _nop_();
+ 623   3                  flag = DATA_BUS;
+ 624   3                  E_RD = 0;
+ 625   3              }
+ 626   2          } else {
+ 627   2              // Set the 6th bit to 0
+ 628   2              while ((flag & 0x40) != 0x40) { // Check the 6th bit (0x40)
+ 629   3                  E_RD = 1;
+ 630   3                  _nop_();
+ 631   3                  flag = DATA_BUS;
+ 632   3                  E_RD = 0;
+ 633   3              }
+ 634   2          }
+ 635   1      
+ 636   1          CS1 = 1;
+ 637   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

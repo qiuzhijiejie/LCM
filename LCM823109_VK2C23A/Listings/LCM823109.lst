@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   LCM823109                                                         02/17/2025 16:15:07 PAGE 1   
+C51 COMPILER V9.60.7.0   LCM823109                                                         03/03/2025 20:27:40 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCM823109
@@ -12,7 +12,7 @@ line level    source
    2          #include <intrins.h> 
    3          
    4          #define VK2C23A_CLK 1 //SCL信号线频率,由delay_nus实现 50->10kHz 10->50kHz 5->100kHz
-   5          
+   5          extern unsigned char seg,i,j;
    6          //VK2C23A 8com 
    7          unsigned char VK2C23A_segtab[VK2C23A_SEGNUM]={
    8                  5,6,7,8,9,                                      //SEG5-SEG9
@@ -62,7 +62,7 @@ line level    source
   52          {
   53   1              while(x--)
   54   1              {
-C51 COMPILER V9.60.7.0   LCM823109                                                         02/17/2025 16:15:07 PAGE 2   
+C51 COMPILER V9.60.7.0   LCM823109                                                         03/03/2025 20:27:40 PAGE 2   
 
   55   2                      delay_nus(1000);
   56   2              }
@@ -126,7 +126,7 @@ line level    source
  114   3          }
  115   2        } 
  116   1              VK2C23A_SCL_L();
-C51 COMPILER V9.60.7.0   LCM823109                                                         02/17/2025 16:15:07 PAGE 3   
+C51 COMPILER V9.60.7.0   LCM823109                                                         03/03/2025 20:27:40 PAGE 3   
 
  117   1        
  118   1        return RetValue;
@@ -190,7 +190,7 @@ line level    source
  176          /*******************************************************************************
  177          * Function Name  : WriteCmd
  178          * Description    : 写1字节命令带参数
-C51 COMPILER V9.60.7.0   LCM823109                                                         02/17/2025 16:15:07 PAGE 4   
+C51 COMPILER V9.60.7.0   LCM823109                                                         03/03/2025 20:27:40 PAGE 4   
 
  179          * Input          : cmd-要写入的命令
  180          *                : data-要写入的参数
@@ -254,7 +254,7 @@ line level    source
  238          
  239          
  240          /*******************************************************************************
-C51 COMPILER V9.60.7.0   LCM823109                                                         02/17/2025 16:15:07 PAGE 5   
+C51 COMPILER V9.60.7.0   LCM823109                                                         03/03/2025 20:27:40 PAGE 5   
 
  241          * Function Name  : Write1Data
  242          * Description    : 写1字节数据到显示RAM
@@ -318,7 +318,7 @@ line level    source
  300   1              //START信号     
  301   1              VK2C23A_I2CStart();                                                                     
  302   1              //SLAVE地址
-C51 COMPILER V9.60.7.0   LCM823109                                                         02/17/2025 16:15:07 PAGE 6   
+C51 COMPILER V9.60.7.0   LCM823109                                                         03/03/2025 20:27:40 PAGE 6   
 
  303   1              VK2C23A_I2CWriteByte(VK2C23A_ADDR);     
  304   1              if(VK2C23A_I2CSlaveAck() == 1 )
@@ -382,7 +382,7 @@ line level    source
  362   1              {
  363   2                      VK2C23A_I2CStop();                                                                                                      
  364   2                      return 0;                                                                               
-C51 COMPILER V9.60.7.0   LCM823109                                                         02/17/2025 16:15:07 PAGE 7   
+C51 COMPILER V9.60.7.0   LCM823109                                                         03/03/2025 20:27:40 PAGE 7   
 
  365   2              }   
  366   1              //显示RAM起始地址
@@ -446,7 +446,7 @@ line level    source
  424   2                      
  425   2                      WritenDataVK2C23A(0,VK2C23A_dispram,52);//这里送8bit数据对应1个SEG，每8bit数据地址加1，每8位数据1个ACK
  426   2              }
-C51 COMPILER V9.60.7.0   LCM823109                                                         02/17/2025 16:15:07 PAGE 8   
+C51 COMPILER V9.60.7.0   LCM823109                                                         03/03/2025 20:27:40 PAGE 8   
 
  427   1      }
  428          /*******************************************************************************
@@ -510,7 +510,7 @@ line level    source
  486          /*******************************************************************************
  487          * Function Name  : Enter_Standby
  488          * Description    : 进入掉电低功耗模式,掉电无显示
-C51 COMPILER V9.60.7.0   LCM823109                                                         02/17/2025 16:15:07 PAGE 9   
+C51 COMPILER V9.60.7.0   LCM823109                                                         03/03/2025 20:27:40 PAGE 9   
 
  489          * Input          ：None 
  490          * Output         : None
@@ -574,7 +574,7 @@ line level    source
  548   1      //      WriteCmdVK2C23A(VK2C23A_BLINKSET,BLINK_1HZ);            //闪烁1HZ
  549   1      //      WriteCmdVK2C23A(VK2C23A_BLINKSET,BLINK_0D5HZ);  //闪烁0.5HZ
  550   1              //SEG/VLCD共用脚设为VLCD，内部电压调整功能关闭,VLCD和VDD短接VR=0偏置电压=VDD
-C51 COMPILER V9.60.7.0   LCM823109                                                         02/17/2025 16:15:07 PAGE 10  
+C51 COMPILER V9.60.7.0   LCM823109                                                         03/03/2025 20:27:40 PAGE 10  
 
  551   1      //      WriteCmdVK2C23A(VK2C23A_IVASET,VLCDSEL_IVAOFF_R0); 
  552   1              //SEG/VLCD共用脚设为VLCD，内部电压调整功能关闭,VLCD和VDD串接电阻VR>0偏置电压=VLCD
@@ -633,13 +633,28 @@ line level    source
  605   1          // 使用 Write1DataVk2c22 将数据写入显示 RAM 的指定位置
  606   1          Write1DataVK2C23A(pos, Data);
  607   1      }
+ 608          
+ 609          
+ 610          unsigned int ReadKey() 
+ 611          {
+ 612   1          if (KEY == 0) 
+C51 COMPILER V9.60.7.0   LCM823109                                                         03/03/2025 20:27:40 PAGE 11  
+
+ 613   1              {  
+ 614   2              delay_nms(5);  
+ 615   2              if (KEY == 0) 
+ 616   2                      {  
+ 617   3                  while (KEY == 0);  
+ 618   3                  return 1;  
+ 619   3              }
+ 620   2          }
+ 621   1          return 0;  
+ 622   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1214    ----
+   CODE SIZE        =   1243    ----
    CONSTANT SIZE    =   ----    ----
-C51 COMPILER V9.60.7.0   LCM823109                                                         02/17/2025 16:15:07 PAGE 11  
-
    XDATA SIZE       =    157      31
    PDATA SIZE       =   ----    ----
    DATA SIZE        =     30    ----

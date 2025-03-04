@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              02/17/2025 17:14:29 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              03/03/2025 20:28:55 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -14,91 +14,85 @@ line level    source
    4          {       
    5   1              VK2C23A_Init();
    6   1              VK2C23A_DisAll(0x00);
-   7   1              while(1)
-   8   1              {
-   9   2                      
-  10   2      //      for(i=0;i<8;i++)
-  11   2      //      {
-  12   2      //              for ( seg = 0; seg < VK2C23A_SEGNUM; seg++){VK2C23A_DisDotOn(seg,i);}
-  13   2      //      }
-  14   2      //      VK2C23A_DisAll(0x00);
-  15   2              
-  16   2              for ( i = 10; i > 0; i-- ) 
-  17   2              {
-  18   3                      for ( j = 0; j < 24; j++) 
-  19   3                      {  
-  20   4                              DisplayDigitOrChar(j, i);
-  21   4                      }
-  22   3                      
-  23   3                      for ( j = 24; j < 51; j++) 
-  24   3                      {  
-  25   4                              DisplayDigitOrChar1(j, i);
-  26   4                      }
-  27   3              }
-  28   2              
-  29   2              
-  30   2      
-  31   2      //      VK2C23A_DisAll(0x00);
-  32   2                      
-  33   2      //         for ( seg = 0; seg < VK2C23A_SEGNUM; seg++){VK2C23A_DisDotOn(seg,7);}
-  34   2      //              VK2C23A_DisAll(0xff);                   //LCD全显
-  35   2      //              delay_nms(3000);                                        //延时1S
-  36   2      //      
-  37   2      //              VK2C23A_DisAll(0x00);                   //LCD全关
-  38   2      //              delay_nms(3000);                                        //延时1S
-  39   2      //              
-  40   2      //              //LCD半显
-  41   2      //              VK2C23A_DisAll(0x55);                   
-  42   2      //              ReadnDataVK2C23A(0,VK2C23A_readbuf,52); //读回RAM数据
-  43   2      //              delay_nms(1500);                                        //延时
-  44   2      //              VK2C23A_DisAll(0xAA);
-  45   2      //              delay_nms(500);         
-  46   2      //              ReadnDataVK2C23A(0,VK2C23A_readbuf,52); //读回RAM数据
-  47   2      //              delay_nms(500);                                 //延时
-  48   2      //              
-  49   2      //              //掉电
-  50   2      //              VK2C23A_DisAll(0x00);                   //LCD全关               
-  51   2      //              VK2C23A_Enter_PowerOff();       //进入掉电模式
-  52   2      //              delay_nms(5000);                                        //延时5S                
-  53   2      //              VK2C23A_Exit_PowerOff();        //退出掉电模式
-  54   2      //              
-C51 COMPILER V9.60.7.0   MAIN                                                              02/17/2025 17:14:29 PAGE 2   
+   7   1              
+   8   1              
+   9   1                      for(i=0;i<8;i++)//com
+  10   1                      {
+  11   2                              for ( seg = 0; seg < VK2C23A_SEGNUM; seg++){VK2C23A_DisDotOn(seg,i);}
+  12   2                      }
+  13   1                       delay_nms(10); 
+  14   1                      
+  15   1                       VK2C23A_DisAll(0x00);
+  16   1                      
+  17   1                      for ( i = 10; i >= 0; i-- ) //9-0
+  18   1                      {
+  19   2                              for ( j = 0; j < 24; j++) 
+  20   2                              {  
+  21   3                                      DisplayDigitOrChar(j, i);
+  22   3                              }
+  23   2                              
+  24   2                              for ( j = 24; j < 51; j++) 
+  25   2                              {  
+  26   3                                      DisplayDigitOrChar1(j, i);
+  27   3                              }
+  28   2                       }
+  29   1              while(1)
+  30   1              {
+  31   2                    unsigned char mode;
+  32   2                        if (ReadKey()) 
+  33   2                        {  
+  34   3                              VK2C23A_Init();
+  35   3                              VK2C23A_DisAll(0x00);
+  36   3                              mode++;
+  37   3                              mode %= 3;                      
+  38   3                              switch (mode) 
+  39   3                        {
+  40   4                              case 0:            
+  41   4                                      VK2C23A_DisAll(0xFF);delay_nms(20); VK2C23A_DisAll(0x00);break;
+  42   4                                      
+  43   4                              case 1:
+  44   4                                      VK2C23A_DisAll(0xFF);delay_nms(20); VK2C23A_DisAll(0x00);break; 
+  45   4                                      
+  46   4                              case 2:
+  47   4                              for(i=0;i<8;i++)
+  48   4                              {
+  49   5                                      for ( seg = 0; seg < VK2C23A_SEGNUM; seg++){VK2C23A_DisDotOn(seg,i);}
+  50   5                              }break;   
+  51   4                              
+  52   4                              case 3:
+  53   4                                while(1)
+  54   4                                {
+C51 COMPILER V9.60.7.0   MAIN                                                              03/03/2025 20:28:55 PAGE 2   
 
-  55   2      //              VK2C23A_DisAll(0x00);                   //LCD全关
-  56   2      //              delay_nms(500);                                   //延时
-  57   2      //              for(VK2C23A_segi=0;VK2C23A_segi<VK2C23A_SEGNUM;VK2C23A_segi++)//seg
-  58   2      //              {
-  59   2      //                      for(VK2C23A_comi=0;VK2C23A_comi<8;VK2C23A_comi++)//com
-  60   2      //                      {
-  61   2      //                                      VK2C23A_DisDotOn(VK2C23A_segtab[VK2C23A_segi]-4,VK2C23A_comi);  //LCD单点点亮
-  62   2      //                              delay_nms(300);                         //延时300mS
-  63   2      //                              VK2C23A_DisDotOff(VK2C23A_segtab[VK2C23A_segi]-4,VK2C23A_comi);   //此行配合单点点亮函数实现单点点亮
-             -，屏蔽此行顺序点亮
-  64   2      //                      }
-  65   2      //              }
-  66   2      //              
-  67   2      //              VK2C23A_DisAll(0xff);                   //LCD全显
-  68   2      //              delay_nms(500);                                   //延时
-  69   2      //              for(VK2C23A_segi=0;VK2C23A_segi<VK2C23A_SEGNUM;VK2C23A_segi++)//seg
-  70   2      //              {
-  71   2      //                      for(VK2C23A_comi=0;VK2C23A_comi<8;VK2C23A_comi++)//com
-  72   2      //                      {
-  73   2      //                                      VK2C23A_DisDotOff(VK2C23A_segtab[VK2C23A_segi]-4,VK2C23A_comi); //LCD单点关闭
-  74   2      //                              delay_nms(300);                         //延时300mS
-  75   2      //                              VK2C23A_DisDotOn(VK2C23A_segtab[VK2C23A_segi]-4,VK2C23A_comi);  //此行配合单点关闭函数实现单点关闭，
-             -屏蔽此行顺序关闭
-  76   2      //                      }
-  77   2      //              }
-  78   2      //              delay_nms(1000);                                          //延时
-  79   2              }
-  80   1      }
-  81          /************************END OF FILE****/
+  55   5                                      for(i=0;i<8;i++)//com
+  56   5                                      {
+  57   6                                              for ( seg = 0; seg < VK2C23A_SEGNUM; seg++){VK2C23A_DisDotOn(seg,i);}
+  58   6                                      }
+  59   5                                      
+  60   5                                      for ( i = 10; i >= 0; i-- ) //9-0
+  61   5                                      {
+  62   6                                              for ( j = 0; j < 24; j++) 
+  63   6                                              {  
+  64   7                                                      DisplayDigitOrChar(j, i);
+  65   7                                              }
+  66   6                                              
+  67   6                                              for ( j = 24; j < 51; j++) 
+  68   6                                              {  
+  69   7                                                      DisplayDigitOrChar1(j, i);
+  70   7                                              }
+  71   6                                       }                
+  72   5                                }
+  73   4                                        
+  74   4                              }
+  75   3              }
+  76   2              }
+  77   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     91    ----
+   CODE SIZE        =    400    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =      3    ----
+   XDATA SIZE       =      3       1
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

@@ -15,12 +15,13 @@ void main(void)
     Initial();
 //	MAPPING(1);
 	while(1)
-	{		
+	{
+
 		Display_pic();
 		Show_chinese();
-		Delay(800);
+		Delay(3000);
 		Display_dot(0x00,0x00); 
 		Display_One_Emglish();
-		Delay(800);
+		Delay(3000);
 	}	
 }

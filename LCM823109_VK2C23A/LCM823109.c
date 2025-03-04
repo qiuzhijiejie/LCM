@@ -2,7 +2,7 @@
 #include <intrins.h> 
 
 #define VK2C23A_CLK 1 //SCL信号线频率,由delay_nus实现 50->10kHz 10->50kHz 5->100kHz
-
+extern unsigned char seg,i,j;
 //VK2C23A 8com 
 unsigned char VK2C23A_segtab[VK2C23A_SEGNUM]={
 	5,6,7,8,9,				        //SEG5-SEG9
@@ -604,4 +604,19 @@ void DisplayDigitOrChar1(unsigned char pos, unsigned char index)
 
     // 使用 Write1DataVk2c22 将数据写入显示 RAM 的指定位置
     Write1DataVK2C23A(pos, Data);
+}
+
+
+unsigned int ReadKey() 
+{
+    if (KEY == 0) 
+	{  
+        delay_nms(5);  
+        if (KEY == 0) 
+		{  
+            while (KEY == 0);  
+            return 1;  
+        }
+    }
+    return 0;  
 }
