@@ -1,0 +1,582 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              09/10/2024 13:07:38 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1           //----------------------------------------------------------------------
+   2          /*GUANGDONG YEHUI TECHNOLOGY CO,.LTD.*/
+   3          // Module    :YBGI12232A Series
+   4          // Lanuage   : C51 Code
+   5          // Create    : TOBU
+   6          // Date      : Apr-24-2020
+   7          // Drive IC  : SBN1661G_M18 
+   8          // INTERFACE : 6800_8bit 
+   9          // MCU     : STC89LE52RC  12M Crystal oscillator
+  10          // VDD     : 3V      
+  11          //----------------------------------------------------------------------
+  12          
+  13          #include <AT89X52.H>
+  14          #include <intrins.h>
+  15          
+  16          #define uint unsigned int
+  17          #define uchar unsigned char   
+  18          #define A0                    P2_0    //Selection of command or data.  1 :data  0 : command
+  19          #define E1                    P2_1    //Enable signal (E1) 
+  20          #define E2                    P2_2    //Enable signal (E2)
+  21          #define R_W                   P2_5       //Read/Write (R/W) signal for the 68-type microcontroller, or WRITE
+             -(WR) signal for the 80-type microcontroller.
+  22          #define RST                   P2_6    //RESET PIN;
+  23          
+  24          #define DATA_BUS              P1    //Data bus
+  25          
+  26          
+  27          sbit  int0=P3^2;            //external interrup input
+  28          bit log=0;                //display stop mark
+  29          
+  30          
+  31          
+  32          void Display_One_Chinese(unsigned char page, unsigned char col, unsigned char Character_coding, unsigned c
+             -har ft[]); 
+  33          void Display_Picture(unsigned char pic[]);
+  34          void show_chinese(void);
+  35          void Display_dot(unsigned char value,unsigned char value1);
+  36          void Initial(void);
+  37          void Set_Column_Address_R(unsigned char address);
+  38          void Set_Column_Address_L(unsigned char address);
+  39          void Set_Page_Address(unsigned char add);
+  40          void Write_Instruction_R(unsigned char cmd);
+  41          void Write_Instruction_L(unsigned char cmd);
+  42          void Write_Data_R(unsigned char dat); 
+  43          void Write_Data_L(unsigned char dat);
+  44          void Busy_R();
+  45          void Busy_L();
+  46          void Delay2(uint n);
+  47          void Delay1(uint x);
+  48          void Delay(uint MS);
+  49          
+  50          unsigned char code ft[]=
+  51          {
+  52          
+C51 COMPILER V9.60.7.0   MAIN                                                              09/10/2024 13:07:38 PAGE 2   
+
+  53          /*--  文字:  深  --*/
+  54          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+  55          0x10,0x61,0x06,0xE0,0x00,0x26,0x22,0x1A,0x02,0xC2,0x0A,0x12,0x32,0x06,0x02,0x00,
+  56          0x04,0xFC,0x03,0x20,0x20,0x11,0x11,0x09,0x05,0xFF,0x05,0x09,0x19,0x31,0x10,0x00,
+  57          
+  58          /*--  文字:  圳  --*/
+  59          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+  60          0x10,0x10,0x10,0xFE,0x10,0x10,0xFE,0x00,0x00,0xFC,0x00,0x00,0x00,0xFE,0x00,0x00,
+  61          0x08,0x08,0x04,0x47,0x24,0x18,0x07,0x00,0x00,0x1F,0x00,0x00,0x00,0x7F,0x00,0x00,
+  62          
+  63          /*--  文字:  科  --*/
+  64          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+  65          0x10,0x12,0x92,0x72,0xFE,0x51,0x91,0x00,0x22,0xCC,0x00,0x00,0xFF,0x00,0x00,0x00,
+  66          0x04,0x02,0x01,0x00,0xFF,0x00,0x04,0x04,0x04,0x02,0x02,0x02,0xFF,0x01,0x01,0x00,
+  67          
+  68          /*--  文字:  技  --*/
+  69          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+  70          0x08,0x08,0x88,0xFF,0x48,0x28,0x00,0xC8,0x48,0x48,0x7F,0x48,0xC8,0x48,0x08,0x00,
+  71          0x01,0x41,0x80,0x7F,0x00,0x40,0x40,0x20,0x13,0x0C,0x0C,0x12,0x21,0x60,0x20,0x00,
+  72          
+  73          /*--  文字:  成  --*/
+  74          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+  75          0x00,0x00,0xF8,0x48,0x48,0x48,0xC8,0x08,0xFF,0x08,0x09,0x0A,0xC8,0x88,0x08,0x00,
+  76          0x40,0x30,0x0F,0x00,0x08,0x50,0x4F,0x20,0x10,0x0B,0x0C,0x12,0x21,0x40,0xF0,0x00,
+  77          
+  78          /*--  文字:  立  --*/
+  79          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+  80          0x00,0x10,0x10,0x90,0x10,0x10,0x11,0x16,0x10,0x10,0xF0,0x50,0x10,0x10,0x00,0x00,
+  81          0x40,0x40,0x40,0x40,0x43,0x4E,0x40,0x60,0x58,0x47,0x40,0x40,0x40,0x60,0x40,0x00,
+  82          
+  83          /*--  文字:  于  --*/
+  84          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+  85          0x40,0x40,0x42,0x42,0x42,0x42,0x42,0xFE,0x42,0x42,0x42,0x42,0x42,0x42,0x40,0x00,
+  86          0x00,0x00,0x00,0x00,0x20,0x40,0x80,0x7F,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+  87          
+  88          /*--  文字:  一  --*/
+  89          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+  90          0x00,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0xC0,0x80,0x00,
+  91          0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+  92          
+  93          /*--  文字:  九  --*/
+  94          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+  95          0x00,0x10,0x10,0x10,0x10,0x90,0x7F,0x10,0x10,0x10,0xF8,0x10,0x00,0x00,0x00,0x00,
+  96          0x00,0x40,0x20,0x10,0x0C,0x03,0x00,0x00,0x00,0x00,0x7F,0x40,0x40,0x78,0x20,0x00,
+  97          
+  98          /*--  文字:  九  --*/
+  99          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+ 100          0x00,0x10,0x10,0x10,0x10,0x90,0x7F,0x10,0x10,0x10,0xF8,0x10,0x00,0x00,0x00,0x00,
+ 101          0x00,0x40,0x20,0x10,0x0C,0x03,0x00,0x00,0x00,0x00,0x7F,0x40,0x40,0x78,0x20,0x00,
+ 102          
+ 103          /*--  文字:  七  --*/
+ 104          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+ 105          0x00,0x40,0x40,0x40,0x40,0x40,0x40,0xFE,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x00,
+ 106          0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x3F,0x40,0x40,0x40,0x40,0x40,0x38,0x00,0x00,
+ 107          
+ 108          /*--  文字:  年  --*/
+ 109          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+ 110          0x40,0x20,0x10,0x0C,0xE3,0x22,0x22,0x22,0xFE,0x22,0x22,0x22,0x22,0x02,0x00,0x00,
+ 111          0x04,0x04,0x04,0x04,0x07,0x04,0x04,0x04,0xFF,0x04,0x04,0x04,0x04,0x04,0x04,0x00,
+ 112          
+ 113          /*--  文字:  期  --*/
+ 114          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+C51 COMPILER V9.60.7.0   MAIN                                                              09/10/2024 13:07:38 PAGE 3   
+
+ 115          0x00,0x04,0xFF,0x54,0x54,0x54,0xFF,0x04,0x00,0xFE,0x22,0x22,0x22,0xFE,0x00,0x00,
+ 116          0x42,0x22,0x1B,0x02,0x02,0x0A,0x33,0x62,0x18,0x07,0x02,0x22,0x42,0x3F,0x00,0x00,
+ 117          
+ 118          /*--  文字:  待  --*/
+ 119          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+ 120          0x20,0x10,0x08,0xC7,0x3A,0x50,0x44,0x44,0x44,0x7F,0x44,0xC4,0x44,0x44,0x40,0x00,
+ 121          0x00,0x02,0x01,0xFF,0x00,0x02,0x02,0x1A,0x02,0x42,0x82,0x7F,0x02,0x02,0x02,0x00,
+ 122          
+ 123          /*--  文字:  着  --*/
+ 124          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+ 125          0x00,0x44,0x54,0x54,0x55,0x56,0xD4,0x7C,0x54,0x54,0x56,0x55,0x54,0x44,0x44,0x00,
+ 126          0x08,0x08,0x04,0x04,0x02,0xFF,0x55,0x55,0x55,0x55,0x55,0x55,0xFF,0x00,0x00,0x00,
+ 127          
+ 128          /*--  文字:  您  --*/
+ 129          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+ 130          0x80,0x40,0x30,0xFC,0x03,0x90,0x68,0x06,0x04,0xF4,0x04,0x24,0x44,0x8C,0x04,0x00,
+ 131          0x00,0x20,0x38,0x03,0x38,0x40,0x40,0x49,0x52,0x41,0x40,0x70,0x00,0x09,0x30,0x00,
+ 132          
+ 133          /*--  文字:  来  --*/
+ 134          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+ 135          0x00,0x80,0x84,0x84,0x94,0xA4,0xC4,0xFF,0x84,0xC4,0xB4,0x94,0x84,0x84,0x80,0x00,
+ 136          0x20,0x20,0x10,0x10,0x08,0x04,0x02,0xFF,0x01,0x02,0x04,0x08,0x18,0x30,0x10,0x00,
+ 137          
+ 138          /*--  文字:  电  --*/
+ 139          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+ 140          0x00,0x00,0xF8,0x48,0x48,0x48,0x48,0xFF,0x48,0x48,0x48,0x48,0xF8,0x00,0x00,0x00,
+ 141          0x00,0x00,0x0F,0x04,0x04,0x04,0x04,0x3F,0x44,0x44,0x44,0x44,0x4F,0x40,0x70,0x00,
+ 142          
+ 143          /*--  文字:  来  --*/
+ 144          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+ 145          0x00,0x80,0x84,0x84,0x94,0xA4,0xC4,0xFF,0x84,0xC4,0xB4,0x94,0x84,0x84,0x80,0x00,
+ 146          0x20,0x20,0x10,0x10,0x08,0x04,0x02,0xFF,0x01,0x02,0x04,0x08,0x18,0x30,0x10,0x00,
+ 147          
+ 148          /*--  文字:  函  --*/
+ 149          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+ 150          0x00,0xE0,0x02,0x12,0xE2,0x42,0x02,0xF2,0x12,0x8A,0x66,0x47,0x02,0xE0,0x00,0x00,
+ 151          0x00,0x7F,0x20,0x24,0x24,0x2A,0x31,0x2F,0x21,0x22,0x24,0x2C,0x20,0x7F,0x00,0x00,
+ 152          
+ 153          /*--  文字:  我  --*/
+ 154          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+ 155          0x20,0x20,0x22,0x22,0xFE,0x21,0x21,0x20,0x20,0xFF,0x20,0x22,0xAC,0x20,0x20,0x00,
+ 156          0x04,0x04,0x42,0x82,0x7F,0x01,0x01,0x10,0x10,0x08,0x07,0x1A,0x21,0x40,0xF0,0x00,
+ 157          
+ 158          /*--  文字:  们  --*/
+ 159          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+ 160          0x80,0x40,0xF0,0x1C,0x03,0xF0,0x01,0x0E,0x04,0x00,0x04,0x04,0x04,0xFC,0x00,0x00,
+ 161          0x00,0x00,0x7F,0x00,0x00,0x7F,0x00,0x00,0x00,0x00,0x00,0x20,0x40,0x3F,0x00,0x00,
+ 162          
+ 163          /*--  文字:  真  --*/
+ 164          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+ 165          0x00,0x04,0x04,0x04,0xF4,0x54,0x5C,0x57,0x54,0x54,0x54,0xF4,0x04,0x06,0x04,0x00,
+ 166          0x10,0x90,0x90,0x50,0x5F,0x35,0x15,0x15,0x15,0x35,0x55,0x5F,0x90,0x90,0x10,0x00,
+ 167          
+ 168          /*--  文字:  诚  --*/
+ 169          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+ 170          0x20,0x21,0xE6,0x02,0x08,0xF8,0x88,0x88,0x88,0x08,0xFF,0x08,0x0A,0xCC,0x88,0x00,
+ 171          0x00,0x00,0x3F,0x90,0x68,0x1F,0x20,0x40,0x3F,0x20,0x10,0x0F,0x14,0x23,0x78,0x00,
+ 172          
+ 173          /*--  文字:  为  --*/
+ 174          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+ 175          0x00,0x10,0x10,0x12,0x14,0x1C,0x10,0xF0,0x9F,0x10,0x10,0x10,0x10,0xF8,0x10,0x00,
+ 176          0x00,0x00,0x40,0x20,0x10,0x08,0x06,0x01,0x00,0x11,0x26,0x40,0x20,0x1F,0x00,0x00,
+C51 COMPILER V9.60.7.0   MAIN                                                              09/10/2024 13:07:38 PAGE 4   
+
+ 177          
+ 178          /*--  文字:  您  --*/
+ 179          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+ 180          0x80,0x40,0x30,0xFC,0x03,0x90,0x68,0x06,0x04,0xF4,0x04,0x24,0x44,0x8C,0x04,0x00,
+ 181          0x00,0x20,0x38,0x03,0x38,0x40,0x40,0x49,0x52,0x41,0x40,0x70,0x00,0x09,0x30,0x00,
+ 182          
+ 183          /*--  文字:  服  --*/
+ 184          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+ 185          0x00,0x00,0xFF,0x91,0x91,0xFF,0x00,0x00,0xFF,0xC1,0x41,0x49,0x51,0xCF,0x00,0x00,
+ 186          0x40,0x30,0x0F,0x20,0x40,0x3F,0x00,0x00,0x7F,0x21,0x16,0x08,0x36,0x61,0x20,0x00,
+ 187          
+ 188          /*--  文字:  务  --*/
+ 189          /*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
+ 190          0x20,0x10,0x10,0x88,0x84,0x4F,0x52,0xA2,0x22,0x52,0x4A,0x86,0x80,0x80,0x80,0x00,
+ 191          0x80,0x81,0x41,0x42,0x22,0x12,0x0E,0x03,0x02,0x42,0x82,0x7E,0x00,0x01,0x00,0x00
+ 192          
+ 193          };
+ 194          
+ 195          /////////////////////////External interrupt
+ 196          void Step(void) interrupt 0 using 0
+ 197          {
+ 198   1        Delay1(3000);
+ 199   1        if(int0==0) log=!log;
+ 200   1         while(!int0)Delay1(3000);
+ 201   1        return;
+ 202   1      
+ 203   1      }
+ 204          
+ 205          
+ 206          void Delay1(uint n)
+ 207          {while(n--);
+ 208   1         
+ 209   1      }
+ 210          
+ 211          void Delay2(uint x)
+ 212          {
+ 213   1        while(x)
+ 214   1        {   
+ 215   2          x--;   
+ 216   2        for(;log==1;);
+ 217   2        }
+ 218   1      }
+ 219          
+ 220          void Delay(uint MS)
+ 221          { unsigned char j;
+ 222   1        while(MS--)
+ 223   1        {
+ 224   2             for(j=0;j<5;j++)
+ 225   2           Delay2(10);
+ 226   2      
+ 227   2        }
+ 228   1      }
+ 229          
+ 230          
+ 231          
+ 232          
+ 233          
+ 234          
+ 235          
+ 236          
+ 237          //6800 interface  //write data to left half screen 
+ 238          void Write_Data_L(unsigned char dat) 
+C51 COMPILER V9.60.7.0   MAIN                                                              09/10/2024 13:07:38 PAGE 5   
+
+ 239          {   Delay1(5);
+ 240   1          A0=1;
+ 241   1          R_W=0;
+ 242   1        DATA_BUS=dat;
+ 243   1          E1=1;
+ 244   1          _nop_();
+ 245   1          E1=0;
+ 246   1        return;
+ 247   1      }
+ 248          
+ 249          
+ 250          
+ 251          //6800 interface  //write data to right half screen 
+ 252          void Write_Data_R(unsigned char dat) 
+ 253          {   Delay1(5);
+ 254   1          A0=1;
+ 255   1          R_W=0;
+ 256   1        DATA_BUS=dat;
+ 257   1          E2=1;
+ 258   1          _nop_();
+ 259   1          E2=0;
+ 260   1        return;
+ 261   1      }
+ 262          
+ 263          
+ 264          
+ 265          //6800 interface  //write command to left half screen
+ 266          void Write_Instruction_L(unsigned char cmd)
+ 267          {   Delay1(20);
+ 268   1          A0=0;
+ 269   1          R_W=0;
+ 270   1        DATA_BUS=cmd;
+ 271   1          E1=1;
+ 272   1        _nop_();
+ 273   1          E1=0;
+ 274   1        return;
+ 275   1      }
+ 276          
+ 277          
+ 278          
+ 279          //6800 interface  //write command to right half screen
+ 280          void Write_Instruction_R(unsigned char cmd)
+ 281          {   Delay1(20);
+ 282   1          A0=0;
+ 283   1          R_W=0;
+ 284   1        DATA_BUS=cmd;
+ 285   1          E2=1;
+ 286   1        _nop_();
+ 287   1          E2=0;
+ 288   1        return;
+ 289   1      }
+ 290          
+ 291          
+ 292          // Set page address 0~4
+ 293          void Set_Page_Address(unsigned char add)
+ 294          {
+ 295   1          add=0xb8|add;
+ 296   1          Write_Instruction_L(add);
+ 297   1          Write_Instruction_R(add);
+ 298   1        return;
+ 299   1      }
+ 300          
+C51 COMPILER V9.60.7.0   MAIN                                                              09/10/2024 13:07:38 PAGE 6   
+
+ 301          
+ 302          //Set left half screen column address
+ 303          void Set_Column_Address_L(unsigned char address)
+ 304          {
+ 305   1          Write_Instruction_L(address&0x7F);
+ 306   1      }
+ 307          
+ 308          //Set right half screen column address
+ 309          void Set_Column_Address_R(unsigned char address)
+ 310          {
+ 311   1          Write_Instruction_R(address&0x7F);
+ 312   1      }
+ 313          
+ 314          
+ 315          // Initial LCM
+ 316          void Initial(void)
+ 317          { //RESET///////////////
+ 318   1        RST=1;
+ 319   1        Delay(10);
+ 320   1        RST=0;
+ 321   1        Delay(2);
+ 322   1        RST=1;
+ 323   1        Delay(10);
+ 324   1        //////////////////////
+ 325   1         // RST rising edge edge 6800 interface  
+ 326   1      
+ 327   1      
+ 328   1        Write_Instruction_L(0xE2);    //Software RESET left half screen
+ 329   1        Write_Instruction_R(0xE2);    //Software RESET right half screen
+ 330   1      
+ 331   1        Write_Instruction_L(0xA4);    //Static Drive OFF 
+ 332   1        Write_Instruction_R(0xA4);    //Static Drive OFF 
+ 333   1      
+ 334   1        Write_Instruction_L(0xA9);    //Select Duty Register 1/32
+ 335   1        Write_Instruction_R(0xA9);    //Select Duty Register 1/32
+ 336   1      
+ 337   1        Write_Instruction_L(0xA0);    //Memory/Segment Mapping Register  Normal Mapping
+ 338   1        Write_Instruction_R(0xA0);    //Memory/Segment Mapping Register  Normal Mapping
+ 339   1      
+ 340   1        Write_Instruction_L(0xC0);    //Start line
+ 341   1        Write_Instruction_R(0xC0);    //Start line
+ 342   1      
+ 343   1      
+ 344   1        Write_Instruction_L(0xAF);    //Turn on display
+ 345   1        Write_Instruction_R(0xAF);    //Turn on display
+ 346   1      
+ 347   1      }
+ 348          
+ 349          void Display_dot(unsigned char value,unsigned char value1)
+ 350          {
+ 351   1          unsigned char i,j;
+ 352   1          for(i=0;i<0x04;i++)
+ 353   1        {
+ 354   2          Set_Page_Address(i);
+ 355   2              Set_Column_Address_L(0x00);
+ 356   2              Set_Column_Address_R(0x00);
+ 357   2      
+ 358   2          for(j=0;j<32;j++)
+ 359   2          {
+ 360   3                  Write_Data_L(value);
+ 361   3                  Write_Data_L(value1);
+ 362   3                  Write_Data_R(value1);
+C51 COMPILER V9.60.7.0   MAIN                                                              09/10/2024 13:07:38 PAGE 7   
+
+ 363   3                  Write_Data_R(value);
+ 364   3          }
+ 365   2        }
+ 366   1          return;
+ 367   1      }
+ 368          //Show some Chinese characters
+ 369          void show_chinese(void)
+ 370          { Display_One_Chinese(0,0,0,ft); 
+ 371   1        Display_One_Chinese(0,16,1,ft); 
+ 372   1        Display_One_Chinese(0,32,2,ft);   
+ 373   1        Display_One_Chinese(0,48,3,ft);
+ 374   1        Display_One_Chinese(0,64,4,ft);
+ 375   1        Display_One_Chinese(0,80,5,ft);
+ 376   1        Display_One_Chinese(0,96,6,ft);
+ 377   1        Display_One_Chinese(0,112,7,ft);
+ 378   1      
+ 379   1        Display_One_Chinese(2,0+6,8,ft); 
+ 380   1        Display_One_Chinese(2,16+6,9,ft); 
+ 381   1        Display_One_Chinese(2,32+6,10,ft);  
+ 382   1        Display_One_Chinese(2,48+6,11,ft);
+ 383   1        Display_One_Chinese(2,64+6,12,ft);
+ 384   1        Display_One_Chinese(2,80+6,13,ft);
+ 385   1        Display_One_Chinese(2,96+6,14,ft);
+ 386   1        Display_One_Chinese(2,112+6,15,ft);
+ 387   1      
+ 388   1      }
+ 389          
+ 390          //display one 16*16 dot character
+ 391          void Display_One_Chinese(unsigned char page, unsigned char col, unsigned char Character_coding,  unsigned 
+             -char ft[]) 
+ 392          {
+ 393   1          unsigned char i,columnaddress=col;
+ 394   1      
+ 395   1        Set_Page_Address(page);
+ 396   1        if(col<61) 
+ 397   1        {          
+ 398   2          for(i=0;i<16;i++)
+ 399   2            {
+ 400   3           if(columnaddress<61)    
+ 401   3            {Set_Column_Address_L(columnaddress);
+ 402   4            Write_Data_L(ft[Character_coding*32+i]);
+ 403   4            }
+ 404   3          else
+ 405   3            {Set_Column_Address_R(columnaddress-61);
+ 406   4            Write_Data_R(ft[Character_coding*32+i]);
+ 407   4            }
+ 408   3           columnaddress+=1;
+ 409   3          }
+ 410   2      
+ 411   2          columnaddress=col;
+ 412   2          Set_Page_Address(page+1); 
+ 413   2          for(i=16;i<32;i++)
+ 414   2            {
+ 415   3           if(columnaddress<61)    
+ 416   3            {Set_Column_Address_L(columnaddress);
+ 417   4            Write_Data_L(ft[Character_coding*32+i]);
+ 418   4            }
+ 419   3          else
+ 420   3            {Set_Column_Address_R(columnaddress-61);
+ 421   4            Write_Data_R(ft[Character_coding*32+i]);
+ 422   4            }
+ 423   3           columnaddress+=1;
+C51 COMPILER V9.60.7.0   MAIN                                                              09/10/2024 13:07:38 PAGE 8   
+
+ 424   3          }
+ 425   2        }
+ 426   1      
+ 427   1      
+ 428   1        else  
+ 429   1        {          
+ 430   2          for(i=0;i<16;i++)
+ 431   2            {
+ 432   3            if(columnaddress<122)    
+ 433   3            {Set_Column_Address_R(columnaddress-61);
+ 434   4            Write_Data_R(ft[Character_coding*32+i]);
+ 435   4            }
+ 436   3            else
+ 437   3            {if(page<=1)
+ 438   4                {Set_Page_Address(page+2);
+ 439   5                Set_Column_Address_L(columnaddress-122);
+ 440   5                Write_Data_L(ft[Character_coding*32+i]);
+ 441   5                }
+ 442   4            } 
+ 443   3           columnaddress+=1;
+ 444   3          }
+ 445   2      
+ 446   2          columnaddress=col;
+ 447   2          Set_Page_Address(page+1); 
+ 448   2          for(i=16;i<32;i++)
+ 449   2            {
+ 450   3             if(columnaddress<122)     
+ 451   3            {Set_Column_Address_R(columnaddress-61);
+ 452   4            Write_Data_R(ft[Character_coding*32+i]);
+ 453   4            }
+ 454   3            else
+ 455   3            {if(page<=1){Set_Page_Address(page+3);
+ 456   5                  Set_Column_Address_L(columnaddress-122);
+ 457   5                  Write_Data_L(ft[Character_coding*32+i]);
+ 458   5                  }
+ 459   4            }
+ 460   3           columnaddress+=1;
+ 461   3          }
+ 462   2        }
+ 463   1      
+ 464   1      }
+ 465          
+ 466          //display Picture
+ 467          void Display_Picture(unsigned char pic[])
+ 468          {
+ 469   1          unsigned char i,j,num=0;
+ 470   1      
+ 471   1        for(i=0;i<0x04;i++)
+ 472   1        {
+ 473   2        Set_Page_Address(i);
+ 474   2          Set_Column_Address_L(0x00);
+ 475   2          Set_Column_Address_R(0x00);
+ 476   2      
+ 477   2              for(j=0;j<61;j++)       //display left half screen
+ 478   2          {
+ 479   3              Write_Data_L(pic[i*122+j]);
+ 480   3          }
+ 481   2              for(j=61;j<122;j++)       //display right half screen
+ 482   2          {
+ 483   3              Write_Data_R(pic[i*122+j]);
+ 484   3          }
+ 485   2        }
+C51 COMPILER V9.60.7.0   MAIN                                                              09/10/2024 13:07:38 PAGE 9   
+
+ 486   1          return;
+ 487   1      }
+ 488          
+ 489          
+ 490          
+ 491          void main(void)
+ 492          {
+ 493   1          IE=0x81; // Turn on  external interrupt
+ 494   1        IP=0x01;
+ 495   1        TCON=0x01;
+ 496   1        int0=1;
+ 497   1      
+ 498   1      
+ 499   1        P1=0xff;
+ 500   1        P2=0xff;
+ 501   1        P3=0xff;
+ 502   1          Initial();
+ 503   1        Delay(50);
+ 504   1      
+ 505   1        while(1)
+ 506   1        {
+ 507   2          Display_dot(0xff,0xff);
+ 508   2          Delay(2000);
+ 509   2          Display_dot(0x00,0x00); //clear display
+ 510   2          Display_dot(0xAA,0x55);
+ 511   2          Delay(2000);
+ 512   2          Display_dot(0x55,0xAA);
+ 513   2          Delay(2000);
+ 514   2          Display_dot(0x55,0x55);
+ 515   2          Delay(2000);
+ 516   2          Display_dot(0xAA,0xAA);
+ 517   2          Delay(2000);
+ 518   2      
+ 519   2          Display_dot(0xFF,0x00);
+ 520   2          Delay(2000);
+ 521   2          Display_dot(0x00,0xFF);
+ 522   2          Delay(2000);
+ 523   2      
+ 524   2          //Display_Picture(pic1);
+ 525   2          Delay(2000);
+ 526   2      
+ 527   2          //Display_Picture(pic2);
+ 528   2          Delay(2000);
+ 529   2      
+ 530   2          //Display_Picture(pic3);
+ 531   2          Delay(2000);
+ 532   2      
+ 533   2          show_chinese();
+ 534   2          Delay(2000);
+ 535   2      
+ 536   2        }
+ 537   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1098    ----
+   CONSTANT SIZE    =    896    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      15
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+C51 COMPILER V9.60.7.0   MAIN                                                              09/10/2024 13:07:38 PAGE 10  
+
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

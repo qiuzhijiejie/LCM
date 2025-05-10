@@ -1,0 +1,346 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              04/11/2025 13:55:52 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\output\main.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE ..\code\main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\code) DEBUG OBJECTE
+                    -XTEND PRINT(.\main.lst) OBJECT(..\output\main.obj)
+
+line level    source
+
+   1          #include "reg51.h"
+   2          #include "main.h"
+   3          #include "lcd.h"
+   4          
+   5          //-----------------------------------------------
+   6          #define NONE_PARITY     0   //None parity
+   7          #define ODD_PARITY      1   //Odd parity
+   8          #define EVEN_PARITY     2   //Even parity
+   9          #define MARK_PARITY     3   //Mark parity
+  10          #define SPACE_PARITY    4   //Space parity
+  11          //-----------------------------------------------
+  12          
+  13          #define FOSC 11059200L                  //晶振频率定义
+  14          #define BAUD 9600              //串口波特率设定
+  15          #define T1MS 0xFC66   //定时1ms中断一次
+  16          #define T2MS 0xF8CD   //定时2ms中断一次
+  17          #define T5MS 0xEE00   //定时5ms中断一次
+  18          #define T10MS 0xDC00  //定时10ms中断一次
+  19          
+  20          
+  21          #define KEY_UP          1               //按键定义
+  22          #define KEY_DOWN        2
+  23          #define KEY_RESET   3           //按键定义
+  24          #define KEY_FULL        4
+  25          
+  26          sbit KEY0 = P0^4;                       //按键0
+  27          sbit KEY1 = P0^5;                       //按键1
+  28          sbit KEY2 = P0^6;                       //按键2
+  29          sbit KEY3 = P0^7;                       //按键3
+  30          
+  31          //-----------------------------------------------
+  32          static u8 Freq=50,Cycle=5,Count_time=5; //控制刷新频率
+  33          u16 time_dely;
+  34          u8 i,j;
+  35          u8 rev_mod=0;
+  36          //-----------------------------------------------
+  37          void timer0_isr() interrupt 1   //定时器0中断函数
+  38          {
+  39   1              
+  40   1          TL0 = T1MS;                     //reload timer0 low byte
+  41   1          TH0 = T1MS >> 8;                //reload timer0 high byte
+  42   1      
+  43   1          if(time_dely)time_dely--;
+  44   1      
+  45   1          if(Count_time)
+  46   1          {
+  47   2                  Count_time--;
+  48   2                  if(Count_time==0)
+  49   2                  {
+  50   3                      Count_time=Cycle;
+  51   3                      
+  52   3                                      if(LCD_POLARITY==1)     //极性反转
+  53   3                                              LCD_POLARITY=1;
+  54   3                                      else
+C51 COMPILER V9.60.7.0   MAIN                                                              04/11/2025 13:55:52 PAGE 2   
+
+  55   3                                              LCD_POLARITY=0;
+  56   3                                      
+  57   3                                      if(LCD_POLARITY==0)     //极性判断
+  58   3                                      {
+  59   4                                              LCD_Update_CGRAM(1);    //正输出
+  60   4                                              LCD_Delay(1);
+  61   4                                              RCK=1;          //com口输出
+  62   4                                      }
+  63   3                                      else
+  64   3                                      {
+  65   4                                              LCD_Update_CGRAM(0);    //反向输出
+  66   4                                              LCD_Delay(1);
+  67   4                                              RCK=0;          //com口输出
+  68   4                                      }
+  69   3                       }
+  70   2              }
+  71   1                      
+  72   1      }
+  73          //-----------------------------------------------
+  74          
+  75          void Uart_Int_Isr() interrupt 4
+  76          {
+  77   1              if (RI)
+  78   1              {
+  79   2                      RI = 0;             //Clear receive interrupt flag
+  80   2                      rev_mod = SBUF;          //P0 show UART data
+  81   2                      LCD_Set_All(0,LCD_Max,rev_mod);
+  82   2              }
+  83   1      }
+  84          //-----------------------------------------------
+  85          void delay_us(u16 dely)
+  86          {
+  87   1              while(dely--);  
+  88   1      }
+  89          //-----------------------------------------------
+  90          void delay_ms(u16 dely)
+  91          {
+  92   1              while(dely--)
+  93   1              {
+  94   2                      delay_us(66);
+  95   2              }
+  96   1      }
+  97          //-----------------------------------------------
+  98          code u8 DBHEX[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+  99          
+ 100          
+ 101          void Uart_Init(void)    //串口初始化
+ 102          {
+ 103   1          SCON = 0x50;            //8-bit variable UART
+ 104   1          TMOD |= 0x20;            //Set Timer1 as 8-bit auto reload mode
+ 105   1          TH1 = TL1 = -(FOSC/12/32/BAUD); //Set auto-reload vaule
+ 106   1          TR1 = 1;                //Timer1 start run
+ 107   1          ES = 1;                 //Enable UART interrupt
+ 108   1      }
+ 109          
+ 110          //-----------------------------------------------
+ 111          void Uart_Send_Byte(u8 dat)
+ 112          {
+ 113   1              SBUF = dat;
+ 114   1              while(TI==0);
+ 115   1              TI=0;   
+ 116   1      }
+C51 COMPILER V9.60.7.0   MAIN                                                              04/11/2025 13:55:52 PAGE 3   
+
+ 117          
+ 118          void Uart_Send_Hex(u8 Byte_HEX)
+ 119          {
+ 120   1              Uart_Send_Byte(DBHEX[Byte_HEX/16]);
+ 121   1              Uart_Send_Byte(DBHEX[Byte_HEX%16]);
+ 122   1      }
+ 123          
+ 124          
+ 125          void Uart_Send_IntHex(u16 Byte_HEX)
+ 126          {
+ 127   1              Uart_Send_Byte(DBHEX[(Byte_HEX>>8)/16]);
+ 128   1              Uart_Send_Byte(DBHEX[(Byte_HEX>>8)%16]);
+ 129   1              Uart_Send_Byte(DBHEX[(Byte_HEX&0xff)/16]);
+ 130   1              Uart_Send_Byte(DBHEX[(Byte_HEX&0xff)%16]);
+ 131   1      }
+ 132          
+ 133          
+ 134          void Uart_Send_Dec(u8 Byte_Dec)
+ 135          {
+ 136   1              Uart_Send_Byte(DBHEX[(Byte_Dec/100)%10]);
+ 137   1              Uart_Send_Byte(DBHEX[(Byte_Dec/10)%10]);
+ 138   1              Uart_Send_Byte(DBHEX[(Byte_Dec/1)%10]);
+ 139   1      }
+ 140          
+ 141          
+ 142          void Uart_Send_IntDec(u16 Int_dec)
+ 143          {
+ 144   1              Uart_Send_Byte(DBHEX[(Int_dec/10000)%10]);
+ 145   1              Uart_Send_Byte(DBHEX[(Int_dec/1000)%10]);
+ 146   1              Uart_Send_Byte(DBHEX[(Int_dec/100)%10]);
+ 147   1              Uart_Send_Byte(DBHEX[(Int_dec/10)%10]);
+ 148   1              Uart_Send_Byte(DBHEX[(Int_dec/1)%10]);
+ 149   1      }
+ 150          
+ 151          
+ 152          
+ 153          void Uart_dbg_print(char *str)
+ 154          {
+ 155   1              while(*str)
+ 156   1              {
+ 157   2                      Uart_Send_Byte(*str++);
+ 158   2              }
+ 159   1      }
+ 160          
+ 161          //-----------------------------------------------
+ 162          void Timer_Init(void)   //定时器初始化
+ 163          {
+ 164   1              TMOD |= 0x01;                   //set timer0 as mode1 (16-bit)
+ 165   1          TL0 = T1MS;                     //initial timer0 low byte
+ 166   1          TH0 = T1MS >> 8;                //initial timer0 high byte
+ 167   1          TR0 = 1;                        //timer0 start running
+ 168   1          ET0 = 1;                        //enable timer0 interrupt
+ 169   1      }
+ 170          //-----------------------------------------------
+ 171          void KEY_Init(void)             //按键初始化
+ 172          { 
+ 173   1              KEY0 = 1;
+ 174   1              KEY1 = 1;
+ 175   1              KEY2 = 1;
+ 176   1              KEY3 = 1;
+ 177   1      
+ 178   1      }
+C51 COMPILER V9.60.7.0   MAIN                                                              04/11/2025 13:55:52 PAGE 4   
+
+ 179          //-----------------------------------------------
+ 180          
+ 181          u8 KEY_Scan(u8 mode)            //按键扫描函数
+ 182          {        
+ 183   1              static u8 key_up=1;
+ 184   1              if(mode)key_up=1;  
+ 185   1              if(key_up&&(KEY0==0||KEY1==0||KEY2==0||KEY3==0))
+ 186   1              {
+ 187   2                      delay_ms(10);
+ 188   2                      key_up=0;
+ 189   2                      if(KEY0==0)return KEY_UP;
+ 190   2                      else if(KEY1==0)return KEY_DOWN;
+ 191   2                      else if(KEY2==0)return KEY_RESET;
+ 192   2                      else if(KEY3==0)return KEY_FULL;
+ 193   2              }else if(KEY0==1&&KEY1==1&&KEY2==1&&KEY3==1)key_up=1;       
+ 194   1              return 0;
+ 195   1      }
+ 196          //-------------------------------------------------
+ 197          void Soft_Init(void)
+ 198          {
+ 199   1              Freq=60;
+ 200   1              Cycle = 14000/Freq;
+ 201   1              Count_time=Cycle;       //控制刷新频率
+ 202   1      }
+ 203          //-----------------------------------------------
+ 204          
+ 205          void Hard_Init(void)
+ 206          {
+ 207   1              KEY_Init();
+ 208   1              LCD_Port_Init();
+ 209   1              
+ 210   1      }
+ 211          
+ 212          /*
+ 213          //-----------------------------------------------
+ 214          void main(void) //主函数
+ 215          {
+ 216                  static u8 key,index=0;
+ 217                  EA = 0;                         //上电关闭中断
+ 218                  delay_ms(10);
+ 219                  Hard_Init();    //IO初始化
+ 220                  Uart_Init();
+ 221                  Timer_Init();   //定时器初始化
+ 222                  Soft_Init();    //变量初始化
+ 223                  Uart_dbg_print("system is init!\r\n");  //向串口打印信息
+ 224              EA = 1;                             //打开中断
+ 225            while (1)
+ 226                  {
+ 227                          //---按键扫描和处理------------------------------------------
+ 228                          key = KEY_Scan(0);
+ 229                          if(key==KEY_UP)
+ 230                          {
+ 231                                  if(Freq<200) Freq++;
+ 232                                  Cycle = 500/Freq;
+ 233                                  Uart_dbg_print("[KEY_UP] Freq= ");Uart_Send_Dec(Freq);
+ 234                                  Uart_dbg_print(" Cycle= ");Uart_Send_Dec(Cycle);
+ 235                                  Uart_dbg_print("\r\n");
+ 236                          }
+ 237                          else if(key==KEY_DOWN)
+ 238                          {
+ 239                                  if(Freq>20) Freq--;
+ 240                                  Cycle = 500/Freq;
+C51 COMPILER V9.60.7.0   MAIN                                                              04/11/2025 13:55:52 PAGE 5   
+
+ 241                                  Uart_dbg_print("[KEY_DN] Freq= ");Uart_Send_Dec(Freq);
+ 242                                  Uart_dbg_print(" Cycle= ");Uart_Send_Dec(Cycle);
+ 243                                  Uart_dbg_print("\r\n");
+ 244                          }
+ 245                          else if(key==KEY_RESET)
+ 246                          {
+ 247                                  Freq=50;
+ 248                                  Cycle = 500/Freq;
+ 249                                  Uart_dbg_print("[KEY_RESET] Freq= ");Uart_Send_Dec(Freq);
+ 250                                  Uart_dbg_print(" Cycle= ");Uart_Send_Dec(Cycle);
+ 251                                  Uart_dbg_print("\r\n");
+ 252                          }
+ 253                          else if(key==KEY_FULL)
+ 254                          {
+ 255                                  Freq=150;
+ 256                                  Cycle = 500/Freq;
+ 257                                  Uart_dbg_print("[KEY_FULL] Freq= ");Uart_Send_Dec(Freq);
+ 258                                  Uart_dbg_print(" Cycle= ");Uart_Send_Dec(Cycle);
+ 259                                  Uart_dbg_print("\r\n");
+ 260                          }               
+ 261          
+ 262                          if(time_dely==0)        //定时变化数据
+ 263                          {
+ 264                                  time_dely=1000;
+ 265                                  
+ 266                                  index++;
+ 267                                  if(index>22)
+ 268                                  {
+ 269                                          LCD_Clear_All();//显示一轮后要全显
+ 270                                          index = 0;                              
+ 271                                  } 
+ 272                                  else
+ 273                                  {
+ 274                                          //留三个位来显示频率
+ 275                                          CGRAM[2]=leddata10[(Freq/100)%10];
+ 276                                          CGRAM[1]=leddata10[(Freq/10)%10];
+ 277                                          CGRAM[0]=leddata10[Freq%10];
+ 278                                          //其余均按顺序显示
+ 279                                          LCD_Set_All(1,LCD_Max,leddata10[index]);
+ 280                                  }
+ 281                          }
+ 282                  }
+ 283          }
+ 284          
+ 285          */
+ 286          
+ 287          
+ 288          
+ 289          
+ 290          void main(void) // 主函数
+ 291          {
+ 292   1              static u8 index=0;
+ 293   1              EA = 0;                   //上电关闭中断
+ 294   1              delay_ms(10);
+ 295   1              Hard_Init();      //IO初始化
+ 296   1      //      Uart_Init();
+ 297   1              Timer_Init();     //定时器初始化
+ 298   1              Soft_Init();      //变量初始化
+ 299   1              EA = 1;                   //打开中断
+ 300   1              while (1)
+ 301   1              {
+ 302   2                      delay_ms(5000); 
+C51 COMPILER V9.60.7.0   MAIN                                                              04/11/2025 13:55:52 PAGE 6   
+
+ 303   2      
+ 304   2                      // 在 LCD 上显示当前数字
+ 305   2                      LCD_Set_All(0,LCD_Max,leddata10[index]);
+ 306   2      
+ 307   2                      // 数字 1-10 循环
+ 308   2                      index++;
+ 309   2                      if(index > 10) index = 0;
+ 310   2                      
+ 311   2              }
+ 312   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    727    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     10       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

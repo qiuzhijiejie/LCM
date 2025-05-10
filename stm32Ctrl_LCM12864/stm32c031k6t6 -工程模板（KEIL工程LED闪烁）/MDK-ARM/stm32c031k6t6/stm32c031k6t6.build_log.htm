@@ -3,37 +3,86 @@
 <pre>
 <h1>礦ision Build Log</h1>
 <h2>Tool Versions:</h2>
-IDE-Version: μVision V5.40.0.0
+IDE-Version: μVision V5.41.0.0
 Copyright (C) 2024 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: 168 168, 168, LIC=UJWP0-BK84P-8TE3P-MNN7E-E7BGX-J7RUG
+License Information: 168 168, 168, LIC=FYKYW-QIBM9-30RNC-756MX-WWZZZ-ES2WG
  
 Tool Versions:
-Toolchain:       MDK-ARM Plus  Version: 5.40.0.3
+Toolchain:       MDK-ARM Plus  Version: 5.41.0.0
 Toolchain Path:  D:\KEIL_STM32\ARM\ARMCLANG\Bin
 C Compiler:      ArmClang.exe V6.22
 Assembler:       Armasm.exe V6.22
 Linker/Locator:  ArmLink.exe V6.22
 Library Manager: ArmAr.exe V6.22
 Hex Converter:   FromElf.exe V6.22
-CPU DLL:         SARMCM3.DLL V5.40.0.3
+CPU DLL:         SARMCM3.DLL V5.41.0.0
 Dialog DLL:      DARMCM1.DLL V1.19.6.0
 Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.3.0.0
 Dialog DLL:      TARMCM1.DLL V1.14.6.0
  
 <h2>Project:</h2>
-D:\桌面\烨辉科技代码\新建文件夹\stm32c031k6t6 -工程模板（KEIL工程LED闪烁）\MDK-ARM\stm32c031k6t6.uvprojx
+D:\桌面\YH_Co.,Ltd\GitHub_LCD-Code\stm32Ctrl_LCM12864\stm32c031k6t6 -工程模板（KEIL工程LED闪烁）\MDK-ARM\stm32c031k6t6.uvprojx
 Project File Date:  09/04/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V6.22', folder: 'D:\KEIL_STM32\ARM\ARMCLANG\Bin'
 Build target 'stm32c031k6t6'
-linking...
-stm32c031k6t6\stm32c031k6t6.axf: Error: L6218E: Undefined symbol column (referred from lcd12864.o).
-stm32c031k6t6\stm32c031k6t6.axf: Error: L6218E: Undefined symbol Page (referred from lcd12864.o).
-Not enough information to list image symbols.
-Not enough information to list load addresses in the image map.
-Finished: 2 information, 0 warning and 2 error messages.
-"stm32c031k6t6\stm32c031k6t6.axf" - 2 Error(s), 0 Warning(s).
+warning: unknown warning option '-Wno-reserved-identifier'; did you mean '-Wno-reserved-id-macro'? [-Wunknown-warning-option]
+1 warning generated.
+compiling stm32c0xx_hal_rcc_ex.c...
+warning: unknown warning option '-Wno-reserved-identifier'; did you mean '-Wno-reserved-id-macro'? [-Wunknown-warning-option]
+1 warning generated.
+compiling stm32c0xx_hal.c...
+warning: unknown warning option '-Wno-reserved-identifier'; did you mean '-Wno-reserved-id-macro'? [-Wunknown-warning-option]
+1 warning generated.
+compiling stm32c0xx_hal_cortex.c...
+warning: unknown warning option '-Wno-reserved-identifier'; did you mean '-Wno-reserved-id-macro'? [-Wunknown-warning-option]
+1 warning generated.
+compiling stm32c0xx_hal_gpio.c...
+warning: unknown warning option '-Wno-reserved-identifier'; did you mean '-Wno-reserved-id-macro'? [-Wunknown-warning-option]
+1 warning generated.
+compiling stm32c0xx_hal_flash_ex.c...
+warning: unknown warning option '-Wno-reserved-identifier'; did you mean '-Wno-reserved-id-macro'? [-Wunknown-warning-option]
+1 warning generated.
+compiling stm32c0xx_it.c...
+warning: unknown warning option '-Wno-reserved-identifier'; did you mean '-Wno-reserved-id-macro'? [-Wunknown-warning-option]
+1 warning generated.
+compiling stm32c0xx_hal_rcc.c...
+warning: unknown warning option '-Wno-reserved-identifier'; did you mean '-Wno-reserved-id-macro'? [-Wunknown-warning-option]
+1 warning generated.
+compiling stm32c0xx_hal_msp.c...
+warning: unknown warning option '-Wno-reserved-identifier'; did you mean '-Wno-reserved-id-macro'? [-Wunknown-warning-option]
+1 warning generated.
+compiling stm32c0xx_hal_flash.c...
+warning: unknown warning option '-Wno-reserved-identifier'; did you mean '-Wno-reserved-id-macro'? [-Wunknown-warning-option]
+../Core/Src/main.c(1): error: 'LCD12864.h' file not found
+#include "LCD12864.h"
+         ^~~~~~~~~~~~
+1 warning and 1 error generated.
+compiling main.c...
+warning: unknown warning option '-Wno-reserved-identifier'; did you mean '-Wno-reserved-id-macro'? [-Wunknown-warning-option]
+1 warning generated.
+compiling lcd12864.c...
+warning: unknown warning option '-Wno-reserved-identifier'; did you mean '-Wno-reserved-id-macro'? [-Wunknown-warning-option]
+1 warning generated.
+compiling stm32c0xx_hal_pwr.c...
+warning: unknown warning option '-Wno-reserved-identifier'; did you mean '-Wno-reserved-id-macro'? [-Wunknown-warning-option]
+1 warning generated.
+compiling stm32c0xx_hal_dma.c...
+warning: unknown warning option '-Wno-reserved-identifier'; did you mean '-Wno-reserved-id-macro'? [-Wunknown-warning-option]
+1 warning generated.
+compiling system_stm32c0xx.c...
+warning: unknown warning option '-Wno-reserved-identifier'; did you mean '-Wno-reserved-id-macro'? [-Wunknown-warning-option]
+1 warning generated.
+compiling stm32c0xx_hal_dma_ex.c...
+warning: unknown warning option '-Wno-reserved-identifier'; did you mean '-Wno-reserved-id-macro'? [-Wunknown-warning-option]
+1 warning generated.
+compiling stm32c0xx_hal_exti.c...
+warning: unknown warning option '-Wno-reserved-identifier'; did you mean '-Wno-reserved-id-macro'? [-Wunknown-warning-option]
+1 warning generated.
+compiling stm32c0xx_hal_pwr_ex.c...
+assembling startup_stm32c031xx.s...
+"stm32c031k6t6\stm32c031k6t6.axf" - 1 Error(s), 17 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -58,7 +107,7 @@ Package Vendor: Keil
    * Component: ARM::CMSIS:CORE@6.1.0
       Include file:  CMSIS/Core/Include/tz_context.h
 Target not created.
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:41
 </pre>
 </body>
 </html>

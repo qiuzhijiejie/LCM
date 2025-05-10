@@ -1,0 +1,116 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              03/28/2025 16:07:32 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <reg52.h>
+   2          #include <intrins.h>
+   3          #include <ST24C02A.c>                                   //读写存储器程序
+   4          #include "pic.h"                                                //图片存储数据
+   5          #include <stdio.h>
+   6          #include "lcm13264cog.h"
+   7          
+   8          
+   9          void main(void)
+  10          {
+  11   1              init_cpu();
+  12   1              Delay_Xms(50);
+  13   1              InitST7567();   //一开始初始化控制器
+  14   1      //      hz_display16(0,0,0,jin); 
+  15   1              DispFram( 0x00,0x00 );  
+  16   1              while(1)  
+  17   1              {
+  18   2      
+  19   2        Start:        //跳转标号
+  20   2                                                      
+  21   2      //        hz_display16(0,0,0,jin); 
+  22   2      //        Delay_Xms(1000);
+  23   2                       
+  24   2      
+  25   2                      
+  26   2                DispFram( 0xff,0xff );                                 //全显
+  27   2                Delay_Xms(2800);
+  28   2      //        if( Change(70)==1 ) goto Start;       //暂停键有动作跳转到程序的最头上
+  29   2      //        push();
+  30   2      //        Pause();
+  31   2      
+  32   2      
+  33   2              
+  34   2                DispDot( 0xf0,0x0f );                  //大棋盘
+  35   2                Delay_Xms(2800);
+  36   2      
+  37   2      
+  38   2                DispDots( 0x33,0xcc );            //小棋盘
+  39   2                Delay_Xms(3000);
+  40   2      
+  41   2              
+  42   2                DispFram( 0x55,0xaa );                 //花点         
+  43   2                Delay_Xms(3000);
+  44   2      
+  45   2              
+  46   2                DispFram( 0x55,0x55 );                //       横线
+  47   2                Delay_Xms(3000);
+  48   2      
+  49   2                      
+  50   2                DispFram( 0xff,0x00 );                 //竖线 
+  51   2                Delay_Xms(3000);
+  52   2       
+  53   2      
+  54   2                DispPic( PIC_5 );
+  55   2                Delay_Xms(3000);
+C51 COMPILER V9.60.7.0   MAIN                                                              03/28/2025 16:07:32 PAGE 2   
+
+  56   2                if( Change(50)==1 ) goto Start;       //暂停键有动作跳转到程序的最头上        
+  57   2              
+  58   2                DispPic( PIC_6 );
+  59   2            Delay_Xms(3000);
+  60   2                if( Change(50)==1 ) goto Start;       //暂停键有动作跳转到程序的最头上        
+  61   2              
+  62   2      /*      
+  63   2      
+  64   2          ST7567_WriteComd(0x81);     //The Electronic Volume (Double Byte Command)数字电位器调节VO输出电压(也就是对
+             -比度)两字节                                 0x81原来的数值
+  65   2              ST7567_WriteComd(55);    //vop 设置
+  66   2              DispPic( PIC_9 );       //中值
+  67   2              Delay_Xms(600);
+  68   2              if( Change(50)==1 ) goto Start; //暂停键有动作跳转到程序的最头上        
+  69   2          push();
+  70   2      
+  71   2          ST7567_WriteComd(0x81);     //The Electronic Volume (Double Byte Command)数字电位器调节VO输出电压(也就是对
+             -比度)两字节                                 0x81原来的数值
+  72   2              ST7567_WriteComd(57);    //vop 设置     
+  73   2              DispPic( PIC_10 );         //上限
+  74   2              Delay_Xms(600);
+  75   2              if( Change(50)==1 ) goto Start; //暂停键有动作跳转到程序的最头上        
+  76   2              push();
+  77   2      
+  78   2          ST7567_WriteComd(0x81);     //The Electronic Volume (Double Byte Command)数字电位器调节VO输出电压(也就是对
+             -比度)两字节                                 0x81原来的数值
+  79   2              ST7567_WriteComd(52);    //vop 设置
+  80   2          DispPic( PIC_11 );            //下限
+  81   2              Delay_Xms(600);
+  82   2              if( Change(50)==1 ) goto Start; //暂停键有动作跳转到程序的最头上        
+  83   2          push();
+  84   2      */
+  85   2      
+  86   2              }
+  87   1      }
+*** WARNING C294 IN LINE 201 OF main.c: unreachable code
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    530    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       2
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

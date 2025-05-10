@@ -1,8 +1,8 @@
 #include "LCM823109.h"
 #include <intrins.h> 
 
-#define VK2C23A_CLK 1 //SCL信号线频率,由delay_nus实现 50->10kHz 10->50kHz 5->100kHz
-extern unsigned char seg,i,j;
+#define VK2C23A_CLK 2 //SCL信号线频率,由delay_nus实现 50->10kHz 10->50kHz 5->100kHz
+
 //VK2C23A 8com 
 unsigned char VK2C23A_segtab[VK2C23A_SEGNUM]={
 	5,6,7,8,9,				        //SEG5-SEG9

@@ -1,7 +1,6 @@
 #include "stm32c0xx_hal.h"
 
 
-
 // 定义引脚
 #define LCD_RS_PIN GPIO_PIN_15  // RS 引脚连接到 GPIOC 的第 15 引脚
 #define LCD_RS_PORT GPIOC       // RS 引脚所在的 GPIO 端口是 GPIOC
@@ -106,7 +105,6 @@ void Lcd12864_BusyR(void) {
 
 
 
-
 extern uint8_t column;
 extern uint8_t Page;
 
@@ -171,9 +169,6 @@ void WriteCommand_L(uint8_t Command) {
 
 
 
-
-
-
 void WriteCommand_R(uint8_t Command) {
     // 等待 LCD 准备好
     Lcd12864_BusyR();
@@ -193,8 +188,6 @@ void WriteCommand_R(uint8_t Command) {
     HAL_GPIO_WritePin(GPIOA, LCD_E_PIN, GPIO_PIN_RESET); // 禁用 LCD
     HAL_Delay(1); // 等待，确保信号稳定
 }
-
-
 
 
 uint8_t ReadDate(void) {
@@ -304,8 +297,6 @@ void Clear(void) {
 }
 
 
-
-
 // 假设 Page 和 column 变量在适当的位置声明
 extern uint8_t Page;
 extern uint8_t column;
@@ -322,7 +313,3 @@ void Showpicture(uint8_t DotByte, uint8_t DotByte1) {
         }
     }
 }
-
-
-
-

@@ -1,4 +1,4 @@
-#include "led12864.h"
+#include "LCD12864.h"
 #include "main.h"
 
 void SystemClock_Config(void);

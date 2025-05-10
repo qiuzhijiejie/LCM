@@ -1,0 +1,283 @@
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    08/02/2024  22:04:27  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.4.0, INVOKED BY:
+E:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\main.obj TO .\Objects\31020 PRINT (.\Listings\31020.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\main.obj (MAIN)
+  E:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+
+
+LINK MAP OF MODULE:  .\Objects\31020 (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0007H     UNIT         _DATA_GROUP_
+                    000FH     0011H                  *** GAP ***
+            BIT     0020H.0   0000H.1   UNIT         _BIT_GROUP_
+                    0020H.1   0000H.7                *** GAP ***
+            IDATA   0021H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0C36H     UNIT         ?CO?MAIN
+            CODE    0C39H     00A9H     UNIT         ?PR?_DISPLAYGRAPHIC?MAIN
+            CODE    0CE2H     0052H     UNIT         ?PR?INITINAL?MAIN
+            CODE    0D34H     004CH     UNIT         ?PR?MAIN?MAIN
+            CODE    0D80H     0047H     UNIT         ?PR?_LCD_MESG?MAIN
+            CODE    0DC7H     0034H     UNIT         ?PR?INITINA2?MAIN
+            CODE    0DFBH     0029H     UNIT         ?PR?_TRANSFERDATA?MAIN
+            CODE    0E24H     0024H     UNIT         ?PR?_DELAYMS?MAIN
+            CODE    0E48H     000CH     UNIT         ?C_C51STARTUP
+            CODE    0E54H     0006H     UNIT         ?PR?_DELAY?MAIN
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\31020 (MAIN)
+
+
+SEGMENT                             BIT_GROUP          DATA_GROUP 
+  +--> CALLED SEGMENT            START    LENGTH     START    LENGTH
+--------------------------------------------------------------------
+?C_C51STARTUP                    -----    -----      -----    -----
+  +--> ?PR?MAIN?MAIN
+
+?PR?MAIN?MAIN                    -----    -----      -----    -----
+  +--> ?PR?_DELAYMS?MAIN
+  +--> ?PR?_DELAY?MAIN
+  +--> ?PR?INITINA2?MAIN
+  +--> ?CO?MAIN
+  +--> ?PR?_DISPLAYGRAPHIC?MAIN
+  +--> ?PR?INITINAL?MAIN
+  +--> ?PR?_LCD_MESG?MAIN
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  08/02/2024  22:04:27  PAGE 2
+
+
+
+?PR?INITINA2?MAIN                -----    -----      -----    -----
+  +--> ?PR?_TRANSFERDATA?MAIN
+  +--> ?PR?_DELAY?MAIN
+  +--> ?PR?_DELAYMS?MAIN
+
+?PR?_TRANSFERDATA?MAIN           0020H.0  0000H.1    000EH    0001H
+  +--> ?PR?_DELAY?MAIN
+
+?PR?_DISPLAYGRAPHIC?MAIN         -----    -----      0008H    0006H
+  +--> ?PR?_TRANSFERDATA?MAIN
+
+?PR?INITINAL?MAIN                -----    -----      -----    -----
+  +--> ?PR?_TRANSFERDATA?MAIN
+  +--> ?PR?_DELAY?MAIN
+  +--> ?PR?_DELAYMS?MAIN
+
+?PR?_LCD_MESG?MAIN               -----    -----      0008H    0003H
+  +--> ?PR?_TRANSFERDATA?MAIN
+  +--> ?PR?_DELAY?MAIN
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\31020 (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00A8H         PUBLIC        IE
+  C:0E58H         PUBLIC        _delay
+  D:00B8H         PUBLIC        IP
+  C:0C39H         PUBLIC        _DisplayGraphic
+  C:0DC7H         PUBLIC        initina2
+  B:00A0H.0       PUBLIC        RS
+  C:0D34H         PUBLIC        main
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:0D80H         PUBLIC        _lcd_mesg
+  B:00A0H.2       PUBLIC        E
+  C:0003H         PUBLIC        IC_DAT
+  C:0E06H         PUBLIC        _TransferData
+  C:0CE2H         PUBLIC        initinal
+  D:00C8H         PUBLIC        T2CON
+  B:00A0H.4       PUBLIC        RES
+  B:00A0H.1       PUBLIC        WRD
+  C:0039H         PUBLIC        pic1
+  C:0439H         PUBLIC        pic2
+  C:0839H         PUBLIC        pic3
+  C:0E28H         PUBLIC        _delayms
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          INITINAL
+  C:0CE2H         LINE#         47
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  08/02/2024  22:04:27  PAGE 3
+
+
+  C:0CE2H         LINE#         48
+  C:0CE2H         LINE#         50
+  C:0CE9H         LINE#         51
+  C:0CECH         LINE#         52
+  C:0CF3H         LINE#         53
+  C:0CFAH         LINE#         54
+  C:0D01H         LINE#         55
+  C:0D04H         LINE#         56
+  C:0D0BH         LINE#         57
+  C:0D0EH         LINE#         58
+  C:0D15H         LINE#         59
+  C:0D18H         LINE#         60
+  C:0D1FH         LINE#         61
+  C:0D26H         LINE#         62
+  C:0D2DH         LINE#         63
+  -------         ENDPROC       INITINAL
+  -------         PROC          INITINA2
+  C:0DC7H         LINE#         67
+  C:0DC7H         LINE#         68
+  C:0DC7H         LINE#         70
+  C:0DCEH         LINE#         71
+  C:0DD1H         LINE#         72
+  C:0DD8H         LINE#         73
+  C:0DDFH         LINE#         74
+  C:0DE6H         LINE#         75
+  C:0DEDH         LINE#         76
+  C:0DF4H         LINE#         77
+  -------         ENDPROC       INITINA2
+  -------         PROC          MAIN
+  C:0D34H         LINE#         81
+  C:0D34H         LINE#         82
+  C:0D34H         LINE#         83
+  C:0D3BH         LINE#         84
+  C:0D3DH         LINE#         85
+  C:0D44H         LINE#         86
+  C:0D46H         LINE#         87
+  C:0D4DH         LINE#         89
+  C:0D4DH         LINE#         90
+  C:0D4DH         LINE#         91
+  C:0D50H         LINE#         93
+  C:0D57H         LINE#         94
+  C:0D5AH         LINE#         96
+  C:0D61H         LINE#         97
+  C:0D64H         LINE#         99
+  C:0D6BH         LINE#         100
+  C:0D6EH         LINE#         102
+  C:0D71H         LINE#         103
+  C:0D74H         LINE#         104
+  C:0D7BH         LINE#         105
+  C:0D7EH         LINE#         108
+  -------         ENDPROC       MAIN
+  -------         PROC          _LCD_MESG
+  D:0008H         SYMBOL        adder1
+  -------         DO            
+  D:000AH         SYMBOL        i
+  -------         ENDDO         
+  C:0D80H         LINE#         113
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  08/02/2024  22:04:27  PAGE 4
+
+
+  C:0D84H         LINE#         114
+  C:0D84H         LINE#         116
+  C:0D8BH         LINE#         117
+  C:0D8EH         LINE#         118
+  C:0D91H         LINE#         119
+  C:0D91H         LINE#         120
+  C:0D94H         LINE#         121
+  C:0D9CH         LINE#         122
+  C:0DA5H         LINE#         124
+  C:0DACH         LINE#         125
+  C:0DAFH         LINE#         126
+  C:0DB2H         LINE#         127
+  C:0DB2H         LINE#         128
+  C:0DB5H         LINE#         129
+  C:0DBDH         LINE#         130
+  C:0DC6H         LINE#         131
+  -------         ENDPROC       _LCD_MESG
+  C:0E01H         SYMBOL        L?0049
+  -------         PROC          L?0048
+  -------         ENDPROC       L?0048
+  C:0E01H         SYMBOL        L?0049
+  -------         PROC          _TRANSFERDATA
+  D:000EH         SYMBOL        data1
+  B:0020H.0       SYMBOL        DI
+  C:0E06H         LINE#         136
+  C:0E08H         LINE#         137
+  C:0E08H         LINE#         138
+  C:0E0AH         LINE#         139
+  C:0E0EH         LINE#         140
+  C:0E15H         LINE#         141
+  C:0E18H         LINE#         142
+  C:0E1AH         LINE#         143
+  C:0E21H         LINE#         144
+  C:0E23H         LINE#         145
+  -------         ENDPROC       _TRANSFERDATA
+  C:0E24H         SYMBOL        L?0051
+  -------         PROC          L?0050
+  -------         ENDPROC       L?0050
+  C:0E24H         SYMBOL        L?0051
+  -------         PROC          _DELAYMS
+  D:0006H         SYMBOL        n
+  -------         DO            
+  D:0004H         SYMBOL        i
+  D:0002H         SYMBOL        j
+  -------         ENDDO         
+  C:0E28H         LINE#         147
+  C:0E28H         LINE#         148
+  C:0E28H         LINE#         150
+  C:0E32H         LINE#         151
+  C:0E47H         LINE#         152
+  -------         ENDPROC       _DELAYMS
+  C:0E54H         SYMBOL        L?0047
+  -------         PROC          L?0046
+  -------         ENDPROC       L?0046
+  C:0E54H         SYMBOL        L?0047
+  -------         PROC          _DELAY
+  D:0006H         SYMBOL        m
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  08/02/2024  22:04:27  PAGE 5
+
+
+  C:0E58H         LINE#         155
+  C:0E58H         LINE#         156
+  C:0E58H         LINE#         157
+  C:0E59H         LINE#         158
+  -------         ENDPROC       _DELAY
+  -------         PROC          _DISPLAYGRAPHIC
+  D:0008H         SYMBOL        adder
+  -------         DO            
+  D:000AH         SYMBOL        i
+  D:000CH         SYMBOL        j
+  -------         ENDDO         
+  C:0C39H         LINE#         160
+  C:0C3DH         LINE#         161
+  C:0C3DH         LINE#         165
+  C:0C42H         LINE#         166
+  C:0C42H         LINE#         167
+  C:0C4CH         LINE#         168
+  C:0C53H         LINE#         169
+  C:0C58H         LINE#         170
+  C:0C58H         LINE#         171
+  C:0C61H         LINE#         172
+  C:0C69H         LINE#         173
+  C:0C7CH         LINE#         174
+  C:0C8FH         LINE#         176
+  C:0C94H         LINE#         177
+  C:0C94H         LINE#         178
+  C:0C9EH         LINE#         179
+  C:0CA5H         LINE#         180
+  C:0CAAH         LINE#         181
+  C:0CAAH         LINE#         182
+  C:0CB3H         LINE#         183
+  C:0CBBH         LINE#         184
+  C:0CCEH         LINE#         185
+  C:0CE1H         LINE#         186
+  -------         ENDPROC       _DISPLAYGRAPHIC
+  -------         ENDMOD        MAIN
+
+Program Size: data=16.1 xdata=0 code=3674
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

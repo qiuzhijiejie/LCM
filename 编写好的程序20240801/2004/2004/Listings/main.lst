@@ -1,0 +1,362 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              08/03/2024 21:04:11 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          //SMC2004A??????????????????[ASM51????][MCS51??????]
+   2          //????: LCM2004A?????????????
+   3          //  ????????SMC2004A???????MCS51???????MCS51?????
+   4          //???????
+   5          //  ???????HD44780?????MCS51??????????,LCM2004A??????
+   6          //????????????????,HD44780???????????????????,
+   7          //??LCM2004A???????????????????.
+   8          //  ???????,?20?ASCII??X4??????????"LCM2004A",
+   9          //"*ShenZhen Oriental**","Technology/123456789","WWW.ORIENTAL-LCD.COM"????0..9??????
+  10          //??,????,??????????,???????1???LCD??.
+  11          //-------------------------------------------------------------------------------
+  12          //????: 2009.08.11
+  13          //????: VW For Windows
+  14          //????: AT89C52 MCU,MCS-51?? MCU,etc.
+  15          //???: XIEJIANREN.
+  16          //????: ??(0762-2898988),??(0762-2898818),??(WWW.YEHUIDISPLAY.COM)
+  17          //????: ??????????????,???????.
+  18          //????: http:/www.yehuidisplay.com/lcm/product/1/LCM2004A.pdf
+  19          //-------------------------------------------------------------------------------
+  20          #include <reg51.h>
+  21          #include <intrins.h>
+  22          //????????????
+  23          void exsample(void);                    //????
+  24          void exdelay(void);                     //???????
+  25          void charfill(unsigned char c);         //????A???ASCII?????
+  26          void putstrxy(unsigned char cx,unsigned char cy,unsigned char code *s);
+  27                                                  //?(cx,cy)???????????
+  28          void putstr(unsigned char code *s);     //?????????
+  29          void putchar(unsigned char c);          //?(CXPOS,CYPOS)??????????
+  30          unsigned char getchar(void);            //?(CXPOS,CYPOS)??????????
+  31          void charlcdpos(void);                  //??(CXPOS,CYPOS)?????DDRAM??
+  32          void charcursornext(void);              //????????????????
+  33          void lcdreset(void);                    //SMC2004???????????????
+  34          void delay3ms(void);                    //??3MS???
+  35          void lcdwc(unsigned char c);            //???????????????
+  36          void lcdwd(unsigned char d);            //???????????????
+  37          unsigned char lcdrd(void);              //??????
+  38          void lcdwaitidle(void);                 //??????
+  39          //-------------------------------------------------------------------------------
+  40          //SMC2004A???????????
+  41          //PIN1: VSS  [???]-------------------VSS
+  42          //PIN2: VDD  [????]-----------------VDD
+  43          //PIN3: Vo   [LCD ????]-------------?10K??????VSS,0?????
+  44          //PIN4: RS   [??/???????]------P3.0
+  45          //PIN5: RW   [????????]---------P3.1
+  46          //PIN6: E    [??????]-------------P3.2
+  47          //PIN7: D0   [Data I/O]-----------------P1.0
+  48          //PIN8: D1   [Data I/O]-----------------P1.1
+  49          //PIN9: D2   [Data I/O]-----------------P1.2
+  50          //PIN10:D3   [Data I/O]-----------------P1.3
+  51          //PIN11:D4   [Data I/O]-----------------P1.4
+  52          //PIN12:D5   [Data I/O]-----------------P1.5
+  53          //PIN13:D6   [Data I/O]-----------------P1.6
+  54          //PIN14:D7   [Data I/O]-----------------P1.7
+C51 COMPILER V9.60.7.0   MAIN                                                              08/03/2024 21:04:11 PAGE 2   
+
+  55          //PIN15:BLA  [?????]---------------?10????+5V.
+  56          //PIN16:BLK  [?????]---------------VSS
+  57          //???http://download.sunman.cn/lcm/product/1/LCM2004A.pdf
+  58          //?????http://download.sunman.cn/lcm/reference/HD44780_CHARACTER_TABLE.pdf
+  59          //-------------------------------------------------------------------------------
+  60          //???????????????????
+  61          //??????????,????????????????
+  62          sbit RSPIN   = P3^0;                    //RS???????
+  63          sbit RWPIN   = P3^1;                    //RW???????
+  64          sbit EPIN    = P3^2;                    //E???????
+  65          //-------------------------------------------------------------------------------
+  66          //??CXPOS,CYPOS???????????????????
+  67          unsigned char data CXPOS;               //???????(??CHARLCDPOS???)
+  68          unsigned char data CYPOS;               //???????(??CHARLCDPOS???)
+  69          //-------------------------------------------------------------------------------
+  70          void main(void)                         //???
+  71          {
+  72   1        while(1)
+  73   1        {
+  74   2          exsample();                         //??????
+  75   2        }
+  76   1      }
+  77          void exsample(void)                     //????
+  78          {   unsigned char i;
+  79   1      //0.??????,LCD??????????,???????
+  80   1          lcdreset();                         //??????????
+  81   1          charfill(' ');                      //????
+  82   1      
+  83   1      //1.?????: ?(6,0)??????"LCM2004A"
+  84   1          putstrxy(6,0,"LCM2004A");           //?(6,0)?????????
+  85   1          exdelay();                          //???300mS
+  86   1          exdelay();                          //???300mS
+  87   1      
+  88   1      //2.?????: ?(0,1)??????"*ShenZhen Oriental**"
+  89   1          putstrxy(0,1,"*ShenZhen Oriental**");      //?(0,1)?????????
+  90   1          exdelay();                          //???300mS
+  91   1          exdelay();                          //???300mS
+  92   1      
+  93   1      //3.?????: ?(0,2)??????"Technology/123456789"
+  94   1          putstrxy(0,2,"Technology/123456789");   //?(0,2)?????????
+  95   1          exdelay();                          //???300mS
+  96   1          exdelay();                          //???300mS
+  97   1      
+  98   1      //4.?????: ?(0,3)??????"WWW.ORIENTAL-LCD.COM"
+  99   1          putstrxy(0,3,"WWW.ORIENTAL-LCD.COM");   //?(0,3)?????????
+ 100   1          exdelay();                          //???300mS
+ 101   1          exdelay();                          //???300mS
+ 102   1      
+ 103   1      //5.??????: ????0..9 ????
+ 104   1          for(i='0';i<'9'+1;i++)
+ 105   1          {   charfill(i);                    //?????i??
+ 106   2              exdelay();                      //???300mS
+ 107   2          }
+ 108   1          charfill(' ');                      //????
+ 109   1          exdelay();                          //???300mS
+ 110   1      
+ 111   1      //6.????: ????A..Z ??
+ 112   1          for(i='A';i<'Z'+1;i++)              //????A..Z??
+ 113   1          {   putchar(i);                     //???????i??
+ 114   2              charcursornext();               //?????????????
+ 115   2              exdelay();                      //???300mS
+ 116   2          }
+C51 COMPILER V9.60.7.0   MAIN                                                              08/03/2024 21:04:11 PAGE 3   
+
+ 117   1      
+ 118   1      //7.????: ???????1???LCD??.
+ 119   1          for(CXPOS=0,CYPOS=0,i=0;i<32;i++)   //????(0,0)
+ 120   1          {   putchar(getchar()+1);          //?????????1???LCD??
+ 121   2              charcursornext();               //?????????????
+ 122   2              exdelay();                      //???300mS
+ 123   2          }
+ 124   1      }
+ 125          void exdelay(void)                      //???????
+ 126          { unsigned char i,j,k;                  //???300mS
+ 127   1        for(i=0;i<30;i++)
+ 128   1          for(j=0;j<64;j++)
+ 129   1            for(k=0;k<51;k++);
+ 130   1      }
+ 131          //-------------------------------------------------------------------------------
+ 132          //??charfill,putstr,putchar,getchar?HD44780??????????????????
+ 133          //-------------------------------------------------------------------------------
+ 134          //?????:void charfill(unsigned char c).
+ 135          //??:????A???ASCII??.
+ 136          //????:2009.08.11
+ 137          //???:chujianjun@sunman.cn,tanchao@sunman.cn
+ 138          //-------------------------------------------------------------------------------
+ 139          void charfill(unsigned char c)          //????A???ASCII?????
+ 140          {   for(CXPOS=CYPOS=0;1;)
+ 141   1          {   putchar(c);                     //?????
+ 142   2              charcursornext();               //?????????????
+ 143   2              if((CXPOS==0) && (CYPOS==0)) break;
+ 144   2          }
+ 145   1      }
+ 146          //-------------------------------------------------------------------------------
+ 147          //?????:void putstrxy(unsigned char cx,unsigned char cy,unsigned char *s).
+ 148          //??:?(cx,cy)????????.
+ 149          //????:2009.08.11
+ 150          //???:chujianjun@sunman.cn,tanchao@sunman.cn
+ 151          //-------------------------------------------------------------------------------
+ 152          void putstrxy(unsigned char cx,unsigned char cy,unsigned char code *s)
+ 153          {                                       //?(cx,cy)???????????
+ 154   1          CXPOS=cx;                           //???X???cx
+ 155   1          CYPOS=cy;                           //???Y???cy
+ 156   1          for(;*s!=0;s++)                     //?????????,??
+ 157   1          {   putchar(*s);                    //?1???
+ 158   2              charcursornext();               //?????????
+ 159   2          }
+ 160   1      }
+ 161          //-------------------------------------------------------------------------------
+ 162          //?????:void putstr(unsigned char *s).
+ 163          //??:?(CXPOS,CYPOS)????????.
+ 164          //????:2009.08.11
+ 165          //???:chujianjun@sunman.cn,tanchao@sunman.cn
+ 166          //-------------------------------------------------------------------------------
+ 167          void putstr(unsigned char code *s)      //?????????
+ 168          {   for(;*s!=0;s++)                     //?????????,??
+ 169   1          {   putchar(*s);                    //?1???
+ 170   2              charcursornext();               //?????????
+ 171   2          }
+ 172   1      }
+ 173          //-------------------------------------------------------------------------------
+ 174          //?????:void putchar(unsigned char c).
+ 175          //??:?(CXPOS,CYPOS)???????.
+ 176          //????:2009.08.11
+ 177          //???:chujianjun@sunman.cn,tanchao@sunman.cn
+ 178          //-------------------------------------------------------------------------------
+C51 COMPILER V9.60.7.0   MAIN                                                              08/03/2024 21:04:11 PAGE 4   
+
+ 179          void putchar(unsigned char c)           //?(CXPOS,CYPOS)??????????
+ 180          {
+ 181   1          charlcdpos();                       //??(CXPOS,CYPOS)?????DDRAM??
+ 182   1          lcdwd(c);                           //???
+ 183   1      }
+ 184          //-------------------------------------------------------------------------------
+ 185          //?????:unsigned char getchar(void).
+ 186          //??:?(CXPOS,CYPOS)???????.
+ 187          //????:2009.08.12
+ 188          //???:chujianjun@sunman.cn,tanchao@sunman.cn
+ 189          //-------------------------------------------------------------------------------
+ 190          unsigned char getchar(void)             //?(CXPOS,CYPOS)??????????
+ 191          {
+ 192   1          charlcdpos();                       //??(CXPOS,CYPOS)?????DDRAM??
+ 193   1          return lcdrd();                     //???
+ 194   1      }
+ 195          //-------------------------------------------------------------------------------
+ 196          //??charlcdpos,charcursornext,lcdreset?HD44780?????????????
+ 197          //20??X4??SMC2004????????????????????.
+ 198          //-------------------------------------------------------------------------------
+ 199          //?????:void charlcdpos(void).
+ 200          //??:??(CXPOS,CYPOS)?????DDRAM??.
+ 201          //????:2009.08.11
+ 202          //???:chujianjun@sunman.cn,tanchao@sunman.cn
+ 203          //-------------------------------------------------------------------------------
+ 204          void charlcdpos(void)                   //??(CXPOS,CYPOS)?????DDRAM??
+ 205          {
+ 206   1          if(CXPOS>=20) CXPOS=0;              //X????(0?15)
+ 207   1          CYPOS&=0X03;                        //Y????(0?3)
+ 208   1          if(CYPOS==0)                        //(???)X: ?0----19???
+ 209   1              lcdwc(CXPOS|0x80);              //    DDRAM:   0----13H
+ 210   1          else if(CYPOS==1)                   //(???)X: ?0----19???
+ 211   1              lcdwc(CXPOS|0xC0);              //    DDRAM:  40----53H
+ 212   1          else if(CYPOS==2)                   //(???)X: ?0----19???
+ 213   1              lcdwc((CXPOS+20)|0x80);         //    DDRAM:  14----27H
+ 214   1          else                                //(???)X: ?0----19???
+ 215   1              lcdwc((CXPOS+20)|0xC0);         //    DDRAM:  54----67H
+ 216   1      }
+ 217          //-------------------------------------------------------------------------------
+ 218          //?????:void charcursornext(void).
+ 219          //??:?????????????.
+ 220          //????:2009.08.11
+ 221          //???:chujianjun@sunman.cn,tanchao@sunman.cn
+ 222          //-------------------------------------------------------------------------------
+ 223          void charcursornext(void)               //????????????????
+ 224          {
+ 225   1          CXPOS++;                            //?????1
+ 226   1          if(CXPOS>19)                        //????CXPOS>19?????
+ 227   1          {   CXPOS=0;                        //????????
+ 228   2              CYPOS++;                        //????1
+ 229   2              CYPOS&=0X3;                     //????CYPOS??????(0?3)
+ 230   2          }
+ 231   1      }
+ 232          //-------------------------------------------------------------------------------
+ 233          //?????:void lcdreset(void).
+ 234          //??:??????????.
+ 235          //????:2009.08.11
+ 236          //???:chujianjun@sunman.cn,tanchao@sunman.cn
+ 237          //-------------------------------------------------------------------------------
+ 238          void lcdreset(void)                     //SMC2004???????????????
+ 239          {                                       //2004???????0x38
+ 240   1          lcdwc(0x38);                        //?????????
+C51 COMPILER V9.60.7.0   MAIN                                                              08/03/2024 21:04:11 PAGE 5   
+
+ 241   1          delay3ms();                         //??3MS
+ 242   1          lcdwc(0x38);                        //?????????
+ 243   1          delay3ms();                         //??3MS
+ 244   1          lcdwc(0x38);                        //?????????
+ 245   1          delay3ms();                         //??3MS
+ 246   1          lcdwc(0x38);                        //?????????
+ 247   1          delay3ms();                         //??3MS
+ 248   1          lcdwc(0x08);                        //????
+ 249   1          lcdwc(0x01);                        //??
+ 250   1          delay3ms();                         //??3MS
+ 251   1          lcdwc(0x06);                        //????????
+ 252   1          lcdwc(0x0C);                        //????????
+ 253   1      }
+ 254          void delay3ms(void)                     //??3MS???
+ 255          { unsigned char i,j,k;
+ 256   1        for(i=0;i<3;i++)
+ 257   1          for(j=0;j<64;j++)
+ 258   1            for(k=0;k<51;k++);
+ 259   1      }
+ 260          //-------------------------------------------------------------------------------
+ 261          //??lcdwc,lcdwd,lcdrd?HD44780?????MCS51????????????,
+ 262          //lcdwaitidle??????.
+ 263          //-------------------------------------------------------------------------------
+ 264          //?????:void lcdwc(unsigned char c).
+ 265          //??:????????????.
+ 266          //????:2009.08.08
+ 267          //???:chujianjun@sunman.cn,tanchao@sunman.cn
+ 268          //-------------------------------------------------------------------------------
+ 269          void lcdwc(unsigned char c)             //???????????????
+ 270          {
+ 271   1          lcdwaitidle();                       //HD44780??????????
+ 272   1          RSPIN=0;                             //RS=0 RW=0 E=???
+ 273   1          RWPIN=0;
+ 274   1          P1=c;
+ 275   1          EPIN=1;
+ 276   1          _nop_();
+ 277   1          EPIN=0;
+ 278   1      }
+ 279          //-------------------------------------------------------------------------------
+ 280          //?????:void lcdwd(unsigned char d).
+ 281          //??:???????????.
+ 282          //????:2009.08.12
+ 283          //???:chujianjun@sunman.cn,tanchao@sunman.cn
+ 284          //-------------------------------------------------------------------------------
+ 285          void lcdwd(unsigned char d)             //???????????????
+ 286          {
+ 287   1          lcdwaitidle();                       //HD44780??????????
+ 288   1          RSPIN=1;                             //RS=1 RW=0 E=???
+ 289   1          RWPIN=0;
+ 290   1          P1=d;
+ 291   1          EPIN=1;
+ 292   1          _nop_();
+ 293   1          EPIN=0;
+ 294   1      }
+ 295          //-------------------------------------------------------------------------------
+ 296          //?????:unsigned char lcdrd(void).
+ 297          //??:???????????.
+ 298          //????:2009.08.12
+ 299          //???:chujianjun@sunman.cn,tanchao@sunman.cn
+ 300          //-------------------------------------------------------------------------------
+ 301          unsigned char lcdrd(void)               //??????
+ 302          {   unsigned char d;
+C51 COMPILER V9.60.7.0   MAIN                                                              08/03/2024 21:04:11 PAGE 6   
+
+ 303   1          lcdwaitidle();                       //HD44780??????????
+ 304   1          P1=0xff;
+ 305   1          RSPIN=1;                             //RS=1 RW=1 E=???
+ 306   1          RWPIN=1;
+ 307   1          EPIN=1;
+ 308   1          _nop_();
+ 309   1          d=P1;
+ 310   1          EPIN=0;
+ 311   1          return d;
+ 312   1      }
+ 313          //-------------------------------------------------------------------------------
+ 314          //?????:void lcdwaitidle(void).
+ 315          //??:???.
+ 316          //????:2009.08.12
+ 317          //???:chujianjun@sunman.cn,tanchao@sunman.cn
+ 318          //-------------------------------------------------------------------------------
+ 319          void lcdwaitidle(void)                  //??????
+ 320          {   unsigned char i;
+ 321   1          P1=0xff;
+ 322   1          RSPIN=0;                            //RS=0 RW=1 E=???
+ 323   1          RWPIN=1;
+ 324   1          EPIN=1;
+ 325   1          for(i=0;i<20;i++)
+ 326   1              if((P1&0x80) == 0) break;       //D7=0 ??LCD?????,?????
+ 327   1          EPIN=0;
+ 328   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    518    ----
+   CONSTANT SIZE    =     72    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2       9
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -708,7 +708,7 @@ void DisplayPatterns()
         case 6: FillHorizontalStripePattern(); Delay(100); break;	
 		case 7: FillDiagonalLinePattern(); Delay(100); break;
         case 8: FillScreenWithPattern(0x00);drawimge(Img_SUNMAN_128x64); Delay(100); break;
-        case 9:DisplaystringAtposition(0,1,"烨辉科技有限公司");DisplaystringAtposition(2,2,"YT-LCD12864"); Delay(100); break;
+        case 9: DisplaystringAtposition(0,1,"烨辉科技有限公司");DisplaystringAtposition(2,2,"YT-LCD12864"); Delay(100); break;
 
     }
     step++;

@@ -1,0 +1,11 @@
+.\objects\main.o: ..\User\main.c
+.\objects\main.o: ..\Device\stm32f10x.h
+.\objects\main.o: ..\Core\core_cm3.h
+.\objects\main.o: D:\Keil\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\main.o: ..\Device\system_stm32f10x.h
+.\objects\main.o: ..\Device\stm32f10x_conf.h
+.\objects\main.o: ..\ST-lib\inc\stm32f10x_gpio.h
+.\objects\main.o: ..\Device\stm32f10x.h
+.\objects\main.o: ..\ST-lib\inc\stm32f10x_rcc.h
+.\objects\main.o: ..\ST-lib\inc\misc.h
+.\objects\main.o: ..\User\gpio.h

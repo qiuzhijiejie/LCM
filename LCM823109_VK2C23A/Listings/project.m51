@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    03/03/2025  20:27:40  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    03/04/2025  16:32:28  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22.4.0, INVOKED BY:
@@ -34,45 +34,45 @@ LINK MAP OF MODULE:  .\Objects\project (LCM823109)
 
             * * * * * * *  X D A T A   M E M O R Y  * * * * * * *
             XDATA   0000H     009DH     UNIT         ?XD?LCM823109
-            XDATA   009DH     000BH     UNIT         _XDATA_GROUP_
-            XDATA   00A8H     0006H     UNIT         ?XD?_READNDATAVK2C23A?LCM823109
-            XDATA   00AEH     0004H     UNIT         ?XD?_VK2C23A_DISDOTOFF?LCM823109
-            XDATA   00B2H     0003H     UNIT         ?XD?MAIN
-            XDATA   00B5H     0001H     UNIT         ?XD?VK2C23A_I2CRDDAT?LCM823109
+            XDATA   009DH     000AH     UNIT         _XDATA_GROUP_
+            XDATA   00A7H     0006H     UNIT         ?XD?_READNDATAVK2C23A?LCM823109
+            XDATA   00ADH     0004H     UNIT         ?XD?_VK2C23A_DISDOTOFF?LCM823109
+            XDATA   00B1H     0003H     UNIT         ?XD?MAIN
+            XDATA   00B4H     0001H     UNIT         ?XD?VK2C23A_I2CRDDAT?LCM823109
 
             * * * * * * *   C O D E   M E M O R Y   * * * * * * *
             CODE    0000H     0003H     ABSOLUTE     
-            CODE    0003H     0190H     UNIT         ?PR?MAIN?MAIN
-            CODE    0193H     00B2H     UNIT         ?PR?_VK2C23A_DISDOTOFF?LCM823109
-            CODE    0245H     00ACH     UNIT         ?PR?_VK2C23A_DISDOTON?LCM823109
-            CODE    02F1H     008EH     UNIT         ?PR?_READNDATAVK2C23A?LCM823109
-            CODE    037FH     008CH     UNIT         ?C_C51STARTUP
-            CODE    040BH     0082H     UNIT         ?C?LIB_CODE
-            CODE    048DH     007BH     UNIT         ?PR?_VK2C23A_DISALL?LCM823109
-            CODE    0508H     006EH     UNIT         ?PR?_WRITENDATAVK2C23A?LCM823109
-            CODE    0576H     005AH     UNIT         ?C_INITSEG
-            CODE    05D0H     0046H     UNIT         ?PR?_WRITE1DATAVK2C23A?LCM823109
-            CODE    0616H     003BH     UNIT         ?PR?VK2C23A_I2CSLAVEACK?LCM823109
-            CODE    0651H     002FH     UNIT         ?PR?_WRITECMDVK2C23A?LCM823109
-            CODE    0680H     002EH     UNIT         ?PR?VK2C23A_I2CRDDAT?LCM823109
-            CODE    06AEH     002CH     UNIT         ?PR?VK2C23A_INITSEQUENCE?LCM823109
-            CODE    06DAH     0025H     UNIT         ?PR?_VK2C23A_I2CWRITEBYTE?LCM823109
-            CODE    06FFH     001EH     UNIT         ?PR?_DELAY_NMS?LCM823109
-            CODE    071DH     001DH     UNIT         ?PR?READKEY?LCM823109
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/03/2025  20:27:40  PAGE 2
+            CODE    0003H     00B2H     UNIT         ?PR?_VK2C23A_DISDOTOFF?LCM823109
+            CODE    00B5H     00ACH     UNIT         ?PR?_VK2C23A_DISDOTON?LCM823109
+            CODE    0161H     0097H     UNIT         ?PR?MAIN?MAIN
+            CODE    01F8H     008EH     UNIT         ?PR?_READNDATAVK2C23A?LCM823109
+            CODE    0286H     008CH     UNIT         ?C_C51STARTUP
+            CODE    0312H     0082H     UNIT         ?C?LIB_CODE
+            CODE    0394H     007BH     UNIT         ?PR?_VK2C23A_DISALL?LCM823109
+            CODE    040FH     006EH     UNIT         ?PR?_WRITENDATAVK2C23A?LCM823109
+            CODE    047DH     005AH     UNIT         ?C_INITSEG
+            CODE    04D7H     0046H     UNIT         ?PR?_WRITE1DATAVK2C23A?LCM823109
+            CODE    051DH     003BH     UNIT         ?PR?VK2C23A_I2CSLAVEACK?LCM823109
+            CODE    0558H     002FH     UNIT         ?PR?_WRITECMDVK2C23A?LCM823109
+            CODE    0587H     002EH     UNIT         ?PR?VK2C23A_I2CRDDAT?LCM823109
+            CODE    05B5H     002CH     UNIT         ?PR?VK2C23A_INITSEQUENCE?LCM823109
+            CODE    05E1H     0025H     UNIT         ?PR?_VK2C23A_I2CWRITEBYTE?LCM823109
+            CODE    0606H     001EH     UNIT         ?PR?_DELAY_NMS?LCM823109
+            CODE    0624H     001DH     UNIT         ?PR?READKEY?LCM823109
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/04/2025  16:32:28  PAGE 2
 
 
-            CODE    073AH     001CH     UNIT         ?PR?_DELAY_NUS?LCM823109
-            CODE    0756H     0019H     UNIT         ?PR?VK2C23A_I2CSENDACK?LCM823109
-            CODE    076FH     0011H     UNIT         ?PR?_DISPLAYDIGITORCHAR?LCM823109
-            CODE    0780H     0011H     UNIT         ?PR?_DISPLAYDIGITORCHAR1?LCM823109
-            CODE    0791H     0010H     UNIT         ?PR?VK2C23A_I2CSTOP?LCM823109
-            CODE    07A1H     000EH     UNIT         ?PR?VK2C23A_I2CSTART?LCM823109
-            CODE    07AFH     000EH     UNIT         ?PR?VK2C23A_I2CSENDNACK?LCM823109
-            CODE    07BDH     0007H     UNIT         ?PR?VK2C23A_ENTER_POWEROFF?LCM823109
-            CODE    07C4H     0007H     UNIT         ?PR?VK2C23A_EXIT_POWEROFF?LCM823109
-            CODE    07CBH     0006H     UNIT         ?PR?VK2C23A_INIT?LCM823109
-            CODE    07D1H     0005H     UNIT         ?PR?VK2C23A_LOWLEVEL_INIT?LCM823109
+            CODE    0641H     001CH     UNIT         ?PR?_DELAY_NUS?LCM823109
+            CODE    065DH     0019H     UNIT         ?PR?VK2C23A_I2CSENDACK?LCM823109
+            CODE    0676H     0011H     UNIT         ?PR?_DISPLAYDIGITORCHAR?LCM823109
+            CODE    0687H     0011H     UNIT         ?PR?_DISPLAYDIGITORCHAR1?LCM823109
+            CODE    0698H     0010H     UNIT         ?PR?VK2C23A_I2CSTOP?LCM823109
+            CODE    06A8H     000EH     UNIT         ?PR?VK2C23A_I2CSTART?LCM823109
+            CODE    06B6H     000EH     UNIT         ?PR?VK2C23A_I2CSENDNACK?LCM823109
+            CODE    06C4H     0007H     UNIT         ?PR?VK2C23A_ENTER_POWEROFF?LCM823109
+            CODE    06CBH     0007H     UNIT         ?PR?VK2C23A_EXIT_POWEROFF?LCM823109
+            CODE    06D2H     0006H     UNIT         ?PR?VK2C23A_INIT?LCM823109
+            CODE    06D8H     0005H     UNIT         ?PR?VK2C23A_LOWLEVEL_INIT?LCM823109
 
 
 
@@ -86,14 +86,13 @@ SEGMENT                                        XDATA_GROUP
   +--> ?PR?MAIN?MAIN
   +--> ?C_INITSEG
 
-?PR?MAIN?MAIN                                009DH    0001H
+?PR?MAIN?MAIN                                -----    -----
   +--> ?PR?VK2C23A_INIT?LCM823109
   +--> ?PR?_VK2C23A_DISALL?LCM823109
-  +--> ?PR?_VK2C23A_DISDOTON?LCM823109
-  +--> ?PR?_DELAY_NMS?LCM823109
   +--> ?PR?_DISPLAYDIGITORCHAR?LCM823109
   +--> ?PR?_DISPLAYDIGITORCHAR1?LCM823109
-  +--> ?PR?READKEY?LCM823109
+  +--> ?PR?_VK2C23A_DISDOTON?LCM823109
+  +--> ?PR?_DELAY_NMS?LCM823109
 
 ?PR?VK2C23A_INIT?LCM823109                   -----    -----
   +--> ?PR?VK2C23A_LOWLEVEL_INIT?LCM823109
@@ -103,7 +102,7 @@ SEGMENT                                        XDATA_GROUP
   +--> ?PR?VK2C23A_LOWLEVEL_INIT?LCM823109
   +--> ?PR?_WRITECMDVK2C23A?LCM823109
 
-?PR?_WRITECMDVK2C23A?LCM823109               009EH    0002H
+?PR?_WRITECMDVK2C23A?LCM823109               009DH    0002H
   +--> ?PR?VK2C23A_I2CSLAVEACK?LCM823109
   +--> ?PR?_VK2C23A_I2CWRITEBYTE?LCM823109
   +--> ?PR?VK2C23A_I2CSTOP?LCM823109
@@ -119,30 +118,24 @@ SEGMENT                                        XDATA_GROUP
 ?PR?_VK2C23A_I2CWRITEBYTE?LCM823109          -----    -----
   +--> ?PR?_DELAY_NUS?LCM823109
 
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/03/2025  20:27:40  PAGE 3
-
-
 ?PR?VK2C23A_I2CSTOP?LCM823109                -----    -----
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/04/2025  16:32:28  PAGE 3
+
+
   +--> ?PR?_DELAY_NUS?LCM823109
 
-?PR?_VK2C23A_DISALL?LCM823109                009EH    0002H
+?PR?_VK2C23A_DISALL?LCM823109                009DH    0002H
   +--> ?PR?_WRITENDATAVK2C23A?LCM823109
 
-?PR?_WRITENDATAVK2C23A?LCM823109             00A2H    0006H
+?PR?_WRITENDATAVK2C23A?LCM823109             00A1H    0006H
   +--> ?PR?VK2C23A_I2CSLAVEACK?LCM823109
   +--> ?PR?_VK2C23A_I2CWRITEBYTE?LCM823109
   +--> ?PR?VK2C23A_I2CSTOP?LCM823109
 
-?PR?_VK2C23A_DISDOTON?LCM823109              009EH    0004H
-  +--> ?PR?_WRITENDATAVK2C23A?LCM823109
-
-?PR?_DELAY_NMS?LCM823109                     009EH    0004H
-  +--> ?PR?_DELAY_NUS?LCM823109
-
 ?PR?_DISPLAYDIGITORCHAR?LCM823109            -----    -----
   +--> ?PR?_WRITE1DATAVK2C23A?LCM823109
 
-?PR?_WRITE1DATAVK2C23A?LCM823109             009EH    0002H
+?PR?_WRITE1DATAVK2C23A?LCM823109             009DH    0002H
   +--> ?PR?VK2C23A_I2CSLAVEACK?LCM823109
   +--> ?PR?_VK2C23A_I2CWRITEBYTE?LCM823109
   +--> ?PR?VK2C23A_I2CSTOP?LCM823109
@@ -150,8 +143,11 @@ SEGMENT                                        XDATA_GROUP
 ?PR?_DISPLAYDIGITORCHAR1?LCM823109           -----    -----
   +--> ?PR?_WRITE1DATAVK2C23A?LCM823109
 
-?PR?READKEY?LCM823109                        -----    -----
-  +--> ?PR?_DELAY_NMS?LCM823109
+?PR?_VK2C23A_DISDOTON?LCM823109              009DH    0004H
+  +--> ?PR?_WRITENDATAVK2C23A?LCM823109
+
+?PR?_DELAY_NMS?LCM823109                     009DH    0004H
+  +--> ?PR?_DELAY_NUS?LCM823109
 
 
 
@@ -162,471 +158,471 @@ SYMBOL TABLE OF MODULE:  .\Objects\project (LCM823109)
 
   -------         MODULE        LCM823109
   C:0000H         SYMBOL        _ICE_DUMMY_
-  C:06DAH         PUBLIC        _VK2C23A_I2CWriteByte
-  C:0791H         PUBLIC        VK2C23A_I2CStop
-  C:0193H         PUBLIC        _VK2C23A_DisDotOff
+  C:05E1H         PUBLIC        _VK2C23A_I2CWriteByte
+  C:0698H         PUBLIC        VK2C23A_I2CStop
+  C:0003H         PUBLIC        _VK2C23A_DisDotOff
   D:0008H         PUBLIC        shuzi_zimo1
-  C:0680H         PUBLIC        VK2C23A_I2CRDDat
+  C:0587H         PUBLIC        VK2C23A_I2CRDDat
   B:00A0H.0       PUBLIC        P2_0
-  C:076FH         PUBLIC        _DisplayDigitOrChar
+  C:0676H         PUBLIC        _DisplayDigitOrChar
   X:0000H         PUBLIC        VK2C23A_dispram
   B:00B0H.1       PUBLIC        P3_1
   B:00B0H.2       PUBLIC        P3_2
   X:0033H         PUBLIC        VK2C23A_segtab
   X:0066H         PUBLIC        VK2C23A_maxcom
-  C:0245H         PUBLIC        _VK2C23A_DisDotOn
-  C:02F1H         PUBLIC        _ReadnDataVK2C23A
-  C:071DH         PUBLIC        ReadKey
-  C:07BDH         PUBLIC        VK2C23A_Enter_PowerOff
-  C:07CBH         PUBLIC        VK2C23A_Init
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/03/2025  20:27:40  PAGE 4
+  C:00B5H         PUBLIC        _VK2C23A_DisDotOn
+  C:01F8H         PUBLIC        _ReadnDataVK2C23A
+  C:0624H         PUBLIC        ReadKey
+  C:06C4H         PUBLIC        VK2C23A_Enter_PowerOff
+  C:06D2H         PUBLIC        VK2C23A_Init
+  C:0418H         PUBLIC        _WritenDataVK2C23A
+  C:0606H         PUBLIC        _delay_nms
+  C:0687H         PUBLIC        _DisplayDigitOrChar1
+  C:06CBH         PUBLIC        VK2C23A_Exit_PowerOff
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/04/2025  16:32:28  PAGE 4
 
 
-  C:0511H         PUBLIC        _WritenDataVK2C23A
-  C:06FFH         PUBLIC        _delay_nms
-  C:0780H         PUBLIC        _DisplayDigitOrChar1
-  C:07C4H         PUBLIC        VK2C23A_Exit_PowerOff
   X:0067H         PUBLIC        VK2C23A_comi
   X:0068H         PUBLIC        VK2C23A_segi
-  C:07AFH         PUBLIC        VK2C23A_I2CSendNAck
-  C:0740H         PUBLIC        _delay_nus
+  C:06B6H         PUBLIC        VK2C23A_I2CSendNAck
+  C:0647H         PUBLIC        _delay_nus
   D:0017H         PUBLIC        shuzi_zimo
-  C:048DH         PUBLIC        _VK2C23A_DisAll
-  C:0651H         PUBLIC        _WriteCmdVK2C23A
-  C:07D1H         PUBLIC        VK2C23A_Lowlevel_Init
-  C:0629H         PUBLIC        VK2C23A_I2CSlaveAck
-  C:07A1H         PUBLIC        VK2C23A_I2CStart
-  C:06AEH         PUBLIC        VK2C23A_InitSequence
-  C:05D0H         PUBLIC        _Write1DataVK2C23A
-  C:0756H         PUBLIC        VK2C23A_I2CSendAck
+  C:0394H         PUBLIC        _VK2C23A_DisAll
+  C:0558H         PUBLIC        _WriteCmdVK2C23A
+  C:06D8H         PUBLIC        VK2C23A_Lowlevel_Init
+  C:0530H         PUBLIC        VK2C23A_I2CSlaveAck
+  C:06A8H         PUBLIC        VK2C23A_I2CStart
+  C:05B5H         PUBLIC        VK2C23A_InitSequence
+  C:04D7H         PUBLIC        _Write1DataVK2C23A
+  C:065DH         PUBLIC        VK2C23A_I2CSendAck
   X:0069H         PUBLIC        VK2C23A_readbuf
-  C:073CH         SYMBOL        L?0123
+  C:0643H         SYMBOL        L?0123
   -------         PROC          L?0122
   -------         ENDPROC       L?0122
-  C:073CH         SYMBOL        L?0123
+  C:0643H         SYMBOL        L?0123
   -------         PROC          _DELAY_NUS
   D:0006H         SYMBOL        x
   -------         DO            
   D:0005H         SYMBOL        i
   -------         ENDDO         
-  C:0740H         LINE#         32
-  C:0740H         LINE#         33
-  C:0740H         LINE#         35
-  C:074AH         LINE#         36
-  C:074AH         LINE#         37
-  C:074CH         LINE#         38
-  C:0752H         LINE#         39
-  C:0752H         LINE#         40
-  C:0753H         LINE#         41
-  C:0755H         LINE#         42
-  C:0755H         LINE#         43
+  C:0647H         LINE#         32
+  C:0647H         LINE#         33
+  C:0647H         LINE#         35
+  C:0651H         LINE#         36
+  C:0651H         LINE#         37
+  C:0653H         LINE#         38
+  C:0659H         LINE#         39
+  C:0659H         LINE#         40
+  C:065AH         LINE#         41
+  C:065CH         LINE#         42
+  C:065CH         LINE#         43
   -------         ENDPROC       _DELAY_NUS
   -------         PROC          _DELAY_NMS
-  X:009EH         SYMBOL        x
-  C:06FFH         LINE#         51
-  C:0705H         LINE#         52
-  C:0705H         LINE#         53
-  C:0713H         LINE#         54
-  C:0713H         LINE#         55
-  C:071AH         LINE#         56
-  C:071CH         LINE#         57
+  X:009DH         SYMBOL        x
+  C:0606H         LINE#         51
+  C:060CH         LINE#         52
+  C:060CH         LINE#         53
+  C:061AH         LINE#         54
+  C:061AH         LINE#         55
+  C:0621H         LINE#         56
+  C:0623H         LINE#         57
   -------         ENDPROC       _DELAY_NMS
   -------         PROC          VK2C23A_I2CSTART
-  C:07A1H         LINE#         65
-  C:07A1H         LINE#         66
-  C:07A1H         LINE#         67
-  C:07A3H         LINE#         68
-  C:07A3H         LINE#         69
-  C:07A6H         LINE#         70
-  C:07A8H         LINE#         71
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/03/2025  20:27:40  PAGE 5
-
-
+  C:06A8H         LINE#         65
+  C:06A8H         LINE#         66
+  C:06A8H         LINE#         67
+  C:06AAH         LINE#         68
+  C:06AAH         LINE#         69
+  C:06ADH         LINE#         70
+  C:06AFH         LINE#         71
   -------         ENDPROC       VK2C23A_I2CSTART
   -------         PROC          VK2C23A_I2CSTOP
-  C:0791H         LINE#         80
-  C:0791H         LINE#         81
-  C:0791H         LINE#         82
-  C:0793H         LINE#         83
-  C:0795H         LINE#         84
-  C:0798H         LINE#         85
-  C:079AH         LINE#         86
+  C:0698H         LINE#         80
+  C:0698H         LINE#         81
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/04/2025  16:32:28  PAGE 5
+
+
+  C:0698H         LINE#         82
+  C:069AH         LINE#         83
+  C:069CH         LINE#         84
+  C:069FH         LINE#         85
+  C:06A1H         LINE#         86
   -------         ENDPROC       VK2C23A_I2CSTOP
-  C:061FH         SYMBOL        L?0120
-  C:0620H         SYMBOL        L?0121
+  C:0526H         SYMBOL        L?0120
+  C:0527H         SYMBOL        L?0121
   -------         PROC          L?0119
   -------         ENDPROC       L?0119
-  C:061FH         SYMBOL        L?0120
-  C:0620H         SYMBOL        L?0121
+  C:0526H         SYMBOL        L?0120
+  C:0527H         SYMBOL        L?0121
   -------         PROC          VK2C23A_I2CSLAVEACK
   -------         DO            
   D:0006H         SYMBOL        TimeOut
   D:0003H         SYMBOL        RetValue
   -------         ENDDO         
-  C:0629H         LINE#         95
-  C:0629H         LINE#         96
-  C:0629H         LINE#         100
-  C:062BH         LINE#         101
-  C:062EH         LINE#         102
-  C:0630H         LINE#         103
-  C:0634H         LINE#         104
-  C:0643H         LINE#         105
-  C:0643H         LINE#         106
-  C:0646H         LINE#         107
-  C:0646H         LINE#         108
-  C:0648H         LINE#         109
-  C:064AH         LINE#         111
-  C:064AH         LINE#         112
-  C:064CH         LINE#         113
-  C:064CH         LINE#         114
-  C:064CH         LINE#         115
-  C:064CH         LINE#         116
-  C:064EH         LINE#         118
-  C:0650H         LINE#         119
+  C:0530H         LINE#         95
+  C:0530H         LINE#         96
+  C:0530H         LINE#         100
+  C:0532H         LINE#         101
+  C:0535H         LINE#         102
+  C:0537H         LINE#         103
+  C:053BH         LINE#         104
+  C:054AH         LINE#         105
+  C:054AH         LINE#         106
+  C:054DH         LINE#         107
+  C:054DH         LINE#         108
+  C:054FH         LINE#         109
+  C:0551H         LINE#         111
+  C:0551H         LINE#         112
+  C:0553H         LINE#         113
+  C:0553H         LINE#         114
+  C:0553H         LINE#         115
+  C:0553H         LINE#         116
+  C:0555H         LINE#         118
+  C:0557H         LINE#         119
   -------         ENDPROC       VK2C23A_I2CSLAVEACK
   -------         PROC          VK2C23A_I2CSENDACK
-  C:0756H         LINE#         127
-  C:0756H         LINE#         128
-  C:0756H         LINE#         129
-  C:0758H         LINE#         130
-  C:075AH         LINE#         131
-  C:0761H         LINE#         132
-  C:0763H         LINE#         133
-  C:076AH         LINE#         134
-  C:076CH         LINE#         135
-  C:076EH         LINE#         136
+  C:065DH         LINE#         127
+  C:065DH         LINE#         128
+  C:065DH         LINE#         129
+  C:065FH         LINE#         130
+  C:0661H         LINE#         131
+  C:0668H         LINE#         132
+  C:066AH         LINE#         133
+  C:0671H         LINE#         134
+  C:0673H         LINE#         135
+  C:0675H         LINE#         136
   -------         ENDPROC       VK2C23A_I2CSENDACK
   -------         PROC          VK2C23A_I2CSENDNACK
-  C:07AFH         LINE#         144
-  C:07AFH         LINE#         145
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/03/2025  20:27:40  PAGE 6
+  C:06B6H         LINE#         144
+  C:06B6H         LINE#         145
+  C:06B6H         LINE#         146
+  C:06B8H         LINE#         147
+  C:06B8H         LINE#         148
+  C:06BBH         LINE#         149
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/04/2025  16:32:28  PAGE 6
 
 
-  C:07AFH         LINE#         146
-  C:07B1H         LINE#         147
-  C:07B1H         LINE#         148
-  C:07B4H         LINE#         149
-  C:07B6H         LINE#         150
+  C:06BDH         LINE#         150
   -------         ENDPROC       VK2C23A_I2CSENDNACK
   -------         PROC          _VK2C23A_I2CWRITEBYTE
   D:0003H         SYMBOL        byte
   -------         DO            
   D:0001H         SYMBOL        i
   -------         ENDDO         
-  C:06DAH         LINE#         159
-  C:06DCH         LINE#         160
-  C:06DCH         LINE#         161
-  C:06DEH         LINE#         162
-  C:06E4H         LINE#         163
-  C:06E4H         LINE#         164
-  C:06E6H         LINE#         165
-  C:06EAH         LINE#         166
-  C:06EEH         LINE#         168
-  C:06F0H         LINE#         169
-  C:06F4H         LINE#         170
-  C:06F7H         LINE#         171
-  C:06F9H         LINE#         172
-  C:06FCH         LINE#         173
-  C:06FEH         LINE#         174
+  C:05E1H         LINE#         159
+  C:05E3H         LINE#         160
+  C:05E3H         LINE#         161
+  C:05E5H         LINE#         162
+  C:05EBH         LINE#         163
+  C:05EBH         LINE#         164
+  C:05EDH         LINE#         165
+  C:05F1H         LINE#         166
+  C:05F5H         LINE#         168
+  C:05F7H         LINE#         169
+  C:05FBH         LINE#         170
+  C:05FEH         LINE#         171
+  C:0600H         LINE#         172
+  C:0603H         LINE#         173
+  C:0605H         LINE#         174
   -------         ENDPROC       _VK2C23A_I2CWRITEBYTE
   -------         PROC          _WRITECMDVK2C23A
-  X:009EH         SYMBOL        cmd
-  X:009FH         SYMBOL        Data
-  C:0651H         LINE#         184
-  C:0657H         LINE#         185
-  C:0657H         LINE#         186
-  C:0657H         LINE#         188
-  C:0657H         LINE#         189
-  C:065DH         LINE#         190
-  C:065DH         LINE#         191
-  C:065DH         LINE#         192
-  C:065FH         LINE#         193
-  C:065FH         LINE#         194
-  C:0667H         LINE#         195
-  C:066DH         LINE#         196
-  C:066DH         LINE#         197
-  C:066DH         LINE#         198
-  C:066FH         LINE#         199
-  C:066FH         LINE#         200
-  C:0677H         LINE#         201
-  C:067AH         LINE#         202
-  C:067AH         LINE#         203
-  C:067AH         LINE#         204
-  C:067AH         LINE#         205
-  C:067AH         LINE#         206
-  C:067DH         LINE#         208
-  C:067FH         LINE#         209
+  X:009DH         SYMBOL        cmd
+  X:009EH         SYMBOL        Data
+  C:0558H         LINE#         184
+  C:055EH         LINE#         185
+  C:055EH         LINE#         186
+  C:055EH         LINE#         188
+  C:055EH         LINE#         189
+  C:0564H         LINE#         190
+  C:0564H         LINE#         191
+  C:0564H         LINE#         192
+  C:0566H         LINE#         193
+  C:0566H         LINE#         194
+  C:056EH         LINE#         195
+  C:0574H         LINE#         196
+  C:0574H         LINE#         197
+  C:0574H         LINE#         198
+  C:0576H         LINE#         199
+  C:0576H         LINE#         200
+  C:057EH         LINE#         201
+  C:0581H         LINE#         202
+  C:0581H         LINE#         203
+  C:0581H         LINE#         204
+  C:0581H         LINE#         205
+  C:0581H         LINE#         206
+  C:0584H         LINE#         208
+  C:0586H         LINE#         209
   -------         ENDPROC       _WRITECMDVK2C23A
   -------         PROC          VK2C23A_I2CRDDAT
   -------         DO            
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/03/2025  20:27:40  PAGE 7
-
-
   D:0003H         SYMBOL        i
   D:0001H         SYMBOL        RetValue
-  X:00B5H         SYMBOL        Bit
+  X:00B4H         SYMBOL        Bit
   -------         ENDDO         
-  C:0680H         LINE#         217
-  C:0680H         LINE#         218
-  C:0680H         LINE#         222
-  C:0682H         LINE#         223
-  C:0682H         LINE#         224
-  C:0684H         LINE#         225
-  C:0687H         LINE#         226
-  C:068AH         LINE#         227
-  C:0692H         LINE#         229
-  C:0697H         LINE#         231
-  C:06A1H         LINE#         232
-  C:06A3H         LINE#         233
-  C:06A6H         LINE#         234
-  C:06ABH         LINE#         236
-  C:06ADH         LINE#         237
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/04/2025  16:32:28  PAGE 7
+
+
+  C:0587H         LINE#         217
+  C:0587H         LINE#         218
+  C:0587H         LINE#         222
+  C:0589H         LINE#         223
+  C:0589H         LINE#         224
+  C:058BH         LINE#         225
+  C:058EH         LINE#         226
+  C:0591H         LINE#         227
+  C:0599H         LINE#         229
+  C:059EH         LINE#         231
+  C:05A8H         LINE#         232
+  C:05AAH         LINE#         233
+  C:05ADH         LINE#         234
+  C:05B2H         LINE#         236
+  C:05B4H         LINE#         237
   -------         ENDPROC       VK2C23A_I2CRDDAT
   -------         PROC          _WRITE1DATAVK2C23A
-  X:009EH         SYMBOL        Addr
-  X:009FH         SYMBOL        Dat
-  C:05D0H         LINE#         248
-  C:05D7H         LINE#         249
-  C:05D7H         LINE#         251
-  C:05D7H         LINE#         253
-  C:05D7H         LINE#         254
-  C:05DDH         LINE#         255
-  C:05DDH         LINE#         256
-  C:05DDH         LINE#         257
-  C:05DFH         LINE#         258
-  C:05DFH         LINE#         260
-  C:05E4H         LINE#         261
-  C:05EAH         LINE#         262
-  C:05EAH         LINE#         263
-  C:05EAH         LINE#         264
-  C:05ECH         LINE#         265
-  C:05ECH         LINE#         267
-  C:05F4H         LINE#         268
-  C:05FAH         LINE#         269
-  C:05FAH         LINE#         270
-  C:05FAH         LINE#         271
-  C:05FCH         LINE#         272
-  C:05FCH         LINE#         274
-  C:0604H         LINE#         275
-  C:060AH         LINE#         276
-  C:060AH         LINE#         277
-  C:060DH         LINE#         278
-  C:0610H         LINE#         279
-  C:0610H         LINE#         282
-  C:0613H         LINE#         283
-  C:0615H         LINE#         284
+  X:009DH         SYMBOL        Addr
+  X:009EH         SYMBOL        Dat
+  C:04D7H         LINE#         248
+  C:04DEH         LINE#         249
+  C:04DEH         LINE#         251
+  C:04DEH         LINE#         253
+  C:04DEH         LINE#         254
+  C:04E4H         LINE#         255
+  C:04E4H         LINE#         256
+  C:04E4H         LINE#         257
+  C:04E6H         LINE#         258
+  C:04E6H         LINE#         260
+  C:04EBH         LINE#         261
+  C:04F1H         LINE#         262
+  C:04F1H         LINE#         263
+  C:04F1H         LINE#         264
+  C:04F3H         LINE#         265
+  C:04F3H         LINE#         267
+  C:04FBH         LINE#         268
+  C:0501H         LINE#         269
+  C:0501H         LINE#         270
+  C:0501H         LINE#         271
+  C:0503H         LINE#         272
+  C:0503H         LINE#         274
+  C:050BH         LINE#         275
+  C:0511H         LINE#         276
+  C:0511H         LINE#         277
+  C:0514H         LINE#         278
+  C:0517H         LINE#         279
+  C:0517H         LINE#         282
+  C:051AH         LINE#         283
+  C:051CH         LINE#         284
   -------         ENDPROC       _WRITE1DATAVK2C23A
   -------         PROC          L?0124
   -------         ENDPROC       L?0124
   -------         PROC          _WRITENDATAVK2C23A
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/03/2025  20:27:40  PAGE 8
-
-
-  X:00A2H         SYMBOL        Addr
-  X:00A3H         SYMBOL        Databuf
-  X:00A6H         SYMBOL        Cnt
+  X:00A1H         SYMBOL        Addr
+  X:00A2H         SYMBOL        Databuf
+  X:00A5H         SYMBOL        Cnt
   -------         DO            
-  X:00A7H         SYMBOL        i
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/04/2025  16:32:28  PAGE 8
+
+
+  X:00A6H         SYMBOL        i
   -------         ENDDO         
-  C:0511H         LINE#         296
-  C:0514H         LINE#         297
-  C:0514H         LINE#         301
-  C:0514H         LINE#         303
-  C:0514H         LINE#         304
-  C:051AH         LINE#         305
-  C:051AH         LINE#         306
-  C:051AH         LINE#         307
-  C:051CH         LINE#         308
-  C:051CH         LINE#         310
-  C:0521H         LINE#         311
-  C:0527H         LINE#         312
-  C:0527H         LINE#         313
-  C:0527H         LINE#         314
-  C:0529H         LINE#         315
-  C:0529H         LINE#         317
-  C:0531H         LINE#         318
-  C:0537H         LINE#         319
-  C:0537H         LINE#         320
-  C:0537H         LINE#         321
-  C:0539H         LINE#         322
-  C:0539H         LINE#         324
-  C:0549H         LINE#         325
-  C:0549H         LINE#         326
-  C:0560H         LINE#         327
-  C:0566H         LINE#         328
-  C:0566H         LINE#         329
-  C:0566H         LINE#         330
-  C:0568H         LINE#         331
-  C:0568H         LINE#         332
-  C:0570H         LINE#         334
-  C:0573H         LINE#         335
-  C:0575H         LINE#         336
+  C:0418H         LINE#         296
+  C:041BH         LINE#         297
+  C:041BH         LINE#         301
+  C:041BH         LINE#         303
+  C:041BH         LINE#         304
+  C:0421H         LINE#         305
+  C:0421H         LINE#         306
+  C:0421H         LINE#         307
+  C:0423H         LINE#         308
+  C:0423H         LINE#         310
+  C:0428H         LINE#         311
+  C:042EH         LINE#         312
+  C:042EH         LINE#         313
+  C:042EH         LINE#         314
+  C:0430H         LINE#         315
+  C:0430H         LINE#         317
+  C:0438H         LINE#         318
+  C:043EH         LINE#         319
+  C:043EH         LINE#         320
+  C:043EH         LINE#         321
+  C:0440H         LINE#         322
+  C:0440H         LINE#         324
+  C:0450H         LINE#         325
+  C:0450H         LINE#         326
+  C:0467H         LINE#         327
+  C:046DH         LINE#         328
+  C:046DH         LINE#         329
+  C:046DH         LINE#         330
+  C:046FH         LINE#         331
+  C:046FH         LINE#         332
+  C:0477H         LINE#         334
+  C:047AH         LINE#         335
+  C:047CH         LINE#         336
   -------         ENDPROC       _WRITENDATAVK2C23A
   -------         PROC          _READNDATAVK2C23A
-  X:00A8H         SYMBOL        Addr
-  X:00A9H         SYMBOL        Databuf
-  X:00ACH         SYMBOL        Cnt
+  X:00A7H         SYMBOL        Addr
+  X:00A8H         SYMBOL        Databuf
+  X:00ABH         SYMBOL        Cnt
   -------         DO            
-  X:00ADH         SYMBOL        n
+  X:00ACH         SYMBOL        n
   -------         ENDDO         
-  C:02F1H         LINE#         346
-  C:02F4H         LINE#         347
-  C:02F4H         LINE#         351
-  C:02F4H         LINE#         353
-  C:02F4H         LINE#         354
-  C:02FAH         LINE#         355
-  C:02FAH         LINE#         356
-  C:02FAH         LINE#         357
-  C:02FCH         LINE#         358
-  C:02FCH         LINE#         360
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/03/2025  20:27:40  PAGE 9
+  C:01F8H         LINE#         346
+  C:01FBH         LINE#         347
+  C:01FBH         LINE#         351
+  C:01FBH         LINE#         353
+  C:01FBH         LINE#         354
+  C:0201H         LINE#         355
+  C:0201H         LINE#         356
+  C:0201H         LINE#         357
+  C:0203H         LINE#         358
+  C:0203H         LINE#         360
+  C:0208H         LINE#         361
+  C:020EH         LINE#         362
+  C:020EH         LINE#         363
+  C:020EH         LINE#         364
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/04/2025  16:32:28  PAGE 9
 
 
-  C:0301H         LINE#         361
-  C:0307H         LINE#         362
-  C:0307H         LINE#         363
-  C:0307H         LINE#         364
-  C:0309H         LINE#         365
-  C:0309H         LINE#         367
-  C:0311H         LINE#         368
-  C:0317H         LINE#         369
-  C:0317H         LINE#         370
-  C:0317H         LINE#         371
-  C:0319H         LINE#         372
-  C:0319H         LINE#         375
-  C:031CH         LINE#         378
-  C:031FH         LINE#         380
-  C:0324H         LINE#         381
-  C:032AH         LINE#         382
-  C:032AH         LINE#         383
-  C:032AH         LINE#         384
-  C:032CH         LINE#         385
-  C:032CH         LINE#         387
-  C:033DH         LINE#         388
-  C:033DH         LINE#         389
-  C:0354H         LINE#         390
-  C:0357H         LINE#         391
-  C:035FH         LINE#         392
-  C:0376H         LINE#         393
-  C:0379H         LINE#         395
-  C:037CH         LINE#         396
-  C:037EH         LINE#         397
+  C:0210H         LINE#         365
+  C:0210H         LINE#         367
+  C:0218H         LINE#         368
+  C:021EH         LINE#         369
+  C:021EH         LINE#         370
+  C:021EH         LINE#         371
+  C:0220H         LINE#         372
+  C:0220H         LINE#         375
+  C:0223H         LINE#         378
+  C:0226H         LINE#         380
+  C:022BH         LINE#         381
+  C:0231H         LINE#         382
+  C:0231H         LINE#         383
+  C:0231H         LINE#         384
+  C:0233H         LINE#         385
+  C:0233H         LINE#         387
+  C:0244H         LINE#         388
+  C:0244H         LINE#         389
+  C:025BH         LINE#         390
+  C:025EH         LINE#         391
+  C:0266H         LINE#         392
+  C:027DH         LINE#         393
+  C:0280H         LINE#         395
+  C:0283H         LINE#         396
+  C:0285H         LINE#         397
   -------         ENDPROC       _READNDATAVK2C23A
   -------         PROC          _VK2C23A_DISALL
-  X:009EH         SYMBOL        dat
+  X:009DH         SYMBOL        dat
   -------         DO            
-  X:009FH         SYMBOL        segi
+  X:009EH         SYMBOL        segi
   -------         ENDDO         
-  C:048DH         LINE#         406
-  C:0492H         LINE#         407
-  C:0492H         LINE#         410
-  C:049AH         LINE#         411
-  C:049AH         LINE#         412
-  C:04A8H         LINE#         413
-  C:04A8H         LINE#         414
-  C:04B9H         LINE#         415
-  C:04C1H         LINE#         416
-  C:04CCH         LINE#         417
-  C:04CEH         LINE#         419
-  C:04CEH         LINE#         420
-  C:04DDH         LINE#         421
-  C:04DDH         LINE#         422
-  C:04EEH         LINE#         423
-  C:04F6H         LINE#         425
-  C:0507H         LINE#         426
-  C:0507H         LINE#         427
+  C:0394H         LINE#         406
+  C:0399H         LINE#         407
+  C:0399H         LINE#         410
+  C:03A1H         LINE#         411
+  C:03A1H         LINE#         412
+  C:03AFH         LINE#         413
+  C:03AFH         LINE#         414
+  C:03C0H         LINE#         415
+  C:03C8H         LINE#         416
+  C:03D3H         LINE#         417
+  C:03D5H         LINE#         419
+  C:03D5H         LINE#         420
+  C:03E4H         LINE#         421
+  C:03E4H         LINE#         422
+  C:03F5H         LINE#         423
+  C:03FDH         LINE#         425
+  C:040EH         LINE#         426
+  C:040EH         LINE#         427
   -------         ENDPROC       _VK2C23A_DISALL
   -------         PROC          _VK2C23A_DISDOTON
-  X:009EH         SYMBOL        seg
-  X:009FH         SYMBOL        com
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/03/2025  20:27:40  PAGE 10
-
-
+  X:009DH         SYMBOL        seg
+  X:009EH         SYMBOL        com
   -------         DO            
-  X:00A0H         SYMBOL        addrbit
-  X:00A1H         SYMBOL        tempdat
+  X:009FH         SYMBOL        addrbit
+  X:00A0H         SYMBOL        tempdat
   -------         ENDDO         
-  C:0245H         LINE#         436
-  C:024DH         LINE#         437
-  C:024DH         LINE#         439
-  C:0255H         LINE#         440
-  C:0255H         LINE#         441
-  C:025CH         LINE#         442
-  C:026BH         LINE#         444
-  C:0280H         LINE#         445
-  C:029CH         LINE#         446
-  C:02AAH         LINE#         447
-  C:02ADH         LINE#         448
-  C:02AFH         LINE#         450
-  C:02AFH         LINE#         451
-  C:02C3H         LINE#         452
-  C:02D7H         LINE#         453
-  C:02E5H         LINE#         454
-  C:02F0H         LINE#         455
-  C:02F0H         LINE#         456
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/04/2025  16:32:28  PAGE 10
+
+
+  C:00B5H         LINE#         436
+  C:00BDH         LINE#         437
+  C:00BDH         LINE#         439
+  C:00C5H         LINE#         440
+  C:00C5H         LINE#         441
+  C:00CCH         LINE#         442
+  C:00DBH         LINE#         444
+  C:00F0H         LINE#         445
+  C:010CH         LINE#         446
+  C:011AH         LINE#         447
+  C:011DH         LINE#         448
+  C:011FH         LINE#         450
+  C:011FH         LINE#         451
+  C:0133H         LINE#         452
+  C:0147H         LINE#         453
+  C:0155H         LINE#         454
+  C:0160H         LINE#         455
+  C:0160H         LINE#         456
   -------         ENDPROC       _VK2C23A_DISDOTON
   -------         PROC          _VK2C23A_DISDOTOFF
-  X:00AEH         SYMBOL        seg
-  X:00AFH         SYMBOL        com
+  X:00ADH         SYMBOL        seg
+  X:00AEH         SYMBOL        com
   -------         DO            
-  X:00B0H         SYMBOL        addrbit
-  X:00B1H         SYMBOL        tempdat
+  X:00AFH         SYMBOL        addrbit
+  X:00B0H         SYMBOL        tempdat
   -------         ENDDO         
-  C:0193H         LINE#         465
-  C:019BH         LINE#         466
-  C:019BH         LINE#         468
-  C:01A3H         LINE#         469
-  C:01A3H         LINE#         470
-  C:01AAH         LINE#         471
-  C:01B9H         LINE#         473
-  C:01CEH         LINE#         474
-  C:01EBH         LINE#         475
-  C:01F9H         LINE#         476
-  C:01FCH         LINE#         477
-  C:01FEH         LINE#         479
-  C:01FEH         LINE#         480
-  C:0212H         LINE#         481
-  C:022BH         LINE#         482
-  C:0239H         LINE#         483
-  C:0244H         LINE#         484
-  C:0244H         LINE#         485
+  C:0003H         LINE#         465
+  C:000BH         LINE#         466
+  C:000BH         LINE#         468
+  C:0013H         LINE#         469
+  C:0013H         LINE#         470
+  C:001AH         LINE#         471
+  C:0029H         LINE#         473
+  C:003EH         LINE#         474
+  C:005BH         LINE#         475
+  C:0069H         LINE#         476
+  C:006CH         LINE#         477
+  C:006EH         LINE#         479
+  C:006EH         LINE#         480
+  C:0082H         LINE#         481
+  C:009BH         LINE#         482
+  C:00A9H         LINE#         483
+  C:00B4H         LINE#         484
+  C:00B4H         LINE#         485
   -------         ENDPROC       _VK2C23A_DISDOTOFF
   -------         PROC          VK2C23A_ENTER_POWEROFF
-  C:07BDH         LINE#         493
-  C:07BDH         LINE#         494
-  C:07BDH         LINE#         495
+  C:06C4H         LINE#         493
+  C:06C4H         LINE#         494
+  C:06C4H         LINE#         495
   -------         ENDPROC       VK2C23A_ENTER_POWEROFF
   -------         PROC          VK2C23A_EXIT_POWEROFF
-  C:07C4H         LINE#         504
-  C:07C4H         LINE#         505
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/03/2025  20:27:40  PAGE 11
-
-
-  C:07C4H         LINE#         506
+  C:06CBH         LINE#         504
+  C:06CBH         LINE#         505
+  C:06CBH         LINE#         506
   -------         ENDPROC       VK2C23A_EXIT_POWEROFF
   -------         PROC          VK2C23A_LOWLEVEL_INIT
-  C:07D1H         LINE#         516
-  C:07D1H         LINE#         517
-  C:07D1H         LINE#         523
-  C:07D3H         LINE#         524
-  C:07D5H         LINE#         525
+  C:06D8H         LINE#         516
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/04/2025  16:32:28  PAGE 11
+
+
+  C:06D8H         LINE#         517
+  C:06D8H         LINE#         523
+  C:06DAH         LINE#         524
+  C:06DCH         LINE#         525
   -------         ENDPROC       VK2C23A_LOWLEVEL_INIT
   -------         PROC          VK2C23A_INITSEQUENCE
-  C:06AEH         LINE#         533
-  C:06AEH         LINE#         534
-  C:06AEH         LINE#         536
-  C:06B1H         LINE#         541
-  C:06B8H         LINE#         542
-  C:06BEH         LINE#         543
-  C:06C5H         LINE#         544
-  C:06CCH         LINE#         546
-  C:06D3H         LINE#         555
+  C:05B5H         LINE#         533
+  C:05B5H         LINE#         534
+  C:05B5H         LINE#         536
+  C:05B8H         LINE#         541
+  C:05BFH         LINE#         542
+  C:05C5H         LINE#         543
+  C:05CCH         LINE#         544
+  C:05D3H         LINE#         546
+  C:05DAH         LINE#         555
   -------         ENDPROC       VK2C23A_INITSEQUENCE
   -------         PROC          VK2C23A_INIT
-  C:07CBH         LINE#         564
-  C:07CBH         LINE#         565
-  C:07CBH         LINE#         567
-  C:07CEH         LINE#         569
+  C:06D2H         LINE#         564
+  C:06D2H         LINE#         565
+  C:06D2H         LINE#         567
+  C:06D5H         LINE#         569
   -------         ENDPROC       VK2C23A_INIT
   -------         PROC          _DISPLAYDIGITORCHAR
   D:0007H         SYMBOL        pos
@@ -634,12 +630,12 @@ SYMBOL TABLE OF MODULE:  .\Objects\project (LCM823109)
   -------         DO            
   D:0006H         SYMBOL        Data
   -------         ENDDO         
-  C:076FH         LINE#         576
-  C:076FH         LINE#         577
-  C:076FH         LINE#         580
-  C:0775H         LINE#         584
-  C:077BH         LINE#         587
-  C:077FH         LINE#         588
+  C:0676H         LINE#         576
+  C:0676H         LINE#         577
+  C:0676H         LINE#         580
+  C:067CH         LINE#         584
+  C:0682H         LINE#         587
+  C:0686H         LINE#         588
   -------         ENDPROC       _DISPLAYDIGITORCHAR
   -------         PROC          _DISPLAYDIGITORCHAR1
   D:0007H         SYMBOL        pos
@@ -647,128 +643,88 @@ SYMBOL TABLE OF MODULE:  .\Objects\project (LCM823109)
   -------         DO            
   D:0006H         SYMBOL        Data
   -------         ENDDO         
-  C:0780H         LINE#         595
-  C:0780H         LINE#         596
-  C:0780H         LINE#         599
-  C:0786H         LINE#         603
-  C:078CH         LINE#         606
-  C:0790H         LINE#         607
+  C:0687H         LINE#         595
+  C:0687H         LINE#         596
+  C:0687H         LINE#         599
+  C:068DH         LINE#         603
+  C:0693H         LINE#         606
+  C:0697H         LINE#         607
   -------         ENDPROC       _DISPLAYDIGITORCHAR1
   -------         PROC          READKEY
-  C:071DH         LINE#         610
-  C:071DH         LINE#         611
-  C:071DH         LINE#         612
-  C:0720H         LINE#         613
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/03/2025  20:27:40  PAGE 12
+  C:0624H         LINE#         610
+  C:0624H         LINE#         611
+  C:0624H         LINE#         612
+  C:0627H         LINE#         613
+  C:0627H         LINE#         614
+  C:0632H         LINE#         615
+  C:0635H         LINE#         616
+  C:0635H         LINE#         617
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/04/2025  16:32:28  PAGE 12
 
 
-  C:0720H         LINE#         614
-  C:072BH         LINE#         615
-  C:072EH         LINE#         616
-  C:072EH         LINE#         617
-  C:0731H         LINE#         618
-  C:0736H         LINE#         619
-  C:0736H         LINE#         620
-  C:0736H         LINE#         621
-  C:0739H         LINE#         622
+  C:0638H         LINE#         618
+  C:063DH         LINE#         619
+  C:063DH         LINE#         620
+  C:063DH         LINE#         621
+  C:0640H         LINE#         622
   -------         ENDPROC       READKEY
   -------         ENDMOD        LCM823109
 
   -------         MODULE        MAIN
   C:0000H         SYMBOL        _ICE_DUMMY_
-  C:0003H         PUBLIC        main
-  X:00B2H         PUBLIC        seg
-  X:00B3H         PUBLIC        i
-  X:00B4H         PUBLIC        j
+  C:0161H         PUBLIC        main
+  X:00B1H         PUBLIC        seg
+  X:00B2H         PUBLIC        i
+  X:00B3H         PUBLIC        j
   -------         PROC          MAIN
-  -------         DO            
-  X:009DH         SYMBOL        mode
-  -------         ENDDO         
-  C:0003H         LINE#         3
-  C:0003H         LINE#         4
-  C:0003H         LINE#         5
-  C:0006H         LINE#         6
-  C:000BH         LINE#         9
-  C:0010H         LINE#         10
-  C:0010H         LINE#         11
-  C:002DH         LINE#         12
-  C:0039H         LINE#         13
-  C:0044H         LINE#         15
-  C:0049H         LINE#         17
-  C:004FH         LINE#         18
-  C:004FH         LINE#         19
-  C:005EH         LINE#         20
-  C:005EH         LINE#         21
-  C:0066H         LINE#         22
-  C:006EH         LINE#         24
-  C:007EH         LINE#         25
-  C:007EH         LINE#         26
-  C:0086H         LINE#         27
-  C:008EH         LINE#         28
-  C:009AH         LINE#         29
-  C:009AH         LINE#         30
-  C:009AH         LINE#         32
-  C:00A1H         LINE#         33
-  C:00A1H         LINE#         34
-  C:00A4H         LINE#         35
-  C:00A9H         LINE#         36
-  C:00AFH         LINE#         37
-  C:00B8H         LINE#         38
-  C:00C5H         LINE#         39
-  C:00C5H         LINE#         40
-  C:00C5H         LINE#         41
-  C:00C7H         LINE#         43
-  C:00C7H         LINE#         44
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/03/2025  20:27:40  PAGE 13
-
-
-  C:00DEH         LINE#         46
-  C:00DEH         LINE#         47
-  C:00ECH         LINE#         48
-  C:00ECH         LINE#         49
-  C:0109H         LINE#         50
-  C:0111H         LINE#         52
-  C:0111H         LINE#         53
-  C:0111H         LINE#         54
-  C:0111H         LINE#         55
-  C:0116H         LINE#         56
-  C:0116H         LINE#         57
-  C:0133H         LINE#         58
-  C:013FH         LINE#         60
-  C:014EH         LINE#         61
-  C:014EH         LINE#         62
-  C:015BH         LINE#         63
-  C:015BH         LINE#         64
-  C:0163H         LINE#         65
-  C:016BH         LINE#         67
-  C:017BH         LINE#         68
-  C:017BH         LINE#         69
-  C:0183H         LINE#         70
-  C:018BH         LINE#         71
+  C:0161H         LINE#         3
+  C:0161H         LINE#         4
+  C:0161H         LINE#         5
+  C:0164H         LINE#         6
+  C:0169H         LINE#         8
+  C:016FH         LINE#         9
+  C:016FH         LINE#         10
+  C:017EH         LINE#         11
+  C:017EH         LINE#         12
+  C:0186H         LINE#         13
+  C:018EH         LINE#         15
+  C:019EH         LINE#         16
+  C:019EH         LINE#         17
+  C:01A6H         LINE#         18
+  C:01AEH         LINE#         19
+  C:01BAH         LINE#         21
+  C:01BFH         LINE#         23
+  C:01C4H         LINE#         24
+  C:01C4H         LINE#         25
+  C:01E1H         LINE#         26
+  C:01EDH         LINE#         27
   -------         ENDPROC       MAIN
   -------         ENDMOD        MAIN
 
   -------         MODULE        ?C?CLDPTR
-  C:040BH         PUBLIC        ?C?CLDPTR
+  C:0312H         PUBLIC        ?C?CLDPTR
   -------         ENDMOD        ?C?CLDPTR
 
   -------         MODULE        ?C?CSTPTR
-  C:0424H         PUBLIC        ?C?CSTPTR
+  C:032BH         PUBLIC        ?C?CSTPTR
   -------         ENDMOD        ?C?CSTPTR
 
   -------         MODULE        ?C?ILDIX
-  C:0436H         PUBLIC        ?C?ILDIX
+  C:033DH         PUBLIC        ?C?ILDIX
   -------         ENDMOD        ?C?ILDIX
 
   -------         MODULE        ?C?LLDIXDATA
-  C:0455H         PUBLIC        ?C?LLDIXDATA
-  C:044CH         PUBLIC        ?C?LLDIXDATA1
-  C:044EH         PUBLIC        ?C?LLDIXDATA8
+  C:035CH         PUBLIC        ?C?LLDIXDATA
+  C:0353H         PUBLIC        ?C?LLDIXDATA1
+  C:0355H         PUBLIC        ?C?LLDIXDATA8
   -------         ENDMOD        ?C?LLDIXDATA
 
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  03/04/2025  16:32:28  PAGE 13
+
+
   -------         MODULE        ?C?LSTXDATA
-  C:0481H         PUBLIC        ?C?LSTXDATA
+  C:0388H         PUBLIC        ?C?LSTXDATA
   -------         ENDMOD        ?C?LSTXDATA
 
-Program Size: data=39.0 xdata=182 code=2006
+Program Size: data=39.0 xdata=181 code=1757
 LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

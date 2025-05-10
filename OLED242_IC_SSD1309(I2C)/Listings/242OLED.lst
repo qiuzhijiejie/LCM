@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   242OLED                                                           12/11/2024 19:43:09 PAGE 1   
+C51 COMPILER V9.60.7.0   242OLED                                                           03/20/2025 16:22:20 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE 242OLED
@@ -62,7 +62,7 @@ line level    source
   52   1          for(i=0;i<_ms_time;i++)
   53   1          {
   54   2          for(j=0;j<900;j++)
-C51 COMPILER V9.60.7.0   242OLED                                                           12/11/2024 19:43:09 PAGE 2   
+C51 COMPILER V9.60.7.0   242OLED                                                           03/20/2025 16:22:20 PAGE 2   
 
   55   2            {;}
   56   2          }
@@ -126,7 +126,7 @@ line level    source
  114   1          IIC_write(o_command);
  115   1          IIC_stop();
  116   1          
-C51 COMPILER V9.60.7.0   242OLED                                                           12/11/2024 19:43:09 PAGE 3   
+C51 COMPILER V9.60.7.0   242OLED                                                           03/20/2025 16:22:20 PAGE 3   
 
  117   1        }
  118            
@@ -190,7 +190,7 @@ line level    source
  176   2              Column_set(0);    
  177   2              for(column=0;column<OLED_COLUMN_NUMBER;column++)        //column loop
  178   2                {
-C51 COMPILER V9.60.7.0   242OLED                                                           12/11/2024 19:43:09 PAGE 4   
+C51 COMPILER V9.60.7.0   242OLED                                                           03/20/2025 16:22:20 PAGE 4   
 
  179   3                  OLED_send_data(0xff);
  180   3                }
@@ -254,7 +254,7 @@ line level    source
  238   3                  dis_data=*ptr_pic++;
  239   3                  dis_data=~dis_data;
  240   3                  OLED_send_data(dis_data);
-C51 COMPILER V9.60.7.0   242OLED                                                           12/11/2024 19:43:09 PAGE 5   
+C51 COMPILER V9.60.7.0   242OLED                                                           03/20/2025 16:22:20 PAGE 5   
 
  241   3                }
  242   2            }
@@ -319,7 +319,7 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
 
-C51 COMPILER V9.60.7.0   242OLED                                                           12/11/2024 19:43:09 PAGE 6   
+C51 COMPILER V9.60.7.0   242OLED                                                           03/20/2025 16:22:20 PAGE 6   
 
 
 C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

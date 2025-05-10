@@ -1,0 +1,38 @@
+C51 COMPILER V9.60.7.0   TPR_786696                                                        03/06/2025 15:43:06 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TPR_786696
+OBJECT MODULE PLACED IN TPR-786696.OBJ
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE TPR-786696.C OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          // ST7567,ST7565R看,UC1701综合程序
+   2          // writer:      laozhongmin
+   3          // version:01
+   4          // date:2013.01.11
+   5          
+   6          /*
+   7          //模块并行接口定义(接口按实际测架更改)
+   8          #define dataport  P1                      //并口通讯数据脚
+   9          sbit CS    = P3^0;                        //定义片选脚为P3.0
+  10          sbit RST   = P3^1;                        //定义复位脚为P3.1
+  11          sbit RS    = P3^2;                        //定义数据/指令控制脚为P3.2
+  12          sbit RW_WR = P3^3;                        //定义读写控制(68)或写(80)脚为P3.3
+  13          sbit E_RD  = P3^4;                        //定义读写使能(68)或读(80)脚为P3.4
+  14          //---------------------------------------------------------
+  15          */
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
