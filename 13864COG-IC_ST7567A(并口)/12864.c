@@ -303,7 +303,7 @@ void trans_display_photo(uchar *p,uchar startP,uchar startC)
    GotoXY(startP,startC);
    for(i=0;i<8;i++)
     {
-	  for(j=0;j<128;j++)
+	  for(j=0;j<132;j++)
 	  {
 	   write_data(~*p++, startP+i, startC+j);
 	  }
@@ -383,11 +383,11 @@ void Yehui_UI()
 	const unsigned char* hanzi_array2[] = {ji, you, xian, gong, si};
 	
 	for ( i = 0; i < 5; i++) {
-		display_hanzi_fan(hanzi_array[i], 0, 20 + i * 16);
+		display_hanzi_fan(hanzi_array[i], 0, 25 + i * 16);
 	}
 
 	for ( i = 0; i < 5; i++) {
-		display_hanzi_fan(hanzi_array2[i], 2, 20 + i * 16);
+		display_hanzi_fan(hanzi_array2[i], 2, 25 + i * 16);
 	}
 	    
 	disp_ascii0816("132*64 Dots",4,20);

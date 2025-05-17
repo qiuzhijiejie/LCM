@@ -35,9 +35,9 @@ void LCD_Reset()
 {   
  IE  =  0x00;   
  rst =  0;   
- delayMs(50);   
+ delayMs(5);   
  rst =  1;   
- delayMs(50);   
+ delayMs(5);   
 }    
 //-----------------写指令或者数据--------------------      
 void write_cmd_dat(uchar cmda,uchar com)   
@@ -130,7 +130,7 @@ void lcd_test()
   for(i=0;i<7;i++)
   {
    display_test(tdata[i][0],tdata[i][1]);
-  delayMs(800);
+   delayMs(800);
    wait_and_clear();
   }
 }    
@@ -138,24 +138,70 @@ void lcd_test()
 void lcd_kuang(void)
 {
  uchar i,j;
-  for(i=0;i<8;i++)
+  for(i=0;i<8;i++) // 外循环：共8页（8个水平带）
    {	 
-    for(j=0;j<128;j++)
+    for(j=0;j<128;j++) // 内循环：每页128列
 	 { 
-	  if((j==0)||(j==127)) { GotoXY(i,j); write_cmd_dat(1,0xff);}
+	  if((j==0)||(j==127)) { GotoXY(i,j); write_cmd_dat(1,0xff);}//竖线部分
 	  if(i==0)
 	   { 
-	    if((j>0)&&(j<127)) { GotoXY(i,j); write_cmd_dat(1,0x01);}}
+	    if((j>0)&&(j<127)) { GotoXY(i,j); write_cmd_dat(1,0x01);}}//顶部横线
 	  if(i==7)
 	   { 
-	    if((j>0)&&(j<127)) { GotoXY(i,j); write_cmd_dat(1,0x80);}}
+	    if((j>0)&&(j<127)) { GotoXY(i,j); write_cmd_dat(1,0x80);}}//底部横线
 	 }
    }
 }
 
+void lcd_nested_frames(void)
+{
+    uchar top = 0;
+    uchar bottom = 7;
+    uchar left = 0;
+    uchar right = 127;
+    uchar i, j;
+
+    while (top <= bottom && left <= right)
+    {
+        // 上边
+        for(j = left; j <= right; j++)
+        {
+            GotoXY(top, j);
+            write_cmd_dat(1, 0xFF);
+        }
+
+        // 下边
+        for(j = left; j <= right; j++)
+        {
+            GotoXY(bottom, j);
+            write_cmd_dat(1, 0xFF);
+        }
+
+        // 左边
+        for(i = top; i <= bottom; i++)
+        {
+            GotoXY(i, left);
+            write_cmd_dat(1, 0xFF);
+        }
+
+        // 右边
+        for(i = top; i <= bottom; i++)
+        {
+            GotoXY(i, right);
+            write_cmd_dat(1, 0xFF);
+        }
+
+        // 缩小一圈
+        top++;
+        bottom--;
+        left += 2;
+        right -= 2;
+    }
+}
+
 //------------------显示8X16点阵字符串-------------------------		
  void disp_ascii0816(uchar *ptrAscii, uchar startP, uchar startC)
-	{
+{
 
 		uchar i,xclum;
 		uint index;
@@ -265,7 +311,7 @@ void Init_IC()
  write_cmd_dat(0,0x25); //Regulator resistor select 110 内部电位器调节
  write_cmd_dat(0,0x81); //set reference voltage mode
  write_cmd_dat(0,0x15); //set reference voltage //改变此值可以改变效果  
- write_cmd_dat(0,0x60); //Initial Display Line 0x40
+ write_cmd_dat(0,0x40); //Initial Display Line 0x40 0x60
  write_cmd_dat(0,0xAF); //Display on 
  Clear();
 }   
@@ -277,17 +323,18 @@ void Yehui_UI()
 	uchar i; 
 	const unsigned char* hanzi_array[]  = {guang, don, ye, hui, ke};
 	const unsigned char* hanzi_array2[] = {ji, you, xian, gong, si};
-	lcd_kuang();
-	for ( i = 0; i < 5; i++) {
-		display_hanzi_fan(hanzi_array[i], 1, 20 + i * 16);
-	}
+//	lcd_kuang();
 
-	for ( i = 0; i < 5; i++) {
-		display_hanzi_fan(hanzi_array2[i], 3, 20 + i * 16);
-	}
+//	for ( i = 0; i < 5; i++) {
+//		display_hanzi_fan(hanzi_array[i], 1, 20 + i * 16);
+//	}
+
+//	for ( i = 0; i < 5; i++) {
+//		display_hanzi_fan(hanzi_array2[i], 3, 20 + i * 16);
+//	}
 	    
-	disp_ascii0816("LCM128*64 Dots", 5,11);
-//	disp_ascii0816("IC:ST7565R",  7,25);
+	disp_ascii0816("LCM128*32 Dots", 1,11);
+
 	
 }
 

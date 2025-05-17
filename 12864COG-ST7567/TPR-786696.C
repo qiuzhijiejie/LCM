@@ -30,11 +30,11 @@ sbit E_RD  = P3^4;		          //定义读写使能(68)或读(80)脚为P3.4
 */
 
 //模块串行接口定义(接口按实际测架更改)
-sbit SDA = P3^4;  //SDA			  //定义串行数据脚为P1.4
-sbit SCK = P3^3;				  //定义串行时钟脚为P1.3
-sbit RS  = P3^2;  //A0			 //定义数据/指令控制脚为P1.2
-sbit RST = P3^1;				 //定义复位脚为P1.1
-sbit CS  = P3^0;			   //定义片选脚为P10
+sbit SDA = P3^7;  //SDA			  //定义串行数据脚为P1.4
+sbit SCK = P3^6;				  //定义串行时钟脚为P1.3
+sbit RS  = P1^2;  //A0			 //定义数据/指令控制脚为P1.2
+sbit RST = P1^0;				 //定义复位脚为P1.1
+sbit CS  = P1^1;			   //定义片选脚为P10
 //---------------------------------------------------------	
 
  
@@ -210,7 +210,7 @@ void InitST7567(void)
  	Delay_Xms(2);
 	ST7567_WriteComd(0x00);	//"00"最大4倍压,"01"最大5倍压,"03"最大6倍压
  	Delay_Xms(2);
-	ST7567_WriteComd(0x40);	//设定起始行第1行
+	ST7567_WriteComd(0x60);	//设定起始行第1行
  	Delay_Xms(2);
 	ST7567_WriteComd(0xa4);	//Display All Points ON/OFF to Normal display mode正常显示模式选择
  	Delay_Xms(2);
@@ -1006,13 +1006,14 @@ while(AOUTOB==1&STEP==0)
 // ====================================//
 void main(void)
 {
-	init_cpu();
-	Delay_Xms(50);
-   	InitST7567();	//一开始初始化控制器
+
 
 
 	while(1)  
 	{
+	init_cpu();
+	Delay_Xms(50);
+   	InitST7567();	//一开始初始化控制器
 
   Start:	//跳转标号
       			   	    
@@ -1026,14 +1027,14 @@ void main(void)
 	
 	
 		DispFram( 0xff,0xff );				 //全显
-		 Delay_Xms(500);
+		 Delay_Xms(5000);
 		if( Change(70)==1 ) goto Start;	//暂停键有动作跳转到程序的最头上
 //		 push();
 //	   Pause();
 
 
   	DispFram( 0x00,0x00 );			   //无显
-		 Delay_Xms(500);
+		 Delay_Xms(5000);
 		if( Change(70)==1 ) goto Start;	//暂停键有动作跳转到程序的最头上
 //	  Pause();
 
@@ -1043,7 +1044,7 @@ void main(void)
 	 
 //------------------------------------------------------------------	
 		DispDot( 0xf0,0x0f );			 //大棋盘
-		 Delay_Xms(500);
+		 Delay_Xms(5000);
 	  	if( Change(70)==1 ) goto Start;	//暂停键有动作跳转到程序的最头上
 		 //push();
 //		 Pause();
@@ -1051,20 +1052,20 @@ void main(void)
 
 
 	
-//		DispDots( 0x33,0xcc );			  //小棋盘
-//		 Delay_Xms(500);
-//		if( Change(70)==1 ) goto Start;	//暂停键有动作跳转到程序的最头上
+		DispDots( 0x33,0xcc );			  //小棋盘
+		 Delay_Xms(5000);
+		if( Change(70)==1 ) goto Start;	//暂停键有动作跳转到程序的最头上
 //		// push();
 //		Pause();
 //------------------------------------------------------------------	
 		DispFram( 0x55,0xaa );				  //花点		
-		 Delay_Xms(500);
+		 Delay_Xms(5000);
 		if( Change(70)==1 ) goto Start;	//暂停键有动作跳转到程序的最头上
 	// push();
 //	Pause();
 	
 		DispFram( 0x55,0x55 );					 //	 横线
-		 Delay_Xms(500);
+		 Delay_Xms(5000);
 		if( Change(70)==1 ) goto Start;	//暂停键有动作跳转到程序的最头上
 	 //push();
 //	 Pause();
@@ -1075,9 +1076,9 @@ void main(void)
 //		 //push();
 ////		 Pause();
 ////-------------------------------------------------------------------------		
-//		DispFram( 0xff,0x00 );					 //竖线 
-//		  Delay_Xms(500);
-//		if( Change(70)==1 ) goto Start;	//暂停键有动作跳转到程序的最头上
+		DispFram( 0xff,0x00 );					 //竖线 
+		  Delay_Xms(5000);
+		if( Change(70)==1 ) goto Start;	//暂停键有动作跳转到程序的最头上
 //	// push();
 ////	  Pause();
 
@@ -1131,9 +1132,9 @@ void main(void)
 //	  Delay_Xms(600);
 //	if( Change(50)==1 ) goto Start;	//暂停键有动作跳转到程序的最头上	
 //	
-	 DispPic( PIC_6 );
-     Delay_Xms(600);
-	 if( Change(50)==1 ) goto Start;	//暂停键有动作跳转到程序的最头上	
+//	 DispPic( PIC_6 );
+//     Delay_Xms(600);
+//	 if( Change(50)==1 ) goto Start;	//暂停键有动作跳转到程序的最头上	
 	
 	 //DispPic( PIC_7 );
 	 //  Delay_Xms(600);

@@ -30,9 +30,9 @@ void main()
 // 	delayMs(5000);
 //    Clear();
 //	  
-//	trans_display_photo(tupian1,0,0);	  
-//	delayMs(5000);
-//	Clear();
+	trans_display_photo(tupian1,0,0);	  
+	delayMs(5000);
+	Clear();
 	  
   }    
 }   

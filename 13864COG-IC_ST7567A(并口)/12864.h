@@ -11,7 +11,7 @@ sbit di  =  P3^2;   //0-命令模式 1-数据模式
 sbit wr  =  P3^5;   
 sbit rd  =  P3^4;
 
-///按键接口定义(与测试板一致)
+//按键接口定义(与测试板一致)
 sbit Key1 =P2^5;//HOLD
 sbit Key2 =P2^6;//UP
 sbit Key3 =P2^7;//DN 
