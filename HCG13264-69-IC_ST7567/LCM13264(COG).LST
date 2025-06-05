@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     04/25/2025 19:20:26 PAGE 1   
+C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     05/23/2025 14:08:23 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCM13264_COG_
@@ -62,7 +62,7 @@ line level    source
   53   1          return 0; 
   54   1      }
   55          
-C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     04/25/2025 19:20:26 PAGE 2   
+C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     05/23/2025 14:08:23 PAGE 2   
 
   56          
   57          
@@ -126,7 +126,7 @@ line level    source
  115   1              Delay_Xms(2);
  116   1              ST7567_WriteComd(0xc8); //SHL selectÈ·¶¨COMÎªÕýÉ¨com63--->com0
  117   1              Delay_Xms(2);
-C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     04/25/2025 19:20:26 PAGE 3   
+C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     05/23/2025 14:08:23 PAGE 3   
 
  118   1              ST7567_WriteComd(0x27); //regulator resistor select V0µ÷Õûµç×èÉè¶¨(1 + Rb/Ra)=5.0               0X26+0X41               vdd=5.0v,vo
              -p=10.0v                                                 0x26Ô­À´µÄÊýÖµ
@@ -190,7 +190,7 @@ line level    source
  173                  ST7567_WriteComd(0x40); //Éè¶¨ÆðÊ¼ÐÐµÚ1ÐÐ
  174                  Delay_Xms(2);
  175                  ST7567_WriteComd(0xa4); //Display All Points ON/OFF to Normal display modeÕý³£ÏÔÊ¾Ä£Ê½Ñ¡Ôñ
-C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     04/25/2025 19:20:26 PAGE 4   
+C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     05/23/2025 14:08:23 PAGE 4   
 
  176                  Delay_Xms(2);
  177          
@@ -254,7 +254,7 @@ line level    source
  235   1              while(page<0xb8)                //¹²4Ò³
  236   1              {
  237   2                      ST7567_WriteComd(page); //Éè¶¨É¨ÃèÒ³
-C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     04/25/2025 19:20:26 PAGE 5   
+C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     05/23/2025 14:08:23 PAGE 5   
 
  238   2                  ST7567_WriteComd(0x10);     //Éè¶¨ÆðÊ¼SEGÊý,Á½×Ö½Ú
  239   2      //          ST7567_WriteComd(0x00);
@@ -318,7 +318,7 @@ line level    source
  297   3                      ST7567_WriteData(x);    //ÏÔÊ¾Êý¾Ý½øÐÐÐ´ÏÔÊ¾
  298   3                      ST7567_WriteData(y);    //ÏÔÊ¾Êý¾Ý½øÐÐÐ´ÏÔÊ¾
  299   3              }
-C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     04/25/2025 19:20:26 PAGE 6   
+C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     05/23/2025 14:08:23 PAGE 6   
 
  300   2              page++; //Ò³×Ô¶¯¼Ó1
  301   2              }
@@ -382,7 +382,7 @@ line level    source
  359          {
  360   1              unsigned char i,j,page; //¶¨Òå¾Ö²¿×Ö·û±äÁ¿
  361   1      
-C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     04/25/2025 19:20:26 PAGE 7   
+C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     05/23/2025 14:08:23 PAGE 7   
 
  362   1      
  363   1              // ÏÂÃæÕâ¶ÎÑ­»·ÎªÏÔÊ¾C0~C31
@@ -446,7 +446,7 @@ line level    source
  420   2                for(i=0;i<32;i++)                        //ÕâÀïÐ´32ÁÐ
  421   2                     ST7567_WriteData(hzk[32*j+i]);      //JÎªÒ³£¬I£¬ÎªµÚJÐÐµÚI¸öÊý
  422   2               }
-C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     04/25/2025 19:20:26 PAGE 8   
+C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     05/23/2025 14:08:23 PAGE 8   
 
  423   1      }
  424          
@@ -510,7 +510,7 @@ line level    source
  482   1              RS = 0;                                                         //ÖÃµÍRS±íÊ¾Ö´ÐÐÖ¸ÁîµÄ´«ËÍ
  483   1              SCK = 0;                                                        //ÖÃµÍSCKÎª²úÉúÉÏÉýÑØ×÷×¼±¸
  484   1              for(i=0;i<8;i++)
-C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     04/25/2025 19:20:26 PAGE 9   
+C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     05/23/2025 14:08:23 PAGE 9   
 
  485   1              {//Ñ­»·´«ËÍ¹²8Î»´Ó¸ßÎ»¿ªÊ¼
  486   2                      if( (comd&0x80)==0x80 ) SDA = 1;//ÅÐ¶ÏcomdµÄ×î¸ßÎ»,ÊÇ"1"ÔòÖÃSDA=1
@@ -574,7 +574,7 @@ line level    source
  544   2                      _nop_();_nop_();_nop_();_nop_();        //Êý¾ÝÎÈ¶¨Ò»¶¨Ê±¼ä
  545   2                      SCK=0;                                                  //ÖÃ¸ßSCK²úÉúÉÏÉýÑØ
  546   2                      _nop_();_nop_();_nop_();_nop_();        //Êý¾ÝÎÈ¶¨Ò»¶¨Ê±¼ä
-C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     04/25/2025 19:20:26 PAGE 10  
+C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     05/23/2025 14:08:23 PAGE 10  
 
  547   2                      _nop_();_nop_();_nop_();_nop_();        //Êý¾ÝÎÈ¶¨Ò»¶¨Ê±¼ä
  548   2              dat = dat<<1;                                   //Íù¸ßÎ»ÒÆÒ»Î»¼ÌÐø
@@ -638,7 +638,7 @@ line level    source
  606          //===============================================================
  607                  //6800Ê±Ðò
  608                  CS = 0;                                                         //ÖÃµÍCS±íÊ¾Ñ¡ÖÐÐ¾Æ¬¿ÉÒÔÓÐÐ§µÄ¶ÔÐ¾Æ¬½øÐÐ¿ØÖÆ,Ë³Ðò1
-C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     04/25/2025 19:20:26 PAGE 11  
+C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     05/23/2025 14:08:23 PAGE 11  
 
  609                  RS = 1;                                                         //ÖÃ¸ßRS±íÊ¾Ö´ÐÐÊý¾Ý´«Êä
  610                  RW_WR = 0;                                                      //ÖÃµÍRW_WR±íÊ¾Ð´¶¯×÷×¼±¸,Ë³Ðò3
@@ -702,7 +702,7 @@ line level    source
  668          //      {
  669          //              ST7567_WriteData( ASC[(i)*16+j] );      //ÏÔÊ¾×Ö·ûµÄÉÏ°ë½Ú8*8
  670          //      }
-C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     04/25/2025 19:20:26 PAGE 12  
+C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     05/23/2025 14:08:23 PAGE 12  
 
  671          //      page++; //Ò³µØÖ·¼Ó1
  672          //      ST7567_WriteComd(page); //Éè¶¨Ò³µØÖ·
@@ -766,7 +766,7 @@ line level    source
  730          //=====================================//
  731          void disp_char(uint x,uint y,uchar dat[])  //Ò»¸ö×Ö·û´óÐ¡£º16bit*8bit
  732          {
-C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     04/25/2025 19:20:26 PAGE 13  
+C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     05/23/2025 14:08:23 PAGE 13  
 
  733   1              unsigned char j;
  734   1              ST7567_WriteComd(0xb0|x);         //PAGE
@@ -830,7 +830,7 @@ line level    source
  792   1      //
  793   1      //      i=(int)(VOP*100.0)%10; //ÏÔÊ¾Ð¡ÊýÎ»2
  794   1      //      disp_char(LINE2,8,num[i]);
-C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     04/25/2025 19:20:26 PAGE 14  
+C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     05/23/2025 14:08:23 PAGE 14  
 
  795   1      //      disp_char(LINE2,9,disp_vop[5]); //Ô¾V
  796   1      }  
@@ -894,7 +894,7 @@ line level    source
  853                                                                                                  while( (DN==1)&&(UP==1) );      //µÈ´ý´Ë¼üµ¯Æð
  854                                                                                                  Delay_Xms(5);   //Ïû¶¶¶¯
  855                                                                                                  h = 1;  //°ÑÔÝÍ£¼ü±êÖ¾ÖÃ1
-C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     04/25/2025 19:20:26 PAGE 15  
+C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     05/23/2025 14:08:23 PAGE 15  
 
  856                                                                                                  goto Eixt;      //Ìøµ½ÍË³ö³ÌÐò±êºÅ
  857                                                                                          }
@@ -958,7 +958,7 @@ line level    source
              -Ç¶Ô±È¶È)Á½×Ö½Ú                                 0x81Ô­À´µÄÊýÖµ
  914   4                          ST7567_WriteComd(ADJUST);    //vop ÉèÖÃ
  915   4                      ADJUST--;                 //VOP DOWN ONE STEP
-C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     04/25/2025 19:20:26 PAGE 16  
+C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     05/23/2025 14:08:23 PAGE 16  
 
  916   4                                      SetContrast(); 
  917   4                  }
@@ -1022,7 +1022,7 @@ line level    source
  975   2                  unsigned char spacing = 8;     // Ã¿¸ö×Ö·ûÕ¼ 8 ÁÐ
  976   2                      hz_display8x8(1, (col_start + k * spacing) & 0x0F, (col_start + k * spacing) >> 4, words4[k]);
  977   2              }
-C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     04/25/2025 19:20:26 PAGE 17  
+C51 COMPILER V9.60.7.0   LCM13264_COG_                                                     05/23/2025 14:08:23 PAGE 17  
 
  978   1              
  979   1              for ( k = 0; k < 15; k++)  // ÏÔÊ¾ 3 ¸ö×Ö·û

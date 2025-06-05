@@ -320,11 +320,16 @@ void Init_IC()
 	 write_cmd_dat(0,0xA0); //ADC selection(SEG0->SEG128) //改变SEG扫描方向 
 	 write_cmd_dat(0,0xC8); //SHL selection(COM64->COM0) //改变COM扫描方向 
 	 write_cmd_dat(0,0x2F); //power control(VB,VR,VF=1,1,1)
-	 write_cmd_dat(0,0x26); //Regulator resistor select 110 内部电位器调节
+	
+	 write_cmd_dat(0,0x25); //Regulator resistor select 110 内部电位器调节（对应不同的VG）
+	
 	 write_cmd_dat(0,0x81); //set reference voltage mode
 	 write_cmd_dat(0,0x17); //set reference voltage //改变此值可以改变效果  
+	
 	 write_cmd_dat(0,0x40); //Initial Display Line
 	 write_cmd_dat(0,0xAF); //Display on 
+	
+	
 	 Clear();
 
 }   

@@ -199,7 +199,7 @@ void DispPic(unsigned char *dispdata)
 		ST7567_WriteComd(page);	//设定扫描页
 	    ST7567_WriteComd(0x10);	//设定起始SEG数,两字节
 	    ST7567_WriteComd(0x00);
-	    for(i=0;i<132;i++)
+	    for(i=0;i<128;i++)
     	{//写128SEG
       		ST7567_WriteData(dispdata[j]);	//调数组显示数据进行写显示
       		j++;
@@ -213,7 +213,7 @@ void DispPic(unsigned char *dispdata)
 		ST7567_WriteComd(page);	//设定扫描页
 	    ST7567_WriteComd(0x10);	//设定起始SEG数,两字节
 	    ST7567_WriteComd(0x00);
-	    for(i=0;i<132;i++)
+	    for(i=0;i<128;i++)
     	{//写132SEG
       		ST7567_WriteData(dispdata[j]);	//调数组显示数据进行写显示
       		j++;
@@ -935,9 +935,9 @@ void yehui_UI()
 	unsigned char i,k;
 	char *words1[] = {guang, dong, ye, hui, ke};
 	char *words2[] = {ji, you, xian, gong, si};
-	char *words3[] = {L, C, M, one,three,two,xing,six,four};
+	char *words3[] = {L, C, M, one,two,eight,xing,six,four};
 	
-	DispPic( PIC_99 );
+//	DispPic( PIC_99 );
 	for (i = 0; i < 5; i++) 
 	{
 		hz_display8x16(1, 8 + i, i + 1, words1[i]);
@@ -990,7 +990,7 @@ void  YHLTD()
 	char *words7[] = {tt,E,C,hh,N,O,L,O,G,Y,C,O,DIAN,DH,L,tt,D};
 	char *words8[] = {C,O,DIAN,DH,L,tt,D};
 	
-	DispPic( PIC_99 );	
+//	DispPic( PIC_99 );	
 	for ( k = 0; k < 14; k++)  // 显示  个字符
 	{
 	    unsigned char col_start = 8;  // 第一个字符的起始列

@@ -3,19 +3,11 @@
 
 void main(void)
 {
-//	unsigned char mode;
-//	init_cpu();
-//	Delay_Xms(5);
-//   	InitST7567();	//一开始初始化控制器
-//	DispFram(0x00,0x00);
-	
-	while(1)  
-	{
+	unsigned char mode;
 	init_cpu();
 	Delay_Xms(5);
    	InitST7567();	//一开始初始化控制器
 	DispFram(0x00,0x00);
-	
 	yehui_UI();
 	Delay_Xms(2000);
 //	WhatsApp();
@@ -23,59 +15,93 @@ void main(void)
 	Delay_Xms(2000);
 	DispPic( PIC_5 );
 	Delay_Xms(2000);
-	yehui_UI();	//     
-	Delay_Xms(2000);
 	DispDot(0xf0,0x0f);
 	Delay_Xms(2000);			 
 	DispDots( 0x33,0xcc);
 	Delay_Xms(2000);				 
 	DispFram(0x55,0xaa);
 	Delay_Xms(2000);				 
-	yehui_UI();
-	Delay_Xms(2000);				 
 	DispFram(0x55,0x55);	
 	Delay_Xms(2000);				 
 	DispFram(0xff,0x00);	 
 	Delay_Xms(2000);				 
 	DispFram(0x00,0xff);	
-	Delay_Xms(2000);
+	Delay_Xms(2000);	
+	
+	while(1)  
+	{
+//	init_cpu();
+//	Delay_Xms(5);
+//   	InitST7567();	//一开始初始化控制器
+//	DispFram(0x00,0x00);
+	
+//	yehui_UI();
+//	Delay_Xms(2000);
+////	WhatsApp();
+//	YHLTD();
+//	Delay_Xms(2000);
+//	DispPic( PIC_5 );
+//	Delay_Xms(2000);
+//	yehui_UI();	//     
+//	Delay_Xms(2000);
+//	DispDot(0xf0,0x0f);
+//	Delay_Xms(2000);			 
+//	DispDots( 0x33,0xcc);
+//	Delay_Xms(2000);				 
+//	DispFram(0x55,0xaa);
+//	Delay_Xms(2000);				 
+//	yehui_UI();
+//	Delay_Xms(2000);				 
+//	DispFram(0x55,0x55);	
+//	Delay_Xms(2000);				 
+//	DispFram(0xff,0x00);	 
+//	Delay_Xms(2000);				 
+//	DispFram(0x00,0xff);	
+//	Delay_Xms(2000);
 
 
-//     Start:	//跳转标号	
-//if (HOLD()) {  
-//    mode++;           // 先增加 mode
-//    mode %= 8;        // 让 mode 保持在 0~7 之间
+     Start:	//跳转标号	
+if (HOLD()) {  
+    mode++;           // 先增加 mode
+    mode %= 11;        // 让 mode 保持在 0~7 之间
 
-//    switch (mode) {
-//        case 0:  
-//            DispPic( PIC_5 );
-//            break;
-//        case 1:            
-//            yehui_UI();		
-//            break;
-//        case 2:
-//            DispDots(0x33, 0xcc);  // 小棋盘	
-//            break;
-//        case 3:
-//            DispFram(0x55, 0xaa);	
-//            break;
-//        case 4:
-//            DispDot(0xf0, 0x0f);  // 大棋盘
-//            break;
-//        case 5:
-//            DispFram(0x55, 0x55);		
-//            break;
-//        case 6:
-//            DispFram(0xff, 0x00);	 
-//            break;
-//        case 7:
-//            DispFram(0xff, 0xff);	
-//            break;
-//        default:
-//            mode = 0;  // 防止异常情况
-//            break;
-//    }
-//}
+    switch (mode) {
+        case 0:  
+            DispPic( PIC_5 );
+            break;
+        case 1:            
+            yehui_UI();		
+            break;
+        case 2:
+            DispDots(0x33, 0xcc);  // 小棋盘	
+            break;
+        case 3:
+            DispDot(0xf0, 0x0f);   // 大棋盘
+            break;
+        case 4:
+            DispFram(0x55, 0xaa);  
+            break;
+        case 5:
+            DispFram(0xaa, 0x55);		
+            break;
+        case 6:
+            DispFram(0xff, 0x00);	 
+            break;
+        case 7:
+            DispFram(0x00, 0xff);	
+            break;
+        case 8:
+            DispFram(0xff, 0xff);	
+            break;
+        case 9:
+            DispFram(0x55, 0x55);	
+            break;
+        case 10:
+            DispFram(0xaa, 0xaa);	
+            break;
+
+    }
+}
 
   
 //	 if (UP()) 

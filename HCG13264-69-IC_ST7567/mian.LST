@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MIAN                                                              04/25/2025 19:20:26 PAGE 1   
+C51 COMPILER V9.60.7.0   MIAN                                                              05/21/2025 23:39:48 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MIAN
@@ -12,295 +12,324 @@ line level    source
    3          
    4          void main(void)
    5          {
-   6   1      //      unsigned char mode;
-   7   1      //      init_cpu();
-   8   1      //      Delay_Xms(5);
-   9   1      //      InitST7567();   //一开始初始化控制器
-  10   1      //      DispFram(0x00,0x00);
-  11   1              
-  12   1              while(1)  
-  13   1              {
-  14   2              init_cpu();
-  15   2              Delay_Xms(5);
-  16   2              InitST7567();   //一开始初始化控制器
-  17   2              DispFram(0x00,0x00);
-  18   2              
-  19   2              yehui_UI();
-  20   2              Delay_Xms(2000);
-  21   2      //      WhatsApp();
-  22   2              YHLTD();
-  23   2              Delay_Xms(2000);
-  24   2              DispPic( PIC_5 );
-  25   2              Delay_Xms(2000);
-  26   2              yehui_UI();     //     
-  27   2              Delay_Xms(2000);
-  28   2              DispDot(0xf0,0x0f);
-  29   2              Delay_Xms(2000);                         
-  30   2              DispDots( 0x33,0xcc);
-  31   2              Delay_Xms(2000);                                 
-  32   2              DispFram(0x55,0xaa);
-  33   2              Delay_Xms(2000);                                 
-  34   2              yehui_UI();
-  35   2              Delay_Xms(2000);                                 
-  36   2              DispFram(0x55,0x55);    
-  37   2              Delay_Xms(2000);                                 
-  38   2              DispFram(0xff,0x00);     
-  39   2              Delay_Xms(2000);                                 
-  40   2              DispFram(0x00,0xff);    
-  41   2              Delay_Xms(2000);
-  42   2      
-  43   2      
-  44   2      //     Start:   //跳转标号      
-  45   2      //if (HOLD()) {  
-  46   2      //    mode++;           // 先增加 mode
-  47   2      //    mode %= 8;        // 让 mode 保持在 0~7 之间
-  48   2      
-  49   2      //    switch (mode) {
-  50   2      //        case 0:  
-  51   2      //            DispPic( PIC_5 );
-  52   2      //            break;
-  53   2      //        case 1:            
-  54   2      //            yehui_UI();               
-  55   2      //            break;
-C51 COMPILER V9.60.7.0   MIAN                                                              04/25/2025 19:20:26 PAGE 2   
+   6   1              unsigned char mode;
+   7   1              init_cpu();
+   8   1              Delay_Xms(5);
+   9   1              InitST7567();   //一开始初始化控制器
+  10   1              DispFram(0x00,0x00);
+  11   1              yehui_UI();
+  12   1              Delay_Xms(2000);
+  13   1      //      WhatsApp();
+  14   1              YHLTD();
+  15   1              Delay_Xms(2000);
+  16   1              DispPic( PIC_5 );
+  17   1              Delay_Xms(2000);
+  18   1              DispDot(0xf0,0x0f);
+  19   1              Delay_Xms(2000);                         
+  20   1              DispDots( 0x33,0xcc);
+  21   1              Delay_Xms(2000);                                 
+  22   1              DispFram(0x55,0xaa);
+  23   1              Delay_Xms(2000);                                 
+  24   1              DispFram(0x55,0x55);    
+  25   1              Delay_Xms(2000);                                 
+  26   1              DispFram(0xff,0x00);     
+  27   1              Delay_Xms(2000);                                 
+  28   1              DispFram(0x00,0xff);    
+  29   1              Delay_Xms(2000);        
+  30   1              
+  31   1              while(1)  
+  32   1              {
+  33   2      //      init_cpu();
+  34   2      //      Delay_Xms(5);
+  35   2      //      InitST7567();   //一开始初始化控制器
+  36   2      //      DispFram(0x00,0x00);
+  37   2              
+  38   2      //      yehui_UI();
+  39   2      //      Delay_Xms(2000);
+  40   2      ////    WhatsApp();
+  41   2      //      YHLTD();
+  42   2      //      Delay_Xms(2000);
+  43   2      //      DispPic( PIC_5 );
+  44   2      //      Delay_Xms(2000);
+  45   2      //      yehui_UI();     //     
+  46   2      //      Delay_Xms(2000);
+  47   2      //      DispDot(0xf0,0x0f);
+  48   2      //      Delay_Xms(2000);                         
+  49   2      //      DispDots( 0x33,0xcc);
+  50   2      //      Delay_Xms(2000);                                 
+  51   2      //      DispFram(0x55,0xaa);
+  52   2      //      Delay_Xms(2000);                                 
+  53   2      //      yehui_UI();
+  54   2      //      Delay_Xms(2000);                                 
+  55   2      //      DispFram(0x55,0x55);    
+C51 COMPILER V9.60.7.0   MIAN                                                              05/21/2025 23:39:48 PAGE 2   
 
-  56   2      //        case 2:
-  57   2      //            DispDots(0x33, 0xcc);  // 小棋盘  
-  58   2      //            break;
-  59   2      //        case 3:
-  60   2      //            DispFram(0x55, 0xaa);     
-  61   2      //            break;
-  62   2      //        case 4:
-  63   2      //            DispDot(0xf0, 0x0f);  // 大棋盘
-  64   2      //            break;
-  65   2      //        case 5:
-  66   2      //            DispFram(0x55, 0x55);             
-  67   2      //            break;
-  68   2      //        case 6:
-  69   2      //            DispFram(0xff, 0x00);      
-  70   2      //            break;
-  71   2      //        case 7:
-  72   2      //            DispFram(0xff, 0xff);     
-  73   2      //            break;
-  74   2      //        default:
-  75   2      //            mode = 0;  // 防止异常情况
-  76   2      //            break;
-  77   2      //    }
-  78   2      //}
-  79   2      
-  80   2        
-  81   2      //       if (UP()) 
-  82   2      //        {  
-  83   2      //                while(1)
-  84   2      //               {
-  85   2      //                      DispDot(0xf0,0x0f);
-  86   2      //                      Delay_Xms(600);                  
-  87   2      //          DispDots( 0x33,0xcc);
-  88   2      //                      Delay_Xms(600);                          
-  89   2      //          DispFram(0x55,0xaa);
-  90   2      //                      Delay_Xms(600);                          
-  91   2      //          yehui_UI();
-  92   2      //                      Delay_Xms(600);                          
-  93   2      //          DispFram(0x55,0x55);        
-  94   2      //                      Delay_Xms(600);                          
-  95   2      //          DispFram(0xff,0x00);         
-  96   2      //                      Delay_Xms(600);                          
-  97   2      //                      DispFram(0x00,0xff);    
-  98   2      //                      Delay_Xms(600);
-  99   2      //                      WhatsApp();
- 100   2      //                      Delay_Xms(100); 
- 101   2      //                }     
- 102   2      //      }
- 103   2                              
- 104   2      
- 105   2      //       if (DN()) 
- 106   2      //        {  
- 107   2      //              RST = 0;    // 先拉低复位引脚
- 108   2      //              Delay_Xms(10);  // 等待 10ms，确保复位信号有效
- 109   2      //              RST = 1;    // 再拉高，完成复位 
- 110   2      //        }
- 111   2      //            DispPic( PIC_5 );
- 112   2      //                      Delay_Xms(5000);
- 113   2      //            yehui_UI();       //     
- 114   2      //                      Delay_Xms(5000);
- 115   2      //                      DispDot(0xf0,0x0f);
- 116   2      //                      Delay_Xms(5000);                         
- 117   2      //            DispDots( 0x33,0xcc);
-C51 COMPILER V9.60.7.0   MIAN                                                              04/25/2025 19:20:26 PAGE 3   
+  56   2      //      Delay_Xms(2000);                                 
+  57   2      //      DispFram(0xff,0x00);     
+  58   2      //      Delay_Xms(2000);                                 
+  59   2      //      DispFram(0x00,0xff);    
+  60   2      //      Delay_Xms(2000);
+  61   2      
+  62   2      
+  63   2           Start:     //跳转标号      
+  64   2      if (HOLD()) {  
+  65   3          mode++;           // 先增加 mode
+  66   3          mode %= 11;        // 让 mode 保持在 0~7 之间
+  67   3      
+  68   3          switch (mode) {
+  69   4              case 0:  
+  70   4                  DispPic( PIC_5 );
+  71   4                  break;
+  72   4              case 1:            
+  73   4                  yehui_UI();         
+  74   4                  break;
+  75   4              case 2:
+  76   4                  DispDots(0x33, 0xcc);  // 小棋盘    
+  77   4                  break;
+  78   4              case 3:
+  79   4                  DispDot(0xf0, 0x0f);   // 大棋盘
+  80   4                  break;
+  81   4              case 4:
+  82   4                  DispFram(0x55, 0xaa);  
+  83   4                  break;
+  84   4              case 5:
+  85   4                  DispFram(0xaa, 0x55);               
+  86   4                  break;
+  87   4              case 6:
+  88   4                  DispFram(0xff, 0x00);        
+  89   4                  break;
+  90   4              case 7:
+  91   4                  DispFram(0x00, 0xff);       
+  92   4                  break;
+  93   4              case 8:
+  94   4                  DispFram(0xff, 0xff);       
+  95   4                  break;
+  96   4              case 9:
+  97   4                  DispFram(0x55, 0x55);       
+  98   4                  break;
+  99   4              case 10:
+ 100   4                  DispFram(0xaa, 0xaa);       
+ 101   4                  break;
+ 102   4      
+ 103   4          }
+ 104   3      }
+ 105   2      
+ 106   2        
+ 107   2      //       if (UP()) 
+ 108   2      //        {  
+ 109   2      //                while(1)
+ 110   2      //               {
+ 111   2      //                      DispDot(0xf0,0x0f);
+ 112   2      //                      Delay_Xms(600);                  
+ 113   2      //          DispDots( 0x33,0xcc);
+ 114   2      //                      Delay_Xms(600);                          
+ 115   2      //          DispFram(0x55,0xaa);
+ 116   2      //                      Delay_Xms(600);                          
+ 117   2      //          yehui_UI();
+C51 COMPILER V9.60.7.0   MIAN                                                              05/21/2025 23:39:48 PAGE 3   
 
- 118   2      //                      Delay_Xms(5000);                                 
- 119   2      //            DispFram(0x55,0xaa);
- 120   2      //                      Delay_Xms(5000);                                 
- 121   2      //            yehui_UI();
- 122   2      //                      Delay_Xms(5000);                                 
- 123   2      //            DispFram(0x55,0x55);      
- 124   2      //                      Delay_Xms(5000);                                 
- 125   2      //            DispFram(0xff,0x00);       
- 126   2      //                      Delay_Xms(5000);                                 
- 127   2      //                      DispFram(0x00,0xff);    
- 128   2      //                      Delay_Xms(5000);
- 129   2              
- 130   2      //              -------------------------------------------------------------------------               
- 131   2      //              hz_display16(0,0,0,jin); 
- 132   2      //              Delay_Xms(1000);
- 133   2      
- 134   2      //              hz_display16(0,0,18,se); 
- 135   2      //              Delay_Xms(1000);
- 136   2      
- 137   2      //              DispFram( 0xff,0xff );                           //全显
- 138   2      //              Delay_Xms(2800);
- 139   2      //              if( Change(70)==1 ) goto Start; //暂停键有动作跳转到程序的最头上
- 140   2      //              push();
- 141   2      //              Pause();
- 142   2      
- 143   2      //              DispFram( 0x00,0x00 );                     //无显
- 144   2      //              Delay_Xms(2800);
- 145   2      //              if( Change(70)==1 ) goto Start; //暂停键有动作跳转到程序的最头上
- 146   2      //              Pause();
- 147   2      
- 148   2      //              ------------------------------------------------------------------      
- 149   2      //              DispDot( 0xf0,0x0f );                    //大棋盘
- 150   2      //              Delay_Xms(2800);
- 151   2      //              if( Change(70)==1 ) goto Start; //暂停键有动作跳转到程序的最头上
- 152   2      //              push();
- 153   2      //              Pause();
- 154   2      //              ------------------------------------------------------------------
- 155   2      
- 156   2      //              DispDots( 0x33,0xcc );                    //小棋盘
- 157   2      //              Delay_Xms(2800);
- 158   2      //              if( Change(70)==1 ) goto Start; //暂停键有动作跳转到程序的最头上
- 159   2      //              push();
- 160   2      //              Pause();
- 161   2      //              ------------------------------------------------------------------      
- 162   2      //              DispFram( 0x55,0xaa );                            //花点                
- 163   2      //              Delay_Xms(2800);
- 164   2      //              if( Change(70)==1 ) goto Start; //暂停键有动作跳转到程序的最头上
- 165   2      //              push();
- 166   2      //              Pause();
- 167   2      
- 168   2      //              DispFram( 0x55,0x55 );                                   //      横线
- 169   2      //              Delay_Xms(2800);
- 170   2      //              if( Change(70)==1 ) goto Start; //暂停键有动作跳转到程序的最头上
- 171   2      //              push();
+ 118   2      //                      Delay_Xms(600);                          
+ 119   2      //          DispFram(0x55,0x55);        
+ 120   2      //                      Delay_Xms(600);                          
+ 121   2      //          DispFram(0xff,0x00);         
+ 122   2      //                      Delay_Xms(600);                          
+ 123   2      //                      DispFram(0x00,0xff);    
+ 124   2      //                      Delay_Xms(600);
+ 125   2      //                      WhatsApp();
+ 126   2      //                      Delay_Xms(100); 
+ 127   2      //                }     
+ 128   2      //      }
+ 129   2                              
+ 130   2      
+ 131   2      //       if (DN()) 
+ 132   2      //        {  
+ 133   2      //              RST = 0;    // 先拉低复位引脚
+ 134   2      //              Delay_Xms(10);  // 等待 10ms，确保复位信号有效
+ 135   2      //              RST = 1;    // 再拉高，完成复位 
+ 136   2      //        }
+ 137   2      //            DispPic( PIC_5 );
+ 138   2      //                      Delay_Xms(5000);
+ 139   2      //            yehui_UI();       //     
+ 140   2      //                      Delay_Xms(5000);
+ 141   2      //                      DispDot(0xf0,0x0f);
+ 142   2      //                      Delay_Xms(5000);                         
+ 143   2      //            DispDots( 0x33,0xcc);
+ 144   2      //                      Delay_Xms(5000);                                 
+ 145   2      //            DispFram(0x55,0xaa);
+ 146   2      //                      Delay_Xms(5000);                                 
+ 147   2      //            yehui_UI();
+ 148   2      //                      Delay_Xms(5000);                                 
+ 149   2      //            DispFram(0x55,0x55);      
+ 150   2      //                      Delay_Xms(5000);                                 
+ 151   2      //            DispFram(0xff,0x00);       
+ 152   2      //                      Delay_Xms(5000);                                 
+ 153   2      //                      DispFram(0x00,0xff);    
+ 154   2      //                      Delay_Xms(5000);
+ 155   2              
+ 156   2      //              -------------------------------------------------------------------------               
+ 157   2      //              hz_display16(0,0,0,jin); 
+ 158   2      //              Delay_Xms(1000);
+ 159   2      
+ 160   2      //              hz_display16(0,0,18,se); 
+ 161   2      //              Delay_Xms(1000);
+ 162   2      
+ 163   2      //              DispFram( 0xff,0xff );                           //全显
+ 164   2      //              Delay_Xms(2800);
+ 165   2      //              if( Change(70)==1 ) goto Start; //暂停键有动作跳转到程序的最头上
+ 166   2      //              push();
+ 167   2      //              Pause();
+ 168   2      
+ 169   2      //              DispFram( 0x00,0x00 );                     //无显
+ 170   2      //              Delay_Xms(2800);
+ 171   2      //              if( Change(70)==1 ) goto Start; //暂停键有动作跳转到程序的最头上
  172   2      //              Pause();
  173   2      
- 174   2      //              DispFram( 0xaa,0xaa );                               // 横线
- 175   2      //              Delay_Xms(1000);
- 176   2      //              if( Change(300)==1 ) goto Start;        //暂停键有动作跳转到程序的最头上
- 177   2      //              //push();
- 178   2      //              Pause();
- 179   2      //              -------------------------------------------------------------------------               
-C51 COMPILER V9.60.7.0   MIAN                                                              04/25/2025 19:20:26 PAGE 4   
+ 174   2      //              ------------------------------------------------------------------      
+ 175   2      //              DispDot( 0xf0,0x0f );                    //大棋盘
+ 176   2      //              Delay_Xms(2800);
+ 177   2      //              if( Change(70)==1 ) goto Start; //暂停键有动作跳转到程序的最头上
+ 178   2      //              push();
+ 179   2      //              Pause();
+C51 COMPILER V9.60.7.0   MIAN                                                              05/21/2025 23:39:48 PAGE 4   
 
- 180   2      //              DispFram( 0xff,0x00 );                                   //竖线 
- 181   2      //              Delay_Xms(500);
- 182   2      //              if( Change(70)==1 ) goto Start; //暂停键有动作跳转到程序的最头上
- 183   2      //              // push();
- 184   2      //              Pause();
- 185   2      
- 186   2      //              DispFram( 0x00,0xff );
- 187   2      //              Delay_Xms(1000);
- 188   2      //              if( Change(300)==1 ) goto Start;        //暂停键有动作跳转到程序的最头上
- 189   2      //              push();
- 190   2      //              Pause();
- 191   2      //              ----------------------------------------------------------------------------     
- 192   2      
- 193   2      //              DispPic( PIC_1 );
- 194   2      //              Delay_Xms(1000);
- 195   2      //              if( Change(300)==1 ) goto Start;        //暂停键有动作跳转到程序的最头上
- 196   2      //              push();
- 197   2      //              Pause();        
- 198   2      
- 199   2      //              ST7567_WriteComd(0xa7);
- 200   2      //              Delay_Xms(1000);
- 201   2      //              if( Change(300)==1 ) goto Start;        //暂停键有动作跳转到程序的最头上
- 202   2      //              Pause();
- 203   2      
- 204   2      //              ST7567_WriteComd(0xa6);
- 205   2      //              Delay_Xms(1000);
- 206   2      //              if( Change(300)==1 ) goto Start;        //暂停键有动作跳转到程序的最头上
- 207   2      //              Pause();
- 208   2      
- 209   2      //              DispPic( pic12864_KH8 );
- 210   2      //              Delay_Xms(500);
- 211   2      //              if( Change(300)==1 ) goto Start;        //暂停键有动作跳转到程序的最头上
- 212   2      //              Pause();
- 213   2      
- 214   2      //              DispPic1( PIC_CS );
- 215   2      //              Delay_Xms(500);
- 216   2      //              if( Change(50)==1 ) goto Start; //暂停键有动作跳转到程序的最头上          
- 217   2      //              Pause();
+ 180   2      //              ------------------------------------------------------------------
+ 181   2      
+ 182   2      //              DispDots( 0x33,0xcc );                    //小棋盘
+ 183   2      //              Delay_Xms(2800);
+ 184   2      //              if( Change(70)==1 ) goto Start; //暂停键有动作跳转到程序的最头上
+ 185   2      //              push();
+ 186   2      //              Pause();
+ 187   2      //              ------------------------------------------------------------------      
+ 188   2      //              DispFram( 0x55,0xaa );                            //花点                
+ 189   2      //              Delay_Xms(2800);
+ 190   2      //              if( Change(70)==1 ) goto Start; //暂停键有动作跳转到程序的最头上
+ 191   2      //              push();
+ 192   2      //              Pause();
+ 193   2      
+ 194   2      //              DispFram( 0x55,0x55 );                                   //      横线
+ 195   2      //              Delay_Xms(2800);
+ 196   2      //              if( Change(70)==1 ) goto Start; //暂停键有动作跳转到程序的最头上
+ 197   2      //              push();
+ 198   2      //              Pause();
+ 199   2      
+ 200   2      //              DispFram( 0xaa,0xaa );                               // 横线
+ 201   2      //              Delay_Xms(1000);
+ 202   2      //              if( Change(300)==1 ) goto Start;        //暂停键有动作跳转到程序的最头上
+ 203   2      //              //push();
+ 204   2      //              Pause();
+ 205   2      //              -------------------------------------------------------------------------               
+ 206   2      //              DispFram( 0xff,0x00 );                                   //竖线 
+ 207   2      //              Delay_Xms(500);
+ 208   2      //              if( Change(70)==1 ) goto Start; //暂停键有动作跳转到程序的最头上
+ 209   2      //              // push();
+ 210   2      //              Pause();
+ 211   2      
+ 212   2      //              DispFram( 0x00,0xff );
+ 213   2      //              Delay_Xms(1000);
+ 214   2      //              if( Change(300)==1 ) goto Start;        //暂停键有动作跳转到程序的最头上
+ 215   2      //              push();
+ 216   2      //              Pause();
+ 217   2      //              ----------------------------------------------------------------------------     
  218   2      
- 219   2      
- 220   2      //              DispPic( PIC_5 );
- 221   2      //              Delay_Xms(2800);
- 222   2      //              if( Change(70)==1 ) goto Start; //暂停键有动作跳转到程序的最头上
- 223   2      //              Pause();
+ 219   2      //              DispPic( PIC_1 );
+ 220   2      //              Delay_Xms(1000);
+ 221   2      //              if( Change(300)==1 ) goto Start;        //暂停键有动作跳转到程序的最头上
+ 222   2      //              push();
+ 223   2      //              Pause();        
  224   2      
- 225   2      //              DispPic1( PIC_4 );
- 226   2      //              Delay_Xms(600);
- 227   2      //              if( Change(50)==1 ) goto Start; //暂停键有动作跳转到程序的最头上          
- 228   2      
+ 225   2      //              ST7567_WriteComd(0xa7);
+ 226   2      //              Delay_Xms(1000);
+ 227   2      //              if( Change(300)==1 ) goto Start;        //暂停键有动作跳转到程序的最头上
+ 228   2      //              Pause();
  229   2      
- 230   2      //              DispPic( PIC_5 );
- 231   2      //              Delay_Xms(2800);
- 232   2      //              if( Change(50)==1 ) goto Start; //暂停键有动作跳转到程序的最头上        
- 233   2      
- 234   2      //              DispPic( PIC_6 );
- 235   2      //              Delay_Xms(2500);
- 236   2      //              if( Change(50)==1 ) goto Start; //暂停键有动作跳转到程序的最头上        
- 237   2      
- 238   2      //              DispPic( PIC_7 );
- 239   2      //              Delay_Xms(600);
- 240   2      //              if( Change(50)==1 ) goto Start; //暂停键有动作跳转到程序的最头上        
- 241   2      
-C51 COMPILER V9.60.7.0   MIAN                                                              04/25/2025 19:20:26 PAGE 5   
+ 230   2      //              ST7567_WriteComd(0xa6);
+ 231   2      //              Delay_Xms(1000);
+ 232   2      //              if( Change(300)==1 ) goto Start;        //暂停键有动作跳转到程序的最头上
+ 233   2      //              Pause();
+ 234   2      
+ 235   2      //              DispPic( pic12864_KH8 );
+ 236   2      //              Delay_Xms(500);
+ 237   2      //              if( Change(300)==1 ) goto Start;        //暂停键有动作跳转到程序的最头上
+ 238   2      //              Pause();
+ 239   2      
+ 240   2      //              DispPic1( PIC_CS );
+ 241   2      //              Delay_Xms(500);
+C51 COMPILER V9.60.7.0   MIAN                                                              05/21/2025 23:39:48 PAGE 5   
 
- 242   2      //              DispPic( PIC_8 );
- 243   2      //              Delay_Xms(600);
- 244   2      //              if( Change(50)==1 ) goto Start; //暂停键有动作跳转到程序的最头上        
- 245   2      //              /*      
- 246   2      
- 247   2      //              ST7567_WriteComd(0x81); //The Electronic Volume (Double Byte Command)数字电位器调节VO输出电压(也就是对
-             -比度)两字节                                 0x81原来的数值
- 248   2      //              ST7567_WriteComd(55);    //vop 设置
- 249   2      //              DispPic( PIC_9 );       //中值
- 250   2      //              Delay_Xms(600);
- 251   2      //              if( Change(50)==1 ) goto Start; //暂停键有动作跳转到程序的最头上        
- 252   2      //              push();
- 253   2      
- 254   2      //              ST7567_WriteComd(0x81); //The Electronic Volume (Double Byte Command)数字电位器调节VO输出电压(也就是对
-             -比度)两字节                                 0x81原来的数值
- 255   2      //              ST7567_WriteComd(57);    //vop 设置     
- 256   2      //              DispPic( PIC_10 );         //上限
- 257   2      //              Delay_Xms(600);
+ 242   2      //              if( Change(50)==1 ) goto Start; //暂停键有动作跳转到程序的最头上          
+ 243   2      //              Pause();
+ 244   2      
+ 245   2      
+ 246   2      //              DispPic( PIC_5 );
+ 247   2      //              Delay_Xms(2800);
+ 248   2      //              if( Change(70)==1 ) goto Start; //暂停键有动作跳转到程序的最头上
+ 249   2      //              Pause();
+ 250   2      
+ 251   2      //              DispPic1( PIC_4 );
+ 252   2      //              Delay_Xms(600);
+ 253   2      //              if( Change(50)==1 ) goto Start; //暂停键有动作跳转到程序的最头上          
+ 254   2      
+ 255   2      
+ 256   2      //              DispPic( PIC_5 );
+ 257   2      //              Delay_Xms(2800);
  258   2      //              if( Change(50)==1 ) goto Start; //暂停键有动作跳转到程序的最头上        
- 259   2      //              push();
- 260   2      
- 261   2      //              ST7567_WriteComd(0x81); //The Electronic Volume (Double Byte Command)数字电位器调节VO输出电压(也就是对
+ 259   2      
+ 260   2      //              DispPic( PIC_6 );
+ 261   2      //              Delay_Xms(2500);
+ 262   2      //              if( Change(50)==1 ) goto Start; //暂停键有动作跳转到程序的最头上        
+ 263   2      
+ 264   2      //              DispPic( PIC_7 );
+ 265   2      //              Delay_Xms(600);
+ 266   2      //              if( Change(50)==1 ) goto Start; //暂停键有动作跳转到程序的最头上        
+ 267   2      
+ 268   2      //              DispPic( PIC_8 );
+ 269   2      //              Delay_Xms(600);
+ 270   2      //              if( Change(50)==1 ) goto Start; //暂停键有动作跳转到程序的最头上        
+ 271   2      //              /*      
+ 272   2      
+ 273   2      //              ST7567_WriteComd(0x81); //The Electronic Volume (Double Byte Command)数字电位器调节VO输出电压(也就是对
              -比度)两字节                                 0x81原来的数值
- 262   2      //              ST7567_WriteComd(52);    //vop 设置
- 263   2      //              DispPic( PIC_11 );                //下限
- 264   2      //              Delay_Xms(600);
- 265   2      //              if( Change(50)==1 ) goto Start; //暂停键有动作跳转到程序的最头上        
- 266   2      //              push();
- 267   2      //              */
- 268   2      
- 269   2      
- 270   2      //              DispPic( PIC_12 );
- 271   2      //              Delay_Xms(600);
- 272   2      //              if( Change(50)==1 ) goto Start; //暂停键有动作跳转到程序的最头上        
- 273   2      
- 274   2      
- 275   2              }
- 276   1      
- 277   1      }
+ 274   2      //              ST7567_WriteComd(55);    //vop 设置
+ 275   2      //              DispPic( PIC_9 );       //中值
+ 276   2      //              Delay_Xms(600);
+ 277   2      //              if( Change(50)==1 ) goto Start; //暂停键有动作跳转到程序的最头上        
+ 278   2      //              push();
+ 279   2      
+ 280   2      //              ST7567_WriteComd(0x81); //The Electronic Volume (Double Byte Command)数字电位器调节VO输出电压(也就是对
+             -比度)两字节                                 0x81原来的数值
+ 281   2      //              ST7567_WriteComd(57);    //vop 设置     
+ 282   2      //              DispPic( PIC_10 );         //上限
+ 283   2      //              Delay_Xms(600);
+ 284   2      //              if( Change(50)==1 ) goto Start; //暂停键有动作跳转到程序的最头上        
+ 285   2      //              push();
+ 286   2      
+ 287   2      //              ST7567_WriteComd(0x81); //The Electronic Volume (Double Byte Command)数字电位器调节VO输出电压(也就是对
+             -比度)两字节                                 0x81原来的数值
+ 288   2      //              ST7567_WriteComd(52);    //vop 设置
+ 289   2      //              DispPic( PIC_11 );                //下限
+ 290   2      //              Delay_Xms(600);
+ 291   2      //              if( Change(50)==1 ) goto Start; //暂停键有动作跳转到程序的最头上        
+ 292   2      //              push();
+ 293   2      //              */
+ 294   2      
+ 295   2      
+ 296   2      //              DispPic( PIC_12 );
+ 297   2      //              Delay_Xms(600);
+ 298   2      //              if( Change(50)==1 ) goto Start; //暂停键有动作跳转到程序的最头上        
+ 299   2      
+ 300   2      
+C51 COMPILER V9.60.7.0   MIAN                                                              05/21/2025 23:39:48 PAGE 6   
+
+ 301   2              }
+ 302   1      
+ 303   1      }
+*** WARNING C280 IN LINE 63 OF mian.c: 'Start': unreferenced label
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    162    ----
+   CODE SIZE        =    288    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =   ----    ----
+   XDATA SIZE       =   ----       1
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
@@ -308,4 +337,4 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

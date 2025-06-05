@@ -9,30 +9,29 @@ void main(void)
    	InitST7567();	//一开始初始化控制器
 	DispFram(0x00,0x00);
 	yehui_UI();
-	Delay_Xms(1500);
+	Delay_Xms(5000);
 //	WhatsApp();
+	DispFram(0x00,0x00);
 	YHLTD();
 	
 	
-			Delay_Xms(1000);
-			DispPic( PIC_5 );
-			Delay_Xms(1000);
-            yehui_UI();	//     
-			Delay_Xms(1000);
+			Delay_Xms(5000);
+//			DispPic( PIC_5 );
+//			Delay_Xms(5000);
+//            yehui_UI();	//     
+//			Delay_Xms(5000);
 			DispDot(0xf0,0x0f);
-			Delay_Xms(1000);			 
+			Delay_Xms(5000);			 
             DispDots( 0x33,0xcc);
-			Delay_Xms(1000);				 
+			Delay_Xms(5000);				 
             DispFram(0x55,0xaa);
-			Delay_Xms(1000);				 
-            yehui_UI();
-			Delay_Xms(1000);				 
+			Delay_Xms(5000);				 				 
             DispFram(0x55,0x55);	
-			Delay_Xms(1000);				 
+			Delay_Xms(5000);				 
             DispFram(0xff,0x00);	 
-			Delay_Xms(1000);				 
+			Delay_Xms(5000);				 
 			DispFram(0x00,0xff);	
-			Delay_Xms(1000);
+			Delay_Xms(5000);
 	
 //	while(1)  
 //	{

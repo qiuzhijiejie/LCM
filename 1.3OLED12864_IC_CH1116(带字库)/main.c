@@ -10,8 +10,6 @@ int main(void)
 	OLED_DisplayTurn(0);	//0正常显示,1 屏幕翻转显示
 	OLED_Clear();
 
-
-	
 	while(1)
 	{	
 //	    t+=0.01;

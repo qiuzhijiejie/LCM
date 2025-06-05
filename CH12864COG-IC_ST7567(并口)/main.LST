@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              05/17/2025 09:40:18 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              05/27/2025 18:23:34 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -17,40 +17,98 @@ line level    source
    8           
    9          void main()   
   10          { 
-  11   1        while(1)
-  12   1        {
-  13   2              Init_IC(); 
-  14   2                
-  15   2          lcd_test();  
-  16   2              delayMs(500);
-  17   2              Yehui_UI();
-  18   2              delayMs(5000);
-  19   2          Clear();
-  20   2                
-  21   2      //      whatsapp();
-  22   2      //      delayMs(5000); 
-  23   2      //      Clear();
-  24   2                
-  25   2              lcd_describe();
-  26   2              delayMs(5000);  
-  27   2          Clear();
-  28   2                
-  29   2          display_photo(tupian,0,0);    
-  30   2              delayMs(5000);
-  31   2          Clear();
-  32   2                
-  33   2              trans_display_photo(tupian1,0,0);         
-  34   2              delayMs(5000);
-  35   2              Clear();
+  11   1              
+  12   1      //      unsigned char mode;
+  13   1      //      Init_IC();   
+  14   1      //    lcd_test();  
+  15   1      //      Yehui_UI();
+  16   1      //      delayMs(3000);
+  17   1      //    Clear();
+  18   1      //        
+  19   1      ////    whatsapp();
+  20   1      ////    delayMs(5000); 
+  21   1      ////    Clear();          
+  22   1      //      lcd_describe();
+  23   1      //      delayMs(3000);  
+  24   1      //    Clear();
+  25   1      //        
+  26   1      //    display_photo(tupian,0,0);          
+  27   1      //      delayMs(3000);
+  28   1      //    Clear();
+  29   1      //        
+  30   1      //      trans_display_photo(tupian1,0,0);         
+  31   1      //      delayMs(3000);
+  32   1      
+  33   1        while(1)
+  34   1        {
+  35   2                
   36   2                
-  37   2        }    
-  38   1      }   
+  37   2                      unsigned char mode;
+  38   2              Init_IC();   
+  39   2          lcd_test();  
+  40   2              Yehui_UI();
+  41   2              delayMs(3000);
+  42   2          Clear();
+  43   2                
+  44   2      //      whatsapp();
+  45   2      //      delayMs(5000); 
+  46   2      //      Clear();          
+  47   2              lcd_describe();
+  48   2              delayMs(3000);  
+  49   2          Clear();
+  50   2                
+  51   2          display_photo(tupian,0,0);    
+  52   2              delayMs(3000);
+  53   2          Clear();
+  54   2                
+  55   2              trans_display_photo(tupian1,0,0);         
+C51 COMPILER V9.60.7.0   MAIN                                                              05/27/2025 18:23:34 PAGE 2   
+
+  56   2              delayMs(3000);
+  57   2                
+  58   2                
+  59   2      //if (HOLD()) {  
+  60   2      //    mode++;           // 先增加 mode
+  61   2      //    mode %= 8;        // 让 mode 保持在 0~7 之间
+  62   2      //      Clear();
+  63   2      //    switch (mode) {
+  64   2      //        case 0:  
+  65   2      //            display_test(0xaa, 0xaa);
+  66   2      //            break;
+  67   2      //        case 1:            
+  68   2      //            Yehui_UI();               
+  69   2      //            break;
+  70   2      //        case 2:
+  71   2      //            display_test(0x55, 0x55);  
+  72   2      //            break;
+  73   2      //        case 3:
+  74   2      //            display_test(0x55, 0xaa);  
+  75   2      //            break;
+  76   2      //        case 4:
+  77   2      //            display_test(0xaa, 0x55);         
+  78   2      //            break;
+  79   2      //        case 5:
+  80   2      //            display_test(0xff, 0x00);  
+  81   2      //            break;
+  82   2      //        case 6:
+  83   2      //            display_test(0x00, 0xff); 
+  84   2      //            break;
+  85   2      //        case 7:
+  86   2      //            display_test(0xff, 0xff); 
+  87   2      //            break;
+  88   2      
+  89   2      //    }
+  90   2      //}
+  91   2                
+  92   2        }    
+  93   1      }   
+*** WARNING C280 IN LINE 37 OF main.c: 'mode': unreferenced local variable
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     91    ----
+   CODE SIZE        =     81    ----
    CONSTANT SIZE    =   2048    ----
-   XDATA SIZE       =   ----    ----
+   XDATA SIZE       =   ----       1
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
@@ -58,4 +116,4 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

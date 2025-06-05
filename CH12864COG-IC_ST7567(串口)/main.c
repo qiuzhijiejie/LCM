@@ -9,8 +9,6 @@ interface    :  4-wire serialbus (S8)intertace
  
 void main()   
 { 
-	
-
   while(1)
   {	
 	  Init_IC(); 

@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   12864                                                             05/13/2025 18:36:26 PAGE 1   
+C51 COMPILER V9.60.7.0   12864                                                             05/21/2025 15:54:04 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE 12864
@@ -62,7 +62,7 @@ line level    source
   53   2        sclk=1;
   54   2        delayUs(5);
   55   2        com<<=1;
-C51 COMPILER V9.60.7.0   12864                                                             05/13/2025 18:36:26 PAGE 2   
+C51 COMPILER V9.60.7.0   12864                                                             05/21/2025 15:54:04 PAGE 2   
 
   56   2        sclk=0;
   57   2        }
@@ -126,7 +126,7 @@ line level    source
  115   1      }
  116            
  117          void lcd_test()
-C51 COMPILER V9.60.7.0   12864                                                             05/13/2025 18:36:26 PAGE 3   
+C51 COMPILER V9.60.7.0   12864                                                             05/21/2025 15:54:04 PAGE 3   
 
  118          {
  119   1        uchar i;
@@ -190,7 +190,7 @@ line level    source
  177   3                  write_cmd_dat(1, 0xFF);
  178   3              }
  179   2      
-C51 COMPILER V9.60.7.0   12864                                                             05/13/2025 18:36:26 PAGE 4   
+C51 COMPILER V9.60.7.0   12864                                                             05/21/2025 15:54:04 PAGE 4   
 
  180   2              // 左边
  181   2              for(i = top; i <= bottom; i++)
@@ -254,7 +254,7 @@ line level    source
  239   1                      uchar i;
  240   1                      uint index;
  241   1                      GotoXY(startP,startC);
-C51 COMPILER V9.60.7.0   12864                                                             05/13/2025 18:36:26 PAGE 5   
+C51 COMPILER V9.60.7.0   12864                                                             05/21/2025 15:54:04 PAGE 5   
 
  242   1                      while((*ptrAscii) != '\0')
  243   1                      {
@@ -318,7 +318,7 @@ line level    source
  301          void Init_IC()   
  302          {   
  303   1       cs  =  0;   
-C51 COMPILER V9.60.7.0   12864                                                             05/13/2025 18:36:26 PAGE 6   
+C51 COMPILER V9.60.7.0   12864                                                             05/21/2025 15:54:04 PAGE 6   
 
  304   1       P1  =  0xFF;   
  305   1       LCD_Reset(); 
@@ -327,7 +327,7 @@ line level    source
  308   1       write_cmd_dat(0,0xC8);  //SHL selection(COM64->COM0) //改变COM扫描方向         
  309   1       write_cmd_dat(0,0xA0);  //ADC selection(SEG0->SEG128) //改变SEG扫描方向 
  310   1       write_cmd_dat(0,0x2F);  //power control(VB,VR,VF=1,1,1)
- 311   1       write_cmd_dat(0,0x25); //Regulator resistor select 110 内部电位器调节
+ 311   1       write_cmd_dat(0,0x26); //Regulator resistor select 110 内部电位器调节
  312   1       write_cmd_dat(0,0x81); //set reference voltage mode
  313   1       write_cmd_dat(0,0x15); //set reference voltage //改变此值可以改变效果  
  314   1       write_cmd_dat(0,0x40); //Initial Display Line 0x40 0x60
