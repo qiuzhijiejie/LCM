@@ -262,21 +262,21 @@ void exsample(void)                     //演示程序
     lcdfill(0);                         //清屏
 
 //1.图片测试: 在(2,1)位置显示32点阵Oriental图标
-    XPOS=2;
-    YPOS=1;
-    putimage(Img_sunman_32);            //写数据到当前LCDRAM地址中
-    exdelay();                          //延时约600mS
+//    XPOS=2;
+//    YPOS=1;
+//    putimage(Img_sunman_32);            //写数据到当前LCDRAM地址中
+//    exdelay();                          //延时约600mS
 
 //2.字符串测试: 在(40,0)位置显示"LCM12864A"字符串.
     XPOS=40;
     YPOS=0;
-    putstr("LCM12864A");
+    putstr("LCM12864");
     exdelay();                          //延时约600mS
 
 //3.字符串测试: 在(36,16)位置显示"Oriental"字符串.
     XPOS=36;
     YPOS=16;
-    putstr("Oriental");
+    putstr("Intelligent Optoelectronics Co., Ltd.");
     exdelay();                          //延时约600mS
 
 //4.字符串测试: 在(1,32)位置显示"ORIENTAL-LCD.COM"字符串.

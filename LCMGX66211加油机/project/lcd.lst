@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   LCD                                                               04/11/2025 13:55:58 PAGE 1   
+C51 COMPILER V9.60.7.0   LCD                                                               06/06/2025 15:52:05 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD
@@ -62,7 +62,7 @@ line level    source
   52                          0x9E,  //"D"
   53                          0x7C,  //"E"
   54                          0x78,  //"F"
-C51 COMPILER V9.60.7.0   LCD                                                               04/11/2025 13:55:58 PAGE 2   
+C51 COMPILER V9.60.7.0   LCD                                                               06/06/2025 15:52:05 PAGE 2   
 
   55                          0xBA,  //"H"
   56                          0x2C,  //"L"
@@ -126,7 +126,7 @@ line level    source
  114                          0xF2,  //"E"
  115                          0xE2,  //"F"
  116                          0xEC,  //"H"
-C51 COMPILER V9.60.7.0   LCD                                                               04/11/2025 13:55:58 PAGE 3   
+C51 COMPILER V9.60.7.0   LCD                                                               06/06/2025 15:52:05 PAGE 3   
 
  117                          0xB0,  //"L"
  118                          0xAE,  //"n"
@@ -142,208 +142,183 @@ line level    source
  128          
  129          code u8 leddata10[]={ 
  130           
- 131          //                          0xFF,  
- 132          //                0x3F,  //"0"
- 133          //                0x06,  //"1"
- 134          //                0x5B,  //"2"
- 135          //                0x4F,  //"3"
- 136          //                0x66,  //"4"
- 137          //                0x6D,  //"5"
- 138          //                0x7D,  //"6"
- 139          //                0x07,  //"7"
- 140          //                0x7F,  //"8"
- 141          //                0x6F,  //"9"
- 142          //                0x77,  //"A"
- 143          //                0x7C,  //"B"
- 144          //                0x39,  //"C"
- 145          //                0x5E,  //"D"
- 146          //                0x79,  //"E"
- 147          //                0x71,  //"F"
- 148          //                0x76,  //"H"
- 149          //                0x38,  //"L"
- 150          //                0x37,  //"n"
- 151          //                0x3E,  //"u"
- 152          //                0x73,  //"P"
- 153          //                0x5C,  //"o"
- 154          //                0x40,  //"-"
- 155          //                0x00,  //熄灭
- 156          
- 157                                            0xBF, // 0：A B C D E F 点亮（G 不亮）+ DP = 1
- 158                                            0x86, // 1：B C + DP
- 159                                            0xDB, // 2：A B D E G + DP
- 160                                            0xCF, // 3：A B C D G + DP
- 161                                            0xE6, // 4：B C F G + DP
- 162                                            0xED, // 5：A C D F G + DP
- 163                                            0xFD, // 6：A C D E F G + DP
- 164                                            0x87, // 7：A B C + DP
- 165                                            0xFF, // 8：全亮（A~G + DP）
- 166                                            0xEF  // 9：A B C D F G + DP
- 167                                  
- 168                                   };
- 169          code u8 leddata20[]={ 
- 170           
- 171                          0xC0,  //"0"
- 172                          0xF9,  //"1"
- 173                          0xA4,  //"2"
- 174                          0xB0,  //"3"
- 175                          0x99,  //"4"
- 176                          0x92,  //"5"
- 177                          0x82,  //"6"
- 178                          0xF8,  //"7"
-C51 COMPILER V9.60.7.0   LCD                                                               04/11/2025 13:55:58 PAGE 4   
+ 131          
+ 132                                            0xBF, // 0：A B C D E F 点亮（G 不亮）+ DP = 1
+ 133                                            0x86, // 1：B C + DP
+ 134                                            0xDB, // 2：A B D E G + DP
+ 135                                            0xCF, // 3：A B C D G + DP
+ 136                                            0xE6, // 4：B C F G + DP
+ 137                                            0xED, // 5：A C D F G + DP
+ 138                                            0xFD, // 6：A C D E F G + DP
+ 139                                            0x87, // 7：A B C + DP
+ 140                                            0xFF, // 8：全亮（A~G + DP）
+ 141                                            0xEF  // 9：A B C D F G + DP
+ 142                                  
+ 143                                   };
+ 144          code u8 leddata20[]={ 
+ 145           
+ 146                          0xC0,  //"0"
+ 147                          0xF9,  //"1"
+ 148                          0xA4,  //"2"
+ 149                          0xB0,  //"3"
+ 150                          0x99,  //"4"
+ 151                          0x92,  //"5"
+ 152                          0x82,  //"6"
+ 153                          0xF8,  //"7"
+ 154                          0x80,  //"8"
+ 155                          0x90,  //"9"
+ 156                          0x88,  //"A"
+ 157                          0x83,  //"B"
+ 158                          0xC6,  //"C"
+ 159                          0xA1,  //"D"
+ 160                          0x86,  //"E"
+ 161                          0x8E,  //"F"
+ 162                          0x89,  //"H"
+ 163                          0xC7,  //"L"
+ 164                          0xC8,  //"n"
+ 165                          0xC1,  //"u"
+ 166                          0x8C,  //"P"
+ 167                          0xA3,  //"o"
+ 168                          0xBF,  //"-"
+ 169                          0xFF,  //熄灭
+ 170                          0xFF  //自定义
+ 171           
+ 172                                   };
+ 173                                   
+ 174          
+ 175          u8 LCD_Get_LEDDATA(u8 pos,u8 dat)
+ 176          {
+ 177   1              u8 ret_dat=0;
+ 178   1              switch(pos)
+C51 COMPILER V9.60.7.0   LCD                                                               06/06/2025 15:52:05 PAGE 4   
 
- 179                          0x80,  //"8"
- 180                          0x90,  //"9"
- 181                          0x88,  //"A"
- 182                          0x83,  //"B"
- 183                          0xC6,  //"C"
- 184                          0xA1,  //"D"
- 185                          0x86,  //"E"
- 186                          0x8E,  //"F"
- 187                          0x89,  //"H"
- 188                          0xC7,  //"L"
- 189                          0xC8,  //"n"
- 190                          0xC1,  //"u"
- 191                          0x8C,  //"P"
- 192                          0xA3,  //"o"
- 193                          0xBF,  //"-"
- 194                          0xFF,  //熄灭
- 195                          0xFF  //自定义
- 196           
- 197                                   };
- 198                                   
- 199          
- 200          u8 LCD_Get_LEDDATA(u8 pos,u8 dat)
- 201          {
- 202   1              u8 ret_dat=0;
- 203   1              switch(pos)
- 204   1              {
- 205   2                      case 14:
- 206   2                      case 15:
- 207   2                      case 16:
- 208   2                      {
- 209   3                              ret_dat=leddata1[dat];
- 210   3                      }break;
- 211   2                      case 17:
- 212   2                      case 18:
- 213   2                      case 19:
- 214   2                      case 13:
- 215   2                      {
- 216   3                              ret_dat=leddata2[dat];
- 217   3                      }break;
- 218   2                      case 10:
- 219   2                      case 11:
- 220   2                      case 12:
- 221   2                      {
- 222   3                              ret_dat=leddata3[dat];
- 223   3                      }break;
- 224   2                      case 0:
- 225   2                      case 1:
- 226   2                      case 2:
- 227   2                      case 3:
- 228   2                      case 4:
- 229   2                      case 5:
- 230   2                      case 6:
- 231   2                      case 7:
- 232   2                      case 8:
- 233   2                      case 9:
- 234   2                      {
- 235   3                              ret_dat=leddata4[dat];
- 236   3                      }break;
- 237   2                      default:break;
- 238   2              }
- 239   1              return ret_dat;
- 240   1      }
-C51 COMPILER V9.60.7.0   LCD                                                               04/11/2025 13:55:58 PAGE 5   
+ 179   1              {
+ 180   2                      case 14:
+ 181   2                      case 15:
+ 182   2                      case 16:
+ 183   2                      {
+ 184   3                              ret_dat=leddata1[dat];
+ 185   3                      }break;
+ 186   2                      case 17:
+ 187   2                      case 18:
+ 188   2                      case 19:
+ 189   2                      case 13:
+ 190   2                      {
+ 191   3                              ret_dat=leddata2[dat];
+ 192   3                      }break;
+ 193   2                      case 10:
+ 194   2                      case 11:
+ 195   2                      case 12:
+ 196   2                      {
+ 197   3                              ret_dat=leddata3[dat];
+ 198   3                      }break;
+ 199   2                      case 0:
+ 200   2                      case 1:
+ 201   2                      case 2:
+ 202   2                      case 3:
+ 203   2                      case 4:
+ 204   2                      case 5:
+ 205   2                      case 6:
+ 206   2                      case 7:
+ 207   2                      case 8:
+ 208   2                      case 9:
+ 209   2                      {
+ 210   3                              ret_dat=leddata4[dat];
+ 211   3                      }break;
+ 212   2                      default:break;
+ 213   2              }
+ 214   1              return ret_dat;
+ 215   1      }
+ 216          
+ 217          
+ 218          
+ 219          void LCD_Delay(u16 nops)
+ 220          {
+ 221   1              while(nops--);
+ 222   1      }
+ 223          
+ 224          
+ 225          void LCD_Port_Init(void)
+ 226          {
+ 227   1              SCK =1;
+ 228   1              SDI=1;
+ 229   1              RCK=1;
+ 230   1      }
+ 231          
+ 232          
+ 233          
+ 234          
+ 235          void LCD_Write_Byte(u8 dat)
+ 236          {
+ 237   1              u8 i;
+ 238   1              for(i=0;i<8;i++)
+ 239   1              {
+ 240   2                      SCK =0;
+C51 COMPILER V9.60.7.0   LCD                                                               06/06/2025 15:52:05 PAGE 5   
 
- 241          
- 242          
- 243          
- 244          void LCD_Delay(u16 nops)
- 245          {
- 246   1              while(nops--);
- 247   1      }
- 248          
- 249          
- 250          void LCD_Port_Init(void)
- 251          {
- 252   1              SCK =1;
- 253   1              SDI=1;
- 254   1              RCK=1;
- 255   1      }
- 256          
- 257          
- 258          
- 259          
- 260          void LCD_Write_Byte(u8 dat)
- 261          {
- 262   1              u8 i;
- 263   1              for(i=0;i<8;i++)
- 264   1              {
- 265   2                      SCK =0;
- 266   2                      //LCD_Delay(1);
- 267   2                      if(dat&0x80)
- 268   2                              SDI=1;
- 269   2                      else
- 270   2                              SDI=0;
- 271   2                      //LCD_Delay(1); 
- 272   2                      SCK =1;
- 273   2                      //LCD_Delay(1);
- 274   2                      dat<<=1;
- 275   2              }
- 276   1      }
- 277          
- 278          
- 279          //LCD_Set_All(1,LCD_Max,leddata10[index]);
- 280          void LCD_Set_All(u8 start,u8 stop,u8 dat)
- 281          {
- 282   1              u8 i;
- 283   1              for(i=start;i<stop;i++)
- 284   1              {
- 285   2                      CGRAM[i]=dat;
- 286   2              }
- 287   1      }
- 288          
- 289          void LCD_Display_All(void)
- 290          {
- 291   1              u8 i;
- 292   1              for(i=0;i<LCD_Max;i++)
- 293   1              {
- 294   2                      CGRAM[i]=0xff;
- 295   2              }
- 296   1      }
- 297          
- 298          void LCD_Clear_All(void)
- 299          {
- 300   1              u8 i;
- 301   1              for(i=0;i<LCD_Max;i++)
- 302   1              {
-C51 COMPILER V9.60.7.0   LCD                                                               04/11/2025 13:55:58 PAGE 6   
+ 241   2                      //LCD_Delay(1);
+ 242   2                      if(dat&0x80)
+ 243   2                              SDI=1;
+ 244   2                      else
+ 245   2                              SDI=0;
+ 246   2                      //LCD_Delay(1); 
+ 247   2                      SCK =1;
+ 248   2                      //LCD_Delay(1);
+ 249   2                      dat<<=1;
+ 250   2              }
+ 251   1      }
+ 252          
+ 253          
+ 254          //LCD_Set_All(1,LCD_Max,leddata10[index]);
+ 255          void LCD_Set_All(u8 start,u8 stop,u8 dat)
+ 256          {
+ 257   1              u8 i;
+ 258   1              for(i=start;i<stop;i++)
+ 259   1              {
+ 260   2                      CGRAM[i]=dat;
+ 261   2              }
+ 262   1      }
+ 263          
+ 264          void LCD_Display_All(void)
+ 265          {
+ 266   1              u8 i;
+ 267   1              for(i=0;i<LCD_Max;i++)
+ 268   1              {
+ 269   2                      CGRAM[i]=0xff;
+ 270   2              }
+ 271   1      }
+ 272          
+ 273          void LCD_Clear_All(void)
+ 274          {
+ 275   1              u8 i;
+ 276   1              for(i=0;i<LCD_Max;i++)
+ 277   1              {
+ 278   2                      CGRAM[i]=0x00;
+ 279   2              }
+ 280   1      }
+ 281          
+ 282          void LCD_Update_CGRAM(u8 bit_state)
+ 283          {
+ 284   1              u8 i;
+ 285   1              RCK=0;
+ 286   1              if(bit_state==0)
+ 287   1              {
+ 288   2                      for(i=0;i<LCD_Max;i++)
+ 289   2                      {
+ 290   3                              LCD_Write_Byte(~CGRAM[i]);
+ 291   3                      }
+ 292   2              }
+ 293   1              else
+ 294   1              {
+ 295   2                      for(i=0;i<LCD_Max;i++)
+ 296   2                      {
+ 297   3                              LCD_Write_Byte(CGRAM[i]);
+ 298   3                      }
+ 299   2              }
+ 300   1              RCK=1;  //将数据更新到端口
+ 301   1      }
 
- 303   2                      CGRAM[i]=0x00;
- 304   2              }
- 305   1      }
- 306          
- 307          void LCD_Update_CGRAM(u8 bit_state)
- 308          {
- 309   1              u8 i;
- 310   1              RCK=0;
- 311   1              if(bit_state==0)
- 312   1              {
- 313   2                      for(i=0;i<LCD_Max;i++)
- 314   2                      {
- 315   3                              LCD_Write_Byte(~CGRAM[i]);
- 316   3                      }
- 317   2              }
- 318   1              else
- 319   1              {
- 320   2                      for(i=0;i<LCD_Max;i++)
- 321   2                      {
- 322   3                              LCD_Write_Byte(CGRAM[i]);
- 323   3                      }
- 324   2              }
- 325   1              RCK=1;  //将数据更新到端口
- 326   1      }
+C51 COMPILER V9.60.7.0   LCD                                                               06/06/2025 15:52:05 PAGE 6   
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

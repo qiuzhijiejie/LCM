@@ -291,10 +291,10 @@ void exsample(void)                     //演示程序
     lcdfill(0);                         //清屏
 
 //1.图片测试: 在(1,1)位置显示32点阵YEHUI图标
-    XPOS=1;
-    YPOS=1;
-    putimage(Img_sunman_32);            //写数据到当前LCDRAM地址中
-    exdelay();                          //延时约600mS
+//    XPOS=1;
+//    YPOS=1;
+//    putimage(Img_sunman_32);            //写数据到当前LCDRAM地址中
+//    exdelay();                          //延时约600mS
 
 //2.字符串测试: 在(88,6)位置显示"LCM240128B"字符串.
     XPOS=88;
@@ -305,22 +305,26 @@ void exsample(void)                     //演示程序
 //3.字符串测试: 在(12,32)位置显示"ShenZhen Oriental Technology"字符串.
     XPOS=12;
     YPOS=32;
-    putstr("ShenZhen Oriental Technology");
+    putstr("Intelligent Optoelectronics");    
+	
+	XPOS=12;
+    YPOS=48;
+    putstr(" Co.,LtD.");
     exdelay();                          //延时约600mS
 
 //4.字符串测试: 在(40,52)位置显示"WWW.ORIENTAL-LCD.COM"字符串.
-    XPOS=40;
-    YPOS=52;
-    putstr("WWW.ORIENTAL-LCD.COM");
-    exdelay();                          //延时约600mS
+//    XPOS=40;
+//    YPOS=52;
+//    putstr("https://wisetip.com.tw/");
+//    exdelay();                          //延时约600mS
 
-//5.反显测试: 在(40,52)位置反显"WWW.ORIENTAL-LCD.COM"字符串.
-    XPOS=40;
-    YPOS=52;
-    CharImageReverse=1;
-    putstr("WWW.ORIENTAL-LCD.COM");
-    CharImageReverse=0;
-    exdelay();                          //延时约600mS
+////5.反显测试: 在(40,52)位置反显"WWW.ORIENTAL-LCD.COM"字符串.
+//    XPOS=40;
+//    YPOS=52;
+//    CharImageReverse=1;
+//    putstr("https://wisetip.com.tw/");
+//    CharImageReverse=0;
+//    exdelay();                          //延时约600mS
 
 //6.字符串测试: 在(16,72)位置显示"DFSTN:240*128 DOTS Display"字符串.
     XPOS=16;

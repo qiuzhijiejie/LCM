@@ -95,7 +95,7 @@ bit CharImageReverse;                   //×Ö·û¼°Í¼ÐÎµÄ·´ÏÔ¿ØÖÆ,0(Õý³£ÏÔÊ¾),1(·´Ï
 //×Ö½Ú·½Ïò:[Ë®Æ½] ×ÖÎ»Ë³Ðò:[´Ó¸ßµ½µÍ]
 //ÖÐÎÄ×ÖÌå:[ËÎÌå] Ó¢ÎÄ×ÖÌå:[ËÎÌå] ×ÖÌå´óÐ¡:[16]
 
-#define ENGLISHCHARNUMBER  40      //¾«¼ò°æÓ¢ÎÄ×Ö·û¿âÖÐµÄÓ¢ÎÄ×Ö·ûµÄ¸öÊý
+#define ENGLISHCHARNUMBER  42      //¾«¼ò°æÓ¢ÎÄ×Ö·û¿âÖÐµÄÓ¢ÎÄ×Ö·ûµÄ¸öÊý
 #define CHINESECHARNUMBER  1       //¾«¼ò°æÖÐÎÄ×Ö·û¿âÖÐµÄÖÐÎÄ×Ö·ûµÄ¸öÊý
 #define ENGLISHCHARSIZE    8       //Ó¢ÎÄ×Ö·ûX·½ÏòÏÔÊ¾µãµÄ¸öÊý
 #define CHINESECHARSIZE    16      //ÖÐÎÄ×Ö·ûX·½Ïò¼°ÖÐÓ¢ÎÄ×Ö·ûY·½ÏòÏÔÊ¾µãµÄ¸öÊý
@@ -105,6 +105,7 @@ bit CharImageReverse;                   //×Ö·û¼°Í¼ÐÎµÄ·´ÏÔ¿ØÖÆ,0(Õý³£ÏÔÊ¾),1(·´Ï
 unsigned int code EnglishCode[]={
 0x20,    //×Ö·û001:[ ]
 0x2a,    //×Ö·û002:[*]
+0x2c,	
 0x2d,    //×Ö·û003:[-]
 0x2e,    //×Ö·û004:[.]
 0x30,    //×Ö·û005:[0]
@@ -131,6 +132,7 @@ unsigned int code EnglishCode[]={
 0x5a,    //×Ö·û026:[Z]
 0x61,    //×Ö·û027:[a]
 0x63,    //×Ö·û028:[c]
+0x64,
 0x65,    //×Ö·û029:[e]
 0x67,    //×Ö·û030:[g]
 0x68,    //×Ö·û031:[h]
@@ -154,6 +156,10 @@ unsigned char code EnglishCharDot[]={
 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 0x00,0x00,0x00,0x00,0x10,0x10,0xd6,0x38,   //×Ö·û002:[*]
 0x38,0xd6,0x10,0x10,0x00,0x00,0x00,0x00,
+	
+/*-- ID:1,×Ö·û:",",ASCII±àÂë:2C,¶ÔÓ¦×Ö:¿íx¸ß=8x16,»­²¼:¿íW=8 ¸ßH=16,¹²16×Ö½Ú*/
+0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x60,0x20,0x20,0x40,0x00	,
+	
 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,   //×Ö·û003:[-]
 0x7e,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,   //×Ö·û004:[.]
@@ -206,8 +212,14 @@ unsigned char code EnglishCharDot[]={
 0x44,0x0c,0x34,0x44,0x4c,0x36,0x00,0x00,
 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x1c,   //×Ö·û028:[c]
 0x22,0x40,0x40,0x40,0x22,0x1c,0x00,0x00,
+
+
+/*-- ID:0,×Ö·û:"d",ASCII±àÂë:64,¶ÔÓ¦×Ö:¿íx¸ß=8x16,»­²¼:¿íW=8 ¸ßH=16,¹²16×Ö½Ú*/
+0x00,0x00,0x00,0x06,0x02,0x02,0x3E,0x42,0x42,0x42,0x42,0x46,0x3B,0x00,0x00,0x00,
+
 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x3c,   //×Ö·û029:[e]
 0x42,0x42,0x7e,0x40,0x42,0x3c,0x00,0x00,
+
 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x3e,   //×Ö·û030:[g]
 0x44,0x44,0x38,0x40,0x3c,0x42,0x42,0x3c,
 0x00,0x00,0x00,0x00,0xc0,0x40,0x40,0x5c,   //×Ö·û031:[h]
@@ -291,36 +303,39 @@ void exsample(void)                     //ÑÝÊ¾³ÌÐò
     lcdfill(0);                         //ÇåÆÁ
 
 //1.Í¼Æ¬²âÊÔ: ÔÚ(1,1)Î»ÖÃÏÔÊ¾32µãÕóYEHUIÍ¼±ê
-    XPOS=1;
-    YPOS=1;
-    putimage(Img_sunman_32);            //Ð´Êý¾Ýµ½µ±Ç°LCDRAMµØÖ·ÖÐ
-    exdelay();                          //ÑÓÊ±Ô¼600mS
+//    XPOS=1;
+//    YPOS=1;
+//    putimage(Img_sunman_32);            //Ð´Êý¾Ýµ½µ±Ç°LCDRAMµØÖ·ÖÐ
+//    exdelay();                          //ÑÓÊ±Ô¼600mS
 
 //2.×Ö·û´®²âÊÔ: ÔÚ(40,10)Î»ÖÃÏÔÊ¾"LCM160128B"×Ö·û´®.
     XPOS=40;
     YPOS=10;
-    putstr("LCM160128B");
+    putstr("LCM160128");
     exdelay();                          //ÑÓÊ±Ô¼600mS
 
 //3.×Ö·û´®²âÊÔ: ÔÚ(6,35)Î»ÖÃÏÔÊ¾"Oriental Technology"×Ö·û´®.
-    XPOS=6;
+    XPOS=1;
     YPOS=35;
-    putstr("Oriental Technology");
+    putstr("Intelligent Optoelec");   
+	XPOS=1;
+    YPOS=52;
+    putstr("tronics Co., Ltd.");
     exdelay();                          //ÑÓÊ±Ô¼600mS
 
 //4.×Ö·û´®²âÊÔ: ÔÚ(1,52)Î»ÖÃÏÔÊ¾"WWW.ORIENTAL-LCD.COM"×Ö·û´®.
-    XPOS=1;
-    YPOS=52;
-    putstr("WWW.ORIENTAL-LCD.COM");
-    exdelay();                          //ÑÓÊ±Ô¼600mS
+//    XPOS=1;
+//    YPOS=52;
+//    putstr("Intelligent Optoelectronics Co., Ltd.");
+//    exdelay();                          //ÑÓÊ±Ô¼600mS
 
 //5.·´ÏÔ²âÊÔ: ÔÚ(1,52)Î»ÖÃ·´ÏÔ"WWW.ORIENTAL-LCD.COM"×Ö·û´®.
-    XPOS=1;
-    YPOS=52;
-    CharImageReverse=1;
-    putstr("WWW.ORIENTAL-LCD.COM");
-    CharImageReverse=0;
-    exdelay();                          //ÑÓÊ±Ô¼600mS
+//    XPOS=1;
+//    YPOS=52;
+//    CharImageReverse=1;
+//    putstr("Intelligent Optoelectronics Co., Ltd.");
+//    CharImageReverse=0;
+//    exdelay();                          //ÑÓÊ±Ô¼600mS
 
 //6.×Ö·û´®²âÊÔ: ÔÚ(10,72)Î»ÖÃÏÔÊ¾"DFSTN:160*128 DOTS"×Ö·û´®.
     XPOS=10;
@@ -360,8 +375,11 @@ void exsample(void)                     //ÑÝÊ¾³ÌÐò
 
 //13.È«ÆÁ²âÊÔ: ËùÓÐ×ø±êµãÈ«²¿ÏÔÊ¾.
     lcdfill(0);                        //È«ÏÔ
-    exdelay();                          //ÑÓÊ±Ô¼600mS
-
+    exdelay();                          //ÑÓÊ±Ô¼600mS 
+ lcdfill(0x55)  ;
+  exdelay(); 
+ lcdfill(0xaa)  ;
+   exdelay(); 
 }
 void exdelay(void)                      //ÑÝÊ¾ÑÓÊ±×Ó³ÌÐò
 { unsigned char i,j,k;                  //ÑÓÊ±Ô¼600mS

@@ -1,10 +1,10 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              08/04/2024 20:11:10 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/17/2025 20:35:21 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
 OBJECT MODULE PLACED IN .\Objects\main.obj
-COMPILER INVOKED BY: E:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
-                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\m
+                    -ain.lst) OBJECT(.\Objects\main.obj)
 
 line level    source
 
@@ -62,7 +62,7 @@ line level    source
   52          //                                      Vo=VEE??????
   53          //PIN5: WR   [??? ???]------------P3.1
   54          //PIN6: RD   [??? ???]------------P3.2
-C51 COMPILER V9.60.7.0   MAIN                                                              08/04/2024 20:11:10 PAGE 2   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/17/2025 20:35:21 PAGE 2   
 
   55          //PIN7: CE   [???? ???]----------P3.3
   56          //PIN8: CD   [??/?????(H/L)]---P3.0
@@ -126,7 +126,7 @@ line level    source
  114          0x42,    //??009:[B]
  115          0x43,    //??010:[C]
  116          0x44,    //??011:[D]
-C51 COMPILER V9.60.7.0   MAIN                                                              08/04/2024 20:11:10 PAGE 3   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/17/2025 20:35:21 PAGE 3   
 
  117          0x45,    //??012:[E]
  118          0x49,    //??013:[I]
@@ -190,7 +190,7 @@ line level    source
  176          0x6c,0x54,0x54,0x54,0x54,0xd6,0x00,0x00,
  177          0x00,0x00,0x00,0xc7,0x62,0x62,0x52,0x52,   //??016:[N]
  178          0x4a,0x4a,0x4a,0x46,0x46,0xe2,0x00,0x00,
-C51 COMPILER V9.60.7.0   MAIN                                                              08/04/2024 20:11:10 PAGE 4   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/17/2025 20:35:21 PAGE 4   
 
  179          0x00,0x00,0x00,0x38,0x44,0x82,0x82,0x82,   //??017:[O]
  180          0x82,0x82,0x82,0x82,0x44,0x38,0x00,0x00,
@@ -254,7 +254,7 @@ line level    source
  238          0x67,0xff,0xff,0xe6,
  239          0x67,0xe7,0xe7,0xe6,
  240          0xcf,0xe3,0xc7,0xf3,
-C51 COMPILER V9.60.7.0   MAIN                                                              08/04/2024 20:11:10 PAGE 5   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/17/2025 20:35:21 PAGE 5   
 
  241          0xcf,0xe1,0x87,0xff,
  242          0xcf,0xe4,0x27,0xff,
@@ -318,7 +318,7 @@ line level    source
  300   1      
  301   1      //5.????: RECT(0,0)-(239,63),???.
  302   1          rect(0,0,239,63,1);
-C51 COMPILER V9.60.7.0   MAIN                                                              08/04/2024 20:11:10 PAGE 6   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/17/2025 20:35:21 PAGE 6   
 
  303   1          exdelay();                          //???600mS
  304   1      
@@ -382,7 +382,7 @@ line level    source
  362   2              else
  363   2              {   putchar(c*256+*s);
  364   3                  s++;
-C51 COMPILER V9.60.7.0   MAIN                                                              08/04/2024 20:11:10 PAGE 7   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/17/2025 20:35:21 PAGE 7   
 
  365   3              }
  366   2          }
@@ -446,7 +446,7 @@ line level    source
  424   2                  max=mid-1;
  425   2              else
  426   2                  min=mid+1;
-C51 COMPILER V9.60.7.0   MAIN                                                              08/04/2024 20:11:10 PAGE 8   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/17/2025 20:35:21 PAGE 8   
 
  427   2          }
  428   1          return EnglishCharDot+mid*ENGLISHCHARDOTSIZE;
@@ -510,7 +510,7 @@ line level    source
  486   4                   a2&=Lcd_Mask;
  487   4                   a2|=a1&(~Lcd_Mask);
  488   4               }
-C51 COMPILER V9.60.7.0   MAIN                                                              08/04/2024 20:11:10 PAGE 9   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/17/2025 20:35:21 PAGE 9   
 
  489   3               lcdwd(a2);
  490   3            }
@@ -574,7 +574,7 @@ line level    source
  548   1          dx=(x1>=x0)?x1-x0:x0-x1;
  549   1          dy=(y1>=y0)?y1-y0:y0-y1;
  550   1          if(dx==dy)
-C51 COMPILER V9.60.7.0   MAIN                                                              08/04/2024 20:11:10 PAGE 10  
+C51 COMPILER V9.60.7.0   MAIN                                                              06/17/2025 20:35:21 PAGE 10  
 
  551   1          {   while(XPOS!=x1)
  552   2              {   if(x1>x0) XPOS++;else XPOS--;
@@ -638,7 +638,7 @@ line level    source
  610   1          for(i=0;i<YDOTS;i++)                //??
  611   1              for(j=0;j<30;j++)               //30??????240?
  612   1                  lcdwd(d);                   //?????
-C51 COMPILER V9.60.7.0   MAIN                                                              08/04/2024 20:11:10 PAGE 11  
+C51 COMPILER V9.60.7.0   MAIN                                                              06/17/2025 20:35:21 PAGE 11  
 
  613   1      }
  614          //-------------------------------------------------------------------------------
@@ -702,7 +702,7 @@ line level    source
  672   1          _nop_();
  673   1          WRPIN=1;
  674   1          CEPIN=1;
-C51 COMPILER V9.60.7.0   MAIN                                                              08/04/2024 20:11:10 PAGE 12  
+C51 COMPILER V9.60.7.0   MAIN                                                              06/17/2025 20:35:21 PAGE 12  
 
  675   1      }
  676          //-------------------------------------------------------------------------------
@@ -766,7 +766,7 @@ line level    source
  734          //??:???,???????????????????,????????????.
  735          //????:2009.08.07
  736          //???:chujianjun@sunman.cn,tanchao@sunman.cn
-C51 COMPILER V9.60.7.0   MAIN                                                              08/04/2024 20:11:10 PAGE 13  
+C51 COMPILER V9.60.7.0   MAIN                                                              06/17/2025 20:35:21 PAGE 13  
 
  737          //-------------------------------------------------------------------------------
  738          void lcdwaitidle(void)                  //??????

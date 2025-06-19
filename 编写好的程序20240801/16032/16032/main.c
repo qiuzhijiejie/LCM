@@ -216,7 +216,7 @@ void exsample(void)                     //演示程序
     charlcdfill(' ');                   //显示清屏
 
 //1.字符串演示: 在(4,0)字符位置显示" LCM16032B "
-    putstrxy(4,0," LCM16032B ");       //在(4,0)位置开始显示字符串
+    putstrxy(4,0," LCM16032 ");       //在(4,0)位置开始显示字符串
     exdelay();                          //延时约300mS
     exdelay();                          //延时约300mS
 
@@ -226,12 +226,13 @@ void exsample(void)                     //演示程序
     exdelay();                          //延时约300mS
 
 //3.字符串演示: 在(0,0)字符位置显示"深圳束方科技有限公司"
-    putstrxy(0,0,"深圳束方科技有限公司");       //在(0,0)位置开始显示字符串
+    putstrxy(0,0,"智力光电股份有限公司");       //在(0,0)位置开始显示字符串
     exdelay();                          //延时约300mS
     exdelay();                          //延时约300mS
 
 //4.字符串演示: 在(0,1)字符位置显示"WWW.ORIENTAL-LCD.COM"
-    putstrxy(0,1,"WWW.ORIENTAL-LCD.COM");   //在(0,1)位置开始显示字符串
+    putstrxy(0,0,"Intelligent Optoelec");   //在(0,1)位置开始显示字符串
+	putstrxy(0,1," tronics Co., Ltd.");   //在(0,1)位置开始显示字符串
     exdelay();                          //延时约300mS
     exdelay();                          //延时约300mS
 

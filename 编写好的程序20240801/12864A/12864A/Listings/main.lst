@@ -1,10 +1,10 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              08/10/2024 22:27:06 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/19/2025 08:48:19 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
 OBJECT MODULE PLACED IN .\Objects\main.obj
-COMPILER INVOKED BY: E:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
-                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\m
+                    -ain.lst) OBJECT(.\Objects\main.obj)
 
 line level    source
 
@@ -62,7 +62,7 @@ line level    source
   52          //-------------------------------------------------------------------------------
   53          //SMG12864G产品引脚说明及演示连线
   54          //PIN1: VSS  [电源地]
-C51 COMPILER V9.60.7.0   MAIN                                                              08/10/2024 22:27:06 PAGE 2   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/19/2025 08:48:19 PAGE 2   
 
   55          //PIN2: VDD  [电源正极]
   56          //PIN3: Vo   [LCD偏压输入]
@@ -126,7 +126,7 @@ line level    source
  114          0x38,    //字符008:[8]
  115          0x41,    //字符009:[A]
  116          0x43,    //字符010:[C]
-C51 COMPILER V9.60.7.0   MAIN                                                              08/10/2024 22:27:06 PAGE 3   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/19/2025 08:48:19 PAGE 3   
 
  117          0x44,    //字符011:[D]
  118          0x45,    //字符012:[E]
@@ -190,7 +190,7 @@ line level    source
  176          0xe0,0x0f,0x10,0x10,0x08,0x20,0x08,0x20,   //字符017:[O]
  177          0x08,0x20,0x10,0x10,0xe0,0x0f,0x00,0x00,
  178          0x08,0x20,0xf8,0x3f,0x88,0x20,0x88,0x00,   //字符018:[R]
-C51 COMPILER V9.60.7.0   MAIN                                                              08/10/2024 22:27:06 PAGE 4   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/19/2025 08:48:19 PAGE 4   
 
  179          0x88,0x03,0x88,0x0c,0x70,0x30,0x00,0x00,
  180          0x00,0x00,0x70,0x38,0x88,0x20,0x08,0x21,   //字符019:[S]
@@ -254,7 +254,7 @@ line level    source
  238          0xe6,0x7f,0xfe,0x67,
  239          0xce,0x7f,0xfe,0x73,
  240          0xcc,0x7f,0xfe,0x33,
-C51 COMPILER V9.60.7.0   MAIN                                                              08/10/2024 22:27:06 PAGE 5   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/19/2025 08:48:19 PAGE 5   
 
  241          0x9c,0x7f,0xfe,0x39,
  242          0x38,0x7f,0xfe,0x1c,
@@ -280,10 +280,10 @@ line level    source
  262   1          lcdfill(0);                         //清屏
  263   1      
  264   1      //1.图片测试: 在(2,1)位置显示32点阵Oriental图标
- 265   1          XPOS=2;
- 266   1          YPOS=1;
- 267   1          putimage(Img_sunman_32);            //写数据到当前LCDRAM地址中
- 268   1          exdelay();                          //延时约600mS
+ 265   1      //    XPOS=2;
+ 266   1      //    YPOS=1;
+ 267   1      //    putimage(Img_sunman_32);            //写数据到当前LCDRAM地址中
+ 268   1      //    exdelay();                          //延时约600mS
  269   1      
  270   1      //2.字符串测试: 在(40,0)位置显示"LCM12864A"字符串.
  271   1          XPOS=40;
@@ -294,7 +294,7 @@ line level    source
  276   1      //3.字符串测试: 在(36,16)位置显示"Oriental"字符串.
  277   1          XPOS=36;
  278   1          YPOS=16;
- 279   1          putstr("Oriental");
+ 279   1          putstr("Intelligent Optoelectronics Co., Ltd.");
  280   1          exdelay();                          //延时约600mS
  281   1      
  282   1      //4.字符串测试: 在(1,32)位置显示"ORIENTAL-LCD.COM"字符串.
@@ -318,7 +318,7 @@ line level    source
  300   1      //7.绘图测试: POINT(6,50),画点.
  301   1          XPOS=6;
  302   1          YPOS=50;
-C51 COMPILER V9.60.7.0   MAIN                                                              08/10/2024 22:27:06 PAGE 6   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/19/2025 08:48:19 PAGE 6   
 
  303   1          point(1);
  304   1          exdelay();                          //延时约600mS
@@ -382,7 +382,7 @@ line level    source
  362   2          }
  363   1      }
  364          //-------------------------------------------------------------------------------
-C51 COMPILER V9.60.7.0   MAIN                                                              08/10/2024 22:27:06 PAGE 7   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/19/2025 08:48:19 PAGE 7   
 
  365          //子程序名称:unsigned char code *getchinesecodepos(unsigned char ac).
  366          //功能:根据当前中文字符码查表后计算得到当前中文字符码的字库点阵位置.
@@ -446,7 +446,7 @@ line level    source
  424   1          return EnglishCharDot+mid*ENGLISHCHARDOTSIZE;
  425   1      }
  426          //-------------------------------------------------------------------------------
-C51 COMPILER V9.60.7.0   MAIN                                                              08/10/2024 22:27:06 PAGE 8   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/19/2025 08:48:19 PAGE 8   
 
  427          //以下putsizeimage为图形对象的基本子程序,putimage为图形对象的扩充子程序
  428          //-------------------------------------------------------------------------------
@@ -510,7 +510,7 @@ line level    source
  486   3            }
  487   2            if((k!=0) && (YSIZE&0x7 != 0) && (k >= YSIZE&0x7)) s--;
  488   2         }
-C51 COMPILER V9.60.7.0   MAIN                                                              08/10/2024 22:27:06 PAGE 9   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/19/2025 08:48:19 PAGE 9   
 
  489   1         YPOS=y;
  490   1      }
@@ -574,7 +574,7 @@ line level    source
  548   3              }
  549   2          }
  550   1          else if (dx>dy)
-C51 COMPILER V9.60.7.0   MAIN                                                              08/10/2024 22:27:06 PAGE 10  
+C51 COMPILER V9.60.7.0   MAIN                                                              06/19/2025 08:48:19 PAGE 10  
 
  551   1          {   dk=dy;
  552   2              dy=0;
@@ -638,7 +638,7 @@ line level    source
  610   2                  lcdwd2(d);                 //送图形数据
  611   2          }
  612   1          XPOS=0;
-C51 COMPILER V9.60.7.0   MAIN                                                              08/10/2024 22:27:06 PAGE 11  
+C51 COMPILER V9.60.7.0   MAIN                                                              06/19/2025 08:48:19 PAGE 11  
 
  613   1          YPOS=0;
  614   1      }
@@ -702,7 +702,7 @@ line level    source
  671          //-------------------------------------------------------------------------------
  672          void lcdwd(unsigned char d)
  673          {   if(XPOS<64)
-C51 COMPILER V9.60.7.0   MAIN                                                              08/10/2024 22:27:06 PAGE 12  
+C51 COMPILER V9.60.7.0   MAIN                                                              06/19/2025 08:48:19 PAGE 12  
 
  674   1              lcdwd1(d);
  675   1          else
@@ -766,7 +766,7 @@ line level    source
  733   1          return d;
  734   1      }
  735          //-------------------------------------------------------------------------------
-C51 COMPILER V9.60.7.0   MAIN                                                              08/10/2024 22:27:06 PAGE 13  
+C51 COMPILER V9.60.7.0   MAIN                                                              06/19/2025 08:48:19 PAGE 13  
 
  736          //子程序名称:unsigned char lcdrd2(void).
  737          //功能:从液晶显示控制器2中读图形数据.
@@ -830,7 +830,7 @@ line level    source
  795          //修改日期:2009.10.30
  796          //修改人:chujianjun@sunman.cn,tanchao@sunman.cn
  797          //-------------------------------------------------------------------------------
-C51 COMPILER V9.60.7.0   MAIN                                                              08/10/2024 22:27:06 PAGE 14  
+C51 COMPILER V9.60.7.0   MAIN                                                              06/19/2025 08:48:19 PAGE 14  
 
  798          void lcdwaitidle1(void)                 //控制器1忙检测子程序
  799          {   unsigned char i;
@@ -867,8 +867,8 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1844    ----
-   CONSTANT SIZE    =    740    ----
+   CODE SIZE        =   1828    ----
+   CONSTANT SIZE    =    769    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =      2      45

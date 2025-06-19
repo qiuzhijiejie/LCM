@@ -323,24 +323,24 @@ void Yehui_UI()
 	uchar i; 
 	const unsigned char* hanzi_array[]  = {guang, don, ye, hui, ke};
 	const unsigned char* hanzi_array2[] = {ji, you, xian, gong, si};
-//	lcd_kuang();
+	lcd_kuang();
 
-//	for ( i = 0; i < 5; i++) {
-//		display_hanzi_fan(hanzi_array[i], 1, 20 + i * 16);
-//	}
+	for ( i = 0; i < 5; i++) {
+		display_hanzi_fan(hanzi_array[i], 1, 20 + i * 16);
+	}
 
-//	for ( i = 0; i < 5; i++) {
-//		display_hanzi_fan(hanzi_array2[i], 3, 20 + i * 16);
-//	}
+	for ( i = 0; i < 5; i++) {
+		display_hanzi_fan(hanzi_array2[i], 3, 20 + i * 16);
+	}
 	    
-	disp_ascii0816("LCM128*32 Dots", 1,11);
+	disp_ascii0816("COG128*64 Dots", 5,11);
 
 	
 }
 
 void WhatsApp()
 {
-//	lcd_kuang();
+	lcd_kuang();
 	disp_ascii0816("WhatsApp:",       2,2);
 	disp_ascii0816("+86136 2249 6694",4,1);
 }	

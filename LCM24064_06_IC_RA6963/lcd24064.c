@@ -324,10 +324,10 @@ void Display_FullCGROM_SpecifiedPositions()
         }
     }
 }
-uchar start_x[] = {7, 10};   // 每组显示的起始X坐标
+uchar start_x[] = {1, 10};   // 每组显示的起始X坐标
 uchar start_y[] = {22, 42};    // 每组显示的起始Y坐标
-uchar start_code[] = {0, 16};  // 每组显示的起始字符编码
-uchar count[] = {16, 11};     // 每组显示的字符数量
+uchar start_code[] = {0, 27};  // 每组显示的起始字符编码
+uchar count[] = {27, 11};     // 每组显示的字符数量
 void wordageEng(void)
 {  
 	
@@ -336,8 +336,7 @@ void wordageEng(void)
     DisplayBMP(0,0,240,64,BMP0); 
 	wordageCha();	
     Delay(100); 
-	
-	
+		
 for ( group = 0; group < 2; group++)  
 {
     for ( i = 0; i < count[group]; i++)
@@ -345,8 +344,6 @@ for ( group = 0; group < 2; group++)
         Display_8_16(start_x[group] + i, start_y[group], English_character, start_code[group] + i);
     }
 }
-
-
 }
 
 
@@ -398,8 +395,8 @@ void DisplayPatterns()
         case 4: DisplayDots(0xff, 0x00); Delay(1000); break;
         case 5: DisplayDots(0x00, 0xff); Delay(1000); break;
         case 6: DisplayDots(0xff, 0xff); Delay(1000); break;
-        case 7: Display_FullCGROM();Delay(100); break;
-		case 8: LcmClear();wordageEng();Delay(100); break;
+        case 7: Display_FullCGROM();Delay(1000); break;
+		case 8: LcmClear();wordageEng();Delay(1000); break;
     }
     step++;
     if (step > 8) step = 0;
@@ -421,7 +418,7 @@ void HandleKey()
         case 5: DisplayDots(0x00, 0xff); Delay(1000); break;
         case 6: DisplayDots(0xff, 0xff); Delay(1000); break;
         case 7: Display_FullCGROM();Delay(100); break;
-		case 8: LcmClear();wordageEng();Delay(100); break;
+		case 8: LcmClear();wordageEng();Delay(1000); break;
 
 
     }

@@ -25,7 +25,6 @@ sbit LCD_EN=P3^3;
 sbit LCD_KEY=P2^0;
 
 
-
 void Delay(uint MS)   
 {   
  unsigned char us,usn;   
@@ -307,23 +306,7 @@ character_code：表示汉字的索引或编码，用来确定要显示的汉字在字库中的位置
 */
 void Display_16_16(uchar x,uchar y,uchar  code *Chinese_character,uchar character_code)
 {	
-	//uchar i,j;    
-	//uint num=0;
-	//num=character_code*0x20;
-	//Locatexy(x,y,Graphic);
-	//for(j = 0; j < 16; j++)  // 循环显示16行
-	//{
-	//	for(i = 0; i < 2; i++)  // 每行2个字节，共16列
-	//	{
-	//		WriteCommand(*(Chinese_character + num), 0, 0xc0, 1);
-	//		num++;
-	//	}
-	//	y += 1;  // 移动到下一行
-	//	Locatexy(x, y, Graphic);  // 更新光标位置
-	//}
-	
-	
-	
+
 	uchar j;    // 行循环控制变量
     uint num = 0;  // 偏移量初始为0
     num = character_code * 0x10;  // 每个字符占用16字节（8×16）
@@ -498,16 +481,16 @@ void DisplayPatterns()
 
     switch (step) 
     {
-        case 0: DisplayDots(0x55, 0xaa); Delay(1000); break;
-        case 1: DisplayDots(0xaa, 0x55); Delay(1000); break;
-        case 2: DisplayDots(0x55, 0x55); Delay(1000); break;
-        case 3: DisplayDots(0xaa, 0xaa); Delay(1000); break;
-        case 4: DisplayDots(0xff, 0x00); Delay(1000); break;
-        case 5: DisplayDots(0x00, 0xff); Delay(1000); break;
-        case 6: DisplayDots(0xff, 0xff); Delay(1000); break;
-        case 7: LcmClear(); DisplayBMP(0, 0, 240, 128, BMP1); Delay(1000); break;
-        case 8: ReverseDisplayBMP(0, 0, 240, 128, BMP1); Delay(1000); break;
-        case 9: LcmClear(); Display_FullCGROM(); Delay(1000); break;
+        case 0:  DisplayDots(0x55, 0xAA); Delay(1000); break;
+        case 1:  DisplayDots(0xAA, 0x55); Delay(1000); break;
+        case 2:  DisplayDots(0x55, 0x55); Delay(1000); break;
+        case 3:  DisplayDots(0xAA, 0xAA); Delay(1000); break;
+        case 4:  DisplayDots(0xFF, 0x00); Delay(1000); break;
+        case 5:  DisplayDots(0x00, 0xFF); Delay(1000); break;
+        case 6:  DisplayDots(0xFF, 0xFF); Delay(1000); break;
+        case 7:  LcmClear(); DisplayBMP(0, 0, 240, 128, BMP1); Delay(1000); break;
+        case 8:  ReverseDisplayBMP(0, 0, 240, 128, BMP1); Delay(1000); break;
+        case 9:  LcmClear(); Display_FullCGROM(); Delay(1000); break;
         case 10: LcmClear(); picture(); Delay(1000); break;
     }
 
@@ -522,26 +505,20 @@ void HandleKey()
 {
 	unsigned char mode;
     mode++;           
-    mode %= 10;    
+    mode %= 11;    
     LcmClear();       
     switch (mode) 
     {	
-        case 0: DisplayDots(0xff, 0x00); Delay(2000); break;
-        case 1: DisplayDots(0x55, 0xaa); Delay(2000); break;
+        case 0: DisplayDots(0xFF, 0x00); Delay(2000); break;
+        case 1: DisplayDots(0x00, 0xFF); Delay(2000); break;
         case 2: DisplayDots(0x55, 0x55); Delay(2000); break;
-        case 3: DisplayDots(0x00, 0xff); Delay(2000); break;
-        case 4: DisplayDots(0xaa, 0xaa); Delay(2000); break;
-        case 5: picture(); Delay(2000); break;
-        case 6: Display_FullCGROM(); Delay(2000); break;
-        case 7: DisplayBMP(0, 0, 240, 128, BMP1); Delay(2000); break;
-        case 8: ReverseDisplayBMP(0, 0, 240, 128, BMP1); Delay(2000); break;
-        case 9: ReverseDisplayBMP(0, 0, 240, 128, BMP0); Delay(2000); break;
+        case 3: DisplayDots(0xAA, 0xAA); Delay(2000); break;
+        case 4: DisplayDots(0xAA, 0x55); Delay(2000); break;
+		case 5: DisplayDots(0x55, 0xAA); Delay(2000); break;
+        case 6: picture(); Delay(2000); break;
+        case 7: Display_FullCGROM(); Delay(2000); break;
+        case 8: DisplayBMP(0, 0, 240, 128, BMP1); Delay(2000); break;
+        case 9: ReverseDisplayBMP(0, 0, 240, 128, BMP1); Delay(2000); break;
+        case 10: ReverseDisplayBMP(0, 0, 240, 128, BMP0); Delay(2000); break;
     }
 }
-
-
-
-
-
-
-
