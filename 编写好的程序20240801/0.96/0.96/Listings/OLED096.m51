@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    04/21/2025  22:21:29  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    06/20/2025  20:24:35  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22.4.0, INVOKED BY:
@@ -27,19 +27,19 @@ LINK MAP OF MODULE:  .\Objects\OLED096 (MAIN)
 
             * * * * * * *   C O D E   M E M O R Y   * * * * * * *
             CODE    0000H     0003H     ABSOLUTE     
-            CODE    0003H     0417H     UNIT         ?CO?MAIN
-            CODE    041AH     0039H     UNIT         ?PR?_PICTURE_DISPLAY?MAIN
-            CODE    0453H     0028H     UNIT         ?PR?_INS_TRANS?MAIN
-            CODE    047BH     0028H     UNIT         ?PR?_DATA_TRANS?MAIN
-            CODE    04A3H     0026H     UNIT         ?PR?MAIN?MAIN
-            CODE    04C9H     0020H     UNIT         ?PR?_DELAY?MAIN
-            CODE    04E9H     001AH     UNIT         ?PR?_COLUMN_SET?MAIN
-            CODE    0503H     0019H     UNIT         ?C?LIB_CODE
-            CODE    051CH     0015H     UNIT         ?PR?SCREEN_CLEAR?MAIN
-            CODE    0531H     0015H     UNIT         ?PR?SCREEN_CHECK?MAIN
-            CODE    0546H     0010H     UNIT         ?PR?INITIAL?MAIN
-            CODE    0556H     000CH     UNIT         ?C_C51STARTUP
-            CODE    0562H     0007H     UNIT         ?PR?_PAGE_SET?MAIN
+            CODE    0003H     0427H     UNIT         ?CO?MAIN
+            CODE    042AH     0039H     UNIT         ?PR?_PICTURE_DISPLAY?MAIN
+            CODE    0463H     0028H     UNIT         ?PR?_INS_TRANS?MAIN
+            CODE    048BH     0028H     UNIT         ?PR?_DATA_TRANS?MAIN
+            CODE    04B3H     0026H     UNIT         ?PR?MAIN?MAIN
+            CODE    04D9H     0020H     UNIT         ?PR?_DELAY?MAIN
+            CODE    04F9H     001AH     UNIT         ?PR?_COLUMN_SET?MAIN
+            CODE    0513H     0019H     UNIT         ?C?LIB_CODE
+            CODE    052CH     0015H     UNIT         ?PR?SCREEN_CLEAR?MAIN
+            CODE    0541H     0015H     UNIT         ?PR?SCREEN_CHECK?MAIN
+            CODE    0556H     0010H     UNIT         ?PR?INITIAL?MAIN
+            CODE    0566H     000CH     UNIT         ?C_C51STARTUP
+            CODE    0572H     0007H     UNIT         ?PR?_PAGE_SET?MAIN
 
 
 
@@ -59,7 +59,7 @@ SEGMENT                             DATA_GROUP
   +--> ?PR?SCREEN_CHECK?MAIN
   +--> ?CO?MAIN
   +--> ?PR?_PICTURE_DISPLAY?MAIN
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  04/21/2025  22:21:29  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/20/2025  20:24:35  PAGE 2
 
 
 
@@ -97,155 +97,156 @@ SYMBOL TABLE OF MODULE:  .\Objects\OLED096 (MAIN)
   -------         MODULE        MAIN
   C:0000H         SYMBOL        _ICE_DUMMY_
   D:00B0H         PUBLIC        P3
-  C:047BH         PUBLIC        _Data_trans
+  C:048BH         PUBLIC        _Data_trans
   C:0003H         PUBLIC        initial_tab
-  C:001AH         PUBLIC        picture_tab
+  C:002AH         PUBLIC        picture_tab
   B:00B0H.1       PUBLIC        SI
-  C:04F0H         PUBLIC        _Column_set
+  C:0500H         PUBLIC        _Column_set
   B:00B0H.2       PUBLIC        RS
-  C:04A3H         PUBLIC        main
-  C:0562H         PUBLIC        _Page_set
-  C:0453H         PUBLIC        _Ins_trans
-  C:041AH         PUBLIC        _Picture_display
-  C:0531H         PUBLIC        Screen_check
-  C:0546H         PUBLIC        Initial
-  C:051CH         PUBLIC        Screen_clear
+  C:04B3H         PUBLIC        main
+  C:0572H         PUBLIC        _Page_set
+  C:0463H         PUBLIC        _Ins_trans
+  C:042AH         PUBLIC        _Picture_display
+  C:0541H         PUBLIC        Screen_check
+  C:0556H         PUBLIC        Initial
+  C:052CH         PUBLIC        Screen_clear
+  C:001AH         PUBLIC        test_tab
   B:00B0H.0       PUBLIC        SCL
   B:00B0H.3       PUBLIC        RES
-  C:04C9H         PUBLIC        _Delay
+  C:04D9H         PUBLIC        _Delay
   B:00B0H.4       PUBLIC        _CS
   -------         PROC          _DELAY
   D:0006H         SYMBOL        time
   -------         DO            
   D:0004H         SYMBOL        i
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/20/2025  20:24:35  PAGE 3
+
+
   D:0002H         SYMBOL        j
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  04/21/2025  22:21:29  PAGE 3
-
-
   -------         ENDDO         
-  C:04C9H         LINE#         120
-  C:04C9H         LINE#         121
-  C:04C9H         LINE#         123
-  C:04D3H         LINE#         124
-  C:04D6H         LINE#         125
-  C:04E8H         LINE#         126
+  C:04D9H         LINE#         120
+  C:04D9H         LINE#         121
+  C:04D9H         LINE#         123
+  C:04E3H         LINE#         124
+  C:04E6H         LINE#         125
+  C:04F8H         LINE#         126
   -------         ENDPROC       _DELAY
   -------         PROC          _INS_TRANS
   D:0007H         SYMBOL        command
   -------         DO            
   D:0006H         SYMBOL        counter
   -------         ENDDO         
-  C:0453H         LINE#         127
-  C:0453H         LINE#         128
-  C:0453H         LINE#         130
-  C:0455H         LINE#         131
-  C:0457H         LINE#         132
-  C:0459H         LINE#         133
-  C:0459H         LINE#         134
-  C:045BH         LINE#         135
-  C:0468H         LINE#         136
-  C:046CH         LINE#         137
-  C:046DH         LINE#         138
-  C:046FH         LINE#         140
-  C:0470H         LINE#         141
-  C:0472H         LINE#         142
-  C:0476H         LINE#         143
-  C:0478H         LINE#         144
-  C:047AH         LINE#         145
+  C:0463H         LINE#         127
+  C:0463H         LINE#         128
+  C:0463H         LINE#         130
+  C:0465H         LINE#         131
+  C:0467H         LINE#         132
+  C:0469H         LINE#         133
+  C:0469H         LINE#         134
+  C:046BH         LINE#         135
+  C:0478H         LINE#         136
+  C:047CH         LINE#         137
+  C:047DH         LINE#         138
+  C:047FH         LINE#         140
+  C:0480H         LINE#         141
+  C:0482H         LINE#         142
+  C:0486H         LINE#         143
+  C:0488H         LINE#         144
+  C:048AH         LINE#         145
   -------         ENDPROC       _INS_TRANS
   -------         PROC          _DATA_TRANS
   D:0007H         SYMBOL        command
   -------         DO            
   D:0006H         SYMBOL        counter
   -------         ENDDO         
-  C:047BH         LINE#         146
-  C:047BH         LINE#         147
-  C:047BH         LINE#         149
-  C:047DH         LINE#         150
-  C:047FH         LINE#         151
-  C:0481H         LINE#         152
-  C:0481H         LINE#         153
-  C:0483H         LINE#         154
-  C:0490H         LINE#         155
-  C:0494H         LINE#         156
-  C:0495H         LINE#         157
-  C:0497H         LINE#         159
-  C:0498H         LINE#         160
-  C:049AH         LINE#         161
-  C:049EH         LINE#         162
-  C:04A0H         LINE#         163
-  C:04A2H         LINE#         164
+  C:048BH         LINE#         146
+  C:048BH         LINE#         147
+  C:048BH         LINE#         149
+  C:048DH         LINE#         150
+  C:048FH         LINE#         151
+  C:0491H         LINE#         152
+  C:0491H         LINE#         153
+  C:0493H         LINE#         154
+  C:04A0H         LINE#         155
+  C:04A4H         LINE#         156
+  C:04A5H         LINE#         157
+  C:04A7H         LINE#         159
+  C:04A8H         LINE#         160
+  C:04AAH         LINE#         161
+  C:04AEH         LINE#         162
+  C:04B0H         LINE#         163
+  C:04B2H         LINE#         164
   -------         ENDPROC       _DATA_TRANS
-  C:04EBH         SYMBOL        L?0050
+  C:04FBH         SYMBOL        L?0050
   -------         PROC          L?0049
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/20/2025  20:24:35  PAGE 4
+
+
   -------         ENDPROC       L?0049
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  04/21/2025  22:21:29  PAGE 4
-
-
-  C:04EBH         SYMBOL        L?0050
+  C:04FBH         SYMBOL        L?0050
   -------         PROC          _COLUMN_SET
   D:0004H         SYMBOL        column
-  C:04F0H         LINE#         165
-  C:04F2H         LINE#         166
-  C:04F2H         LINE#         167
-  C:04FCH         LINE#         168
+  C:0500H         LINE#         165
+  C:0502H         LINE#         166
+  C:0502H         LINE#         167
+  C:050CH         LINE#         168
   -------         ENDPROC       _COLUMN_SET
   -------         PROC          _PAGE_SET
   D:0007H         SYMBOL        page
-  C:0562H         LINE#         170
-  C:0562H         LINE#         171
-  C:0562H         LINE#         172
+  C:0572H         LINE#         170
+  C:0572H         LINE#         171
+  C:0572H         LINE#         172
   -------         ENDPROC       _PAGE_SET
   -------         PROC          SCREEN_CLEAR
   -------         DO            
   D:0003H         SYMBOL        page
   D:0004H         SYMBOL        column
   -------         ENDDO         
-  C:051CH         LINE#         174
-  C:051CH         LINE#         175
-  C:051CH         LINE#         177
-  C:051EH         LINE#         178
-  C:051EH         LINE#         179
-  C:051EH         LINE#         180
-  C:0521H         LINE#         181
-  C:0523H         LINE#         182
-  C:0523H         LINE#         183
-  C:0528H         LINE#         184
-  C:052CH         LINE#         185
-  C:0530H         LINE#         186
+  C:052CH         LINE#         174
+  C:052CH         LINE#         175
+  C:052CH         LINE#         177
+  C:052EH         LINE#         178
+  C:052EH         LINE#         179
+  C:052EH         LINE#         180
+  C:0531H         LINE#         181
+  C:0533H         LINE#         182
+  C:0533H         LINE#         183
+  C:0538H         LINE#         184
+  C:053CH         LINE#         185
+  C:0540H         LINE#         186
   -------         ENDPROC       SCREEN_CLEAR
   -------         PROC          SCREEN_CHECK
   -------         DO            
   D:0003H         SYMBOL        page
   D:0004H         SYMBOL        column
   -------         ENDDO         
-  C:0531H         LINE#         187
-  C:0531H         LINE#         188
-  C:0531H         LINE#         190
-  C:0533H         LINE#         191
-  C:0533H         LINE#         192
-  C:0533H         LINE#         193
-  C:0536H         LINE#         194
-  C:0538H         LINE#         195
-  C:0538H         LINE#         196
-  C:053DH         LINE#         197
-  C:0541H         LINE#         198
-  C:0545H         LINE#         199
+  C:0541H         LINE#         187
+  C:0541H         LINE#         188
+  C:0541H         LINE#         190
+  C:0543H         LINE#         191
+  C:0543H         LINE#         192
+  C:0543H         LINE#         193
+  C:0546H         LINE#         194
+  C:0548H         LINE#         195
+  C:0548H         LINE#         196
+  C:054DH         LINE#         197
+  C:0551H         LINE#         198
+  C:0555H         LINE#         199
   -------         ENDPROC       SCREEN_CHECK
   -------         PROC          INITIAL
   -------         DO            
   D:0004H         SYMBOL        i
   -------         ENDDO         
-  C:0546H         LINE#         200
-  C:0546H         LINE#         201
-  C:0546H         LINE#         203
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  04/21/2025  22:21:29  PAGE 5
+  C:0556H         LINE#         200
+  C:0556H         LINE#         201
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/20/2025  20:24:35  PAGE 5
 
 
-  C:0548H         LINE#         204
-  C:0548H         LINE#         205
-  C:0551H         LINE#         206
-  C:0555H         LINE#         207
+  C:0556H         LINE#         203
+  C:0558H         LINE#         204
+  C:0558H         LINE#         205
+  C:0561H         LINE#         206
+  C:0565H         LINE#         207
   -------         ENDPROC       INITIAL
   -------         PROC          _PICTURE_DISPLAY
   D:0008H         SYMBOL        ptr_pic
@@ -253,39 +254,39 @@ SYMBOL TABLE OF MODULE:  .\Objects\OLED096 (MAIN)
   D:000BH         SYMBOL        page
   D:0004H         SYMBOL        column
   -------         ENDDO         
-  C:041AH         LINE#         209
-  C:0420H         LINE#         210
-  C:0420H         LINE#         214
-  C:0423H         LINE#         215
-  C:0423H         LINE#         216
-  C:0425H         LINE#         217
-  C:0428H         LINE#         218
-  C:042AH         LINE#         219
-  C:042AH         LINE#         220
-  C:043FH         LINE#         221
-  C:0443H         LINE#         222
-  C:044CH         LINE#         223
+  C:042AH         LINE#         209
+  C:0430H         LINE#         210
+  C:0430H         LINE#         214
+  C:0433H         LINE#         215
+  C:0433H         LINE#         216
+  C:0435H         LINE#         217
+  C:0438H         LINE#         218
+  C:043AH         LINE#         219
+  C:043AH         LINE#         220
+  C:044FH         LINE#         221
+  C:0453H         LINE#         222
+  C:045CH         LINE#         223
   -------         ENDPROC       _PICTURE_DISPLAY
   -------         PROC          MAIN
-  C:04A3H         LINE#         226
-  C:04A3H         LINE#         227
-  C:04A3H         LINE#         228
-  C:04A5H         LINE#         229
-  C:04ACH         LINE#         230
-  C:04AEH         LINE#         231
-  C:04B1H         LINE#         232
-  C:04B1H         LINE#         233
-  C:04B1H         LINE#         234
-  C:04B4H         LINE#         235
-  C:04B7H         LINE#         236
-  C:04BEH         LINE#         237
-  C:04C7H         LINE#         239
+  C:04B3H         LINE#         226
+  C:04B3H         LINE#         227
+  C:04B3H         LINE#         228
+  C:04B5H         LINE#         229
+  C:04BCH         LINE#         230
+  C:04BEH         LINE#         231
+  C:04C1H         LINE#         232
+  C:04C1H         LINE#         233
+  C:04C1H         LINE#         234
+  C:04C4H         LINE#         235
+  C:04C7H         LINE#         236
+  C:04CEH         LINE#         237
+  C:04D7H         LINE#         240
   -------         ENDPROC       MAIN
   -------         ENDMOD        MAIN
 
   -------         MODULE        ?C?CLDPTR
-  C:0503H         PUBLIC        ?C?CLDPTR
+  C:0513H         PUBLIC        ?C?CLDPTR
   -------         ENDMOD        ?C?CLDPTR
 
-Program Size: data=13.0 xdata=0 code=1385
+Program Size: data=13.0 xdata=0 code=1401
 LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

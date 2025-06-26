@@ -210,7 +210,7 @@ void InitST7567(void)
  	Delay_Xms(2);
 	ST7567_WriteComd(0x00);	//"00"最大4倍压,"01"最大5倍压,"03"最大6倍压
  	Delay_Xms(2);
-	ST7567_WriteComd(0x40);	//设定起始行第1行
+	ST7567_WriteComd(0x60);	//设定起始行第1行
  	Delay_Xms(2);
 	ST7567_WriteComd(0xa4);	//Display All Points ON/OFF to Normal display mode正常显示模式选择
  	Delay_Xms(2);

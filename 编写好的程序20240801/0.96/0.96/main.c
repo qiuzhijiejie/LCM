@@ -38,11 +38,11 @@ unsigned char code initial_tab[23]={
 0xAF,
          };
 
-/*unsigned char code test_tab[16]={
+unsigned char code test_tab[16]={
                                0xff,0xff,0x00,0x00,
                                0xaa,0xaa,0x55,0x55,
 			  	               0xff,0x00,0x00,0xff,
-				               0xaa,0x55,0x55,0xaa};*/
+				               0xaa,0x55,0x55,0xaa};
 
 unsigned char code picture_tab[]={
 /*------------------------------------------------------------------------------
@@ -235,6 +235,7 @@ void main()
 				Screen_check();
                 Delay(10);
 			    Picture_display(picture_tab);
+
 
 			 }
 	 }

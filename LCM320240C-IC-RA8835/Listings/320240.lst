@@ -1,0 +1,826 @@
+C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE 320240
+OBJECT MODULE PLACED IN .\Objects\320240.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE 320240.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Li
+                    -stings\320240.lst) OBJECT(.\Objects\320240.obj)
+
+line level    source
+
+   1          #include "320240.h"
+   2          #include "PIC.h"
+   3          uchar code scroll_P10[]   = { 0x00, basepart1, 0xf0,  //1area??10KB??240 row
+   4                             0x00, basepart2, 0xf0,  //2area??10KB??240 row
+   5                             0x00, basepart3,        //3area??10KB
+   6                             0x00, basepart4};       //4area??32KB
+   7          
+   8                                                                             
+   9          uchar code systemset_P8[] =  {0x30, 0x87, 0x07, 0x27, 0x3f, 0xef, 0x28, 0x00};
+  10          /******************************************************* 
+  11          Write instruction code  写指令码
+  12          *******************************************************/
+  13          void write_cmd(unsigned char cmd)
+  14          {
+  15   1       CS = 0;
+  16   1       _RD = 1;  
+  17   1       P1 = cmd;
+  18   1       CD = 1;    //command
+  19   1       _WR = 0;    //Rising edge of write
+  20   1       _WR = 1;
+  21   1       CS = 1;
+  22   1      }
+  23          /******************************************************* 
+  24          Write command parameters, display data  写命令参数，显示数据
+  25          *******************************************************/
+  26          void write_dat(unsigned char dat)
+  27          {chkbusy();
+  28   1       CS = 0;
+  29   1       _RD = 1;
+  30   1       P1 = dat;
+  31   1       CD = 0;    //data
+  32   1       _WR = 0;    //Rising edge of write
+  33   1       _WR = 1;
+  34   1       CS = 1;
+  35   1      }
+  36          /******************************************************* 
+  37          read data  读取数据
+  38          *******************************************************/
+  39          uchar read_dat(void)
+  40          { uchar temp=0;
+  41   1      chkbusy();
+  42   1       CS = 0;
+  43   1       CD   = 1;
+  44   1       _WR   = 1;
+  45   1       _RD   = 0;
+  46   1       temp = P1;
+  47   1       _RD   = 1;
+  48   1        CS = 1;
+  49   1       return (temp);
+  50   1      }
+  51          
+  52          /******************************************************* 
+  53          check busy  检查忙碌状态
+  54          *******************************************************/
+C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 2   
+
+  55          void chkbusy(void)
+  56          {
+  57   1           uchar b;
+  58   1               b=1;
+  59   1              if(b!=0)
+  60   1              {
+  61   2          b=lcd_cmdread();
+  62   2          b&=0x40; 
+  63   2              } 
+  64   1       
+  65   1      }
+  66          
+  67          /******************************************************* 
+  68           read status 阅读状态
+  69          *******************************************************/
+  70          uchar lcd_cmdread(void)
+  71          {   
+  72   1          uchar address_cmd;
+  73   1          P1=0xff;
+  74   1          CS = 0;
+  75   1          CD = 0;
+  76   1              _WR = 1;
+  77   1          _RD = 0;
+  78   1          address_cmd =P1;
+  79   1          _RD = 1;
+  80   1          CS = 1;
+  81   1        return(address_cmd);
+  82   1      }
+  83          
+  84          
+  85          /******************************************************* 
+  86                                Delay  延迟
+  87          *******************************************************/
+  88          void delay(uint ms)
+  89          {
+  90   1          uint i, j;
+  91   1          for(i = 0; i < ms; i++)
+  92   1              for(j = 0; j < 120; j++);  // 这个120是根据主频调整的
+  93   1      }
+  94          
+  95          
+  96          
+  97          /******************************************************* 
+  98                          LCM  Initialization  LCM初始化
+  99          *******************************************************/
+ 100          void lcd_init(void)
+ 101          {
+ 102   1      
+ 103   1       uchar i;
+ 104   1       write_cmd(systemset);//Initialization settings
+ 105   1       for(i=0;i<8 ;i++)
+ 106   1       write_dat(systemset_P8[i]);
+ 107   1       write_cmd(scroll);   //Setting the display start address and the display range
+ 108   1       for(i=0;i<10;i++) 
+ 109   1       write_dat(scroll_P10[i]);
+ 110   1       write_cmd(hdotscr);  //Point displacement amount set
+ 111   1       write_dat(0x00);     //Do not move
+ 112   1       write_cmd(ovlay);    //Display synthesis settings
+ 113   1       write_dat(0x00);     //Synthesis of double, text display, logic or
+ 114   1       show_off();          //display off
+ 115   1       lcd_cls(0);          //clrar dispay
+ 116   1       show_on();           //display on
+C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 3   
+
+ 117   1      }
+ 118          /******************************************************* 
+ 119          clear display  清晰的显示屏
+ 120          32KB RAM 
+ 121          part = 1  1area
+ 122          part = 2  2area
+ 123          part = 3  3area
+ 124          part = 4  4area              
+ 125          *******************************************************/
+ 126          void lcd_cls(uchar part)
+ 127          {
+ 128   1       uint i = 10240;       //10240 = 0x2800  10KB RAM
+ 129   1       write_cmd(csrw);      //Write cursor address
+ 130   1       write_dat(0x00);      //First write the low eight
+ 131   1            if(part == 1) write_dat(0x00);     //1area
+ 132   1       else if(part == 2) write_dat(basepart2);//2area
+ 133   1       else if(part == 3) write_dat(basepart3);//3area
+ 134   1       else if(part == 4) write_dat(basepart4);//4area
+ 135   1       else {i = 32768;   write_dat(0x00);}    //After writing the high eight, All dispay area 32KB RAM
+ 136   1       write_cmd(csrdirr);   //Cursor right direction
+ 137   1       write_cmd(mwrite);    //write data 
+ 138   1       while(i--) write_dat(0x00);//Write 0
+ 139   1      }
+ 140          /******************************************************* 
+ 141                                  Display on
+ 142          *******************************************************/
+ 143          void show_on(void)
+ 144          {
+ 145   1       write_cmd(dispon);    //Display on
+ 146   1       write_dat(0x57);      //the cursor 1Hz flashes
+ 147   1      }
+ 148          /******************************************************* 
+ 149                                  Display  off
+ 150          *******************************************************/
+ 151          void show_off(void)
+ 152          {
+ 153   1       write_cmd(dispoff);   //Display  off
+ 154   1       write_dat(0x57);      //the cursor 1Hz flashes
+ 155   1      }
+ 156          
+ 157          /******************************************************* 
+ 158          Cursor positioning  光标定位
+ 159          x: 0~39 320/8=40
+ 160          y: 0~29 240/8=30
+ 161          1 area Text
+ 162          *******************************************************/
+ 163          void locate_xy1(unsigned char x, unsigned char y)
+ 164          {
+ 165   1       unsigned int  addr;
+ 166   1       addr  =(unsigned int)(y) * AP + x;
+ 167   1       write_cmd(csrw);       //Write cursor address
+ 168   1       write_dat((unsigned char)(addr & 0xff));  //First write the low eight
+ 169   1       write_dat((unsigned char)(addr >> 8));  //After writing the high eight
+ 170   1      }
+ 171          
+ 172          /******************************************************* 
+ 173          Cursor positioning  光标定位
+ 174          x: 0~319 320
+ 175          y: 0~239 240
+ 176          2  area   Graphics
+ 177          *******************************************************/
+ 178          void locate_xy2(uint x, uchar y)
+C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 4   
+
+ 179          {
+ 180   1       uint  addr;
+ 181   1       addr  = (uint)(y) * AP + x/8;
+ 182   1       write_cmd(csrw);         //Write cursor address
+ 183   1       write_dat((uchar)(addr & 0xff));    //First write the low eight
+ 184   1       write_dat((uchar)(addr >> 8) + basepart2); //After writing the high eight
+ 185   1      }
+ 186          /******************************************************* 
+ 187          Cursor positioning  光标定位
+ 188          x: 0~319 320
+ 189          y: 0~239 240
+ 190          2  area      Graphics         
+ 191          *******************************************************/
+ 192          void locate_xy22(uint x, uchar y)
+ 193          {
+ 194   1       uint  addr;
+ 195   1       addr  = (uint)(y) * AP + x;
+ 196   1       write_cmd(csrw);         //Write cursor address
+ 197   1       write_dat((uchar)(addr & 0xff));    //First write the low eight
+ 198   1       write_dat((uchar)(addr >> 8) + basepart2); //After writing the high eight
+ 199   1      }
+ 200          /******************************************************* 
+ 201          set 1 area address   Text  设置1个地区地址文本
+ 202          *******************************************************/
+ 203          void set_addr1(uint addr)
+ 204          {
+ 205   1       addr += basepart1;
+ 206   1       write_cmd(scroll);
+ 207   1       write_dat((uchar)(addr & 0xff));
+ 208   1       write_dat((uchar)(addr >> 8));
+ 209   1      }
+ 210          /******************************************************* 
+ 211           set 2 area address   Graphics 设置2个区域地址图形
+ 212          *******************************************************/
+ 213          void set_addr2(uint addr)
+ 214          {
+ 215   1       addr += basepart2;
+ 216   1       write_cmd(scroll);
+ 217   1       write_dat(scroll_P10[0]);
+ 218   1       write_dat(scroll_P10[1]);
+ 219   1       write_dat(scroll_P10[2]);
+ 220   1       write_dat((uchar)(addr & 0xff));
+ 221   1       write_dat((uchar)(addr >> 8));   
+ 222   1      }
+ 223          /******************************************************* 
+ 224          Vertical direction scrolling display  垂直方向滚动显示器
+ 225          x?? Rolling distance  Text--x  row ??Graphics--x pixels
+ 226          dir?? Rolling direction  0--left ??1--right
+ 227          part??Scroll area  0--1area?? 1--2area                           
+ 228          *******************************************************/
+ 229          void roll_h(uint x,bit dir,bit part)
+ 230          {
+ 231   1       uchar i;
+ 232   1       uint  addr;
+ 233   1       if(dir) addr = x;  //Horizontally to the right
+ 234   1       else addr = 0;     //Horizontally to the left
+ 235   1       while(x--)
+ 236   1       {
+ 237   2        for(i = 0; i < 8; i++)
+ 238   2        {
+ 239   3         write_cmd(hdotscr);
+ 240   3         if(dir) write_dat(7 - i); //Horizontally to the right
+C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 5   
+
+ 241   3         else write_dat(i);        //Horizontally to the left
+ 242   3        delay(50000);
+ 243   3        delay(50000);
+ 244   3        }
+ 245   2        if(dir) addr--;   //Horizontally to the right
+ 246   2        else addr++;      //Horizontally to the left
+ 247   2        if(part) set_addr2(addr); //2area
+ 248   2        else  set_addr1(addr);    //1area
+ 249   2       }
+ 250   1      }
+ 251          /******************************************************* 
+ 252          Vertical direction scrolling display 垂直方向滚动显示器
+ 253          x?? Rolling distance  Text--x  row ??Graphics--x pixels
+ 254          dir?? Rolling direction  0--Up ??1--Down
+ 255          part??Scroll area  0--1area?? 1--2area                           
+ 256          *******************************************************/
+ 257          void roll_v(unsigned char x, bit dir, bit part)
+ 258          {
+ 259   1       unsigned char i;
+ 260   1       unsigned int  addr = 0;
+ 261   1       for(i = 0; i <= x; i++)
+ 262   1       {
+ 263   2        if(dir) addr = AP * (x - i); //Vertically upwards
+ 264   2        else addr = AP * i;          //Vertically downwards
+ 265   2        if(part) set_addr2(addr);    //2 area
+ 266   2        else  set_addr1(addr);       //1 area 
+ 267   2       delay(50000);
+ 268   2        delay(50000);
+ 269   2       }
+ 270   1      }
+ 271          
+ 272          /******************************************************* 
+ 273          display string 显示字符串
+ 274          x: 0~39 320/8=40
+ 275          y: 0~29 240/8=30                         
+ 276          *******************************************************/
+ 277          void show_char(unsigned char x, unsigned char y, unsigned char *string)
+ 278          {
+ 279   1       locate_xy1(x, y);    //Cursor positioning
+ 280   1       write_cmd(csrform);    //Set cursor shape 
+ 281   1       write_dat(0x07);    //Horizontal display width 6
+ 282   1       write_dat(0x07);    //Linear cursor display??hight 8
+ 283   1       write_cmd(csrdirr);    //Cursor right direction
+ 284   1       write_cmd(dispon);    //Display the status is on
+ 285   1       write_dat(0x57);    //Cursor 1Hz blinking
+ 286   1       write_cmd(mwrite);    //write data 
+ 287   1       while(*string) 
+ 288   1       {
+ 289   2        write_dat(*string); 
+ 290   2        string++;
+ 291   2       }
+ 292   1      }
+ 293          /******************************************************* 
+ 294          display chinese (Graphics mode) 显示中文（图形模式）
+ 295          x: 0~39 320/8=40
+ 296          y: 0~29 240/8=30                         
+ 297          *******************************************************/
+ 298          void show_hzg(uchar x,uchar y,uchar *string,bit inverse)
+ 299          {
+ 300   1       uchar i, j,k,adr=0;
+ 301   1       write_cmd(csrdirr);    //Cursor right direction
+ 302   1       for(j = 0; j < num/32; j++)
+C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 6   
+
+*** WARNING C198 IN LINE 302 OF 320240.c: sizeof returns zero
+ 303   1       { 
+ 304   2              for(k=0;k<16;k++)
+ 305   2              {         locate_xy22(x+adr,y+k);  //Cursor positioning
+ 306   3                        write_cmd(mwrite);   //write data 
+ 307   3                        for(i = 0; i < 2; i++) 
+ 308   3                        {
+ 309   4                         if(inverse) write_dat(~*string);
+ 310   4                         else  write_dat(*string); 
+ 311   4                         string++;
+ 312   4                        }
+ 313   3              }
+ 314   2              adr+=2;
+ 315   2       }
+ 316   1      }
+ 317          /******************************************************* 
+ 318          Load cgram 加载 cgram
+ 319          *******************************************************/
+ 320          void load_cgram(uchar m,bit inverse)
+ 321          {
+ 322   1       uchar i, j;
+ 323   1       write_cmd(cgramadr);
+ 324   1       write_dat(0x00);
+ 325   1       write_dat(0x50);  //cgram start address
+ 326   1       write_cmd(csrdirr);
+ 327   1       write_cmd(csrw);
+ 328   1       write_dat(0x00);
+ 329   1       write_dat(0x54);  //cgram 1K RAM end address
+ 330   1       write_cmd(mwrite);
+ 331   1       for(j = 0; j < m; j++)
+ 332   1       {
+ 333   2               for(i = 0; i < 32; i+=2) 
+ 334   2                {
+ 335   3                 if(inverse) write_dat(~cgtab[j][i]);
+ 336   3                 else  write_dat(cgtab[j][i]);
+ 337   3      
+ 338   3                }
+ 339   2               for(i = 1; i < 32; i+=2) 
+ 340   2                { 
+ 341   3                 if(inverse) write_dat(~cgtab[j][i]);
+ 342   3                 else  write_dat(cgtab[j][i]);
+ 343   3      
+ 344   3                }
+ 345   2       }
+ 346   1      }
+ 347          /******************************************************* 
+ 348          display chinese (Text mode) 显示中文（文本模式）
+ 349          x: 0~39 320/8=40
+ 350          y: 0~29 240/8=30
+ 351          *******************************************************/
+ 352          void show_hzt(uchar x,uchar y,uchar n_4)
+ 353          {
+ 354   1       locate_xy1(x, y);
+ 355   1       write_cmd(csrdird);    //Cursor down direction
+ 356   1       write_cmd(mwrite);
+ 357   1       write_dat(n_4);
+ 358   1       write_dat(n_4 + 1);
+ 359   1       locate_xy1(x + 1, y);
+ 360   1       write_cmd(mwrite);
+ 361   1       write_dat(n_4 + 2);
+ 362   1       write_dat(n_4 + 3);
+ 363   1      }
+C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 7   
+
+ 364          /******************************************************* 
+ 365          display pixels 显示器像素
+ 366          x: 0~319 320
+ 367          y: 0~239 240
+ 368          attr:Display Properties??0-Drawing   1-clear
+ 369          *******************************************************/
+ 370          void show_pixel(uint x,uchar y,bit attr)
+ 371          { 
+ 372   1       uchar temp, tempd;
+ 373   1       tempd = 0x80 >> (x & 0x07);
+ 374   1       locate_xy2(x, y);     //Cursor positioning
+ 375   1       write_cmd(mread);
+ 376   1       temp = read_dat();
+ 377   1       if(attr) temp &= ~tempd;
+ 378   1       else  temp |= tempd;
+ 379   1       locate_xy2(x, y);     //Cursor positioning
+ 380   1       write_cmd(mwrite);     //write data 
+ 381   1       write_dat(temp);
+ 382   1      }
+ 383          /******************************************************* 
+ 384          display line 显示线
+ 385          x: 0~319 320
+ 386          y: 0~239 240
+ 387          attr:Display Properties??0-Drawing   1-clear
+ 388          *******************************************************/
+ 389          void show_line(uint x1,uchar y1,uint x2,uchar y2,bit attr)
+ 390          {
+ 391   1       int  dx, dy;
+ 392   1       char inc_x, inc_y;
+ 393   1       int  xerr = 0, yerr = 0;    //Initialize variables
+ 394   1       uint i, ds;
+ 395   1          dx = x2 - x1;       //Calculate the coordinates increment
+ 396   1          dy = y2 - y1;
+ 397   1       if(dx > 0) inc_x = 1;     //Set the single-step direction
+ 398   1       else 
+ 399   1       {
+ 400   2        if(dx == 0) {inc_x = 0;     } //Vertical line
+ 401   2        else  {inc_x = -1; dx = -dx;}
+ 402   2       }
+ 403   1       if(dy > 0) inc_y = 1;     //Set the single-step direction
+ 404   1       else
+ 405   1          {
+ 406   2        if(dy == 0) {inc_y = 0;     } //Horizontal line
+ 407   2        else  {inc_y = -1; dy = -dy;}
+ 408   2       }
+ 409   1       if(dx > dy) ds = dx;     //select the basic incremental axis
+ 410   1       else  ds = dy;
+ 411   1       for(i = 0; i <= ds+1; i++)    //drawing line
+ 412   1       {
+ 413   2        show_pixel(x1, y1, attr);   //drawing pixel
+ 414   2        xerr += dx;
+ 415   2        yerr += dy;
+ 416   2        if(xerr > ds)
+ 417   2        {
+ 418   3         xerr -= ds;
+ 419   3         x1   += inc_x;
+ 420   3        }
+ 421   2        if(yerr > ds)
+ 422   2        {
+ 423   3         yerr -= ds;
+ 424   3         y1   += inc_y;
+ 425   3        }
+C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 8   
+
+ 426   2       }
+ 427   1      }
+ 428          /******************************************************* 
+ 429          display square 展示广场
+ 430          x: 0~319 320
+ 431          y? 0~239 240
+ 432          attr:Display Properties??0-Drawing   1-clear
+ 433          *******************************************************/
+ 434          void show_rectangle(uint x1,uchar y1,uint x2,uchar y2,bit attr)
+ 435          {
+ 436   1       show_line(x1, y1, x2, y1, attr);
+ 437   1       show_line(x1, y1, x1, y2, attr);
+ 438   1       show_line(x2, y1, x2, y2, attr);
+ 439   1       show_line(x1, y2, x2, y2, attr);
+ 440   1      }
+ 441          /******************************************************* 
+ 442          display circle  显示圈
+ 443          x: 0~319 320 
+ 444          y: 0~239 240
+ 445          r: Radius  0~239 240
+ 446          attr:Display Properties??0-Drawing   1-clear
+ 447          *******************************************************/
+ 448          void show_circle(uint x,uchar y,uchar r,bit attr)
+ 449          {
+ 450   1       uchar dx,dy = r; 
+ 451   1       for(dx = 0; dx <= r; dx++)
+ 452   1       {
+ 453   2        while((r * r + 1 - dx * dx) < (dy * dy)) dy--;
+ 454   2        show_pixel(x + dx, y - dy, attr);
+ 455   2        show_pixel(x - dx, y - dy, attr);
+ 456   2        show_pixel(x - dx, y + dy, attr);
+ 457   2        show_pixel(x + dx, y + dy, attr);
+ 458   2        show_pixel(x + dy, y - dx, attr);
+ 459   2        show_pixel(x - dy, y - dx, attr);
+ 460   2        show_pixel(x - dy, y + dx, attr);
+ 461   2        show_pixel(x + dy, y + dx, attr);
+ 462   2       }
+ 463   1      }
+ 464          /******************************************************* 
+ 465          display picture  显示画面
+ 466          x: 0~39 320/8=40
+ 467          y: 0~239 240
+ 468          *******************************************************/
+ 469          void show_pic(uchar x,uchar y,uchar *string,bit inverse)
+ 470          {
+ 471   1       uchar i, j;
+ 472   1              //      demo_line();
+ 473   1              delay(10);
+ 474   1       write_cmd(csrdirr);    //Cursor right direction
+ 475   1       for(j = 0; j < height; j++)
+ 476   1       { 
+ 477   2        locate_xy22(x , y+ j);  //Cursor positioning
+ 478   2        write_cmd(mwrite);   //write data
+ 479   2        for(i = 0; i < width/8; i++) 
+ 480   2        {
+ 481   3         if(inverse) write_dat(~*string);
+ 482   3         else  write_dat(*string); 
+ 483   3         string++;
+ 484   3        }
+ 485   2       }
+ 486   1      }
+ 487          /******************************************************* 
+C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 9   
+
+ 488          display sine   显示正弦
+ 489          y: coordinate  119
+ 490          attr:Display Properties??0-Drawing   1-clear
+ 491          *******************************************************/
+ 492          void show_sine(uchar y,uchar a,uchar n,bit attr)
+ 493          {
+ 494   1       uint  x1 = 0, x2;
+ 495   1       uchar y1 = 119, y2;
+ 496   1       for(x2 = 0; x2 < 320; x2++)
+ 497   1       {
+ 498   2        y2 = y + (a * sin(0.0175 * n * x2));
+ 499   2        show_line(x1, y1, x2, y2, attr);
+ 500   2        x1 = x2;
+ 501   2        y1 = y2;
+ 502   2       }
+ 503   1      }
+ 504          
+ 505          
+ 506          /******************************************************* 
+ 507          show pixels  显示像素
+ 508          *******************************************************/
+ 509          void demo_pixel(void)
+ 510          {
+ 511   1       uint  i, j;
+ 512   1       uchar n;
+ 513   1       //lcd_init();
+ 514   1        lcd_cls(0);
+ 515   1       n = 10;
+ 516   1       for(j = 1; j < 121; j += n) 
+ 517   1       {
+ 518   2        for(i = j-n; i < 240-j;   i++) show_pixel(j, i, 0);         //"| "
+ 519   2        for(i = j+1; i < 240-j;   i++) show_pixel(i, 239-j, 0);     //"_"
+ 520   2        for(i = j+1; i < 240-j;   i++) show_pixel(239-j, 239-i, 0); //" |"
+ 521   2        for(i = j+1; i < 240-n-j; i++) show_pixel(239-i, j, 0);     //"??
+ 522   2       }
+ 523   1       for(j = 5; j < 121; j += n) 
+ 524   1       { 
+ 525   2        for(i = j-n; i < 240-j; i++) {show_pixel(j, i, i&0x02);  }       //"| "
+ 526   2        for(i = j+1; i < 240-j; i++) {show_pixel(i, 239-j, i&0x02); }    //"_"
+ 527   2        for(i = j+1; i < 240-j; i++) {show_pixel(239-j, 239-i, i&0x02);} //" |"
+ 528   2        for(i = j+1; i < 240-n-j;i++){show_pixel(239-i, j, i&0x02); }    //"??"
+ 529   2       }
+ 530   1      }
+ 531          /******************************************************* 
+ 532           show line  表演路线
+ 533          *******************************************************/
+ 534          void demo_line(void)
+ 535          {
+ 536   1       //lcd_init();
+ 537   1        lcd_cls(0);
+ 538   1      // show_line(0,0,319,239, 0);  //"\"
+ 539   1      // show_line(0,239,319,0, 0);  //"_"
+ 540   1              
+ 541   1       show_line(0,0,319,0, 0);    //"-"
+ 542   1       show_line(0,0,0,239, 0);    //"|"
+ 543   1       show_line(0,239,319,239, 0);//"/"
+ 544   1       show_line(319,0,319,239, 0);//"|"
+ 545   1              
+ 546   1       show_line(1,1,318,1, 0);    //"-"
+ 547   1       show_line(1,1,1,238, 0);    //"|"
+ 548   1       show_line(1,238,318,238, 0);//"/"
+ 549   1       show_line(318,1,318,238, 0);//"|"      
+C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 10  
+
+ 550   1              
+ 551   1      // show_line(0,0,239,239, 0);
+ 552   1      // show_line(0,239,239,0, 0);
+ 553   1      // show_line(239,0,239,239, 0);
+ 554   1         delay(500);
+ 555   1      
+ 556   1      }
+ 557          /******************************************************* 
+ 558          show Square  展示广场
+ 559          *******************************************************/
+ 560          void demo_rectangle(void)
+ 561          {
+ 562   1       uchar i;
+ 563   1       //lcd_init();
+ 564   1        lcd_cls(0);
+ 565   1       for(i=0;i<119;i+=5)
+ 566   1       {show_rectangle(i, i, 319-i, 239-i, 0);}
+ 567   1       for(i = 0; i < 119; i += 5)
+ 568   1       {show_rectangle(i, i, 319-i, 239-i, 1);}
+ 569   1       delay(500);
+ 570   1      }
+ 571          /******************************************************* 
+ 572           show circle  展示圈
+ 573          *******************************************************/
+ 574          void demo_circle(void)
+ 575          {
+ 576   1       uchar i, j;
+ 577   1      // lcd_init();
+ 578   1       lcd_cls(0);
+ 579   1       show_circle(4,4,3, 0);
+ 580   1       show_circle(315,4,3, 0);
+ 581   1       show_circle(315,235,3, 0);
+ 582   1       show_circle(4,235,3, 0);
+ 583   1       for(i = 1; i< 118; i+=6) 
+ 584   1       { 
+ 585   2        show_circle(159,119,i, 0);
+ 586   2        delay(500);
+ 587   2       }
+ 588   1       j = 1;
+ 589   1       while(j--)
+ 590   1       {
+ 591   2        for(i = 1; i< 118; i+=6) 
+ 592   2        { 
+ 593   3         show_circle(159,119,i, 1);
+ 594   3         delay(500);
+ 595   3        }
+ 596   2        for(i = 118; i > 2; i-=3) 
+ 597   2        { 
+ 598   3         show_circle(159,119,i, 0);
+ 599   3         delay(500); 
+ 600   3        }
+ 601   2       }
+ 602   1      }
+ 603          /******************************************************* 
+ 604          show picture  显示图片
+ 605          *******************************************************/
+ 606          void demo_picture(void)
+ 607          {
+ 608   1      // lcd_init();
+ 609   1       lcd_cls(0);
+ 610   1      // show_pic (0, 0, tab1, 0);
+ 611   1      //      delay(10);
+C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 11  
+
+ 612   1      //demo_line();
+ 613   1       show_pic (0, 0, tab2, 0);
+ 614   1      
+ 615   1      }
+ 616          
+ 617          
+ 618          
+ 619          /******************************************************* 
+ 620          sine presentation function  正弦表示函数
+ 621          *******************************************************/
+ 622          void demo_sine(void)
+ 623          {
+ 624   1       uchar i;
+ 625   1      // lcd_init();
+ 626   1       lcd_cls(0);
+ 627   1       i = 2;
+ 628   1       while(i--)
+ 629   1       { 
+ 630   2        show_sine(119, 80, 5, 0);
+ 631   2        delay(500);
+ 632   2        show_sine(119, 80, 5, 1);
+ 633   2        delay(500);
+ 634   2       }
+ 635   1      }
+ 636          /******************************************************* 
+ 637          display scroll  显示滚动
+ 638          *******************************************************/
+ 639          void demo_roll(void)
+ 640          {
+ 641   1      // lcd_init();
+ 642   1       lcd_cls(0);
+ 643   1      show_char(0, 0, "EastRising technology  www.buy-display.com ");
+ 644   1      show_char(0, 3, "!*^_^*!  EastRising technology  www.buy-display.com");
+ 645   1      show_char(0, 29, "X");
+ 646   1      show_char(39, 29, "Y");
+ 647   1      show_char(19, 17, "Z");
+ 648   1      roll_h(5,0,0);
+ 649   1      roll_h(5,1,0);
+ 650   1      roll_v(10,0,0);
+ 651   1      roll_v(10,1,0);
+ 652   1      show_char(16, 15, "!*^_^*!");
+ 653   1        delay(50000);
+ 654   1        delay(50000);
+ 655   1        delay(50000);
+ 656   1        delay(50000);
+ 657   1        delay(50000);
+ 658   1        delay(50000);
+ 659   1        delay(50000);
+ 660   1        delay(50000);
+ 661   1        delay(50000);
+ 662   1        delay(50000);
+ 663   1        delay(50000);
+ 664   1        delay(50000);
+ 665   1      
+ 666   1      }
+ 667          /******************************************************* 
+ 668          show chinese  表演中文
+ 669          *******************************************************/
+ 670          void demo_hz(void)
+ 671          {
+ 672   1      // lcd_init();
+ 673   1       lcd_cls(0);
+C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 12  
+
+ 674   1       show_hzg(0, 0,  tab, 0);
+ 675   1       show_hzg(0, 32, tab, 1);
+ 676   1       load_cgram(4,0);
+ 677   1       show_hzt(0,2,0x80);
+ 678   1       show_hzt(2,2,0x84);
+ 679   1       show_hzt(4,2,0x88);
+ 680   1       show_hzt(6,2,0x8c);
+ 681   1       delay(50000);
+ 682   1      }
+ 683          /******************************************************* 
+ 684          show moving circle   显示移动圆圈
+ 685          *******************************************************/
+ 686          void demo_game(void)
+ 687          {uchar cs=500;
+ 688   1       uchar r = 20;    //Radius
+ 689   1       uchar i = 3;    //Stepping variables
+ 690   1       int   x = 30,y = 30;     //Starting position
+ 691   1       int   dx = i,  dy = i;    //Stepping
+ 692   1       int   x1, y1;      //Save the last position
+ 693   1       
+ 694   1       //lcd_init();
+ 695   1       lcd_cls(0);
+ 696   1       while(cs--)
+ 697   1       {
+ 698   2        show_circle(x, y, r, 0);
+ 699   2        x1 = x, y1 = y;     //Save location
+ 700   2        if((x-r) < 0) dx = i;
+ 701   2        if((x+r) > 319) dx = -i;
+ 702   2        if((y-r) < 0) dy = i;
+ 703   2        if((y+r) > 239) dy = -i;
+ 704   2        x += dx;
+ 705   2        y += dy; 
+ 706   2        delay(50000);     
+ 707   2        show_circle(x1, y1, r, 1);   //Disappear before a round
+ 708   2        show_pixel(x1, y1, x&0x01);  //Locus
+ 709   2       }
+ 710   1      }
+ 711          
+ 712          
+ 713          void DisplayDots(unsigned num1, unsigned num2)
+ 714          {
+ 715   1          uchar y;
+ 716   1          uint i;
+ 717   1      
+ 718   1          for (y = 0; y < 240; y++)  // RW8835 支持 240 行
+ 719   1          {
+ 720   2              locate_xy2(0, y);       // 设置当前行的起始位置为 X=0
+ 721   2      
+ 722   2              write_cmd(mwrite);      // 进入图形写入模式
+ 723   2      
+ 724   2              for (i = 0; i < 40; i++) // 每行写 320 像素 / 8 = 40 字节
+ 725   2              {
+ 726   3                  if (y % 2 == 1)
+ 727   3                      write_dat(num1);  // 奇数行：写满（点亮）
+ 728   3                  else
+ 729   3                      write_dat(num2);  // 偶数行：清零（熄灭）
+ 730   3              }
+ 731   2          }
+ 732   1      }
+ 733          
+ 734          
+ 735          uint ReadKey1() // 按键检测函数
+C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 13  
+
+ 736          {
+ 737   1          if (LCD_KEY == 1)           
+ 738   1              {  // 按键被按下
+ 739   2              delay(10);  // 简单的去抖动处理
+ 740   2              if (LCD_KEY == 1) 
+ 741   2                      {  // 检查按键是否仍然按下
+ 742   3                  while (LCD_KEY == 1);  // 等待按键释放
+ 743   3                  return 1;  // 返回按键被按下
+ 744   3              }
+ 745   2          }
+ 746   1          return 0;  // 按键没有被按下
+ 747   1      }
+ 748          
+ 749          void DisplayFullCGROM(void)
+ 750          {
+ 751   1          uchar x, y;
+ 752   1          uchar charCode = 0x01;  // CGROM 从 0x01 开始，0x00 是空格
+ 753   1      
+ 754   1          for (y = 0; y < 30; y++)      // 30 行（240 / 8 = 30）
+ 755   1          {
+ 756   2              for (x = 0; x < 40; x++)  // 40 列（320 / 8 = 40）
+ 757   2              {
+ 758   3                  locate_xy1(x, y);        // 文字区定位
+ 759   3                  write_cmd(mwrite);       // 写入模式
+ 760   3                  write_dat(charCode);     // 写入 CGROM 字符码
+ 761   3      
+ 762   3                  charCode++;
+ 763   3                  if (charCode == 0x00)    // 跳过 0x00（一般是空格）
+ 764   3                      charCode = 0x01;
+ 765   3              }
+ 766   2          }
+ 767   1      
+ 768   1      show_char(0, 0, "!*^_^*!ABCDEFG12345678909876543");
+ 769   1      show_char(1, 3, "1234567890EDCWFRWEGTEHRTYJHUMQ234675634");
+ 770   1      show_char(7, 5, "1234567890EDCWFRWEGTEHRTYJHUMQ2");
+ 771   1      show_char(1, 6, "1234567890EDCWFRWEGTEHRTYJHUMQ21234567890EDCWFRWEGTEHRTYJHUMQ2");      
+ 772   1      show_char(23, 9, "1234567890EDCWFRWEGTEHRTYJHUMQ21234567890EDCWFRWEGTEHRTYJHUMQ2");     
+ 773   1      show_char(38, 11, "1234567890EDCWFRWEGTEHRTYJHUMQ21234567890EDCWFRWEGTEHRTYJHUMQ2");    
+ 774   1      show_char(37, 15, "1234567890EDCWFRWEGTEHRTYJHUMQ21234567890EDCWFRWEGTEHRTYJHUMQ2");
+ 775   1      show_char(0, 18, "1234567890EDCWFRWEGTEHRTYJHUMQ21234567890EDCWFRWEGTEHRTYJHUMQ2");     
+ 776   1      show_char(0, 24, "1234567890EDCWFRWEGTEHRTYJHUMQ21234567890EDCWFRWEGTEHRTYJHUMQ2");
+ 777   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   5032    ----
+   CONSTANT SIZE    =    295    ----
+   XDATA SIZE       =   ----     129
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----      12
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

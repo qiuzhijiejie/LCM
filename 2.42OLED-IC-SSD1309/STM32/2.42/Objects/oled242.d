@@ -1,0 +1,9 @@
+.\objects\oled242.o: oled242.c
+.\objects\oled242.o: stm32f10x.h
+.\objects\oled242.o: core_cm3.h
+.\objects\oled242.o: D:\KEIL_STM32\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\oled242.o: cmsis_version.h
+.\objects\oled242.o: cmsis_compiler.h
+.\objects\oled242.o: cmsis_armcc.h
+.\objects\oled242.o: D:\KEIL_STM32\Packs\Keil\STM32F1xx_DFP\2.4.1\Device\Include\system_stm32f10x.h
+.\objects\oled242.o: oled242.h

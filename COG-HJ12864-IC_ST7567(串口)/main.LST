@@ -1,0 +1,52 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              06/26/2025 14:02:39 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          /*************************************************************************  
+   2          Driver IC    :  ST7565R / UC1701x
+   3          interface    :  4-wire serialbus (S8)intertace
+   4          ************************************************************************/   
+   5          //#include "int/hanzi1616.c"
+   6          #include "int/shuhanzi1616.c"
+   7          #include "12864.h"
+   8          #include "int/photo.c"
+   9           
+  10          void main()   
+  11          { 
+  12   1        while(1)
+  13   1        {     
+  14   2                Init_IC(); 
+  15   2                lcd_test();  // lcd ×é×°²âÊÔ
+  16   2                delayMs(1200);
+  17   2                Yehui_UI();
+  18   2                delayMs(1200);
+  19   2                Clear();
+  20   2                 
+  21   2      //        WhatsApp();
+  22   2      //        delayMs(1200);
+  23   2      //        Clear();
+  24   2                
+  25   2                display_photo(tupian,0,0); 
+  26   2                delayMs(1200);
+  27   2                Clear();
+  28   2        }    
+  29   1      }   
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     51    ----
+   CONSTANT SIZE    =   2816    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

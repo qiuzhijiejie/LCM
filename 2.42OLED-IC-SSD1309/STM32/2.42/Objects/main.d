@@ -1,0 +1,10 @@
+.\objects\main.o: main.c
+.\objects\main.o: oled242.h
+.\objects\main.o: stm32f10x.h
+.\objects\main.o: core_cm3.h
+.\objects\main.o: D:\KEIL_STM32\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\main.o: cmsis_version.h
+.\objects\main.o: cmsis_compiler.h
+.\objects\main.o: cmsis_armcc.h
+.\objects\main.o: D:\KEIL_STM32\Packs\Keil\STM32F1xx_DFP\2.4.1\Device\Include\system_stm32f10x.h
+.\objects\main.o: PIC.h

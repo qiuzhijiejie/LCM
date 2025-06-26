@@ -1,0 +1,455 @@
+C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 10:23:41 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE 12864
+OBJECT MODULE PLACED IN 12864.OBJ
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE 12864.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "12864.h"
+   3          #include <INTRINS.H> 
+   4          #include "int/ascii0816x.c"
+   5          #include "int/ascii0508x.c"
+   6          #include "int/hanzi1616.c"
+   7          
+   8          // Delay microsecond less than 255us
+   9          void delayUs(uint Tus)
+  10          {
+  11   1              // If Tus >= 18, the delay is precise, otherwise not!
+  12   1              if (Tus > 17)
+  13   1              {
+  14   2                      Tus = Tus/2 - 9;
+  15   2                      if (Tus != 0)
+  16   2                              while(--Tus != 0);
+  17   2              }
+  18   1      }
+  19          
+  20          // Delay Tms ms
+  21          void delayMs(uint Tms)
+  22          {
+  23   1              uint i;
+  24   1              while(Tms-- != 0)
+  25   1              {
+  26   2                      i = 4;
+  27   2                      while(i-- != 0)
+  28   2                      delayUs(250);
+  29   2              }
+  30   1      }
+  31           
+  32             
+  33          /****************************reset IC for start****************************/   
+  34          void LCD_Reset()   
+  35          {   
+  36   1               IE  =  0x00;   
+  37   1               rst =  0;   
+  38   1               delayMs(50);   
+  39   1               rst =  1;   
+  40   1               delayMs(50);   
+  41   1      }  
+  42          
+  43          //-----------------写指令或者数据--------------------      
+  44          void write_cmd_dat(uchar cmda,uchar com)   
+  45          {    
+  46   1               cs=0;   
+  47   1               di=cmda; 
+  48   1               rd=1;
+  49   1               wr=0; 
+  50   1               data=com;  
+  51   1               delayUs(2); 
+  52   1               wr=1;  
+  53   1               delayUs(2); 
+  54   1      } 
+  55          
+C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 10:23:41 PAGE 2   
+
+  56          
+  57          // Set Column Address 4
+  58          void SetCA(uchar Caddr)
+  59          { 
+  60   1         write_cmd_dat(0, Caddr & 0x0F);          // Lower 4-bit
+  61   1         write_cmd_dat(0,(Caddr >> 4) | 0x10);    // Higher 4-bit
+  62   1      }
+  63          
+  64          // Set Page Address 7
+  65          void SetPA(uchar Paddr)
+  66          {
+  67   1         write_cmd_dat(0,0xb0+Paddr);
+  68   1      }
+  69          
+  70          //--------------向某页某列写数据----------------------------
+  71          void write_data(uint com,uchar page,uchar clum)
+  72          {
+  73   1        SetPA(page);
+  74   1        SetCA(clum);
+  75   1        write_cmd_dat(1,com);
+  76   1      }
+  77          
+  78          // Display data RAM page and column address
+  79          void GotoXY(uchar Paddr, uchar Caddr)
+  80          {
+  81   1         SetPA(Paddr);
+  82   1         SetCA(Caddr);
+  83   1      }
+  84          
+  85          //----------------------组装测试-------------------------
+  86          void display_test(uchar fst,uchar snd) 
+  87          { 
+  88   1        uchar i,j;
+  89   1       for(j=0;j<8;j++)// 遍历所有页(Page),ST7567有8个页,每页8行
+  90   1       {      
+  91   2        GotoXY(j,0);// 设置当前页 j,列地址为 0
+  92   2         for(i=0;i<128/2;i++) // 每页写 64 次,每次写两个字节
+  93   2        {
+  94   3         write_cmd_dat(1,fst);
+  95   3         write_cmd_dat(1,snd);
+  96   3        }
+  97   2       }
+  98   1      }
+  99          
+ 100          // Clear LCD screen
+ 101          void Clear(void)
+ 102          {
+ 103   1              display_test(0x00,0x00);
+ 104   1              delayUs(4);
+ 105   1      }  
+ 106          // Wait some time and clear the screen
+ 107          void wait_and_clear(void)
+ 108          {
+ 109   1              delayMs(200);
+ 110   1              Clear();
+ 111   1      }
+ 112            
+ 113          void lcd_test()
+ 114          {
+ 115   1        uchar i;       //行 列
+ 116   1        uchar code tdata[][2]=
+ 117   1        {
+C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 10:23:41 PAGE 3   
+
+ 118   1              {0xff,0xff},    // All
+ 119   1              {0x00,0xFF},    // Virtical 
+ 120   1              {0xff,0x00},    // Virtical
+ 121   1              {0xAA,0xAA},    // Horizontal 
+ 122   1              {0x55,0x55},    // Horizontal 
+ 123   1              {0xAA,0x55},    // Stars 
+ 124   1              {0x55,0xaa},    // Stars 
+ 125   1        };
+ 126   1        for(i=0;i<7;i++)
+ 127   1        {
+ 128   2         display_test(tdata[i][0],tdata[i][1]);
+ 129   2         delayMs(800);
+ 130   2         wait_and_clear();
+ 131   2        }
+ 132   1      }  
+ 133          
+ 134           //------------------显示方框-----------------------
+ 135          void lcd_kuang(void)
+ 136          {
+ 137   1       uchar i,j;
+ 138   1        for(i=0;i<8;i++)
+ 139   1         {     
+ 140   2          for(j=0;j<128;j++)
+ 141   2               { 
+ 142   3                if((j==0)||(j==127)) { GotoXY(i,j); write_cmd_dat(1,0xff);}
+ 143   3                if(i==0)
+ 144   3                 { 
+ 145   4                  if((j>0)&&(j<127)) { GotoXY(i,j); write_cmd_dat(1,0x01);}}
+ 146   3                if(i==7)
+ 147   3                 { 
+ 148   4                  if((j>0)&&(j<127)) { GotoXY(i,j); write_cmd_dat(1,0x80);}}
+ 149   3               }
+ 150   2         }
+ 151   1      }
+ 152          
+ 153          
+ 154          void lcd_nested_frames(void)
+ 155          {
+ 156   1          uchar top = 0;
+ 157   1          uchar bottom = 7;
+ 158   1          uchar left = 0;
+ 159   1          uchar right = 127;
+ 160   1          uchar i, j;
+ 161   1      
+ 162   1          while (top <= bottom && left <= right)
+ 163   1          {
+ 164   2              // 上边
+ 165   2              for(j = left; j <= right; j++)
+ 166   2              {
+ 167   3                  GotoXY(top, j);
+ 168   3                  write_cmd_dat(1, 0xFF);
+ 169   3              }
+ 170   2      
+ 171   2              // 下边
+ 172   2              for(j = left; j <= right; j++)
+ 173   2              {
+ 174   3                  GotoXY(bottom, j);
+ 175   3                  write_cmd_dat(1, 0xFF);
+ 176   3              }
+ 177   2      
+ 178   2              // 左边
+ 179   2              for(i = top; i <= bottom; i++)
+C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 10:23:41 PAGE 4   
+
+ 180   2              {
+ 181   3                  GotoXY(i, left);
+ 182   3                  write_cmd_dat(1, 0xFF);
+ 183   3              }
+ 184   2      
+ 185   2              // 右边
+ 186   2              for(i = top; i <= bottom; i++)
+ 187   2              {
+ 188   3                  GotoXY(i, right);
+ 189   3                  write_cmd_dat(1, 0xFF);
+ 190   3              }
+ 191   2      
+ 192   2              // 缩小一圈
+ 193   2              top++;
+ 194   2              bottom--;
+ 195   2              left += 2;
+ 196   2              right -= 2;
+ 197   2          }
+ 198   1      }
+ 199          
+ 200          
+ 201          
+ 202          //------------------显示8X16点阵字符串-------------------------         
+ 203           void disp_ascii0816(uchar *ptrAscii, uchar startP, uchar startC)
+ 204                  {
+ 205   1      
+ 206   1                      uchar i,xclum;
+ 207   1                      uint index;
+ 208   1                      GotoXY(startP,startC);
+ 209   1                      while((*ptrAscii) != '\0')
+ 210   1                      {
+ 211   2                              index = ((*ptrAscii)-0x20)*16; 
+ 212   2                        
+ 213   2                              for(i=0;i<16;i++)
+ 214   2                              {
+ 215   3                               if(i%8==0)
+ 216   3                                {
+ 217   4                                xclum=startC;
+ 218   4                                }
+ 219   3                               write_data(AsciiDot0816[index++],startP+i/8,xclum++);                   
+ 220   3                              }
+ 221   2                              startC+=8;
+ 222   2                         ptrAscii++;                            
+ 223   2                      //      if((128-xclum)<8)
+ 224   2              //      {
+ 225   2                      // startP+=2;
+ 226   2                      //       startC=0;
+ 227   2                               //if(startP<8)
+ 228   2                      //       {Gotoxy(startP,startC);}
+ 229   2                      //      }
+ 230   2              }
+ 231   1      }
+ 232          
+ 233          
+ 234          
+ 235          //------------------显示5X8点阵字库串-------------------------
+ 236          void disp_ascii0508(uchar *ptrAscii, uchar startP, uchar startC)
+ 237          {
+ 238   1      
+ 239   1                      uchar i;
+ 240   1                      uint index;
+ 241   1                      GotoXY(startP,startC);
+C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 10:23:41 PAGE 5   
+
+ 242   1                      while((*ptrAscii) != '\0')
+ 243   1                      {
+ 244   2                              index = ((*ptrAscii) - 0x20)*5;
+ 245   2                              for (i=0;i<5;i++)       
+ 246   2                              {
+ 247   3                               write_data(AsciiDot0508[index++],startP,startC++);             
+ 248   3                              }
+ 249   2                         ptrAscii++;                            
+ 250   2                              if((128-startC)<6)
+ 251   2                              {
+ 252   3                               startP++;
+ 253   3                               startC=0;
+ 254   3                               if(startP<8)
+ 255   3                               {GotoXY(startP,startC);}
+ 256   3                              }
+ 257   2              }
+ 258   1      }
+ 259          //------------------显示一个汉字-------------------------
+ 260          void display_hanzi(uchar *p,uchar startP, uchar startC)
+ 261          {
+ 262   1      
+ 263   1         uchar i,j;
+ 264   1               for(i=0;i<2;i++)
+ 265   1                 {
+ 266   2               GotoXY(startP+i,startC);
+ 267   2                                for(j=0;j<16;j++)
+ 268   2                                  {write_cmd_dat(1,*p++);}//发送数据
+ 269   2           }
+ 270   1      }
+ 271          
+ 272          //------------------显示一个反白汉字-------------------------
+ 273          void display_hanzi_fan(uchar *p,uchar startP, uchar startC)
+ 274          {
+ 275   1      
+ 276   1         uchar i,j;
+ 277   1               for(i=0;i<2;i++)
+ 278   1                 {
+ 279   2               GotoXY(startP+i,startC);
+ 280   2                                for(j=0;j<16;j++)
+ 281   2                                  {write_cmd_dat(1,~*p++);}//取反发送数据
+ 282   2           }
+ 283   1      }
+ 284          
+ 285          //-------------显示一副128X64点阵的图片------------------------------
+ 286          void display_photo(uchar *p,uchar startP,uchar startC)   
+ 287          {
+ 288   1         uchar i,j;
+ 289   1         GotoXY(startP,startC);
+ 290   1         for(i=0;i<8;i++)
+ 291   1          {
+ 292   2                for(j=0;j<128;j++)
+ 293   2                {
+ 294   3                 write_data(*p++, startP+i, startC+j);
+ 295   3                }
+ 296   2              }
+ 297   1      }
+ 298          
+ 299          //-------------取反显示一副128X64点阵的图片------------------------------
+ 300          void trans_display_photo(uchar *p,uchar startP,uchar startC)     
+ 301          {
+ 302   1         uchar i,j;
+ 303   1         GotoXY(startP,startC);
+C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 10:23:41 PAGE 6   
+
+ 304   1         for(i=0;i<8;i++)
+ 305   1          {
+ 306   2                for(j=0;j<128;j++)
+ 307   2                {
+ 308   3                 write_data(~*p++, startP+i, startC+j);
+ 309   3                }
+ 310   2              }
+ 311   1      }
+ 312          void Init_IC()   
+ 313          {   
+ 314   1              
+ 315   1               cs  =  0;   
+ 316   1               P1  =  0xFF;   
+ 317   1               LCD_Reset(); 
+ 318   1               write_cmd_dat(0,0xE2); //initialize interal function   
+ 319   1               write_cmd_dat(0,0xA2); //LCD Bias selection(1/65 Duty,1/9Bias)         
+ 320   1               write_cmd_dat(0,0xA0); //ADC selection(SEG0->SEG128) //改变SEG扫描方向 
+ 321   1               write_cmd_dat(0,0xC8); //SHL selection(COM64->COM0) //改变COM扫描方向 
+ 322   1               write_cmd_dat(0,0x2F); //power control(VB,VR,VF=1,1,1)
+ 323   1              
+ 324   1               write_cmd_dat(0,0x25); //Regulator resistor select 110 内部电位器调节（对应不同的VG）
+ 325   1              
+ 326   1               write_cmd_dat(0,0x81); //set reference voltage mode
+ 327   1               write_cmd_dat(0,0x17); //set reference voltage //改变此值可以改变效果  
+ 328   1              
+ 329   1               write_cmd_dat(0,0x40); //Initial Display Line
+ 330   1               write_cmd_dat(0,0xAF); //Display on 
+ 331   1              
+ 332   1              
+ 333   1               Clear();
+ 334   1      
+ 335   1      }   
+ 336          
+ 337          
+ 338          //按键函数
+ 339          unsigned int HOLD()
+ 340          {
+ 341   1          if (Key1 == 0) 
+ 342   1              {  
+ 343   2              delayUs(5);  
+ 344   2              if (Key1 == 0) 
+ 345   2                      {  
+ 346   3                  while (Key1 == 0); 
+ 347   3                  return 1; 
+ 348   3              }
+ 349   2          }
+ 350   1          return 0; 
+ 351   1      }
+ 352          
+ 353          //按键函数
+ 354          unsigned int UP() 
+ 355          {
+ 356   1          if (Key2 == 0) 
+ 357   1              {  
+ 358   2              delayUs(5);  
+ 359   2              if (Key2 == 0) 
+ 360   2                      { 
+ 361   3                  while (Key2 == 0);  
+ 362   3                  return 1;  
+ 363   3              }
+ 364   2          }
+ 365   1          return 0; 
+C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 10:23:41 PAGE 7   
+
+ 366   1      }
+ 367          
+ 368          //按键函数
+ 369          unsigned int DN() 
+ 370          {
+ 371   1          if (Key3 == 0) 
+ 372   1              {  
+ 373   2              delayUs(5);  
+ 374   2              if (Key3 == 0) 
+ 375   2                      { 
+ 376   3                  while (Key3 == 0);  
+ 377   3                  return 1;  
+ 378   3              }
+ 379   2          }
+ 380   1          return 0; 
+ 381   1      }
+ 382          
+ 383          
+ 384          void Yehui_UI()
+ 385          {
+ 386   1              uchar i; 
+ 387   1              const unsigned char* hanzi_array[] = {guang, don, ye, hui, ke};
+ 388   1              const unsigned char* hanzi_array2[] = {ji, you, xian, gong, si};
+ 389   1              
+ 390   1              for ( i = 0; i < 5; i++) {
+ 391   2                      display_hanzi_fan(hanzi_array[i], 0, 20 + i * 16);
+ 392   2              }
+ 393   1      
+ 394   1              for ( i = 0; i < 5; i++) {
+ 395   2                      display_hanzi_fan(hanzi_array2[i], 2, 20 + i * 16);
+ 396   2              }
+ 397   1                  
+ 398   1              disp_ascii0816("128*64 Dots",4,20);
+ 399   1              disp_ascii0816("IC:ST7565R",  6,25);
+ 400   1              
+ 401   1      }
+ 402          
+ 403          void whatsapp()
+ 404          {
+ 405   1              disp_ascii0816("WhatsApp:",       2,0);
+ 406   1              disp_ascii0816("+86136 2249 6694",6,0);
+ 407   1              
+ 408   1      }
+ 409          
+ 410          
+ 411          
+ 412          void lcd_describe(void)
+ 413          {
+ 414   1              lcd_kuang();     
+ 415   1          disp_ascii0508("Support 8-Bit parallel", 2, 10);
+ 416   1          disp_ascii0508("Bus (8080 or 6800 Mode)", 4, 10);
+ 417   1          disp_ascii0508(" Serial Bus Interface",   6, 6);
+ 418   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1608    ----
+   CONSTANT SIZE    =   2787    ----
+   XDATA SIZE       =   ----      75
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 10:23:41 PAGE 8   
+
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

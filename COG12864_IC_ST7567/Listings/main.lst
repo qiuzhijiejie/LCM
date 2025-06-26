@@ -1,0 +1,615 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              04/03/2025 00:05:15 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\m
+                    -ain.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <reg51.H>
+   2          #include <intrins.h>
+   3          
+   4          sbit lcd_rs=P1^2;    /*½Ó¿Ú¶¨Òå:lcd_rs¾ÍÊÇLCDµÄrs*/
+   5          sbit lcd_sclk=P3^6;  /*½Ó¿Ú¶¨Òå:lcd_sclk¾ÍÊÇLCDµÄsclk*/
+   6          sbit lcd_sid=P3^7;   /*½Ó¿Ú¶¨Òå:lcd_sid¾ÍÊÇLCDµÄsid*/
+   7          sbit lcd_reset=P1^0; /*½Ó¿Ú¶¨Òå:lcd_reset¾ÍÊÇLCDµÄreset*/
+   8          sbit lcd_cs1=P1^1;   /*½Ó¿Ú¶¨Òå:lcd_cs1¾ÍÊÇLCDµÄcs1*/
+   9          
+  10          #define uchar unsigned char 
+  11          #define uint unsigned int
+  12          #define ulong unsigned long
+  13          
+  14          
+  15          void lcd_address(uchar page,uchar column) ;
+  16          
+  17          
+  18          uchar code bmp1[];
+  19          uchar code bmp2[];
+  20          uchar code jiong1[]={/*--  ÎÄ×Ö:  ‡å  --*/
+  21          /*--  ËÎÌå12;  ´Ë×ÖÌåÏÂ¶ÔÓ¦µÄµãÕóÎª£º¿íx¸ß=16x16   --*/
+  22          0x00,0xFE,0x82,0x42,0xA2,0x9E,0x8A,0x82,0x86,0x8A,0xB2,0x62,0x02,0xFE,0x00,0x00,
+  23          0x00,0x7F,0x40,0x40,0x7F,0x40,0x40,0x40,0x40,0x40,0x7F,0x40,0x40,0x7F,0x00,0x00};
+  24          
+  25          uchar code lei1[]={/*--  ÎÄ×Ö:  ®š  --*/
+  26          /*--  ËÎÌå12;  ´Ë×ÖÌåÏÂ¶ÔÓ¦µÄµãÕóÎª£º¿íx¸ß=16x16   --*/
+  27          0x80,0x80,0x80,0xBF,0xA5,0xA5,0xA5,0x3F,0xA5,0xA5,0xA5,0xBF,0x80,0x80,0x80,0x00,
+  28          0x7F,0x24,0x24,0x3F,0x24,0x24,0x7F,0x00,0x7F,0x24,0x24,0x3F,0x24,0x24,0x7F,0x00};
+  29          
+  30          
+  31          /*Ð´Ö¸Áîµ½LCDÄ£¿é*/
+  32          void transfer_command_lcd(int data1)   
+  33          {
+  34   1              char i;
+  35   1              lcd_rs=0;
+  36   1              for(i=0;i<8;i++)
+  37   1         {
+  38   2                      lcd_sclk=0;
+  39   2                      if(data1&0x80) lcd_sid=1;
+  40   2                      else lcd_sid=0;
+  41   2                      lcd_sclk=1;
+  42   2                      data1=data1<<=1;
+  43   2         }
+  44   1      }
+  45          
+  46          /*Ð´Êý¾Ýµ½LCDÄ£¿é*/
+  47          void transfer_data_lcd(int data1)
+  48          {
+  49   1              char i;
+  50   1              lcd_rs=1;
+  51   1              for(i=0;i<8;i++)
+  52   1         {
+  53   2                      lcd_sclk=0;
+  54   2                      if(data1&0x80) lcd_sid=1;
+C51 COMPILER V9.60.7.0   MAIN                                                              04/03/2025 00:05:15 PAGE 2   
+
+  55   2                      else lcd_sid=0;
+  56   2                      lcd_sclk=1;
+  57   2                      data1=data1<<=1;
+  58   2          }
+  59   1      }
+  60          
+  61          /*ÑÓÊ±*/
+  62          void delay(int n_ms)               
+  63          {
+  64   1       int j,k;
+  65   1       for(j=0;j<n_ms;j++)
+  66   1               for(k=0;k<110;k++);
+  67   1      }
+  68          
+  69          
+  70          /*µÈ´ýÒ»¸ö°´¼ü£¬ÎÒµÄÖ÷°åÊÇÓÃP2.0ÓëGNDÖ®¼ä½ÓÒ»¸ö°´¼ü*/
+  71          void waitkey()
+  72          {
+  73   1       repeat:
+  74   1              if (P2&0x01) goto repeat;
+  75   1              else delay(6);
+  76   1              if (P2&0x01) goto repeat;
+  77   1              else
+  78   1              delay(40);;
+  79   1      }
+  80          
+  81          /*LCDÄ£¿é³õÊ¼»¯*/
+  82          void initial_lcd()
+  83          {
+  84   1      //              lcd_cs1=0;
+  85   1              lcd_reset=0;                /*µÍµçÆ½¸´Î»*/
+  86   1              delay(20);
+  87   1              lcd_reset=1;                    /*¸´Î»Íê±Ï*/
+  88   1              delay(20);          
+  89   1                      transfer_command_lcd(0xe2);      /*Èí¸´Î»*/
+  90   1                      delay(5);
+  91   1                      transfer_command_lcd(0x2c);  /*ÉýÑ¹²½¾Û1*/
+  92   1                      delay(5);       
+  93   1                      transfer_command_lcd(0x2e);  /*ÉýÑ¹²½¾Û2*/
+  94   1                      delay(5);
+  95   1                      transfer_command_lcd(0x2f);  /*ÉýÑ¹²½¾Û3*/
+  96   1                      delay(5);
+  97   1                      transfer_command_lcd(0x24);  /*´Öµ÷¶Ô±È¶È£¬¿ÉÉèÖÃ·¶Î§0x20¡«0x27*/
+  98   1                      transfer_command_lcd(0x81);  /*Î¢µ÷¶Ô±È¶È*/
+  99   1                      transfer_command_lcd(0x0d);  /*0x1a,Î¢µ÷¶Ô±È¶ÈµÄÖµ£¬¿ÉÉèÖÃ·¶Î§0x00¡«0x3f*/
+ 100   1                      transfer_command_lcd(0xa2);  /*1/9Æ«Ñ¹±È£¨bias£©*/
+ 101   1                      transfer_command_lcd(0xc8);  /*ÐÐÉ¨ÃèË³Ðò£º´ÓÉÏµ½ÏÂ*/
+ 102   1                      transfer_command_lcd(0xa0);  /*ÁÐÉ¨ÃèË³Ðò£º´Ó×óµ½ÓÒ*/
+ 103   1                      transfer_command_lcd(0x40);  /*ÆðÊ¼ÐÐ£ºµÚÒ»ÐÐ¿ªÊ¼*/
+ 104   1                      transfer_command_lcd(0xaf);  /*¿ªÏÔÊ¾*/
+ 105   1      //              lcd_cs1=1;
+ 106   1      
+ 107   1      
+ 108   1      
+ 109   1      //      delay(100);     // ÒÔÏÂ¼¸ÐÐ´úÂëÊÇ²úÉúÓ²¼þ¸´Î»
+ 110   1      //      lcd_reset = 0;
+ 111   1      //      delay(50);      // 
+ 112   1      //      lcd_reset = 1;
+ 113   1      //      delay(100);     // 
+ 114   1      
+ 115   1      //      transfer_command_lcd(0xe2);     //soft reset¿ªÊ¼½øÐÐÈí¸´Î»
+ 116   1      //      delay(10);
+C51 COMPILER V9.60.7.0   MAIN                                                              04/03/2025 00:05:15 PAGE 3   
+
+ 117   1      //      transfer_command_lcd(0xa2);     //bias selectÈ·¶¨Îª1/9BIAS,1/65duty
+ 118   1      //      delay(2);
+ 119   1      //      transfer_command_lcd(0xa0);     // ADC selectÈ·¶¨SEG·´É¨seg0--->seg131
+ 120   1      //      delay(2);
+ 121   1      //      transfer_command_lcd(0xc8);     //SHL selectÈ·¶¨COMÎªÕýÉ¨com63--->com0
+ 122   1      //      delay(2);
+ 123   1      //      transfer_command_lcd(0x25);     //regulator resistor select V0µ÷Õûµç×èÉè¶¨(1 + Rb/Ra)=5.0               0X26+0X41               vdd=5
+             -.0v,vop=10.0v                                                 0x26Ô­À´µÄÊýÖµ
+ 124   1      //      delay(2);
+ 125   1      //      transfer_command_lcd(0x81);     //The Electronic Volume (Double Byte Command)Êý×ÖµçÎ»Æ÷µ÷½ÚVOÊä³öµçÑ¹(Ò²¾ÍÊ
+             -Ç¶Ô±È¶È)Á½×Ö½Ú                                 0x81Ô­À´µÄÊýÖµ
+ 126   1      //      transfer_command_lcd(25);//vop ÉèÖÃ
+ 127   1      //      delay(2);
+ 128   1      //      transfer_command_lcd(0x2c);     //power control1 onÄÚ²¿±¶Ñ¹µçÂ·¿ªÆô,Ðè·ÖÒÔÏÂÈý²½´ò¿ªµçÂ·
+ 129   1      //      delay(2);
+ 130   1      //      transfer_command_lcd(0x2e);     //power control2
+ 131   1      //      delay(2);
+ 132   1      //      transfer_command_lcd(0x2f);     //power control3
+ 133   1      //      delay(2);
+ 134   1      //      transfer_command_lcd(0xf1);     //The Booster Ratio (Double Byte Command)Éè¶¨±¶Ñ¹Êý,Á½×Ö½Ú
+ 135   1      //      delay(2);
+ 136   1      //      transfer_command_lcd(0x00);     //"00"×î´ó4±¶Ñ¹,"01"×î´ó5±¶Ñ¹,"03"×î´ó6±¶Ñ¹
+ 137   1      //      delay(2);
+ 138   1      //      transfer_command_lcd(0x60);     //Éè¶¨ÆðÊ¼ÐÐµÚ1ÐÐ
+ 139   1      //      delay(2);
+ 140   1      //      transfer_command_lcd(0xa4);     //Display All Points ON/OFF to Normal display modeÕý³£ÏÔÊ¾Ä£Ê½Ñ¡Ôñ
+ 141   1      //      delay(2);
+ 142   1      //      transfer_command_lcd(0xaf);     //Display ON/OFF¿ªÏÔÊ¾Éè¶¨
+ 143   1      //      delay(2);
+ 144   1      }
+ 145          
+ 146          
+ 147          void lcd_address(uchar page,uchar column) 
+ 148          { 
+ 149   1              column=column-1; //ÎÒÃÇÆ½ËùËµµÄµÚ1ÁÐ£¬ÔÚLCDÇý¶¯ICÀïÊÇµÚ0ÁÐ¡£ËùÒÔÔÚÕâÀï¼õ1
+ 150   1              page=page-1; //ÉèÖÃÒ³µØÖ·¡£Ã¿Ò³ÊÇ8ÐÐ¡£Ò»¸ö»­ÃæµÄ64ÐÐ±»·Ö³É8¸öÒ³¡£ÎÒÃÇÆ½³£
+ 151   1      //                              ËµµÄµÚ1Ò³£¬ÔÚLCDÇý¶¯ICÀïÊÇµÚ0Ò³£¬ËùÒÔÔÚÕâÀï¼õÈ¥1*/ 
+ 152   1              
+ 153   1              transfer_command_lcd(0xb0+page); 
+ 154   1              transfer_command_lcd(((column>>4)&0x0f)+0x10); //ÉèÖÃÁÐµØÖ·µÄ¸ß4Î» 
+ 155   1              transfer_command_lcd(column&0x0f);             //ÉèÖÃÁÐµØÖ·µÄµÍ4Î» 
+ 156   1      } 
+ 157          
+ 158          
+ 159          /*È«ÆÁÇåÆÁ*/
+ 160          void clear_screen()
+ 161          {
+ 162   1              unsigned char i,j;
+ 163   1              lcd_cs1=0;
+ 164   1              for(i=0;i<9;i++)
+ 165   1              {
+ 166   2                      transfer_command_lcd(0xb0+i);
+ 167   2                      transfer_command_lcd(0x10);
+ 168   2                      transfer_command_lcd(0x00);
+ 169   2                      for(j=0;j<132;j++)
+ 170   2                      {
+ 171   3                              transfer_data_lcd(0x00);
+ 172   3                      }
+ 173   2               }
+ 174   1              lcd_cs1=1;
+ 175   1      }
+ 176          /*ÏÔÊ¾16x16µãÕóÍ¼Ïñ¡¢ºº×Ö¡¢ÉúÆ§×Ö»ò16x16µãÕóµÄÆäËûÍ¼±ê*/
+C51 COMPILER V9.60.7.0   MAIN                                                              04/03/2025 00:05:15 PAGE 4   
+
+ 177          void display_graphic_16x16(uint page,uint column,uchar *dp)
+ 178          {
+ 179   1              uint i,j;
+ 180   1              uchar page_address;
+ 181   1              uchar column_address_L,column_address_H;
+ 182   1              column=column-1;
+ 183   1              page_address = 0xb0+page-1;
+ 184   1              column_address_L =column&0x0f;
+ 185   1              column_address_H =((column>>4)&0x0f)+0x10;
+ 186   1              lcd_cs1=0;
+ 187   1              for(j=0;j<2;j++)
+ 188   1              {
+ 189   2                      transfer_command_lcd(page_address+j);   /*ÉèÖÃÒ³µØÖ·*/
+ 190   2                      transfer_command_lcd(column_address_H); /*ÉèÖÃÁÐµØÖ·µÄ¸ß4Î»*/
+ 191   2                      transfer_command_lcd(column_address_L); /*ÉèÖÃÁÐµØÖ·µÄµÍ4Î»*/
+ 192   2                      for (i=0;i<16;i++)
+ 193   2                      {       
+ 194   3                              transfer_data_lcd(*dp);                                 /*Ð´Êý¾Ýµ½LCD,Ã¿Ð´ÍêÒ»¸ö8Î»µÄÊý¾ÝºóÁÐµØÖ·×Ô¶¯¼Ó1*/
+ 195   3                              dp++;
+ 196   3                      }
+ 197   2              }
+ 198   1              lcd_cs1=1;
+ 199   1      }
+ 200          
+ 201          
+ 202          /*ÏÔÊ¾8x16µãÕóÍ¼Ïñ¡¢ASCII, »ò8x16µãÕóµÄ×ÔÔì×Ö·û¡¢ÆäËûÍ¼±ê*/
+ 203          void display_graphic_8x16(uint page,uchar column,uchar *dp)
+ 204          {
+ 205   1              uint i,j;
+ 206   1              uchar page_address;
+ 207   1              uchar column_address_L,column_address_H;
+ 208   1              lcd_cs1=0;
+ 209   1              column=column-1;
+ 210   1              page_address = 0xb0+page-1;
+ 211   1              column_address_L =column&0x0f;
+ 212   1              column_address_H =((column>>4)&0x0f)+0x10;
+ 213   1      
+ 214   1              for(j=0;j<2;j++)
+ 215   1              {
+ 216   2                      transfer_command_lcd(page_address+j);   /*ÉèÖÃÒ³µØÖ·*/
+ 217   2                      transfer_command_lcd(column_address_H); /*ÉèÖÃÁÐµØÖ·µÄ¸ß4Î»*/
+ 218   2                      transfer_command_lcd(column_address_L); /*ÉèÖÃÁÐµØÖ·µÄµÍ4Î»*/
+ 219   2                      for (i=0;i<8;i++)
+ 220   2                      {       
+ 221   3                              transfer_data_lcd(*dp);                                 /*Ð´Êý¾Ýµ½LCD,Ã¿Ð´ÍêÒ»¸ö8Î»µÄÊý¾ÝºóÁÐµØÖ·×Ô¶¯¼Ó1*/
+ 222   3                              dp++;
+ 223   3                      }
+ 224   2              }
+ 225   1              lcd_cs1=1;
+ 226   1      }
+ 227          
+ 228          
+ 229          /*ÏÔÊ¾5*7µãÕóÍ¼Ïñ¡¢ASCII, »ò5x7µãÕóµÄ×ÔÔì×Ö·û¡¢ÆäËûÍ¼±ê*/
+ 230          void display_graphic_5x7(uint page,uchar column,uchar *dp)
+ 231          {
+ 232   1              uint col_cnt;
+ 233   1              uchar page_address;
+ 234   1              uchar column_address_L,column_address_H;
+ 235   1              page_address = 0xb0+page-1;
+ 236   1              column=column-1;        
+ 237   1              lcd_cs1=0;      
+ 238   1              
+C51 COMPILER V9.60.7.0   MAIN                                                              04/03/2025 00:05:15 PAGE 5   
+
+ 239   1              column_address_L =column&0x0f;
+ 240   1              column_address_H =((column>>4)&0x0f)+0x10;
+ 241   1              
+ 242   1              transfer_command_lcd(page_address);             /*Set Page Address*/
+ 243   1              transfer_command_lcd(column_address_H); /*Set MSB of column Address*/
+ 244   1              transfer_command_lcd(column_address_L); /*Set LSB of column Address*/
+ 245   1              
+ 246   1              for (col_cnt=0;col_cnt<8;col_cnt++)
+ 247   1              {       
+ 248   2                      transfer_data_lcd(*dp);
+ 249   2                      dp++;
+ 250   2              }
+ 251   1              lcd_cs1=1;
+ 252   1      }
+ 253          
+ 254          /****Òº¾§ÆÁ²âÊÔ³ÌÐò£º±ß¿ò²âÊÔ***/
+ 255          void display_graphic128x64(char *dp)
+ 256          {
+ 257   1              unsigned char i,j;
+ 258   1              lcd_cs1=0;
+ 259   1              for(i=0;i<9;i++)
+ 260   1         {
+ 261   2                      transfer_command_lcd(0xb0+i);
+ 262   2                      transfer_command_lcd(0x10);
+ 263   2                      transfer_command_lcd(0x00);
+ 264   2                      for(j=0;j<128;j++)
+ 265   2                      {
+ 266   3                              transfer_data_lcd(*dp);
+ 267   3                                      dp++;
+ 268   3                      }
+ 269   2         }
+ 270   1              lcd_cs1=1;
+ 271   1      
+ 272   1      }
+ 273          
+ 274          /****Òº¾§ÆÁ²âÊÔ³ÌÐò***/
+ 275          void test_screen(uchar data1,uchar data2)
+ 276          {
+ 277   1              unsigned char i,j;
+ 278   1              lcd_cs1=0;      
+ 279   1              for(i=0;i<9;i++)
+ 280   1         {
+ 281   2                      transfer_command_lcd(0xb0+i);
+ 282   2                      transfer_command_lcd(0x10);
+ 283   2                      transfer_command_lcd(0x00);
+ 284   2                      for(j=0;j<64;j++)
+ 285   2                      {
+ 286   3                              transfer_data_lcd(data1);
+ 287   3                              transfer_data_lcd(data2);
+ 288   3                      }
+ 289   2         }
+ 290   1              lcd_cs1=1;
+ 291   1      }
+ 292          
+ 293          //===ÏÔÊ¾²âÊÔ»­Ãæ£ºÀýÈçÈ«ÏÔÊ¾£¬¸ôÐÐÏÔÊ¾£¬¸ôÁÐÏÔÊ¾£¬Ñ©»¨ÏÔÊ¾===== 
+ 294          void test_display(uchar data1,uchar data2) 
+ 295          { 
+ 296   1              int i,j; 
+ 297   1              for(j=0;j<8;j++) 
+ 298   1               {
+ 299   2               lcd_address(j+1,0); 
+ 300   2              for(i=0;i<128;i++) 
+C51 COMPILER V9.60.7.0   MAIN                                                              04/03/2025 00:05:15 PAGE 6   
+
+ 301   2                {
+ 302   3               transfer_data_lcd(data1);    
+ 303   3               transfer_data_lcd(data2);  
+ 304   3                }
+ 305   2               }           
+ 306   1      } 
+ 307          
+ 308          void sleep() 
+ 309          { 
+ 310   1              transfer_command_lcd(0xac);/*¾²Ì¬Í¼±ê¹Ø±Õ*/ 
+ 311   1              transfer_command_lcd(0x00);/*¾²Ì¬Í¼±ê¼Ä´æÆ÷ÉèÖÃ£º¹Ø±Õ¡£´ËÖ¸ÁîÓëÉÏÊöÖ¸ÁîÒ»ÆðÍê³É¾²Ì¬Í¼±ê¹Ø±Õ*/ 
+ 312   1              transfer_command_lcd(0xae);/*ÏÔÊ¾£º¹Ø*/ 
+ 313   1              transfer_command_lcd(0xa5);/*È«ÆÁÏÔÊ¾£º¿ª*/ 
+ 314   1      } 
+ 315          
+ 316          void wake() 
+ 317          { 
+ 318   1              transfer_command_lcd(0xa4);/*È«ÆÁÏÔÊ¾£º¹Ø¡£½øÈëÕý³£Ä£Ê½*/ 
+ 319   1              transfer_command_lcd(0xad);/*¾²Ì¬Í¼±ê¿ªÆô*/ 
+ 320   1              transfer_command_lcd(0x03);/*¾²Ì¬Í¼±ê¼Ä´æÆ÷ÉèÖÃ£º¿ª¡£´ËÖ¸ÁîÓëÉÏÊöÖ¸ÁîÒ»ÆðÍê³É¾²Ì¬Í¼±ê¿ªÆô*/ 
+ 321   1              transfer_command_lcd(0xaf);/*ÏÔÊ¾£º¿ª*/ 
+ 322   1      } 
+ 323          //===¿ªÊ¼ ¡°¶ÁÈ¡-ÐÞ¸Ä-Ð´Èë¡± Ä£Ê½==== 
+ 324          void Start_Read_Modify_Write() 
+ 325          { 
+ 326   1              transfer_command_lcd(0xe0); 
+ 327   1       
+ 328   1      } 
+ 329          //===½áÊø ¡°¶ÁÈ¡-ÐÞ¸Ä-Ð´Èë¡± Ä£Ê½==== 
+ 330          void End_Read_Modify_Write() 
+ 331          { 
+ 332   1              transfer_command_lcd(0xee); 
+ 333   1       
+ 334   1      } 
+ 335           
+ 336          //´ÓÒº¾§ÆÁÇý¶¯ICÖÐ¶ÁÈ¡Êý¾Ý,º¬Ò»´Î¿Õ¶ÁºÍÒ»´ÎÕýÊ½¶ÁÈ¡ 
+ 337          uchar read_data_twice() 
+ 338          { 
+ 339   1       
+ 340   1      //       uchar ret_data=0; 
+ 341   1      //       P1=0xff; 
+ 342   1      //       lcd_cs1=0; 
+ 343   1      //       rs=1; 
+ 344   1      //       rw=1; 
+ 345   1      //       
+ 346   1      //      //Ò»´Î¿Õ¶Á---------------- 
+ 347   1      //       e=0; 
+ 348   1      //       e=1;   
+ 349   1      //       delay_us(1); 
+ 350   1      //       
+ 351   1      //      //---Ò»´ÎÕýÊ½¶Á------------ 
+ 352   1      //       e=0;   
+ 353   1      //       e=1;   
+ 354   1      //       delay_us(1); 
+ 355   1      //      //------------------------ 
+ 356   1      //       ret_data=P1; 
+ 357   1      //       cs1=1; 
+ 358   1      //       e=0; 
+ 359   1      //       return(ret_data); 
+ 360   1      
+ 361   1      
+ 362   1          uchar i, received_data = 0;
+C51 COMPILER V9.60.7.0   MAIN                                                              04/03/2025 00:05:15 PAGE 7   
+
+ 363   1      
+ 364   1          for (i = 0; i < 8; i++)  
+ 365   1          {
+ 366   2              received_data <<= 1;  // ×óÒÆ£¬Îª½ÓÊÕµÄÊý¾ÝÌÚ³öÎ»ÖÃ
+ 367   2              lcd_sclk = 0;         // ÏÂ½µÑØ×¼±¸½ÓÊÕÊý¾Ý
+ 368   2              delay(1);  
+ 369   2      
+ 370   2              if (lcd_sid)          // ¶ÁÈ¡ SPI Êý¾ÝÒý½Å
+ 371   2              {
+ 372   3                  received_data |= 0x01;  // ÖÃÎ»×îµÍÎ»
+ 373   3              }
+ 374   2      
+ 375   2              lcd_sclk = 1;  // ÉÏÉýÑØËø´æ
+ 376   2              delay(1);
+ 377   2          }
+ 378   1      
+ 379   1          return received_data;
+ 380   1      } 
+ 381           
+ 382          //»­µãº¯Êý¡£À¨ºÅÀïµÄ²ÎÊý·Ö±ðÎª£º×ø±ê(column,row),rowÎªÐÐ,¹²64ÐÐ£¬×îÐ¡ÖµÎª1£¬×î´óÖµÎª64; columnÎªÁÐ,¹²128ÁÐ
+             -,×îÐ¡ÖµÎª1£¬×î´óÖµÎª128. 
+ 383          void draw_point(uint column,uint row)   
+ 384          { 
+ 385   1       uchar i,dat,page; 
+ 386   1       row--;                                                  
+ 387   1       column--;     //ÎÒÃÇÆ½³£µÄ¡°µÚ1ÐÐ¡±ÔÚÒº¾§ÆÁÀï½Ð¡°µÚ0ÐÐ¡±£¬ËùÒÔ¼õ1£¬Í¬Àí,ÁÐÒ²Èç´Ë 
+ 388   1       page=row/8; 
+ 389   1       page++; 
+ 390   1       lcd_address(page,column); //ÉèÖÃµØÖ· 
+ 391   1       Start_Read_Modify_Write(); //¿ªÊ¼ ¡°¶ÁÈ¡-ÐÞ¸Ä-Ð´Èë¡± Ä£Ê½ 
+ 392   1       i=row%8;     //ÐÐÎ»ÖÃ·Ö³ÉÁËµÚ¼¸Ò³ºÍÕâÒ»Ò³ÄÚµÄµÚ¼¸Î»,i=y%8¼´ÊÇÕâ¸öµÚ¼¸Î» 
+ 393   1       dat=1; 
+ 394   1       dat<<=i;     //ÓÃÒÆÎ»µÄ·½·¨,¸ù¾ÝÕâ¸ö¡°µÚ¼¸Î»¡±Ëã³öÕâ¸ö×Ö½ÚµÄÊýÖµÀ´£¬Õâ¸ö¾ÍÊÇÎÒÃÇÒª»­µÄ¡°µã¡±µÄÒ»¸ö×Ö½ÚÊý¾
+             -Ý 
+ 395   1       dat|=read_data_twice();  //Òª»­µãµÄÊý¾ÝºÍ¸Õ¶Áµ½µÄÔ­À´Òº¾§ÆÁµÄÎ»ÖÃÉÏµÄÊý¾Ý½øÐÐ¡°»ò¡±ÔËËã£¬ÒÔÃâ¸²¸ÇÔ­À´µÄÊý
+             -¾Ý¡£ 
+ 396   1       transfer_data_lcd(dat); 
+ 397   1       
+ 398   1       End_Read_Modify_Write(); //½áÊø ¡°¶ÁÈ¡-ÐÞ¸Ä-Ð´Èë¡± Ä£Ê½ 
+ 399   1      } 
+ 400                  
+ 401           
+ 402          //¡°»­Ö±Ïß¡±º¯ÊýµÄ×¢ÒâÊÂÏî£º 
+ 403          //Ö±ÏßµÄÐ±ÂÊk=(y2-y1)/(x2-x1)£¬k\x1\y1\x2\y2±ØÐëÊÇ¸¡µãÐÍµÄÊý¾Ý£¬³ý´ËÖ®Íâ£¬ÓÉÓÚÖÕµã×ø±ê¿ÉÄÜÐ¡ÓÚÆðµã×ø±ê£¬Ëù
+             -ÒÔÐ±ÂÊ
+ 404          //»¹ÓÐ¿ÉÄÜÊÇ¸ºÊýµÄ¡£ 
+ 405          //ÓÉÓÚk=(y2-y1)/(x2-x1)£¬ËùÒÔÔÚx2=x1Ê±£¬µ¼ÖÂ³ýÊýÎª0£¬ÊýÑ§ÉÏÕâÊÇÐÐ²»Í¨µÄ£¬ËùÒÔÁíÍâÏë°ì·¨¡£Í¬Àík_y=(x2-x1)/(
+             -y2-y1)
+ 406          //µ±y2=y1Ê±Ò²ÊÇÐÐ²»Í¨µÄ¡£ 
+ 407          //ÁíÍâintÊÇ16Î»µÄÕûÊý£¬ucharÈ´Ö»ÓÐ8Î».
+ 408          //void draw_line(float x1,float y1,float x2, float y2) 
+ 409          //{ 
+ 410          // int i;float k,k_y,x,z; 
+ 411          // if( (y2-y1)==0&&(x2-x1)!=0 ) //Èç¹ûy2-y1=0ÇÒx2-x1²»µÈÓÚ0£¬Ôò»­Ò»ÌõºáÏß¡£ 
+ 412          // { 
+ 413          //  if(x2<x1)       //Èç¹ûx2<x1£¬ÔòÁ½¸ö×ø±ê»¥»»¡£»­ºáÏßÊ±£¬´Ó×óµ½ÓÒÓë´ÓÓÒµ½×óÊÇÒ»ÑùµÄ½á¹û¡£ 
+ 414          //  { 
+ 415          //   z=x2; x2=x1;x1=z; 
+ 416          //  } 
+ 417          //  for(i=0;i<=(x2-x1);i++) 
+ 418          //  { 
+ 419          //   draw_point((x1+i),y1); 
+C51 COMPILER V9.60.7.0   MAIN                                                              04/03/2025 00:05:15 PAGE 8   
+
+ 420          //  } 
+ 421          // } 
+ 422          // else if( ((x2-x1)==0)&&((y2-y1)!=0 )) //Èç¹ûx2-x1=0ÇÒy2-y1²»µÈÓÚ0£¬Ôò»­Ò»ÌõÊúÏß¡£ 
+ 423          // { 
+ 424          //  if(y2<y1)       //Èç¹ûy2<y1£¬ÔòÁ½¸ö×ø±ê»¥»»¡£»­ÊúÏßÊ±£¬´ÓÉÏµ½ÏÂÓë´ÓÏÂµ½ÉÏÊÇÒ»ÑùµÄ½á¹û¡£ 
+ 425          //  { 
+ 426          //   z=y2; y2=y1;y1=z; 
+ 427          //  } 
+ 428          //  for(i=0;i<=(y2-y1);i++) 
+ 429          //  { 
+ 430          //   draw_point(x1,(y1+i)); 
+ 431          //  } 
+ 432          // } 
+ 433          // else if((x2-x1)==0&&(y2-y1)==0)     //Èç¹û (x2=x1)ÇÒ(y2=y1)£¬»­Ò»¸öµã¼´¿É 
+ 434          // { 
+ 435          //  draw_point(x1,y2);  
+ 436          // } 
+ 437          // 
+ 438          // else           //·ñÔò£¬»­Ð±Ïß 
+ 439          // { 
+ 440          //  if(x2<x1)        //Èç¹ûx2<x1£¬ÔòÁ½¸ö×ø±ê»¥»»¡££¨´ÓÆðµã»­µ½ÖÕµã£©Óë£¨´ÓÖÕµã»­µ½Æðµã£©½á¹ûÊÇÒ»ÑùµÄ¡£ 
+ 441          //  { 
+ 442          //   z=y2; y2=y1;y1=z; 
+ 443          //   z=x2; x2=x1;x1=z; 
+ 444          //  } 
+ 445          //  else;       // 
+ 446          //          
+ 447          //  if(fabs(y2-y1)<=fabs(x2-x1)) //Èç¹û(y2-y1)µÄ¾ø¶ÔÖµÐ¡ÓÚµÈÓÚ£¨x2-x1£©µÄ¾ø¶ÔÖµ£¬¾ÍÆô¶¯·½°¸Ò»£ºxÖðµãÉ¨Ãè£¬
+             -y°´Ð±ÂÊ¼ÆËã£¬È»ºó»­µã£¨x+i£¬y£© 
+ 448          //  { 
+ 449          //   k=(y2-y1)/(x2-x1);        //kÊÇÐ±ÂÊ 
+ 450          //   for(i=0;i<=(x2-x1);i++) 
+ 451          //   { 
+ 452          //    draw_point((x1+i),(y1+k*i)); 
+ 453          //   } 
+ 454          // 
+ 455          //  } 
+ 456          //  else          //Èç¹û(y2-y1)µÄ¾ø¶ÔÖµ´óÓÚ(x2-x1)µÄ¾ø¶ÔÖµ£¬¾ÍÆô¶¯·½°¸¶þ£ºyÖðµãÉ¨Ãè£¬x°´Ð±ÂÊ¼ÆËã£¬È»ºó»­µã
+             -£¨x,y+i£©»ò£¨x,y-i) 
+ 457          //  { 
+ 458          //   k_y=fabs((x2-x1)/(y2-y1)); //k_yÊÇ·´Ð±ÂÊ£¨¼´x³ýÒÔy£©¡£fabsÊÇ¸¡µãÐÍÊý¾ÝµÄ¾ø¶ÔÖµ 
+ 459          //   for(i=0;i<=fabs(y2-y1);i++) 
+ 460          //   { 
+ 461          //    x=x1+k_y*i; 
+ 462          //    if((y2-y1)>0) 
+ 463          //    { 
+ 464          //     draw_point(x,(y1+i)); 
+ 465          //    } 
+ 466          //    else 
+ 467          //    { 
+ 468          //    draw_point(x,(y1-i));
+ 469          
+ 470          //    }
+ 471          //   }
+ 472          //  }
+ 473          // }
+ 474          // } 
+ 475          
+ 476           
+ 477           
+ 478           
+ 479          //===============main program===================
+C51 COMPILER V9.60.7.0   MAIN                                                              04/03/2025 00:05:15 PAGE 9   
+
+ 480          void main(void)
+ 481          {     
+ 482   1              initial_lcd();
+ 483   1              while(1)
+ 484   1              {
+ 485   2                      display_graphic128x64(bmp1);
+ 486   2                      waitkey();                      
+ 487   2                      test_screen(0xff,0xff);
+ 488   2                      waitkey();                      
+ 489   2                      test_screen(0x55,0xaa);
+ 490   2                      waitkey();                      
+ 491   2                      test_screen(0xaa,0x55);
+ 492   2                      waitkey();                              
+ 493   2              }
+ 494   1      }
+ 495          char code bmp1[]={
+*** WARNING C231 IN LINE 495 OF main.c: 'bmp1': redefinition
+ 496          /*--  µ÷ÈëÁËÒ»·ùÍ¼Ïñ£ºD:\e\ÐÂ¿ª·¢²¿\ÏÔÊ¾Í¼°¸ÊÕ²Ø\¾§ÁªÑ¶LOGOÐ¡Í¼ºÚ°×-ÓÐ¿ò.bmp  --*/
+ 497          /*--  ¿í¶Èx¸ß¶È=128x64  --*/
+ 498          0xFF,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x81,
+ 499          0x81,0x81,0x81,0x81,0xC1,0xC1,0xC1,0xC1,0xC1,0xC1,0xC1,0xC1,0xE1,0xE1,0xE1,0xE1,
+ 500          0xE1,0xE1,0xE1,0xE1,0xE1,0xE1,0xE1,0xE1,0xE1,0xE1,0xE1,0xE1,0xE1,0xC1,0xC1,0xC1,
+ 501          0xC1,0xC1,0xC1,0xC1,0xC1,0x81,0x81,0x81,0x81,0x81,0x01,0x01,0x01,0x01,0x01,0x01,
+ 502          0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,
+ 503          0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,
+ 504          0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,
+ 505          0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0xFF,
+ 506          0xFF,0x00,0x00,0x00,0x04,0x04,0x04,0x02,0x02,0x02,0x02,0x03,0x03,0x03,0x01,0x01,
+ 507          0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,
+ 508          0x01,0x01,0x01,0x01,0x03,0x03,0x03,0x03,0x03,0x03,0x07,0x07,0x07,0x07,0x0F,0x0F,
+ 509          0x0F,0x0F,0x1F,0x1F,0x1F,0x1F,0x3F,0x3F,0x7F,0x7F,0x7F,0xFF,0xFF,0xFF,0xFE,0xFE,
+ 510          0xFE,0xFC,0xFC,0xFC,0xF8,0xF8,0xF8,0xF0,0xF0,0xE0,0xE0,0xE0,0xC0,0xC0,0x80,0x80,
+ 511          0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+ 512          0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+ 513          0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xFF,
+ 514          0xFF,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+ 515          0x00,0x00,0x00,0x00,0x00,0xF0,0xF0,0xF0,0xF0,0xF0,0xF0,0xF0,0xF0,0xF0,0xF0,0xF0,
+ 516          0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xF0,0xF0,0xF0,0xF0,0xF0,
+ 517          0xF0,0xF0,0xF0,0xF0,0xF0,0xF0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x01,0x03,
+ 518          0x03,0x07,0x0F,0x0F,0x1F,0x1F,0x3F,0x7F,0x7F,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
+ 519          0xFF,0xFF,0xFE,0xFE,0xFC,0xF8,0xF0,0xF0,0xE0,0xE0,0xC0,0x80,0x00,0x00,0x00,0x00,
+ 520          0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0xE0,0xF0,0xF0,0xF0,0xF0,0xF0,0xF0,
+ 521          0xF0,0xF0,0xF0,0xF0,0xF0,0xF0,0xF0,0xF0,0xF0,0xF0,0x70,0x30,0x10,0x00,0x00,0xFF,
+ 522          0xFF,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+ 523          0x00,0x00,0x00,0x00,0x00,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
+ 524          0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xFF,0xFF,0xFF,0xFF,0xFF,
+ 525          0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+ 526          0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x01,0x03,0x07,0x07,0x0F,
+ 527          0x1F,0x3F,0x3F,0x7F,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFE,0xFC,
+ 528          0xF8,0xF8,0xF0,0xE0,0xF0,0xF8,0xFC,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
+ 529          0xFF,0xFF,0x7F,0x3F,0x1F,0x0F,0x07,0x03,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0xFF,
+ 530          0xFF,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+ 531          0x00,0x00,0x00,0x00,0x00,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
+ 532          0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xFF,0xFF,0xFF,0xFF,0xFF,
+ 533          0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+ 534          0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+ 535          0x00,0x00,0x00,0x00,0x00,0x03,0x03,0x07,0x0F,0x9F,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
+ 536          0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x9F,0x0F,0x07,
+ 537          0x03,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xFF,
+ 538          0xFF,0x00,0x00,0x00,0x00,0xFC,0xFC,0xFC,0xFC,0xFC,0xFC,0xFC,0xFC,0xFC,0xFC,0x00,
+ 539          0x00,0x00,0x00,0x00,0x00,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
+ 540          0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xFF,0xFF,0xFF,0xFF,0xFF,
+C51 COMPILER V9.60.7.0   MAIN                                                              04/03/2025 00:05:15 PAGE 10  
+
+ 541          0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+ 542          0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+ 543          0x00,0x00,0x80,0xC0,0xE0,0xF8,0xFC,0xFE,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
+ 544          0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFE,
+ 545          0xF8,0xF0,0xE0,0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xFF,
+ 546          0xFF,0x00,0x00,0x00,0x00,0x0F,0x3F,0x7F,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFE,
+ 547          0xFC,0xF8,0xF8,0xFC,0xFE,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x7F,0x3F,0x03,
+ 548          0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xFF,0xFF,0xFF,0xFF,0xFF,
+ 549          0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFC,0xFC,0xFC,0xFC,0xFC,0xFC,0xFC,0xFC,0xFC,0xFC,
+ 550          0xFC,0xFC,0xFC,0xFC,0xFC,0xFC,0x00,0x00,0x00,0x00,0x00,0x80,0xC0,0xE0,0xF0,0xF8,
+ 551          0xFE,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x7F,0x3F,0x0F,
+ 552          0x07,0x03,0x00,0x01,0x03,0x07,0x1F,0x3F,0x7F,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
+ 553          0xFF,0xFF,0xFF,0xFF,0xFF,0xFE,0xF8,0xF0,0xE0,0x80,0x00,0x00,0x00,0x00,0x00,0xFF,
+ 554          0xFF,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x81,0x83,0x83,0x87,0x87,0x87,0x87,
+ 555          0x8F,0x8F,0x8F,0x8F,0x8F,0x87,0x87,0x87,0x87,0x83,0x83,0x81,0x80,0x80,0x80,0x80,
+ 556          0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x87,0x87,0x87,0x87,0x87,
+ 557          0x87,0x87,0x87,0x87,0x87,0x87,0x87,0x87,0x87,0x87,0x87,0x87,0x87,0x87,0x87,0x87,
+ 558          0x87,0x87,0x87,0x87,0x87,0x87,0x80,0x80,0x84,0x86,0x87,0x87,0x87,0x87,0x87,0x87,
+ 559          0x87,0x87,0x87,0x87,0x87,0x87,0x87,0x87,0x87,0x87,0x87,0x81,0x80,0x80,0x80,0x80,
+ 560          0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x81,0x87,0x87,0x87,0x87,0x87,0x87,
+ 561          0x87,0x87,0x87,0x87,0x87,0x87,0x87,0x87,0x87,0x87,0x87,0x84,0x80,0x80,0x80,0xFF
+ 562          
+ 563          };
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    975    ----
+   CONSTANT SIZE    =   1088    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      21
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

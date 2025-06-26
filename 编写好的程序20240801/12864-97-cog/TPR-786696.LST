@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   TPR_786696                                                        04/21/2025 22:37:40 PAGE 1   
+C51 COMPILER V9.60.7.0   TPR_786696                                                        06/21/2025 18:34:15 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TPR_786696
@@ -62,7 +62,7 @@ line level    source
   53          uchar code e_char[8] = {0x7f,0x49,0x49,0x49,0x49,0x49,0x00,0x00 };
   54          
   55          
-C51 COMPILER V9.60.7.0   TPR_786696                                                        04/21/2025 22:37:40 PAGE 2   
+C51 COMPILER V9.60.7.0   TPR_786696                                                        06/21/2025 18:34:15 PAGE 2   
 
   56          
   57          
@@ -126,7 +126,7 @@ line level    source
  115          {0x02,0x02,0x02,0x02,0x02,0x02,0x02,0x00,
  116          0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x00},/*"=",3*/
  117          
-C51 COMPILER V9.60.7.0   TPR_786696                                                        04/21/2025 22:37:40 PAGE 3   
+C51 COMPILER V9.60.7.0   TPR_786696                                                        06/21/2025 18:34:15 PAGE 3   
 
  118          {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
  119          0x00,0x0C,0x0C,0x00,0x00,0x00,0x00,0x00},/*".",4*/
@@ -190,7 +190,7 @@ line level    source
  177          // 注:与其它ST7567及NT75451/NT7534/NT7538是最后倍压数选择有差异其它相同
  178          // ====================================//
  179          
-C51 COMPILER V9.60.7.0   TPR_786696                                                        04/21/2025 22:37:40 PAGE 4   
+C51 COMPILER V9.60.7.0   TPR_786696                                                        06/21/2025 18:34:15 PAGE 4   
 
  180            
  181           // ST7567初始化函数
@@ -254,7 +254,7 @@ line level    source
  237                  Delay_Xms(2);
  238                  ST7567_WriteComd(0xa1); // ADC select确定SEG反扫seg0--->seg131
  239                  Delay_Xms(2);
-C51 COMPILER V9.60.7.0   TPR_786696                                                        04/21/2025 22:37:40 PAGE 5   
+C51 COMPILER V9.60.7.0   TPR_786696                                                        06/21/2025 18:34:15 PAGE 5   
 
  240                  ST7567_WriteComd(0xc8); //SHL select确定COM为正扫com63--->com0
  241                  Delay_Xms(2);
@@ -318,7 +318,7 @@ line level    source
  297   2                  ST7567_WriteComd(0x10);     //设定起始SEG数,两字节
  298   2                  ST7567_WriteComd(0x04);
  299   2                  for(i=0;i<128;i++)
-C51 COMPILER V9.60.7.0   TPR_786696                                                        04/21/2025 22:37:40 PAGE 6   
+C51 COMPILER V9.60.7.0   TPR_786696                                                        06/21/2025 18:34:15 PAGE 6   
 
  300   2              {//写128SEG
  301   3                      ST7567_WriteData(dispdata[j]);  //调数组显示数据进行写显示
@@ -382,7 +382,7 @@ line level    source
  359   2                  ST7567_WriteComd(0x10);     //设定起始SEG数,两字节
  360   2                  ST7567_WriteComd(0x00);
  361   2                  for(i=0;i<128;i++)
-C51 COMPILER V9.60.7.0   TPR_786696                                                        04/21/2025 22:37:40 PAGE 7   
+C51 COMPILER V9.60.7.0   TPR_786696                                                        06/21/2025 18:34:15 PAGE 7   
 
  362   2              {//写128SEG
  363   3                      ST7567_WriteData(x);    //显示数据进行写显示
@@ -446,7 +446,7 @@ line level    source
  421   3                  { 
  422   4                      ST7567_WriteData(x);    //显示数据进行写显示
  423   4                    }
-C51 COMPILER V9.60.7.0   TPR_786696                                                        04/21/2025 22:37:40 PAGE 8   
+C51 COMPILER V9.60.7.0   TPR_786696                                                        06/21/2025 18:34:15 PAGE 8   
 
  424   3                  for(j=0;j<4;j++)
  425   3                  { 
@@ -510,7 +510,7 @@ line level    source
  483          
  484          
  485          //====================================================================
-C51 COMPILER V9.60.7.0   TPR_786696                                                        04/21/2025 22:37:40 PAGE 9   
+C51 COMPILER V9.60.7.0   TPR_786696                                                        06/21/2025 18:34:15 PAGE 9   
 
  486          //==============================================
  487          unsigned char code    jin[128]= 
@@ -574,7 +574,7 @@ line level    source
  528   2                     ST7567_WriteData(hzk[32*j+i]);        //J为页，I，为第J行第I个数
  529   2               }
  530   1      }
-C51 COMPILER V9.60.7.0   TPR_786696                                                        04/21/2025 22:37:40 PAGE 10  
+C51 COMPILER V9.60.7.0   TPR_786696                                                        06/21/2025 18:34:15 PAGE 10  
 
  531          
  532          
@@ -638,7 +638,7 @@ line level    source
  590   2                      SCK=0;                                                  //置高SCK产生上升沿
  591   2                      _nop_();_nop_();_nop_();_nop_();        //数据稳定一定时间
  592   2                      _nop_();_nop_();_nop_();_nop_();        //数据稳定一定时间
-C51 COMPILER V9.60.7.0   TPR_786696                                                        04/21/2025 22:37:40 PAGE 11  
+C51 COMPILER V9.60.7.0   TPR_786696                                                        06/21/2025 18:34:15 PAGE 11  
 
  593   2              dat = dat<<1;                                   //往高位移一位继续
  594   2              }
@@ -702,7 +702,7 @@ line level    source
  652                  E_RD = 0;                                                       //置低E_RD产生下降沿数据此时锁存进芯片内部电路,顺序6
  653                  _nop_();_nop_();_nop_();_nop_();        //数据建立一定时间
  654                  CS = 1;                                                         //置高CS表示任何动作对芯片无效,顺序7
-C51 COMPILER V9.60.7.0   TPR_786696                                                        04/21/2025 22:37:40 PAGE 12  
+C51 COMPILER V9.60.7.0   TPR_786696                                                        06/21/2025 18:34:15 PAGE 12  
 
  655          }
  656          
@@ -766,7 +766,7 @@ line level    source
  714          
  715          /*
  716          // ====================================//
-C51 COMPILER V9.60.7.0   TPR_786696                                                        04/21/2025 22:37:40 PAGE 13  
+C51 COMPILER V9.60.7.0   TPR_786696                                                        06/21/2025 18:34:15 PAGE 13  
 
  717          // 对比度设定及显示对比度参数函数,
  718          // 输入参数:ADJUST
@@ -830,7 +830,7 @@ line level    source
  776                          ST7567_WriteData( ASC[(i)*16+j] );      //显示字符的上半节8*8
  777                  }
  778                  page++; //页地址加1
-C51 COMPILER V9.60.7.0   TPR_786696                                                        04/21/2025 22:37:40 PAGE 14  
+C51 COMPILER V9.60.7.0   TPR_786696                                                        06/21/2025 18:34:15 PAGE 14  
 
  779                  ST7567_WriteComd(page); //设定页地址
  780                  ST7567_WriteComd(0x11); //双字节设定起始SEG
@@ -894,7 +894,7 @@ line level    source
  838   1        
  839   1              i=ADJUST%100/10;                //取出对比度数值的十位
  840   1              disp_char(LINE1,1,num[i]);
-C51 COMPILER V9.60.7.0   TPR_786696                                                        04/21/2025 22:37:40 PAGE 15  
+C51 COMPILER V9.60.7.0   TPR_786696                                                        06/21/2025 18:34:15 PAGE 15  
 
  841   1      
  842   1              i=ADJUST%10;            //取出对比度数值的个位
@@ -958,7 +958,7 @@ line level    source
  899   7                                                              Delay_Xms(10);  //消抖动
  900   7                                                              if ( SW==0 )
  901   7                                                              {//暂停键按下有效
-C51 COMPILER V9.60.7.0   TPR_786696                                                        04/21/2025 22:37:40 PAGE 16  
+C51 COMPILER V9.60.7.0   TPR_786696                                                        06/21/2025 18:34:15 PAGE 16  
 
  902   8                                                                      while( SW==0 ); //等待暂停键弹起
  903   8                                                                      Delay_Xms(10);  //消抖动
@@ -1022,7 +1022,7 @@ line level    source
  961          {
  962   1      while(AOUTOB==1&STEP==0)
  963   1              {
-C51 COMPILER V9.60.7.0   TPR_786696                                                        04/21/2025 22:37:40 PAGE 17  
+C51 COMPILER V9.60.7.0   TPR_786696                                                        06/21/2025 18:34:15 PAGE 17  
 
  964   2              if(UPT==1)
  965   2              {
@@ -1086,7 +1086,7 @@ line level    source
 1021   2      //                      Delay_Xms(1000);
 1022   2      //                       
 1023   2      //                       
-C51 COMPILER V9.60.7.0   TPR_786696                                                        04/21/2025 22:37:40 PAGE 18  
+C51 COMPILER V9.60.7.0   TPR_786696                                                        06/21/2025 18:34:15 PAGE 18  
 
 1024   2      //          hz_display16(0,0,18,se); 
 1025   2      //              Delay_Xms(1000);
@@ -1150,7 +1150,7 @@ line level    source
 1083   2      
 1084   2      //              DispFram( 0x00,0xff );
 1085   2      //               Delay_Xms(1000);
-C51 COMPILER V9.60.7.0   TPR_786696                                                        04/21/2025 22:37:40 PAGE 19  
+C51 COMPILER V9.60.7.0   TPR_786696                                                        06/21/2025 18:34:15 PAGE 19  
 
 1086   2      //              if( Change(300)==1 ) goto Start;        //暂停键有动作跳转到程序的最头上
 1087   2               //push();
@@ -1214,7 +1214,7 @@ line level    source
 1145   2      /*      
 1146   2      
 1147   2          ST7567_WriteComd(0x81);     //The Electronic Volume (Double Byte Command)数字电位器调节VO输出电压(也就是对
-C51 COMPILER V9.60.7.0   TPR_786696                                                        04/21/2025 22:37:40 PAGE 20  
+C51 COMPILER V9.60.7.0   TPR_786696                                                        06/21/2025 18:34:15 PAGE 20  
 
              -比度)两字节                                 0x81原来的数值
 1148   2              ST7567_WriteComd(55);    //vop 设置
@@ -1278,7 +1278,7 @@ line level    source
 1204   2      
 1205   2               //DispPic( PIC_19 );
 1206   2               //  Delay_Xms(600);
-C51 COMPILER V9.60.7.0   TPR_786696                                                        04/21/2025 22:37:40 PAGE 21  
+C51 COMPILER V9.60.7.0   TPR_786696                                                        06/21/2025 18:34:15 PAGE 21  
 
 1207   2              //if( Change(50)==1 ) goto Start;       //暂停键有动作跳转到程序的最头上        
 1208   2      

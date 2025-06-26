@@ -1,0 +1,128 @@
+C51 COMPILER V9.60.7.0   MIAN                                                              06/21/2025 15:01:30 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MIAN
+OBJECT MODULE PLACED IN mian.OBJ
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE mian.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "LCM13264(cog).h"
+   2          #include "pic.h"
+   3          
+   4          void main(void)
+   5          {
+   6   1      //      unsigned char mode;
+   7   1              
+   8   1              init_cpu();
+   9   1              Delay_Xms(50);
+  10   1              
+  11   1              InitST7567();   //一开始初始化控制器
+  12   1              DispFram(0x00,0x00);
+  13   1              
+  14   1              while(1)  
+  15   1              {
+  16   2      //     Start:   //跳转标号      
+  17   2      //if (HOLD()) {  
+  18   2      //    mode++;           // 先增加 mode
+  19   2      //    mode %= 8;        // 让 mode 保持在 0~7 之间
+  20   2      
+  21   2      //    switch (mode) {
+  22   2      //        case 0:  
+  23   2      //            DispPic( PIC_5 );
+  24   2      //            break;
+  25   2      //        case 1:            
+  26   2      //            yehui_UI();               
+  27   2      //            break;
+  28   2      //        case 2:
+  29   2      //            DispDots(0x33, 0xcc);  // 小棋盘  
+  30   2      //            break;
+  31   2      //        case 3:
+  32   2      //            DispFram(0x55, 0xaa);     
+  33   2      //            break;
+  34   2      //        case 4:
+  35   2      //            DispDot(0xf0, 0x0f);  // 大棋盘
+  36   2      //            break;
+  37   2      //        case 5:
+  38   2      //            DispFram(0x55, 0x55);             
+  39   2      //            break;
+  40   2      //        case 6:
+  41   2      //            DispFram(0xff, 0x00);      
+  42   2      //            break;
+  43   2      //        case 7:
+  44   2      //            DispFram(0xff, 0xff);     
+  45   2      //            break;
+  46   2      //        default:
+  47   2      //            mode = 0;  // 防止异常情况
+  48   2      //            break;
+  49   2      //    }
+  50   2      //}
+  51   2      
+  52   2      //       if (UP()) 
+  53   2      //        {  
+  54   2      //                while(1)
+  55   2      //               {
+C51 COMPILER V9.60.7.0   MIAN                                                              06/21/2025 15:01:30 PAGE 2   
+
+  56   2      //                      DispDot(0xf0,0x0f);
+  57   2      //                      Delay_Xms(600);                  
+  58   2      //          DispDots( 0x33,0xcc);
+  59   2      //                      Delay_Xms(600);                          
+  60   2      //          DispFram(0x55,0xaa);
+  61   2      //                      Delay_Xms(600);                          
+  62   2      //          yehui_UI();
+  63   2      //                      Delay_Xms(600);                          
+  64   2      //          DispFram(0x55,0x55);        
+  65   2      //                      Delay_Xms(600);                          
+  66   2      //          DispFram(0xff,0x00);         
+  67   2      //                      Delay_Xms(600);                          
+  68   2      //                      DispFram(0x00,0xff);    
+  69   2      //                      Delay_Xms(600);
+  70   2      //                      WhatsApp();
+  71   2      //                      Delay_Xms(100); 
+  72   2      //                }     
+  73   2      //      }
+  74   2                              
+  75   2      //       if (DN()) 
+  76   2      //        {  
+  77   2      //              RST = 0;    // 先拉低复位引脚
+  78   2      //              Delay_Xms(10);  // 等待 10ms，确保复位信号有效
+  79   2      //              RST = 1;    // 再拉高，完成复位 
+  80   2      //        }
+  81   2      
+  82   2                  DispPic( PIC_5 );
+  83   2                              Delay_Xms(5000);
+  84   2                  yehui_UI(); //     
+  85   2                              Delay_Xms(5000);
+  86   2                              DispDot(0xf0,0x0f);
+  87   2                              Delay_Xms(5000);                         
+  88   2                  DispDots( 0x33,0xcc);
+  89   2                              Delay_Xms(5000);                                 
+  90   2                  DispFram(0x55,0xaa);
+  91   2                              Delay_Xms(5000);                                 
+  92   2                  yehui_UI();
+  93   2                              Delay_Xms(5000);                                 
+  94   2                  DispFram(0x55,0x55);        
+  95   2                              Delay_Xms(5000);                                 
+  96   2                  DispFram(0xff,0x00);         
+  97   2                              Delay_Xms(5000);                                 
+  98   2                              DispFram(0x00,0xff);    
+  99   2                              Delay_Xms(5000);
+ 100   2      
+ 101   2              }
+ 102   1      
+ 103   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    141    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

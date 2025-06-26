@@ -1,0 +1,233 @@
+C51 COMPILER V9.60.7.0   HT1622                                                            06/05/2025 11:49:15 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE HT1622
+OBJECT MODULE PLACED IN .\Objects\HT1622.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE HT1622.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings
+                    -\HT1622.lst) OBJECT(.\Objects\HT1622.obj)
+
+line level    source
+
+   1          #include "ht1622.h"
+   2          #include <intrins.h>
+   3          unsigned int i,j,count;
+   4          
+   5          void lcd_init()
+   6          {
+   7   1              write_com(0x01);   //SYS EN   open the oscillator
+   8   1              write_com(0x03);   //LCD ON
+   9   1              write_com(0x29);   //1621: 0x29:1/3bais,1/4duty   0x30  0x18
+  10   1              write_com(0x40);   //0x40:Tone frequency, 4kHz ; 0x60: Tone frequency, 2kHz
+  11   1              write_com(0x09);   //Turn on tone outputs
+  12   1      //  write_com(0x08);   //Turn off tone outputs
+  13   1      //      write_com(0xe3);   //NORMAL MODE
+  14   1      //      write_com(0x18);   //RC OSCILLATOR
+  15   1      
+  16   1      }
+  17          
+  18          void lcd_clear()
+  19          {
+  20   1              unsigned char add;
+  21   1              add=0x40;
+  22   1              for(i=0;i<44;i++)
+  23   1              {               
+  24   2                      write_data(add,0x00);
+  25   2                      add++;  
+  26   2              }
+  27   1      }
+  28          
+  29          void lcd_all()
+  30          {
+  31   1              unsigned char add;
+  32   1              add=0x40;
+  33   1              for(i=0;i<44;i++) 
+  34   1              {
+  35   2                      write_data(add,0xff);   
+  36   2                      add++;
+  37   2              }
+  38   1      }
+  39          
+  40          //命令模式
+  41          void  write_com(unsigned char com)
+  42          {
+  43   1              unsigned char x,y;
+  44   1              LCDCS1=0;
+  45   1              LCDDATA=1;
+  46   1              LCDWR=0;
+  47   1              _nop_();
+  48   1          _nop_();
+  49   1              LCDWR=1;
+  50   1              for(y=0;y<2;y++)//（命令代码：100）
+  51   1              {
+  52   2                      LCDDATA=0;
+  53   2                      LCDWR=0;
+  54   2                      _nop_();
+C51 COMPILER V9.60.7.0   HT1622                                                            06/05/2025 11:49:15 PAGE 2   
+
+  55   2                      _nop_();                
+  56   2                      LCDWR=1;
+  57   2              }
+  58   1              
+  59   1              for(x=0; x<8; x++)
+  60   1              {
+  61   2                      if(com&0x80)
+  62   2                              LCDDATA = 1;
+  63   2                      else
+  64   2                              LCDDATA = 0;
+  65   2      
+  66   2                      LCDWR=0;        
+  67   2                      _nop_();
+  68   2              _nop_();        
+  69   2                      LCDWR=1;
+  70   2                      com <<= 1; 
+  71   2              }
+  72   1              LCDDATA=1;
+  73   1              LCDWR=0;
+  74   1              _nop_();
+  75   1          _nop_();
+  76   1              LCDWR=1;
+  77   1              LCDCS1=1;
+  78   1      }
+  79          
+  80          
+  81          void  write_data(unsigned char add1,date)
+  82          {
+  83   1              unsigned char x, y;
+  84   1              LCDCS1=0;
+  85   1              LCDDATA=1;
+  86   1              LCDWR=0;
+  87   1              _nop_();
+  88   1          _nop_();
+  89   1              LCDWR=1;
+  90   1      
+  91   1              for(x=0; x<8; x++)
+  92   1              {
+  93   2                      if(add1&0x80)
+  94   2                              LCDDATA = 1;
+  95   2                      else
+  96   2                              LCDDATA = 0;
+  97   2      
+  98   2                      LCDWR=0;
+  99   2                      _nop_();
+ 100   2              _nop_();
+ 101   2                      LCDWR=1;
+ 102   2      
+ 103   2                      add1 <<= 1; 
+ 104   2              }
+ 105   1      
+ 106   1              for(y=0;y<4;y++)
+ 107   1              {
+ 108   2                      if(date&0x01)
+ 109   2                              LCDDATA = 1;
+ 110   2                      else
+ 111   2                              LCDDATA = 0;
+ 112   2                      LCDWR=0;
+ 113   2                      _nop_();
+ 114   2              _nop_();
+ 115   2                      LCDWR=1;
+ 116   2      
+C51 COMPILER V9.60.7.0   HT1622                                                            06/05/2025 11:49:15 PAGE 3   
+
+ 117   2                      date >>= 1;   
+ 118   2              }
+ 119   1              LCDCS1=1;
+ 120   1      }
+ 121          
+ 122          
+ 123          /*延时*/
+ 124          void delay(unsigned int z)             
+ 125          {
+ 126   1       int j,k;
+ 127   1       for(j=0;j<z;j++)
+ 128   1       for(k=0;k<110;k++);
+ 129   1      }
+ 130          
+ 131          
+ 132          
+ 133          
+ 134          // 段码：高4位 + 低4位
+ 135          typedef struct 
+ 136          {
+ 137              unsigned char high;
+ 138              unsigned char low;
+ 139          } SegmentData;
+ 140          
+ 141          SegmentData digits[] = 
+ 142          {
+ 143          
+ 144                  {0x0D, 0x0F},  // 0
+ 145              {0x00, 0x0E},  // 1
+ 146              {0x0E, 0x0B},  // 2
+ 147              {0x0A, 0x0F},  // 3
+ 148              {0x03, 0x0E},  // 4
+ 149              {0x0B, 0x0D},  // 5
+ 150              {0x0F, 0x0D},  // 6
+ 151              {0x00, 0x0F},  // 7
+ 152              {0x0F, 0x0F},  // 8 
+ 153                  {0x03, 0x0F},  // 9
+ 154                  
+ 155          };
+ 156          
+ 157          void display_digit(unsigned char start_addr, SegmentData seg, unsigned char count)
+ 158          {
+ 159   1          unsigned char addr = start_addr;
+ 160   1          for (i = 0; i < count; i++) 
+ 161   1              {
+ 162   2              write_data(addr, seg.high);     // 高4位
+ 163   2              write_data(addr + 2, seg.low);  // 低4位
+ 164   2              addr += 4;
+ 165   2          }
+ 166   1      }
+ 167          
+ 168          //void display_sequence()
+ 169          //{
+ 170          //    unsigned char i;
+ 171          //    for (i = 0; i < sizeof(digits)/sizeof(digits[0]); i++) 
+ 172          //      {
+ 173          //        display_digit(0x40, digits[i], 11);  // 第一行
+ 174          //        delay(100);
+ 175          //        display_digit(0x41, digits[i], 11);  // 第二行（错位）
+ 176          //        delay(3000);
+ 177          //    }
+ 178          //}
+C51 COMPILER V9.60.7.0   HT1622                                                            06/05/2025 11:49:15 PAGE 4   
+
+ 179          
+ 180          void display_sequence()
+ 181          {
+ 182   1          unsigned char i;
+ 183   1      
+ 184   1          // 从 8 到 0 倒序显示（全屏）
+ 185   1          for (i = 9; i < 255; i--) 
+ 186   1              {
+ 187   2              display_digit(0x40, digits[i], 11);  // 第一行
+ 188   2              display_digit(0x41, digits[i], 11);  // 第二行
+ 189   2              delay(3000); // 显示间隔
+ 190   2          }
+ 191   1      
+ 192   1          delay(1000); // 停顿
+ 193   1      
+ 194   1          // 从 0 到 8 正序显示（全屏）
+ 195   1          for (i = 0; i <= 9; i++) 
+ 196   1              {
+ 197   2              display_digit(0x40, digits[i], 11);  // 第一行
+ 198   2              display_digit(0x41, digits[i], 11);  // 第二行
+ 199   2              delay(3000); // 显示间隔
+ 200   2          }
+ 201   1      
+ 202   1          delay(3000); // 停顿
+ 203   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    465    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     26       7
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

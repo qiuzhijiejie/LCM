@@ -1,432 +1,1018 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              08/02/2024 22:04:27 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/21/2025 18:38:06 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
 OBJECT MODULE PLACED IN .\Objects\main.obj
-COMPILER INVOKED BY: E:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
-                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\m
+                    -ain.lst) OBJECT(.\Objects\main.obj)
 
 line level    source
 
-   1          //----------------------------------------------------------------------
-   2          /*EASTRISING TECHNOLOGY CO,.LTD.*/
-   3          // Module    : ERM12864-6 Series  Chinese Fonts
-   4          // Lanuage   : C51 Code
-   5          // Create    : JAVEN
-   6          // Date      : 2009-06-18
-   7          // Drive IC  : ST7920
-   8          // INTERFACE : 8/4-bits parallel bus mode(PSB=1) OR serial mode(PSB=0)
-   9          // MCU     : AT89C52
-  10          // VDD     : 5V/3.3V            
-  11          //***************************************************************************   
-  12          #include <INTRINS.H>   
-  13          #include <stdio.h>
-  14          #include <math.h>
-  15          #include <reg52.h>
-  16          #include <string.h>
-  17          
-  18          unsigned char code IC_DAT[];
-  19          unsigned char code pic1[];
-  20          unsigned char code pic2[];
-  21          unsigned char code pic3[];
-  22          
-  23          //D0-D7   P1.0-P1.7
-  24          sbit    RS =P2^0;
-  25          sbit    WRD=P2^1;
-  26          sbit    E=  P2^2;
-  27          sbit    RES=P2^4;
-  28          
-  29          void  delay(unsigned int ms);
-  30          void    TransferData(char data1,bit DI);
-  31          void    display(void);
-  32          void    display_grapic(void);
-  33          void    delayms(unsigned int n);
-  34          void    DisplayLine(unsigned char line1,unsigned char line2);
-  35          void    DisplayGraphic(unsigned char code *adder);
-  36          void    delay(unsigned int m);
-  37          void    lcd_mesg(unsigned char code *adder1);
-  38          
-  39          
-  40          unsigned char code IC_DAT[]={
-  41          "??????????????"  
-  42          "??????g?????"
-  43          "?????????????"
-  44          "??????????????"
-  45          };
-  46          
-  47          void     initinal(void)           //LCD initinal  Fonts Mode
-  48                    {
-  49   1      
-  50   1                 TransferData(0x30,0);  //Extended Function Set :8BIT,RE=0: basic instruction set, G=0 :graphic 
-             -display OFF
-  51   1                 delay(100);            
-  52   1                 TransferData(0x30,0);  //Function Set
-  53   1                 delay(37);             
-C51 COMPILER V9.60.7.0   MAIN                                                              08/02/2024 22:04:27 PAGE 2   
+   1          ;SMG12864ZK标准字符点阵型液晶显示模块的演示程序[ASM51编程语言][MCS51三线式串行接口方式]
+*** ERROR C141 IN LINE 1 OF main.c: syntax error near ';', expected 'hdata'
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xB1 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xEA skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xD7 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xBC skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xD7 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xD6 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xB7 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xFB skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xB5 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xE3 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xD5 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xF3 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xD0 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xCD skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xD2 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xBA skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xBE skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xA7 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xCF skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xD4 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xCA skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xBE skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xC4 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xA3 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xBF skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xE9 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xB5 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xC4 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xD1 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xDD skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xCA skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xBE skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xB3 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xCC skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xD0 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xF2 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xB1 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xE0 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xB3 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xCC skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xD3 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xEF skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xD1 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xD4 skipped
+*** ERROR C202 IN LINE 1 OF main.c: 'ASM51': undefined identifier
+*** ERROR C136 IN LINE 1 OF main.c: invalid dimension size: [0]
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xC8 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xCF skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xDF skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xCA skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xBD skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xB4 skipped
+C51 COMPILER V9.60.7.0   MAIN                                                              06/21/2025 18:38:06 PAGE 2   
 
-  54   1                 TransferData(0x08,0);  //Display on Control
-  55   1                 delay(100);            
-  56   1                 TransferData(0x10,0);  //Cursor Display Control
-  57   1                 delay(100);            
-  58   1                 TransferData(0x0C,0);  //Display Control,D=1,display on
-  59   1                 delay(100);            
-  60   1                 TransferData(0x01,0);  //Display Clear
-  61   1                 delayms(10);             
-  62   1                 TransferData(0x06,0);  //Enry Mode Set
-  63   1                 delay(100);            
-  64   1                }
-  65          
-  66          
-  67          void     initina2(void)           //Graphic display Mode
-  68                    {
-  69   1      
-  70   1                 TransferData(0x30,0);  //Extended Function Set RE=1: extended instruction
-  71   1                 delay(100);       
-  72   1                 TransferData(0x01,0);  //Display Clear
-  73   1                 delayms(10);     
-  74   1                 TransferData(0x36,0);  //Extended Function Set:RE=1: extended instruction set
-  75   1                 delay(37);            
-  76   1                 TransferData(0x3E,0);  //EXFUNCTION(DL=8BITS,RE=1,G=1)
-  77   1                 delay(100);                      
-  78   1                }
-  79          
-  80          
-  81          void    main(void)
-  82               {
-  83   1             delayms(40);             //Delay 40ms
-  84   1                 RES=0;                 //Reset
-  85   1                 delay(1);             
-  86   1                 RES=1;                 //Reset set H
-  87   1                 delay(10);
-  88   1      
-  89   1               while(1)
-  90   1            {
-  91   2            initina2();            //Graphic display Mode
-  92   2      
-  93   2                DisplayGraphic(pic1);  //show Graphic 
-  94   2                delayms(2000);
-  95   2        
-  96   2                DisplayGraphic(pic2);  //show Graphic 
-  97   2                delayms(2000);
-  98   2      
-  99   2                DisplayGraphic(pic3);  //show Graphic 
- 100   2                delayms(2000);
- 101   2      
- 102   2                initinal();        // Fonts Mode
- 103   2                delay(100);           
- 104   2                lcd_mesg(IC_DAT);      //Show chanese fonts
- 105   2                delayms(2000);
- 106   2      
- 107   2          
- 108   2              }
- 109   1            }
- 110          
- 111          
- 112          
- 113          void   lcd_mesg(unsigned char code *adder1)
- 114          {
- 115   1        unsigned char i;
-C51 COMPILER V9.60.7.0   MAIN                                                              08/02/2024 22:04:27 PAGE 3   
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xAE skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xD0 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xD0 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xBD skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xD3 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xBF skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xDA skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xB7 skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xBD skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xCA skipped
+*** ERROR C100 IN LINE 1 OF main.c: unprintable character 0xBD skipped
+*** ERROR C136 IN LINE 1 OF main.c: invalid dimension size: [0]
+   2          ;应用产品: SMG12864ZK SMG12864G2-ZK SMG12864G3-ZK标准中文字符点阵型液晶显示模块
+*** ERROR C100 IN LINE 2 OF main.c: unprintable character 0xD3 skipped
+*** ERROR C100 IN LINE 2 OF main.c: unprintable character 0xA6 skipped
+*** ERROR C100 IN LINE 2 OF main.c: unprintable character 0xD3 skipped
+*** ERROR C100 IN LINE 2 OF main.c: unprintable character 0xC3 skipped
+*** ERROR C100 IN LINE 2 OF main.c: unprintable character 0xB2 skipped
+*** ERROR C100 IN LINE 2 OF main.c: unprintable character 0xFA skipped
+*** ERROR C100 IN LINE 2 OF main.c: unprintable character 0xC6 skipped
+*** ERROR C100 IN LINE 2 OF main.c: unprintable character 0xB7 skipped
+*** ERROR C141 IN LINE 2 OF main.c: syntax error near ':', expected 'hdata'
+*** ERROR C129 IN LINE 2 OF main.c: missing ';' before 'SMG12864G2'
+   3          ;  本演示程序适用于SMG12864ZK液晶显示模块与MCS51系列单片机采用MCS51三线式串行接口
+   4          ;方式的硬件连线方式。
+   5          ;  本演示程序包括ST7920兼容芯片的MCS51三线式串行接口方式子程序集,SMC12864系列
+   6          ;标准中文字符点阵型液晶显示模块的接口子程序集,ST7920兼容芯片的液晶显示控制器的
+   7          ;通用子程序集,以及SMG12864系列标准中文字符点阵型液晶显示的演示子程序.
+   8          ;  本演示的内容为,在16列ASCII字符(8列中文)X4行的液晶显示屏上显示" SMG12864ZK ",
+   9          ;"中文字符图形点阵","液晶显示模块","长沙太阳人SUNMAN",所有数字0..9依次全屏显示
+  10          ;一遍,显示清屏,所有英文字母依次显示,显示自定义字符,图形模式图片显示.
+  11          ;-------------------------------------------------------------------------------
+  12          ;创建日期: 2009.10.29
+  13          ;软件环境: VW For Windows
+  14          ;硬件环境: AT89C52 MCU,MCS-51系列 MCU,etc.
+  15          ;创建人: 褚建军(chujianjun@sunman.cn),谭超(tanchao@sunman.cn).
+  16          ;技术支持: 电话(0731-84167806,84167807),传真(0731-84167807),网址(www.sunman.cn)
+  17          ;版权信息: 长沙太阳人电子有限公司版权所有,转载请指明出处.
+  18          ;参考网页: http:/www.sunman.cn/lcm/product/SMG12864ZK.html
+  19          ;-------------------------------------------------------------------------------
+  20          ;SMG12864ZK产品引脚说明及演示连线
+  21          ;PIN1: VSS  [电源地]-------------------VSS
+  22          ;PIN2: VDD  [电源正极]-----------------VDD(+5V)
+  23          ;PIN3: NC   [空脚]
+  24          ;PIN4: CS   [片选信号输入]-------------P3.0
+  25          ;PIN5: STD  [串行数据输入]-------------P3.1
+  26          ;PIN6: SCLK [串行移位脉冲输入]---------P3.2
+  27          ;PIN7: D0   [Data I/O]-----------------P1.0
+  28          ;PIN8: D1   [Data I/O]-----------------P1.1
+  29          ;PIN9: D2   [Data I/O]-----------------P1.2
+  30          ;PIN10:D3   [Data I/O]-----------------P1.3
+  31          ;PIN11:D4   [Data I/O]-----------------P1.4
+  32          ;PIN12:D5   [Data I/O]-----------------P1.5
+  33          ;PIN13:D6   [Data I/O]-----------------P1.6
+  34          ;PIN15:PSB  [模块内部已选择,悬空]
+  35          ;PIN16:NC   [空脚]
+  36          ;PIN17:RST  [复位端,低电平有效]--------VDD
+  37          ;PIN18:NC   [空脚]
+  38          ;PIN19:BLA  [背光源正极]---------------接20欧电阻到+5V.
+  39          ;PIN20:BLK  [背光源负极]---------------VSS
+  40          ;请参见http://download.sunman.cn/lcm/product/1/SMG12864ZK.pdf
+  41          ;字符表参见http://download.sunman.cn/lcm/reference/ST7920_GB_CHARACTER_TABLE.pdf
+C51 COMPILER V9.60.7.0   MAIN                                                              06/21/2025 18:38:06 PAGE 3   
 
- 116   1              TransferData(0x80,0);  //Set RAM Address
- 117   1              delay(100);
- 118   1        for(i=0;i<32;i++)
- 119   1          {
- 120   2              TransferData(*adder1,1);
- 121   2              adder1++;
- 122   2          }
- 123   1      
- 124   1              TransferData(0x90,0);  //Set RAM Address
- 125   1              delay(100);
- 126   1        for(i=32;i<64;i++)
- 127   1          {
- 128   2              TransferData(*adder1,1);
- 129   2              adder1++;
- 130   2          }
- 131   1      }
- 132          
- 133          
- 134          
- 135          
- 136          void    TransferData(char data1,bit DI)  //if DI=0  Transfer command DI=1  Transfer data
- 137                    {
- 138   1                  WRD=0;
- 139   1                  RS=DI;
- 140   1                  delay(1);
- 141   1                  P1=data1;
- 142   1                  E=1;
- 143   1                  delay(1);
- 144   1                  E=0;
- 145   1                 }
- 146          
- 147          void    delayms(unsigned int n)            //delay n ms
- 148                             {
- 149   1                            unsigned int i,j;
- 150   1                            for(i=0;i<n;i++)
- 151   1                               for(j=0;j<125;j++);
- 152   1                         }
- 153          
- 154          
- 155          void    delay(unsigned int m)           
- 156                             {
- 157   1                           m--;
- 158   1                         }
- 159          
- 160          void DisplayGraphic(unsigned char code *adder)
- 161          {
- 162   1      
- 163   1         int i,j;
- 164   1      //*******display top half screen
- 165   1         for(i=0;i<32;i++)              //
- 166   1          { 
- 167   2            TransferData((0x80 + i),0); //SET   VERTICAL ADDRESS
- 168   2            TransferData(0x80,0);       //SET   HORIZONTAL ADDRESS
- 169   2            for(j=0;j<16;j++)
- 170   2             {
- 171   3               TransferData(*adder,1);
- 172   3               adder++;
- 173   3             }
- 174   2          }
- 175   1      //*******display bottom half screen
- 176   1         for(i=0;i<32;i++)              //
- 177   1          {
-C51 COMPILER V9.60.7.0   MAIN                                                              08/02/2024 22:04:27 PAGE 4   
+  42          ;芯片资料参见http://download.sunman.cn/lcm/reference/ST7920.pdf
+  43          ;-------------------------------------------------------------------------------
+  44          ;以下为产品接口引脚在演示程序中的预定义
+  45          ;用户在编写应用程序时,需按自己的实际硬件连线来重新定义
+  46          CSPIN           BIT P3.0                ;CS对应单片机引脚
+  47          STDPIN          BIT P3.1                ;STD对应单片机引脚
+  48          SCLKPIN         BIT P3.2                ;SCLK对应单片机引脚
+  49          ;-------------------------------------------------------------------------------
+  50          ;以下CXPOS,CYPOS变量用于指示当前操作字符的位置的预定义
+  51          ;用户在编写应用程序时,需按自己的实际软件程序需要来重新定义
+  52          CXPOS           EQU 20H                 ;列方向地址指针(用于CHARLCDPOS子程序)
+  53          CYPOS           EQU 21H                 ;行方向地址指针(用于CHARLCDPOS子程序)
+  54          FCHARBUF        EQU 22H                 ;上一个显示的ASCII字符
+  55          ;-------------------------------------------------------------------------------
+  56          ;以下GXPOS,GYPOS变量用于指示绘图区域RAM的位置的预定义
+  57          ;用户在编写应用程序时,需按自己的实际软件程序需要来重新定义
+  58          GXPOS           EQU 23H                 ;列方向地址指针(用于GLCDPOS子程序)
+  59          GYPOS           EQU 24H                 ;行方向地址指针(用于GLCDPOS子程序)
+  60          
+  61          ;-------------------------------------------------------------------------------
+  62                  ORG     0000H                   ;
+  63                  JMP     START
+  64          
+  65                  ORG     100H
+  66          ;-------------------------------------------------------------------------------
+  67          USERCHAR1CODE   EQU 0FFFFH              ;自定义字符1代码
+  68          USERCHAR2CODE   EQU 0FFFDH              ;自定义字符2代码
+  69          USERCHAR3CODE   EQU 0FFFBH              ;自定义字符3代码
+  70          USERCHAR4CODE   EQU 0FFF9H              ;自定义字符4代码
+  71          ;以下自定义字符点阵代码,用户可在实际使用时根据需要自己编写,位置参见芯片资料第13页
+  72          CHAR1CGRAMTAB:                          ;自定义字符1点阵
+  73                  DB  000H,00fH
+  74                  DB  000H,07fH
+  75                  DB  001H,0f0H
+  76                  DB  003H,0c0H
+  77                  DB  007H,00fH
+  78                  DB  00eH,03fH
+  79                  DB  01cH,0feH
+  80                  DB  039H,0fcH
+  81                  DB  033H,0fcH
+  82                  DB  073H,0feH
+  83                  DB  067H,0ffH
+  84                  DB  067H,0e7H
+  85                  DB  0cfH,0e3H
+  86                  DB  0cfH,0e1H
+  87                  DB  0cfH,0e4H
+  88                  DB  0c0H,006H
+  89          CHAR2CGRAMTAB:                          ;自定义字符2点阵
+  90                  DB  0f0H,000H
+  91                  DB  0feH,000H
+  92                  DB  00fH,080H
+  93                  DB  003H,0c0H
+  94                  DB  0f0H,0e0H
+  95                  DB  0fcH,070H
+  96                  DB  07fH,038H
+  97                  DB  03fH,09cH
+  98                  DB  03fH,0ccH
+  99                  DB  07fH,0ceH
+ 100                  DB  0ffH,0e6H
+ 101                  DB  0e7H,0e6H
+ 102                  DB  0c7H,0f3H
+ 103                  DB  087H,0ffH
+C51 COMPILER V9.60.7.0   MAIN                                                              06/21/2025 18:38:06 PAGE 4   
 
- 178   2            TransferData((0x80 + i),0); //SET VERTICAL ADDRESS
- 179   2            TransferData(0x88,0);       //SET HORIZONTAL ADDRESS
- 180   2            for(j=0;j<16;j++)
- 181   2             {
- 182   3               TransferData(*adder,1);
- 183   3               adder++;
- 184   3             }
- 185   2          }
- 186   1      }
- 187          
- 188          unsigned char code pic1[]=
- 189          {
- 190          /*--  ERM12864-6 series.bmp  --*/
- 191          /*-- LxH=128x64  --*/
- 192          0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
- 193          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 194          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 195          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 196          0x9F,0x10,0xCF,0xBC,0x46,0x24,0x47,0x07,0xDF,0x38,0x88,0x1C,0x38,0x02,0x3E,0xF1,
- 197          0x90,0x29,0x22,0x22,0x49,0x26,0x48,0x81,0x10,0x44,0x88,0x22,0x44,0x02,0x08,0x89,
- 198          0x90,0x29,0x02,0x22,0x48,0x26,0x48,0x01,0x10,0x40,0x88,0x20,0x44,0x02,0x08,0x89,
- 199          0x9F,0x44,0xC2,0x3C,0x46,0x25,0x49,0x81,0x1F,0x40,0xF8,0x20,0x44,0x02,0x08,0x89,
- 200          0x90,0x7C,0x22,0x24,0x41,0x24,0xC8,0x81,0x10,0x40,0x88,0x20,0x44,0x02,0x08,0x89,
- 201          0x90,0x45,0x22,0x22,0x49,0x24,0xC8,0x81,0x10,0x44,0x88,0x22,0x44,0x02,0x08,0x89,
- 202          0x9F,0x82,0xC2,0x22,0x46,0x24,0x47,0x01,0x1F,0x38,0x89,0x1C,0x38,0xB3,0xC8,0xF1,
- 203          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x10,0x00,0x01,
- 204          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x20,0x00,0x01,
- 205          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 206          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 207          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 208          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 209          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 210          0x80,0x3E,0x00,0xD9,0x06,0x00,0x0F,0x30,0x60,0x00,0x00,0x00,0x0E,0x00,0x02,0x01,
- 211          0x80,0x33,0x00,0x1B,0x00,0x00,0x19,0xB0,0x00,0x00,0x00,0x00,0x18,0x00,0x06,0x01,
- 212          0x80,0x33,0x66,0xDF,0x86,0xF8,0x30,0x3E,0x6F,0x8F,0x1E,0x3C,0x3C,0xF3,0xEF,0x01,
- 213          0x80,0x3E,0x66,0xDB,0x06,0xCC,0x30,0x33,0x6C,0xD9,0xB3,0x66,0x19,0x9B,0x36,0x01,
- 214          0x80,0x33,0x66,0xDB,0x06,0xCC,0x30,0x33,0x6C,0xDF,0xBC,0x7E,0x19,0x9B,0x36,0x01,
- 215          0x80,0x33,0x66,0xDB,0x06,0xCC,0x30,0x33,0x6C,0xD8,0x0F,0x60,0x19,0x9B,0x36,0x01,
- 216          0x80,0x33,0x66,0xDB,0x06,0xCC,0x19,0xB3,0x6C,0xD9,0xB3,0x66,0x19,0x9B,0x36,0x01,
- 217          0x80,0x3E,0x3E,0xD9,0x86,0xCC,0x0F,0x33,0x6C,0xCF,0x1E,0x3C,0x18,0xF3,0x33,0x01,
- 218          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 219          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 220          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 221          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 222          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 223          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 224          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 225          0x80,0x00,0x00,0x7F,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xE0,0x00,0x00,0x01,
- 226          0x80,0x00,0x00,0x40,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x20,0x00,0x00,0x01,
- 227          0x80,0x00,0x00,0x40,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x20,0x00,0x00,0x01,
- 228          0x80,0x00,0x00,0x40,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x20,0x00,0x00,0x01,
- 229          0x80,0x00,0x00,0x41,0xF7,0xC3,0xC3,0x1C,0x71,0xC1,0x80,0x70,0x20,0x00,0x00,0x01,
- 230          0x80,0x00,0x00,0x41,0x86,0x66,0x67,0x36,0xDB,0x63,0x80,0xD8,0x20,0x00,0x00,0x01,
- 231          0x80,0x00,0x00,0x41,0x86,0x6C,0x0F,0x06,0xDB,0x05,0x80,0xC0,0x20,0x00,0x00,0x01,
- 232          0x80,0x00,0x00,0x41,0xF6,0x6C,0x0B,0x06,0x73,0xC5,0x80,0xF0,0x26,0x00,0x40,0x01,
- 233          0x80,0x00,0x00,0x41,0x87,0xCC,0x03,0x0C,0xDB,0x69,0x9E,0xD8,0x29,0x00,0x00,0x01,
- 234          0x80,0x00,0x00,0x41,0x86,0xCC,0x03,0x18,0xDB,0x6F,0xC0,0xD8,0x28,0x33,0x4C,0x71,
- 235          0x80,0x00,0x00,0x41,0x86,0x66,0x63,0x30,0xDB,0x61,0x80,0xD8,0x26,0x4A,0x52,0x81,
- 236          0x80,0x00,0x00,0x41,0xF6,0x33,0xC3,0x3E,0x71,0xC1,0x80,0x70,0x21,0x7A,0x5E,0x61,
- 237          0x80,0x00,0x00,0x40,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x29,0x42,0x50,0x11,
- 238          0x80,0x00,0x00,0x40,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x26,0x3A,0x4E,0xE1,
- 239          0x80,0x00,0x00,0x7F,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xE0,0x00,0x00,0x01,
-C51 COMPILER V9.60.7.0   MAIN                                                              08/02/2024 22:04:27 PAGE 5   
+ 104                  DB  027H,0ffH
+ 105                  DB  060H,003H
+ 106          CHAR3CGRAMTAB:                          ;自定义字符3点阵
+ 107                  DB  0c0H,007H
+ 108                  DB  0ffH,0e7H
+ 109                  DB  0ffH,0e7H
+ 110                  DB  0cfH,0e7H
+ 111                  DB  067H,0e7H
+ 112                  DB  067H,0ffH
+ 113                  DB  073H,0ffH
+ 114                  DB  033H,0ffH
+ 115                  DB  039H,0ffH
+ 116                  DB  01cH,0ffH
+ 117                  DB  00eH,03fH
+ 118                  DB  007H,00fH
+ 119                  DB  003H,0c0H
+ 120                  DB  001H,0f0H
+ 121                  DB  000H,07fH
+ 122                  DB  000H,00fH
+ 123          CHAR4CGRAMTAB:                          ;自定义字符4点阵
+ 124                  DB  0e0H,003H
+ 125                  DB  0e7H,0f3H
+ 126                  DB  0e7H,0f3H
+ 127                  DB  0e7H,0f3H
+ 128                  DB  0e7H,0e6H
+ 129                  DB  0ffH,0e6H
+ 130                  DB  0ffH,0ceH
+ 131                  DB  0ffH,0ccH
+ 132                  DB  0ffH,09cH
+ 133                  DB  0ffH,038H
+ 134                  DB  0fcH,070H
+ 135                  DB  0f0H,0e0H
+ 136                  DB  003H,0c0H
+ 137                  DB  00fH,080H
+ 138                  DB  0feH,000H
+ 139                  DB  0f0H,000H
+ 140          ;-------------------------------------------------------------------------------
+ 141          ;以下为图片库点阵代码
+ 142          ;实际使用时请包含由SUNMAN图形点阵代码生成器.EXE自动生成的IMAGELIB.ASM文件来替换该
+ 143          ;部分
+ 144          IMG_SUNMAN_128x64TAB:
+ 145                  DB  128,64
+ 146                  DB  000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H
+ 147                  DB  000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H
+ 148                  DB  000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H
+ 149                  DB  000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H
+ 150                  DB  000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H
+ 151                  DB  000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H
+ 152                  DB  000H,000H,000H,000H,000H,000H,000H,000H,000H,003H,0c0H,000H,000H,000H,000H,000H
+ 153                  DB  000H,000H,000H,000H,000H,000H,000H,000H,000H,00fH,0e0H,000H,000H,000H,000H,000H
+ 154                  DB  000H,000H,000H,000H,000H,000H,000H,000H,000H,028H,0e0H,000H,000H,000H,000H,000H
+ 155                  DB  000H,000H,000H,020H,000H,000H,000H,000H,038H,038H,0e0H,000H,000H,000H,000H,000H
+ 156                  DB  000H,000H,001H,0f0H,000H,000H,000H,000H,0fcH,038H,0e0H,000H,000H,000H,000H,000H
+ 157                  DB  000H,000H,001H,0f8H,000H,000H,000H,003H,0fcH,01fH,0e0H,000H,000H,000H,000H,000H
+ 158                  DB  000H,000H,001H,0fcH,000H,000H,000H,001H,0fcH,01bH,0c0H,000H,000H,000H,000H,000H
+ 159                  DB  000H,000H,000H,0feH,000H,000H,000H,000H,038H,01bH,0c0H,000H,000H,000H,000H,000H
+ 160                  DB  000H,000H,000H,0feH,000H,000H,000H,000H,030H,01bH,0c0H,000H,000H,000H,000H,000H
+ 161                  DB  000H,000H,000H,07cH,000H,000H,000H,000H,030H,01eH,0c0H,000H,000H,000H,000H,000H
+ 162                  DB  000H,000H,000H,0fcH,000H,000H,000H,000H,030H,01cH,0fcH,000H,003H,080H,000H,000H
+ 163                  DB  000H,000H,000H,0f8H,000H,000H,000H,000H,038H,01fH,0feH,000H,003H,0c0H,000H,000H
+ 164                  DB  000H,000H,000H,0f8H,000H,000H,000H,001H,098H,07fH,0e0H,000H,007H,0e0H,000H,000H
+ 165                  DB  000H,000H,000H,0f8H,000H,000H,000H,001H,08cH,0fbH,0c0H,000H,007H,0c0H,000H,000H
+C51 COMPILER V9.60.7.0   MAIN                                                              06/21/2025 18:38:06 PAGE 5   
 
- 240          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 241          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 242          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 243          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 244          0x81,0x9B,0xE6,0x01,0x80,0x00,0x00,0x1B,0x00,0x01,0x80,0x00,0x00,0x00,0x00,0x01,
- 245          0x81,0x9B,0x36,0x01,0x80,0x00,0x00,0x18,0x00,0x01,0x80,0x00,0x00,0x00,0x00,0x01,
- 246          0x81,0x9B,0x36,0x0D,0xF3,0x3C,0x60,0xFB,0x3C,0xF9,0x9D,0x8C,0x38,0xF3,0xFE,0x01,
- 247          0x81,0x9B,0x36,0x0D,0x9B,0x36,0xC1,0x9B,0x66,0xCD,0xA6,0xD8,0x6D,0x9B,0x33,0x01,
- 248          0x81,0x9B,0xE6,0x01,0x9B,0x36,0xC1,0x9B,0x78,0xCD,0x9E,0xD8,0x61,0x9B,0x33,0x01,
- 249          0x81,0x9B,0x66,0x01,0x9B,0x36,0xDD,0x9B,0x1E,0xCD,0xB6,0xD8,0x61,0x9B,0x33,0x01,
- 250          0x81,0x9B,0x36,0x0D,0x9B,0x33,0x81,0x9B,0x66,0xCD,0xB6,0x73,0x6D,0x9B,0x33,0x01,
- 251          0x80,0xF3,0x1F,0xED,0xF1,0xF3,0x80,0xFB,0x3C,0xF9,0x9E,0x73,0x38,0xF3,0x33,0x01,
- 252          0x80,0x00,0x00,0x00,0x00,0x03,0x00,0x00,0x00,0xC0,0x00,0x60,0x00,0x00,0x00,0x01,
- 253          0x80,0x00,0x00,0x00,0x00,0x0E,0x00,0x00,0x00,0xC0,0x01,0xC0,0x00,0x00,0x00,0x01,
- 254          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 255          0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
- 256          
- 257          };
- 258          
- 259          
- 260          unsigned char code pic2[]=
- 261          {
- 262          0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
- 263          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x00,0x00,0x01,
- 264          0x80,0x00,0x00,0x40,0x00,0x00,0x00,0x00,0x00,0x06,0x00,0x06,0x03,0x80,0x00,0x01,
- 265          0x80,0x00,0x00,0xC0,0x00,0x00,0x00,0x00,0x00,0x0E,0x00,0x1F,0x07,0xFF,0xC0,0x01,
- 266          0x80,0x00,0x01,0xE0,0x00,0x00,0x00,0x00,0x00,0x1E,0x00,0x3F,0x9F,0x39,0xC0,0x01,
- 267          0x80,0x00,0x01,0xE0,0x00,0x00,0x00,0x00,0x00,0x1E,0x00,0x7F,0xF0,0x01,0x80,0x01,
- 268          0x80,0x00,0x03,0xE4,0x00,0x00,0x00,0x00,0x00,0x1F,0x00,0xFF,0xE0,0x00,0xC0,0x01,
- 269          0x80,0x00,0x07,0xEF,0xC0,0x00,0x00,0x00,0x00,0x3F,0x00,0xFF,0xF0,0x00,0xE1,0xE1,
- 270          0x80,0x00,0x0F,0xEF,0xFE,0x00,0x00,0x00,0x00,0x3F,0x01,0xFF,0xE0,0x00,0xF7,0xF1,
- 271          0x80,0x00,0x0F,0xE7,0xFF,0xE0,0x00,0x00,0x00,0x77,0x01,0xFF,0xF0,0x00,0xFF,0xF1,
- 272          0x80,0x00,0x07,0xE7,0x3F,0xFE,0x00,0x00,0x00,0x59,0x01,0xFF,0xFC,0x01,0x8F,0xF9,
- 273          0x80,0x00,0x07,0xE7,0x07,0xFF,0xF0,0x00,0x00,0xFD,0x00,0xFF,0x8E,0x3F,0xEF,0xF9,
- 274          0x80,0x00,0x07,0xE7,0x00,0xFF,0xFE,0x00,0x01,0xE7,0x80,0xFF,0xF7,0xFC,0x77,0xF9,
- 275          0x80,0x00,0x07,0xF7,0x00,0x1F,0xFE,0x00,0x07,0xF7,0x80,0x77,0xFB,0xFF,0xF7,0xF9,
- 276          0x80,0x00,0x03,0xF7,0x00,0x03,0xFE,0x00,0x07,0xFF,0x80,0x27,0xFE,0x7F,0xF3,0xF1,
- 277          0x80,0x00,0x03,0xF7,0x00,0x00,0x7E,0x00,0x00,0x01,0x80,0x27,0xFE,0x7F,0xF1,0xF1,
- 278          0x80,0x00,0x03,0xF3,0x00,0x00,0x1C,0x00,0x00,0x00,0xC0,0x41,0xFC,0x3F,0xF1,0xE1,
- 279          0x80,0x00,0x01,0xF3,0x00,0x00,0x1C,0x00,0x00,0x00,0xC0,0xC1,0xF0,0x1F,0xE1,0x01,
- 280          0x80,0xC0,0x01,0xF3,0x80,0x00,0x1C,0x00,0x00,0x00,0x40,0x87,0xE0,0x03,0x01,0x01,
- 281          0x80,0xF8,0x01,0xF3,0x80,0x00,0x3C,0x00,0x00,0x00,0x61,0x9F,0xF0,0x1C,0x01,0x81,
- 282          0x80,0x7F,0x00,0xF3,0x80,0x00,0x3C,0x00,0x00,0x00,0x7F,0xBF,0xF0,0x7F,0x01,0x81,
- 283          0x80,0x7F,0xC0,0xF3,0x80,0x00,0x38,0x00,0x00,0x00,0x63,0x7E,0x70,0x7F,0xC1,0x81,
- 284          0x80,0x3F,0xF8,0xF3,0x80,0x00,0x38,0x00,0x00,0x00,0xF3,0xFD,0xF0,0xFF,0xE1,0x81,
- 285          0x80,0x3F,0xFE,0xF9,0x80,0x00,0x38,0x00,0x00,0x01,0xBE,0xFF,0x60,0xE7,0xE1,0x81,
- 286          0x80,0x1D,0xFF,0x79,0x80,0x00,0x78,0x00,0x00,0x01,0x1E,0xFE,0x60,0xF7,0xE1,0x01,
- 287          0x80,0x1C,0x3F,0x79,0x80,0x00,0x70,0x00,0x00,0x01,0x1E,0xFC,0x80,0x97,0xF1,0x81,
- 288          0x80,0x1C,0x07,0x79,0x80,0x00,0x70,0x00,0x00,0x01,0x8E,0xFF,0x80,0x07,0xE1,0x81,
- 289          0x80,0x0E,0x00,0x39,0x80,0x00,0x70,0x00,0x00,0x00,0xC6,0x7F,0xE0,0x7F,0xE1,0x81,
- 290          0x80,0x0E,0x00,0x39,0xC0,0x00,0x70,0x00,0x00,0x00,0xEE,0x3E,0xE0,0x7F,0xE1,0x81,
- 291          0x80,0x06,0x00,0x39,0xC0,0x00,0x60,0x00,0x00,0x00,0x7E,0x00,0x40,0x1F,0xC1,0x81,
- 292          0x80,0x07,0x00,0x18,0xC0,0x00,0xE0,0x00,0x00,0x00,0x0F,0x00,0x00,0x07,0x03,0x01,
- 293          0x80,0x03,0x00,0x18,0xC0,0x00,0xE0,0x00,0x00,0x00,0x07,0x80,0x00,0x00,0x07,0x01,
- 294          0x80,0x03,0x00,0x1C,0xC0,0x00,0xE0,0x00,0x00,0x00,0x02,0xC3,0xF8,0x00,0x06,0x01,
- 295          0x80,0x01,0x80,0x1C,0xFF,0xFF,0xC0,0x00,0x00,0x00,0x03,0x61,0xF0,0x00,0x0C,0x01,
- 296          0x80,0x01,0x80,0x0C,0xFF,0xFF,0xC0,0x00,0x00,0x00,0x03,0x30,0x00,0x00,0x38,0x01,
- 297          0x80,0x00,0x80,0x0C,0xFF,0xFF,0xC0,0x00,0x00,0x00,0x01,0x9C,0x00,0x00,0x70,0x01,
- 298          0x80,0x00,0x80,0x0C,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x87,0x00,0x01,0xC0,0x01,
- 299          0x80,0x00,0x00,0x04,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xC7,0xFC,0x7F,0xC0,0x01,
- 300          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xCF,0x1F,0xFF,0xE0,0x01,
- 301          0x87,0xE0,0x00,0x02,0x3F,0x0C,0x00,0xC0,0x00,0x00,0x00,0x6E,0x00,0x3B,0xE0,0x01,
-C51 COMPILER V9.60.7.0   MAIN                                                              08/02/2024 22:04:27 PAGE 6   
+ 166                  DB  000H,000H,000H,0fcH,000H,000H,000H,001H,0cfH,0e7H,080H,000H,00fH,080H,000H,000H
+ 167                  DB  000H,000H,001H,0f2H,000H,000H,000H,001H,0cdH,08eH,000H,000H,00fH,000H,000H,000H
+ 168                  DB  000H,000H,001H,0f1H,0c0H,000H,000H,001H,0fcH,01fH,0feH,000H,01cH,000H,000H,000H
+ 169                  DB  000H,000H,001H,0e1H,0ffH,000H,000H,001H,0bcH,03fH,007H,000H,038H,000H,000H,000H
+ 170                  DB  000H,000H,001H,0e3H,0ffH,080H,000H,001H,0b8H,0f9H,087H,000H,07eH,000H,000H,000H
+ 171                  DB  000H,000H,001H,0e7H,0ffH,0c0H,000H,001H,090H,0f1H,087H,000H,0ffH,0c0H,000H,000H
+ 172                  DB  000H,000H,003H,0cfH,0ffH,0c0H,000H,001H,080H,0b9H,087H,000H,0e7H,0e0H,000H,000H
+ 173                  DB  000H,000H,003H,0ffH,0ffH,0c0H,000H,001H,080H,033H,08eH,001H,0c0H,0f8H,000H,000H
+ 174                  DB  000H,000H,003H,0ffH,0f8H,000H,000H,001H,020H,063H,00eH,003H,080H,03cH,000H,000H
+ 175                  DB  000H,000H,003H,0ffH,0e0H,000H,000H,001H,020H,0e6H,00cH,003H,000H,01fH,000H,000H
+ 176                  DB  000H,000H,00fH,0ffH,0c0H,000H,000H,001H,040H,0ceH,01cH,007H,000H,00fH,080H,000H
+ 177                  DB  000H,000H,01fH,0ffH,000H,000H,000H,001H,0c0H,08cH,018H,00eH,000H,007H,0e0H,000H
+ 178                  DB  000H,000H,07fH,0feH,000H,000H,000H,001H,0c0H,018H,038H,00eH,000H,003H,0fcH,000H
+ 179                  DB  000H,007H,0ffH,0f8H,000H,000H,000H,001H,0c0H,038H,070H,03cH,000H,001H,0ffH,000H
+ 180                  DB  000H,03fH,0ffH,0f0H,000H,000H,000H,000H,080H,007H,0e0H,038H,000H,000H,0ffH,0c0H
+ 181                  DB  000H,01fH,0ffH,0e0H,000H,000H,000H,000H,000H,003H,0c0H,000H,000H,000H,07fH,0c0H
+ 182                  DB  000H,00fH,0ffH,0f0H,000H,000H,000H,000H,000H,001H,080H,000H,000H,000H,030H,000H
+ 183                  DB  000H,007H,0ffH,0fcH,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H
+ 184                  DB  000H,003H,0ffH,0feH,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H
+ 185                  DB  000H,001H,0ffH,0ffH,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H
+ 186                  DB  000H,000H,01fH,01fH,080H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H
+ 187                  DB  000H,000H,01fH,00fH,0c0H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H
+ 188                  DB  000H,000H,01eH,003H,0f0H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H
+ 189                  DB  000H,000H,01eH,001H,0f8H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H
+ 190                  DB  000H,000H,03eH,000H,0fcH,000H,000H,000H,0e0H,000H,000H,000H,000H,040H,000H,000H
+ 191                  DB  000H,000H,03eH,000H,0feH,000H,000H,003H,0f1H,082H,061H,09cH,060H,061H,086H,000H
+ 192                  DB  000H,000H,03eH,000H,07fH,000H,000H,002H,011H,082H,071H,09cH,060H,0e1H,0c6H,000H
+ 193                  DB  000H,000H,03eH,000H,03fH,080H,000H,006H,019H,082H,071H,09cH,060H,0e1H,0c6H,000H
+ 194                  DB  000H,000H,07fH,0e0H,01fH,0c0H,000H,006H,001H,082H,079H,09cH,0e0H,0b1H,0e6H,000H
+ 195                  DB  000H,000H,0ffH,0f0H,01fH,0f0H,000H,003H,081H,082H,069H,09cH,0e1H,0b1H,0a6H,000H
+ 196                  DB  000H,001H,0ffH,0f8H,00fH,0fcH,000H,001H,0e1H,082H,069H,096H,0a1H,091H,0a6H,000H
+ 197                  DB  000H,003H,0fbH,0fcH,007H,0ffH,000H,000H,071H,082H,06dH,096H,0a1H,019H,0b6H,000H
+ 198                  DB  000H,007H,0f0H,0fcH,007H,0ffH,080H,000H,019H,082H,065H,093H,0a1H,0f9H,096H,000H
+ 199                  DB  000H,00fH,0e0H,07cH,001H,0ffH,0e0H,006H,019H,082H,067H,093H,0a3H,019H,09eH,000H
+ 200                  DB  004H,07fH,0c0H,01cH,000H,0ffH,0fcH,006H,019H,086H,063H,093H,0a3H,00dH,08eH,000H
+ 201                  DB  001H,0ffH,000H,008H,000H,07fH,0feH,006H,019H,086H,063H,093H,022H,00dH,08eH,000H
+ 202                  DB  000H,010H,000H,000H,000H,01fH,0ffH,003H,0f0H,0fcH,061H,093H,026H,00dH,086H,000H
+ 203                  DB  000H,000H,000H,000H,000H,007H,0ffH,000H,0e0H,078H,061H,091H,026H,005H,086H,000H
+ 204                  DB  000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H
+ 205                  DB  000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H
+ 206                  DB  000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H
+ 207                  DB  000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H
+ 208                  DB  000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H
+ 209                  DB  000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H,000H
+ 210          ;-------------------------------------------------------------------------------
+ 211          ;演示用字符串定义
+ 212          STR1:   DB     " SMG12864ZK ",0
+ 213          STR2:   DB     "中文字符图形点阵",0
+ 214          STR3:   DB     "液晶显示模块",0
+ 215          STR4:   DB     "长沙太阳人SUNMAN",0
+ 216          STR5:   DW      USERCHAR1CODE,USERCHAR2CODE,00H
+ 217          STR6:   DW      USERCHAR3CODE,USERCHAR4CODE,00H
+ 218          ;-------------------------------------------------------------------------------
+ 219          
+ 220          START:  MOV     SP,#60H
+ 221          MAIN:
+ 222                  CALL    EXSAMPLE                ;调用演示程序
+ 223                  JMP     MAIN
+ 224          EXSAMPLE:                               ;演示程序
+ 225          ;0.演示前的准备,LCD液晶显示控制器初始化,所有显示全清零
+ 226                  CALL    LCDRESET                ;液晶显示控制器初始化
+ 227                  MOV     A,#' '
+C51 COMPILER V9.60.7.0   MAIN                                                              06/21/2025 18:38:06 PAGE 6   
 
- 302          0x86,0x00,0x00,0x06,0x31,0x80,0x00,0x00,0x00,0x00,0x00,0x38,0x00,0x30,0xE0,0x01,
- 303          0x86,0x03,0xC3,0xCF,0x31,0x8C,0x78,0xCD,0x86,0xC0,0x00,0x38,0x00,0x30,0x60,0x01,
- 304          0x86,0x04,0x66,0x66,0x31,0x8C,0xCC,0xCE,0xCD,0xC0,0x00,0x10,0x00,0x38,0x20,0x01,
- 305          0x87,0xE1,0xE7,0x06,0x3F,0x0C,0xE0,0xCC,0xCC,0xC0,0x00,0x30,0x00,0x0C,0x30,0x01,
- 306          0x86,0x03,0x63,0xC6,0x33,0x0C,0x78,0xCC,0xCC,0xC0,0x00,0x30,0x00,0x04,0x18,0x01,
- 307          0x86,0x06,0x60,0xE6,0x31,0x8C,0x1C,0xCC,0xCC,0xC0,0x00,0x30,0x00,0x06,0x18,0x01,
- 308          0x86,0x06,0x66,0x66,0x31,0x8C,0xCC,0xCC,0xCD,0xC0,0x00,0x20,0x00,0x03,0x0C,0x01,
- 309          0x87,0xE3,0xE3,0xC3,0x30,0xCC,0x78,0xCC,0xC6,0xC0,0x00,0x20,0x00,0x02,0x08,0x01,
- 310          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x08,0xC0,0x00,0x20,0x00,0x02,0x08,0x01,
- 311          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x07,0x80,0x00,0x20,0x00,0x03,0x98,0x01,
- 312          0xBF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xF0,0x00,0x20,0x00,0x01,0xF0,0x01,
- 313          0xBF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xF0,0x00,0x20,0x00,0x01,0xE0,0x01,
- 314          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x20,0x00,0x01,0xC0,0x01,
- 315          0xA0,0x00,0x00,0x28,0x00,0x20,0x00,0x00,0x00,0x00,0x00,0x20,0x00,0x01,0x80,0x01,
- 316          0xA0,0x00,0x00,0x20,0x00,0x20,0x00,0x00,0x00,0x00,0x00,0x30,0x00,0x03,0x00,0x01,
- 317          0xBC,0x8A,0x21,0xE8,0xEF,0x27,0x22,0x18,0xE7,0x60,0x00,0x30,0x00,0x03,0x00,0x01,
- 318          0xA2,0x89,0x42,0x29,0x08,0xA0,0x94,0x25,0x14,0x90,0x00,0x30,0x00,0x02,0x00,0x01,
- 319          0xA2,0x89,0x5A,0x28,0xC8,0xA3,0x94,0x21,0x14,0x90,0x00,0x10,0xFC,0x02,0x00,0x01,
- 320          0xA2,0x89,0x42,0x28,0x28,0xA4,0x94,0x25,0x14,0x90,0x00,0x10,0x3C,0x06,0x00,0x01,
- 321          0xBC,0x78,0x81,0xE9,0xCF,0x23,0x88,0x98,0xE4,0x90,0x00,0x18,0x08,0x06,0x00,0x01,
- 322          0x80,0x00,0x80,0x00,0x08,0x00,0x08,0x00,0x00,0x00,0x00,0x18,0x08,0x06,0x00,0x01,
- 323          0x80,0x03,0x00,0x00,0x08,0x00,0x30,0x00,0x00,0x00,0x00,0x0C,0x18,0x0C,0x00,0x01,
- 324          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x07,0xFF,0x3C,0x00,0x01,
- 325          0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
- 326          
- 327          };
- 328          unsigned char code pic3[]=
- 329          {
- 330          0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
- 331          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 332          0x80,0x60,0x00,0x60,0x38,0x00,0x00,0x00,0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 333          0x80,0x60,0x01,0xF8,0x77,0xF8,0x00,0x00,0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 334          0x80,0xE0,0x03,0xFB,0x00,0x18,0x00,0x00,0x80,0x00,0x00,0x07,0x00,0x20,0x00,0x01,
- 335          0x80,0xE0,0x07,0xFE,0x00,0x08,0x00,0x00,0x80,0x00,0x00,0x0F,0x80,0x20,0x00,0x01,
- 336          0x81,0xE0,0x0F,0xFF,0x00,0x04,0x18,0x00,0x80,0x00,0x00,0x0F,0xC0,0x20,0x00,0x01,
- 337          0x81,0xF0,0x0F,0xFA,0x00,0x1C,0x7C,0x00,0x80,0x00,0x00,0x0F,0xC0,0x20,0x00,0x01,
- 338          0x83,0x30,0x0F,0xE2,0x00,0x0B,0x7E,0x00,0x80,0x00,0x00,0x0F,0xE0,0x20,0x00,0x01,
- 339          0x82,0x90,0x0F,0xFF,0x80,0x08,0xFF,0x00,0x80,0x03,0x00,0x0F,0xE0,0x20,0x00,0x01,
- 340          0x86,0x98,0x0F,0xF9,0xC0,0x78,0xFF,0x00,0x80,0x07,0x80,0x7F,0xE0,0x20,0x00,0x01,
- 341          0x8E,0x18,0x07,0xFC,0x3F,0xCE,0x7F,0x00,0x80,0x07,0xC3,0xC3,0xE0,0x20,0x00,0x01,
- 342          0xBF,0x38,0x03,0xFF,0x9F,0xF3,0x7F,0x00,0x80,0x07,0xCC,0x00,0x38,0x20,0x00,0x01,
- 343          0xBF,0xF8,0x02,0x7F,0x87,0xFD,0x3F,0x00,0x80,0x0F,0xF0,0x00,0x06,0x20,0x00,0x01,
- 344          0x8F,0xF8,0x02,0x3F,0xE7,0xFD,0x3E,0x00,0x80,0x0F,0xC0,0x00,0x01,0xA0,0x00,0x01,
- 345          0x80,0x04,0x04,0x1F,0xC3,0xFE,0x3C,0x00,0x80,0x0F,0x80,0x00,0x00,0xE0,0x00,0x01,
- 346          0x80,0x04,0x04,0x0F,0x81,0xFC,0x10,0x00,0x80,0x07,0x00,0x10,0x3F,0xE0,0x00,0x01,
- 347          0x80,0x04,0x04,0x7C,0x00,0x00,0x10,0x00,0x80,0x06,0x00,0x20,0xFF,0xF0,0x00,0x01,
- 348          0x80,0x02,0x08,0xFE,0x00,0x00,0x10,0x00,0x80,0x04,0x18,0x01,0xFF,0xFC,0x00,0x01,
- 349          0x80,0x03,0xE9,0xFE,0x03,0xF0,0x10,0x00,0x80,0x08,0x02,0x03,0xFF,0xFC,0x00,0x01,
- 350          0x80,0x02,0x33,0xC7,0x07,0xF8,0x10,0x00,0x80,0x10,0x00,0x07,0xFF,0xFE,0x00,0x01,
- 351          0x80,0x06,0x37,0x8B,0x04,0xFC,0x10,0x00,0x80,0x10,0x00,0x07,0xFF,0xFF,0x00,0x01,
- 352          0x80,0x0B,0xA7,0xBE,0x08,0x7E,0x10,0x00,0x80,0x30,0x00,0x0F,0xFF,0xFD,0x80,0x01,
- 353          0x80,0x08,0x47,0x84,0x0F,0x7E,0x10,0x00,0x80,0x20,0x78,0x0F,0xFF,0xE0,0x80,0x01,
- 354          0x80,0x08,0x47,0x80,0x01,0xFE,0x10,0x00,0x80,0x23,0xFE,0x0F,0xFF,0x82,0xC0,0x01,
- 355          0x80,0x08,0x47,0xC8,0x00,0x7E,0x10,0x00,0x80,0x47,0xFF,0x8F,0xFC,0x0E,0x40,0x01,
- 356          0x80,0x08,0x43,0xFC,0x07,0xFE,0x10,0x00,0x80,0x5F,0xFF,0xCF,0xE0,0x7E,0x40,0x01,
- 357          0x80,0x06,0x61,0xEE,0x03,0xFE,0x10,0x00,0x80,0x5F,0xFF,0xEF,0x81,0xFE,0x40,0x01,
- 358          0x80,0x03,0xE0,0x00,0x01,0xFC,0x10,0x00,0x80,0x7F,0xFF,0xEF,0x0F,0xFE,0x60,0x01,
- 359          0x80,0x00,0x70,0x00,0x00,0x78,0x30,0x00,0x80,0xFF,0xFF,0xF7,0x3F,0xFE,0x20,0x01,
- 360          0x80,0x00,0x38,0x00,0x00,0x00,0x20,0x00,0x80,0xFF,0xFF,0xC3,0xFF,0xFC,0x20,0x01,
- 361          0x80,0x00,0x2C,0x06,0x80,0x00,0x60,0x00,0x80,0xFF,0xFE,0x03,0xFF,0xF8,0x20,0x01,
- 362          0x80,0x00,0x36,0x18,0x00,0x00,0xC0,0x00,0x80,0xFF,0xF0,0x39,0xFF,0xF8,0x60,0x01,
- 363          0x80,0x00,0x13,0x00,0x00,0x01,0x00,0x00,0x80,0xFF,0xC0,0xF8,0xFF,0xE0,0x40,0x01,
-C51 COMPILER V9.60.7.0   MAIN                                                              08/02/2024 22:04:27 PAGE 7   
+ 228                  MOV     B,A
+ 229                  CALL    CHARLCDFILL             ;显示清屏
+ 230          
+ 231          ;1.字符串演示: 在(2,0)字符位置显示" SMG12864ZK "
+ 232                  MOV     CXPOS,#2                ;设置当前显示位置为第3列
+ 233                  MOV     CYPOS,#0                ;设置当前显示位置为第1行
+ 234                  MOV     DPTR,#STR1
+ 235                  CALL    PUTSTR                  ;显示字符串
+ 236                  CALL    EXDELAY                 ;延时约300mS
+ 237                  CALL    EXDELAY                 ;延时约300mS
+ 238          
+ 239          ;2.字符串演示: 在(0,1)字符位置显示"中文字符图形点阵"
+ 240                  MOV     CXPOS,#0                ;设置当前显示位置为第1列
+ 241                  MOV     CYPOS,#1                ;设置当前显示位置为第2行
+ 242                  MOV     DPTR,#STR2
+ 243                  CALL    PUTSTR                  ;显示字符串
+ 244                  CALL    EXDELAY                 ;延时约300mS
+ 245                  CALL    EXDELAY                 ;延时约300mS
+ 246          
+ 247          ;3.字符串演示: 在(2,2)字符位置显示"液晶显示模块"
+ 248                  MOV     CXPOS,#2                ;设置当前显示位置为第3列
+ 249                  MOV     CYPOS,#2                ;设置当前显示位置为第3行
+ 250                  MOV     DPTR,#STR3
+ 251                  CALL    PUTSTR                  ;显示字符串
+ 252                  CALL    EXDELAY                 ;延时约300mS
+ 253                  CALL    EXDELAY                 ;延时约300mS
+ 254          
+ 255          ;4.字符串演示: 在(0,3)字符位置显示"长沙太阳人SUNMAN"
+ 256                  MOV     CXPOS,#0                ;设置当前显示位置为第1列
+ 257                  MOV     CYPOS,#3                ;设置当前显示位置为第4行
+ 258                  MOV     DPTR,#STR4
+ 259                  CALL    PUTSTR                  ;显示字符串
+ 260                  CALL    EXDELAY                 ;延时约300mS
+ 261                  CALL    EXDELAY                 ;延时约300mS
+ 262          
+ 263          ;5.字符填充演示: 整屏显示0..9 空格一遍
+ 264                  MOV     R7,#'0'                 ;初始数字为0
+ 265          ESP_PA:                                 ;
+ 266                  MOV     A,R7                    ;
+ 267                  MOV     B,A
+ 268                  CALL    CHARLCDFILL             ;整屏显示为A的值
+ 269                  CALL    EXDELAY                 ;延时300mS
+ 270                  INC     R7
+ 271                  CJNE    R7,#'9'+1,ESP_PA        ;
+ 272                  MOV     A,#' '                  ;
+ 273                  MOV     B,A
+ 274                  CALL    CHARLCDFILL             ;显示清屏
+ 275                  CALL    EXDELAY                 ;延时300mS
+ 276          
+ 277          ;6.字符演示: 依次显示A..Z 一遍
+ 278                  MOV     R7,#'A'                 ;依次显示A..Z一遍
+ 279          ESP_PB:                                 ;
+ 280                  MOV     A,R7                    ;
+ 281                  MOV     B,#00H
+ 282                  CALL    PUTCHAR                 ;当前位置显示为A的值
+ 283                  CALL    EXDELAY                 ;延时300mS
+ 284                  INC     R7
+ 285                  CJNE    R7,#'Z'+1,ESP_PB       ;
+ 286          
+ 287          ;7.自定义字符演示: 装入自定义字符点阵发生器
+ 288                  MOV     DPTR,#CHAR1CGRAMTAB
+ 289                  MOV     A,#00H
+C51 COMPILER V9.60.7.0   MAIN                                                              06/21/2025 18:38:06 PAGE 7   
 
- 364          0x80,0x00,0x08,0xC0,0x00,0x06,0x00,0x00,0x80,0xFE,0x07,0xF0,0x3F,0xC0,0x40,0x01,
- 365          0x80,0x00,0x08,0x70,0x00,0x1C,0x00,0x00,0x80,0xF8,0x1F,0xF0,0x00,0x00,0xC0,0x01,
- 366          0x80,0x00,0x0C,0x7F,0x00,0xFC,0x00,0x00,0x80,0xB8,0xFF,0xF0,0x00,0x00,0x80,0x01,
- 367          0x80,0x00,0x04,0xF0,0xFF,0xFE,0x00,0x00,0x80,0xBB,0xFF,0xE0,0x00,0x01,0x00,0x01,
- 368          0x80,0x00,0x04,0xE0,0x07,0x9E,0x00,0x00,0x80,0x5F,0xFF,0xE0,0x00,0x02,0x00,0x01,
- 369          0x80,0x00,0x02,0xC0,0x07,0x0E,0x00,0x00,0x80,0x5F,0xFF,0xC0,0x00,0x04,0x00,0x01,
- 370          0x80,0x00,0x03,0x80,0x07,0x06,0x00,0x00,0x80,0x4F,0xFF,0x80,0x00,0x08,0x00,0x01,
- 371          0x80,0x00,0x01,0x00,0x02,0x06,0x00,0x00,0x80,0x23,0xFF,0x00,0x00,0x30,0x00,0x01,
- 372          0x80,0x00,0x01,0x00,0x00,0x82,0x00,0x00,0x80,0x20,0xF8,0x1C,0x00,0x60,0x00,0x01,
- 373          0x80,0x00,0x01,0x00,0x00,0x01,0x00,0x00,0x80,0x10,0x00,0x00,0x01,0xA0,0x00,0x01,
- 374          0x80,0x00,0x03,0x00,0x00,0x41,0x00,0x00,0x80,0x0C,0x00,0x00,0x06,0x23,0x00,0x01,
- 375          0x80,0x00,0x02,0x00,0x00,0x20,0x80,0x00,0x80,0x06,0x00,0x02,0x18,0x27,0x00,0x01,
- 376          0x80,0x00,0x02,0x00,0x00,0x20,0x80,0x00,0x80,0x01,0xC0,0x00,0x60,0x3F,0x00,0x01,
- 377          0x80,0x00,0x02,0x00,0x00,0x00,0x80,0x00,0x80,0x00,0x7C,0x07,0xE0,0x3E,0x00,0x01,
- 378          0x80,0x00,0x02,0x00,0x00,0x20,0x00,0x00,0x80,0x00,0x07,0xFF,0xFF,0xFE,0x00,0x01,
- 379          0x80,0x00,0x02,0x00,0x00,0x38,0x00,0x00,0x80,0x00,0x00,0x7F,0xFF,0xFC,0x00,0x01,
- 380          0x80,0x00,0x02,0x00,0x00,0x1E,0x00,0x00,0x80,0x00,0x00,0x67,0xFF,0xF8,0x00,0x01,
- 381          0x80,0x00,0x02,0x00,0x00,0x1C,0x00,0x00,0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 382          0x80,0x00,0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
- 383          0x80,0x00,0x02,0x00,0x03,0x00,0x00,0x00,0x36,0x00,0x03,0x00,0x00,0x00,0x00,0x01,
- 384          0x80,0x00,0x02,0x00,0x03,0x00,0x00,0x00,0x30,0x00,0x03,0x00,0x00,0x00,0x00,0x01,
- 385          0x80,0x00,0x03,0x00,0x03,0xE6,0x78,0xC1,0xF6,0x79,0xF3,0x3B,0x18,0x71,0xE7,0xFD,
- 386          0x80,0x00,0x01,0x08,0x03,0x36,0x6D,0x83,0x36,0xCD,0x9B,0x4D,0xB0,0xDB,0x36,0x67,
- 387          0x80,0x00,0x01,0x07,0xC3,0x36,0x6D,0x83,0x36,0xF1,0x9B,0x3D,0xB0,0xC3,0x36,0x67,
- 388          0x80,0x00,0x01,0x01,0x83,0x36,0x6D,0xBB,0x36,0x3D,0x9B,0x6D,0xB0,0xC3,0x36,0x67,
- 389          0x80,0x00,0x00,0x00,0x03,0x36,0x67,0x03,0x36,0xCD,0x9B,0x6C,0xE6,0xDB,0x36,0x67,
- 390          0x80,0x00,0x00,0x80,0x83,0xE3,0xE7,0x01,0xF6,0x79,0xF3,0x3C,0xE6,0x71,0xE6,0x67,
- 391          0x80,0x00,0x00,0x61,0xC0,0x00,0x06,0x00,0x00,0x01,0x80,0x00,0xC0,0x00,0x00,0x01,
- 392          0x80,0x00,0x00,0x1E,0x38,0x00,0x1C,0x00,0x00,0x01,0x80,0x03,0x80,0x00,0x00,0x01,
- 393          0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
- 394          
- 395          };
+ 290                  CALL    SETCHARCGRAM            ;装入自定义字符字符点阵
+ 291                  MOV     DPTR,#CHAR2CGRAMTAB
+ 292                  MOV     A,#01H
+ 293                  CALL    SETCHARCGRAM            ;装入自定义字符字符点阵
+ 294                  MOV     DPTR,#CHAR3CGRAMTAB
+ 295                  MOV     A,#02H
+ 296                  CALL    SETCHARCGRAM            ;装入自定义字符字符点阵
+ 297                  MOV     DPTR,#CHAR4CGRAMTAB
+ 298                  MOV     A,#03H
+ 299                  CALL    SETCHARCGRAM            ;装入自定义字符字符点阵
+ 300          
+ 301          ;8.自定义字符演示：在(4,0)(5,0)(4,1)(5,1)字符位置显示自定义字符1,2,3,4
+ 302                  MOV     CXPOS,#4                ;设置当前显示位置为第5列
+ 303                  MOV     CYPOS,#0                ;设置当前显示位置为第1行
+ 304                  MOV     A,#USERCHAR1CODE%256
+ 305                  MOV     B,#USERCHAR1CODE/256
+ 306                  CALL    PUTCHAR                 ;显示自定义字符1
+ 307                  CALL    EXDELAY                 ;延时约300mS
+ 308                  MOV     A,#USERCHAR2CODE%256
+ 309                  MOV     B,#USERCHAR2CODE/256
+ 310                  CALL    PUTCHAR                 ;显示自定义字符2
+ 311                  CALL    EXDELAY                 ;延时约300mS
+ 312                  MOV     CXPOS,#4                ;设置当前显示位置为第5列
+ 313                  MOV     CYPOS,#1                ;设置当前显示位置为第2行
+ 314                  MOV     A,#USERCHAR3CODE%256
+ 315                  MOV     B,#USERCHAR3CODE/256
+ 316                  CALL    PUTCHAR                 ;显示自定义字符3
+ 317                  CALL    EXDELAY                 ;延时约300mS
+ 318                  MOV     A,#USERCHAR4CODE%256
+ 319                  MOV     B,#USERCHAR4CODE/256
+ 320                  CALL    PUTCHAR                 ;显示自定义字符4
+ 321                  CALL    EXDELAY                 ;延时约300mS
+ 322                  CALL    EXDELAY                 ;延时约300mS
+ 323          
+ 324          ;9.图形模式演示: 在(0,0)点阵位置显示图片
+ 325                  MOV     A,#' '
+ 326                  MOV     B,A
+ 327                  CALL    CHARLCDFILL             ;字符显示清屏
+ 328                  CALL    LCDGRAPHON              ;开图形模式
+ 329                  MOV     DPTR,#IMG_SUNMAN_128x64TAB
+ 330                  MOV     GXPOS,#0
+ 331                  MOV     GYPOS,#0
+ 332                  CALL    PUTIMAGE                ;显示图片
+ 333                  CALL    EXDELAY                 ;延时约300mS
+ 334                  CALL    EXDELAY                 ;延时约300mS
+ 335                  MOV     A,#00H
+ 336                  CALL    GLCDFILL                ;图形区域清屏
+ 337                  CALL    LCDGRAPHOFF             ;关图形模式
+ 338                  RET
+ 339          EXDELAY:                                ;演示延时子程序
+ 340                  MOV     R2,#30                  ;延时约300mS
+ 341          EDY_PA: MOV     R1,#100
+ 342          EDY_PB: MOV     R0,#49
+ 343                  DJNZ    R0,$
+ 344                  DJNZ    R1,EDY_PB
+ 345                  DJNZ    R2,EDY_PA
+ 346                  RET
+ 347          ;-------------------------------------------------------------------------------
+ 348          ;字符操作区域
+ 349          ;12864ZK字符区域定义为:
+ 350          ;   CXPOS(0-15) 对应于第1列到第16列位置,每个字符列位置实际占位8点,总计对应128点
+ 351          ;   CYPOS(0-3)对应于第1行到第4行,每个行位置实际占位16点,总计对应64点
+C51 COMPILER V9.60.7.0   MAIN                                                              06/21/2025 18:38:06 PAGE 8   
 
+ 352          ;警告:直接设置CXPOS的位置时,请将CXPOS的值设置为偶数,否则显示的字符值会不正确.
+ 353          ;-------------------------------------------------------------------------------
+ 354          ;以下为CHARLCDFILL,PUTSTR,PUTCHAR,SETCHARCGRAM为ST7920兼容芯片的液晶显示控制器
+ 355          ;的通用子程序
+ 356          ;-------------------------------------------------------------------------------
+ 357          ;子程序名称:CHARLCDFILL(A,B).
+ 358          ;功能:整屏显示A/B表示的字符.
+ 359          ;输入:A,B.
+ 360          ;输出:无.
+ 361          ;影响:R0,R2.
+ 362          ;修改日期:2009.10.28
+ 363          ;修改人:chujianjun@sunman.cn,tanchao@sunman.cn
+ 364          ;-------------------------------------------------------------------------------
+ 365          CHARLCDFILL:                            ;整屏显示A/B代表的字数据子程序
+ 366                  MOV     CYPOS,#0                ;第1行位置
+ 367                  MOV     CXPOS,#0                ;第1列位置
+ 368          CLF_PA:
+ 369                  CALL    CHARLCDPOS
+ 370                  XCH     A,B
+ 371                  CALL    LCDWD
+ 372                  XCH     A,B
+ 373                  CALL    LCDWD
+ 374                  CALL    CHARCURSORNEXT          ;置字符位置为下一个有效位置
+ 375                  CALL    CHARCURSORNEXT          ;置字符位置为下一个有效位置
+ 376                  MOV     R2,CXPOS
+ 377                  CJNE    R2,#00H,CLF_PA
+ 378                  MOV     R2,CYPOS
+ 379                  CJNE    R2,#00H,CLF_PA
+ 380                  RET
+ 381          ;-------------------------------------------------------------------------------
+ 382          ;子程序名称:PUTSTR(*S).
+ 383          ;功能:写字符串点阵,若*S=0 表示字符串结束.
+ 384          ;输入:*S.
+ 385          ;输出:.
+ 386          ;影响:R0,R1,R2,R3,R4,R5,R6,R7,A,B.
+ 387          ;修改日期:2009.7.17
+ 388          ;修改人:chujianjun@sunman.cn,tanchao@sunman.cn
+ 389          ;-------------------------------------------------------------------------------
+ 390          PUTSTR:                                 ;显示字符串子程序,字符码为00H时退出
+ 391                  CALL    GETSTRCHAR
+ 392                  JZ      PSR_LAX
+ 393                  CALL    PUTCHAR
+ 394                  JMP     PUTSTR
+ 395          PSR_LAX:
+ 396                  RET
+ 397          ;-------------------------------------------------------------------------------
+ 398          ;子程序名称:GETSTRCHAR(*S).
+ 399          ;功能:读单个字符串字符代码,本子程序仅供PUTSTR使用,若*S<128 表示字符为ASCII码,
+ 400          ;     A=*S后退出;否则表示为中文汉字代码,B=*S后,再读一个字符置入A中.
+ 401          ;输入:*S(DPTR).
+ 402          ;输出:.
+ 403          ;影响:R0,R1,R2,R3,R4,R5,R6,R7,A,B.
+ 404          ;修改日期:2009.7.17
+ 405          ;修改人:chujianjun@sunman.cn,tanchao@sunman.cn
+ 406          ;-------------------------------------------------------------------------------
+ 407          GETSTRCHAR:                             ;字符串中取字符码子程序
+ 408                  MOV     B,#00H
+ 409                  CLR     A
+ 410                  MOVC    A,@A+DPTR
+ 411                  INC     DPTR
+ 412                  JNB     ACC.7,GSC_LAX
+ 413                  MOV     B,A
+C51 COMPILER V9.60.7.0   MAIN                                                              06/21/2025 18:38:06 PAGE 9   
 
-MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    533    ----
-   CONSTANT SIZE    =   3126    ----
-   XDATA SIZE       =   ----    ----
-   PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----      10
-   IDATA SIZE       =   ----    ----
-   BIT SIZE         =   ----       1
-END OF MODULE INFORMATION.
+ 414                  CLR     A
+ 415                  MOVC    A,@A+DPTR
+ 416                  INC     DPTR
+ 417          GSC_LAX:
+ 418                  RET
+ 419          ;-------------------------------------------------------------------------------
+ 420          ;子程序名称:PUTCHAR(A,B).
+ 421          ;功能:在(CXPOS,CYPOS)字符位置写字符A/B.
+ 422          ;输入:A,B.
+ 423          ;输出:无.
+ 424          ;影响:R0.
+ 425          ;修改日期:2009.10.29
+ 426          ;修改人:chujianjun@sunman.cn,tanchao@sunman.cn
+ 427          ;-------------------------------------------------------------------------------
+ 428          PUTCHAR:                                ;在(CXPOS,CYPOS)字符位置写字符子程序
+ 429                  PUSH    DPL
+ 430                  PUSH    DPH
+ 431                  JNB     B.7,PCR_LAY
+ 432          ;CHINESE:                               ;高位字节大于128表示为汉字
+ 433                                                  ;奇数位置判断功能
+ 434                  PUSH    ACC                     ;写汉字时,CXPOS字符位置在奇数位置,则
+ 435                  MOV     A,CXPOS                 ;自动补添一个空格对齐后再显示汉字
+ 436                  JNB     ACC.0,PCR_LDX
+ 437                  MOV     A,#' '
+ 438                  CALL    LCDWD
+ 439                  CALL    CHARCURSORNEXT          ;置字符位置为下一个有效位置
+ 440          PCR_LDX:
+ 441                  POP     ACC
+ 442                  CALL    CHARLCDPOS              ;定位第CXPOS个字符位置的DDRAM地址
+ 443                  XCH     A,B
+ 444                  CJNE    A,#0FFH,PCR_LFY
+ 445                                                  ;若高位字节为0FFH则表示为自定义字符
+ 446                  CPL     A                       ;则转换为ST7920的字符码
+ 447                  CALL    LCDWD                   ;写高位字符
+ 448                  CPL     A
+ 449                  XCH     A,B
+ 450                  CALL    CHARCURSORNEXT          ;置字符位置为下一个有效位置
+ 451                  CPL     A
+ 452                  CALL    LCDWD                   ;写低位字符
+ 453                  CPL     A
+ 454                  JMP     PCR_LFX
+ 455          PCR_LFY:
+ 456                  CALL    LCDWD                   ;写高位字符
+ 457                  XCH     A,B
+ 458                  CALL    CHARCURSORNEXT          ;置字符位置为下一个有效位置
+ 459                  CALL    LCDWD                   ;写低位字符
+ 460          PCR_LFX:
+ 461                  CALL    CHARCURSORNEXT          ;置字符位置为下一个有效位置
+ 462                  JMP     PCR_LAX
+ 463          PCR_LAY:
+ 464          ;ENGLISH:                               ;高位字节小于128表示为ASCII字符
+ 465                  CALL    CHARLCDPOS              ;定位第CXPOS个字符位置的DDRAM地址
+ 466          
+ 467                  PUSH    B
+ 468                  MOV     B,CXPOS
+ 469                  JNB     B.0,PCR_LEY
+ 470                                                  ;写ASCII字符时,CXPOS字符位置在奇数位置,则
+ 471                                                  ;重新写高位字符缓冲区内容
+ 472                  XCH     A,FCHARBUF
+ 473                  CALL    LCDWD
+ 474                  XCH     A,FCHARBUF
+ 475                  CALL    LCDWD                   ;低字节写ASCII字符
+C51 COMPILER V9.60.7.0   MAIN                                                              06/21/2025 18:38:06 PAGE 10  
 
+ 476                  JMP     PCR_LEX
+ 477          PCR_LEY:                                ;CXPOS字符位置在偶数位置则
+ 478                  CALL    LCDWD                   ;高字节写ASCII字符后补显空格
+ 479                  MOV     FCHARBUF,A
+ 480                  PUSH    ACC
+ 481                  MOV     A,#' '                  ;如果为偶数位置,则将奇数位置显示为空格
+ 482                  CALL    LCDWD
+ 483                  POP     ACC
+ 484          PCR_LEX:
+ 485                  POP     B
+ 486                  CALL    CHARCURSORNEXT          ;置字符位置为下一个有效位置
+ 487          
+ 488          PCR_LAX:
+ 489                  POP     DPH
+ 490                  POP     DPL
+ 491                  RET
+ 492          ;-------------------------------------------------------------------------------
+ 493          ;子程序名称:SETCHARCGRAM(A,*S).
+ 494          ;功能:将DPTR所指32字节数据设置到自定义字符A(0-3)的CGRAM中.
+ 495          ;输入:A,DPTR.
+ 496          ;输出:无.
+ 497          ;影响:R0,R2,A.
+ 498          ;修改日期:2009.10.28
+ 499          ;修改人:chujianjun@sunman.cn,tanchao@sunman.cn
+ 500          ;-------------------------------------------------------------------------------
+ 501          SETCHARCGRAM:
+ 502                  PUSH    ACC
+ 503                  MOV     A,#34H
+ 504                  CALL    LCDWC                   ;扩充指令集,图形模式关闭
+ 505                  MOV     A,#02H
+ 506                  CALL    LCDWC                   ;SR=0 激活CGRAM
+ 507                  MOV     A,#30H
+ 508                  CALL    LCDWC                  ;恢复为基本指令集
+ 509                  POP     ACC
+ 510                  ANL     A,#03H
+ 511                  SWAP    A
+ 512                  ORL     A,#40H
+ 513                  CALL    LCDWC                   ;设置CGRAM地址
+ 514                  MOV     R2,#32
+ 515          SCG_PA:
+ 516                  CLR     A
+ 517                  MOVC    A,@A+DPTR
+ 518                  CALL    LCDWD
+ 519                  INC     DPTR
+ 520                  DJNZ    R2,SCG_PA
+ 521                  RET
+ 522          ;-------------------------------------------------------------------------------
+ 523          ;以下为CHARLCDPOS,CHARCURSORNEXT,LCDRESET为ST7920兼容芯片的液晶显示控制器的
+ 524          ;16ASCII字符X4行的SMG12864系列标准中文字符点阵型液晶显示模块的接口程序.
+ 525          ;-------------------------------------------------------------------------------
+ 526          ;子程序名称:CHARLCDPOS().
+ 527          ;功能:设置(CXPOS,CYPOS)字符位置的DDRAM地址.
+ 528          ;输入:无.
+ 529          ;输出:无.
+ 530          ;影响:无.
+ 531          ;修改日期:2009.10.28
+ 532          ;修改人:chujianjun@sunman.cn,tanchao@sunman.cn
+ 533          ;-------------------------------------------------------------------------------
+ 534          CHARLCDPOS:                             ;设置(CXPOS,CYPOS)字符位置的DDRAM地址
+ 535                  PUSH    ACC                     ;保护ACC的值
+ 536                  ANL     CXPOS,#0FH              ;X位置范围(0到15)
+ 537                  MOV     A,CXPOS
+C51 COMPILER V9.60.7.0   MAIN                                                              06/21/2025 18:38:06 PAGE 11  
 
-C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
+ 538                  CLR     C
+ 539                  RRC     A
+ 540                  MOV     R0,A
+ 541                  MOV     A,CYPOS
+ 542                  CJNE    A,#0,LPS_LA1
+ 543                  MOV     A,#80H                  ;第一行 DDRAM:80H--87H
+ 544                  ADD     A,R0
+ 545                  JMP     LPS_LAX
+ 546          LPS_LA1:CJNE    A,#1,LPS_LA2
+ 547                  MOV     A,#90H                  ;第二行 DDRAM:90H--97H
+ 548                  ADD     A,R0
+ 549                  JMP     LPS_LAX
+ 550          LPS_LA2:CJNE    A,#2,LPS_LA3
+ 551                  MOV     A,#88H                  ;第三行 DDRAM:88H--8FH
+ 552                  ADD     A,R0
+ 553                  JMP     LPS_LAX
+ 554          LPS_LA3:CJNE    A,#3,LPS_LAX
+ 555                  MOV     A,#98H                  ;第四行 DDRAM:98H--9FH
+ 556                  ADD     A,R0
+ 557                  JMP     LPS_LAX
+ 558          LPS_LAX:                                ;
+ 559                  CALL    LCDWC
+ 560                  POP     ACC                     ;恢复ACC的值
+ 561                  RET
+ 562          ;-------------------------------------------------------------------------------
+ 563          ;子程序名称:CHARCURSORNEXT().
+ 564          ;功能:置字符位置为下一个有效位置.
+ 565          ;输入:无.
+ 566          ;输出:无.
+ 567          ;影响:R0.
+ 568          ;修改日期:2009.10.28
+ 569          ;修改人:chujianjun@sunman.cn,tanchao@sunman.cn
+ 570          ;-------------------------------------------------------------------------------
+ 571          CHARCURSORNEXT:                         ;置字符位置为下一个有效位置子程序
+ 572                  INC     CXPOS                   ;字符位置加1
+ 573                  ANL     CXPOS,#0FH              ;字符位置CXPOS的有效范围为(0到15)
+ 574                  MOV     R0,CXPOS
+ 575                  CJNE    R0,#0,CSN_LAX           ;CXPOS为0表示要换行
+ 576                  INC     CYPOS
+ 577                  ANL     CYPOS,#03H              ;字符位置CYPOS的有效范围为(0到3)
+ 578          CSN_LAX:
+ 579                  RET
+ 580          ;-------------------------------------------------------------------------------
+ 581          ;子程序名称:LCDRESET().
+ 582          ;功能:液晶显示控制器初始化.
+ 583          ;输入:无.
+ 584          ;输出:无.
+ 585          ;影响:R0,ACC.
+ 586          ;修改日期:2009.10.29
+ 587          ;修改人:chujianjun@sunman.cn,tanchao@sunman.cn
+ 588          ;-------------------------------------------------------------------------------
+ 589          LCDRESET:                              ;液晶显示控制器初始化子程序
+ 590                  MOV     A,#33H                 ;接口模式设置
+ 591                  CALL    LCDWC
+ 592                  CALL    DELAY3MS                ;延时3MS
+ 593                  MOV     A,#30H                 ;基本指令集
+ 594                  CALL    LCDWC
+ 595                  CALL    DELAY3MS                ;延时3MS
+ 596                  MOV     A,#30H                 ;重复送基本指令集
+ 597                  CALL    LCDWC
+ 598                  CALL    DELAY3MS                ;延时3MS
+ 599                  MOV     A,#01H                 ;清屏控制字
+C51 COMPILER V9.60.7.0   MAIN                                                              06/21/2025 18:38:06 PAGE 12  
+
+ 600                  CALL    LCDWC
+ 601                  CALL    DELAY3MS                ;延时3MS
+ 602                  CALL    LCDON                  ;字符显示开
+ 603                  RET
+ 604          DELAY3MS:                               ;延时3MS子程序
+ 605                  MOV     R1,#15
+ 606          DL3_PA: MOV     R2,#100
+ 607                  DJNZ    R2,$
+ 608                  DJNZ    R1,DL3_PA
+ 609                  RET
+ 610          ;-------------------------------------------------------------------------------
+ 611          ;以下PUTSIZEIMAGE,GLCDFILL,GLCDPOS为图形对象的基本子程序,PUTIMAGE为图形对象的
+ 612          ;扩充子程序
+ 613          ;-------------------------------------------------------------------------------
+ 614          ;子程序名称:PUTSIZEIMAGE(GXPOS,GYPOS,XSIZE,YSIZE,*S).
+ 615          ;功能:在(GXPOS,GYPOS)位置绘制XSIZE列及YISZE行点阵的图形*S(XSIZE仅取8的倍数
+ 616          ;     GXPOS仅取16的倍数).
+ 617          ;输入:位置GXPOS,GYPOS;XSIZE=R6,YSIZE=R7,S=DPTR.
+ 618          ;输出:GXPOS=GXPOS+XSIZE;GYPOS=GYPOS+YSIZE.
+ 619          ;影响:R0,R4,R5.
+ 620          ;修改日期:2009.10.29
+ 621          ;修改人:chujianjun@sunman.cn,tanchao@sunman.cn
+ 622          ;-------------------------------------------------------------------------------
+ 623          PUTSIZEIMAGE:                           ;显示图形子程序
+ 624                                                  ;图形的大小,XSIZE=R6,YSIZE=R7
+ 625                                                  ;图形的大小循环变量LX=R4,LY=R5
+ 626                                                  ;图形数据1变量A1=R1,图形数据2变量A2=R2
+ 627                                                  ;第一列数据的BIT位移变量K=R3
+ 628                  MOV     R5,#00H                 ;LY=0
+ 629          PIM_PA:
+ 630                  PUSH    GXPOS                   ;保存XPOS位置,准备进行一行数据的处理
+ 631                  MOV     R4,#00H                 ;LX=0
+ 632          PIM_PB:                                 ;写一行图形数据
+ 633                  MOV     A,GXPOS
+ 634                  JB      ACC.3,PIM_LAX
+ 635                  CALL    GLCDPOS                 ;绘图地址指针定位
+ 636          PIM_LAX:
+ 637                  CLR     A                       ;A2=*S
+ 638                  MOVC    A,@A+DPTR
+ 639                  INC     DPTR                    ;S++
+ 640                  CALL    LCDWD
+ 641                  MOV     A,R4                    ;LX+=8
+ 642                  ADD     A,#08H
+ 643                  MOV     R4,A
+ 644                  MOV     A,GXPOS                 ;GXPOS+=8
+ 645                  ADD     A,#08H
+ 646                  MOV     GXPOS,A
+ 647          
+ 648                  MOV     A,R6                    ;XSIZE与LX比较
+ 649                  XRL     A,R4
+ 650                  JZ      PIM_PBX                 ;XSIZE=LX
+ 651                  JMP     PIM_PB                  ;XSIZE<>LX
+ 652          PIM_PBX:
+ 653          
+ 654                  POP     GXPOS                   ;恢复列首位置
+ 655          
+ 656                  INC     GYPOS                   ;位置转下一行
+ 657                  INC     R5                      ;LY++
+ 658          
+ 659                  MOV     A,R7                    ;YSIZE与LY比较
+ 660                  XRL     A,R5
+ 661                  JZ      PIM_PAX                 ;YSIZE=LY
+C51 COMPILER V9.60.7.0   MAIN                                                              06/21/2025 18:38:06 PAGE 13  
+
+ 662                  JMP     PIM_PA                  ;YSIZE<>LY
+ 663          PIM_PAX:
+ 664                  RET
+ 665          ;-------------------------------------------------------------------------------
+ 666          ;子程序名称:PUTIMAGE(GXPOS,GYPOS,*S).
+ 667          ;功能:在(GXPOS,GYPOS)位置绘制XSIZE列及YISZE行点阵的图形*(S+2).
+ 668          ;输入:位置GXPOS,GYPOS;XSIZE=*S,YSIZE=*(S+1),S=DPTR+2.
+ 669          ;输出:GXPOS=GXPOS+XSIZE;GYPOS=GYPOS+YSIZE.
+ 670          ;影响:R0,R4,R5,R6,R7.
+ 671          ;修改日期:2009.7.17
+ 672          ;修改人:chujianjun@sunman.cn,tanchao@sunman.cn
+ 673          ;-------------------------------------------------------------------------------
+ 674          PUTIMAGE:                               ;显示图象子程序,在(XPOS,YPOS)位置显示一幅
+ 675                                                  ;图象,图象地址指针为DPTR,
+ 676                                                  ;第2个字节为Y方向点阵数,随后的数据为图象
+ 677                                                  ;点阵数据.
+ 678                  CLR     A                       ;图象数据的第1个字节为X方向点阵数
+ 679                  MOVC    A,@A+DPTR               ;XSIZE=*S
+ 680                  MOV     R6,A                    ;
+ 681                  INC     DPTR                    ;S++
+ 682                  CLR     A                       ;图象数据的第2个字节为Y方向点阵数
+ 683                  MOVC    A,@A+DPTR               ;YSIZE=*S
+ 684                  MOV     R7,A                    ;
+ 685                  INC     DPTR                    ;S++
+ 686                  CALL    PUTSIZEIMAGE            ;绘制图形
+ 687                  RET
+ 688          
+ 689          ;-------------------------------------------------------------------------------
+ 690          ;子程序名称:GLCDFILL(A).
+ 691          ;功能:整屏显示A表示的字节数据.
+ 692          ;输入:A.
+ 693          ;输出:无.
+ 694          ;影响:R0,R2,A,B.
+ 695          ;修改日期:2009.10.29
+ 696          ;修改人:chujianjun@sunman.cn,tanchao@sunman.cn
+ 697          ;-------------------------------------------------------------------------------
+ 698          GLCDFILL:                               ;整屏显示A代表的字数据子程序
+ 699                  MOV     GYPOS,#0                ;第1行位置
+ 700                  MOV     GXPOS,#0                ;第1列位置
+ 701          GLF_PB:
+ 702                  CALL    GLCDPOS
+ 703                  MOV     R2,#16
+ 704          GLF_PA: CALL    LCDWD
+ 705                  DJNZ    R2,GLF_PA
+ 706                  INC     GYPOS
+ 707                  MOV     R2,GYPOS
+ 708                  CJNE    R2,#64,GLF_PB
+ 709          
+ 710                  MOV     GYPOS,#0
+ 711                  MOV     GXPOS,#0
+ 712                  RET
+ 713          ;-------------------------------------------------------------------------------
+ 714          ;子程序名称:GLCDPOS(GXPOS,GYPOS)
+ 715          ;功能:设置绘图区域内部RAM指针.
+ 716          ;输入:GXPOS(列变量0-127,对于串行接口,GXPOS只能为16的整数倍).
+ 717          ;     GYPOS(行变量0-63)
+ 718          ;输出:无.
+ 719          ;影响:R0,ACC.
+ 720          ;修改日期:2009.10.28
+ 721          ;修改人:chujianjun@sunman.cn,tanchao@sunman.cn
+ 722          ;-------------------------------------------------------------------------------
+ 723          GLCDPOS:                               ;写入绘图区域内部RAM指针子程序
+C51 COMPILER V9.60.7.0   MAIN                                                              06/21/2025 18:38:06 PAGE 14  
+
+ 724                  PUSH    ACC                    ;R6:Y指针,R7:X指针
+ 725                  MOV     A,#36H
+ 726                  CALL    LCDWC                  ;扩充指令集
+ 727                  MOV     A,GYPOS
+ 728                  ANL     A,#1FH                 ;绘图区域Y地址范围0-31
+ 729                  ORL     A,#80H
+ 730                  CALL    LCDWC                  ;先送Y地址
+ 731                  MOV     A,GYPOS
+ 732                  ANL     A,#0E0H
+ 733                  JZ      GLP_LAY
+ 734                  MOV     A,GXPOS                ;X地址=GXPOS/16
+ 735                  SWAP    A
+ 736                  ANL     A,#07H
+ 737                  ORL     A,#08H                 ;若GYPOS>=32,则X地址=GXPOS/16+08H
+ 738                  JMP     GLP_LAX
+ 739          GLP_LAY:
+ 740                  MOV     A,GXPOS
+ 741                  SWAP    A
+ 742                  ANL     A,#07H
+ 743          GLP_LAX:
+ 744                  ORL     A,#80H
+ 745                  CALL    LCDWC                  ;再送X地址
+ 746                  MOV     A,#30H
+ 747                  CALL    LCDWC                  ;恢复为基本指令集
+ 748                  POP     ACC
+ 749                  RET
+ 750          ;-------------------------------------------------------------------------------
+ 751          ;子程序名称:LCDON()
+ 752          ;功能:开启LCD显示
+ 753          ;输入:无.
+ 754          ;输出:无.
+ 755          ;影响:R0,ACC.
+ 756          ;修改日期:2009.10.28
+ 757          ;修改人:chujianjun@sunman.cn,tanchao@sunman.cn
+ 758          ;-------------------------------------------------------------------------------
+ 759          LCDON:                                 ;显示开启子程序
+ 760                  MOV     A,#30H                 ;设置为基本指令集
+ 761                  CALL    LCDWC
+ 762                  MOV     A,#0CH                 ;
+ 763                  CALL    LCDWC
+ 764                  RET
+ 765          ;-------------------------------------------------------------------------------
+ 766          ;子程序名称:LCDOFF()
+ 767          ;功能:关闭LCD显示
+ 768          ;输入:无.
+ 769          ;输出:无.
+ 770          ;影响:R0,ACC.
+ 771          ;修改日期:2009.10.28
+ 772          ;修改人:chujianjun@sunman.cn,tanchao@sunman.cn
+ 773          ;-------------------------------------------------------------------------------
+ 774          LCDOFF:                                ;显示关闭子程序
+ 775                  MOV     A,#30H                 ;设置为基本指令集
+ 776                  CALL    LCDWC
+ 777                  MOV     A,#08H                 ;
+ 778                  CALL    LCDWC
+ 779                  RET
+ 780          ;-------------------------------------------------------------------------------
+ 781          ;子程序名称:LCDGRAPHON()
+ 782          ;功能:开启绘图区域显示
+ 783          ;输入:无.
+ 784          ;输出:无.
+ 785          ;影响:R0,ACC.
+C51 COMPILER V9.60.7.0   MAIN                                                              06/21/2025 18:38:06 PAGE 15  
+
+ 786          ;修改日期:2009.10.28
+ 787          ;修改人:chujianjun@sunman.cn,tanchao@sunman.cn
+ 788          ;-------------------------------------------------------------------------------
+ 789          LCDGRAPHON:                            ;绘图区域显示开启子程序
+ 790                  MOV     A,#36H
+ 791                  CALL    LCDWC
+ 792                  MOV     A,#30H
+ 793                  CALL    LCDWC                  ;恢复为基本指令集
+ 794                  RET
+ 795          ;-------------------------------------------------------------------------------
+ 796          ;子程序名称:LCDGRAPHOFF()
+ 797          ;功能:关闭绘图区域显示
+ 798          ;输入:无.
+ 799          ;输出:无.
+ 800          ;影响:R0,ACC.
+ 801          ;修改日期:2009.10.28
+ 802          ;修改人:chujianjun@sunman.cn,tanchao@sunman.cn
+ 803          ;-------------------------------------------------------------------------------
+ 804          LCDGRAPHOFF:                           ;绘图区域显示关闭子程序
+ 805                  MOV     A,#34H
+ 806                  CALL    LCDWC
+ 807                  MOV     A,#30H
+ 808                  CALL    LCDWC                  ;恢复为基本指令集
+ 809                  RET
+ 810          ;-------------------------------------------------------------------------------
+ 811          ;以下LCDWC,LCDWD为ST7920兼容芯片的MCS51三线式串行接口方式的基本子程序,TRANSBYTE,
+ 812          ;TRANSBIT为内部子程序.
+ 813          ;-------------------------------------------------------------------------------
+ 814          ;子程序名称:LCDWC(A).
+ 815          ;功能:送控制字到液晶显示控制器.
+ 816          ;输入:A.
+ 817          ;输出:无.
+ 818          ;影响:R0.
+ 819          ;修改日期:2009.10.28
+ 820          ;修改人:chujianjun@sunman.cn,tanchao@sunman.cn
+ 821          ;-------------------------------------------------------------------------------
+ 822          LCDWC:                                  ;送控制字子程序
+ 823                  PUSH    ACC
+ 824                  PUSH    B
+ 825                  MOV     B,A
+ 826                  SETB    CSPIN                  ;片选使能
+ 827                  MOV     A,#0F8H                ;SYNCODE=0F8H,RW=0,RS=0,D0=0
+ 828                  CALL    TRANSBYTE
+ 829                  MOV     A,B
+ 830                  ANL     A,#0F0H
+ 831                  CALL    TRANSBYTE              ;D7D6D5D4 0000
+ 832                  MOV     A,B
+ 833                  SWAP    A
+ 834                  ANL     A,#0F0H
+ 835                  CALL    TRANSBYTE              ;D3D2D1D0 0000
+ 836                  CLR     CSPIN                  ;片选禁止
+ 837                  POP     B
+ 838                  POP     ACC
+ 839                  RET
+ 840          ;-------------------------------------------------------------------------------
+ 841          ;子程序名称:LCDWD(A).
+ 842          ;功能:送数据到液晶显示控制器.
+ 843          ;输入:A.
+ 844          ;输出:无.
+ 845          ;影响:R0.
+ 846          ;修改日期:2009.10.28
+ 847          ;修改人:chujianjun@sunman.cn,tanchao@sunman.cn
+C51 COMPILER V9.60.7.0   MAIN                                                              06/21/2025 18:38:06 PAGE 16  
+
+ 848          ;-------------------------------------------------------------------------------
+ 849          LCDWD:                                  ;送数据子程序
+ 850                  PUSH    ACC
+ 851                  PUSH    B
+ 852                  MOV     B,A
+ 853                  SETB    CSPIN                   ;片选使能
+ 854                  MOV     A,#0FAH                 ;SYNCODE=0FAH,RW=0,RS=1,D0=0
+ 855                  CALL    TRANSBYTE
+ 856                  MOV     A,B
+ 857                  ANL     A,#0F0H
+ 858                  CALL    TRANSBYTE               ;D7D6D5D4 0000
+ 859                  MOV     A,B
+ 860                  SWAP    A
+ 861                  ANL     A,#0F0H
+ 862                  CALL    TRANSBYTE               ;D3D2D1D0 0000
+ 863                  CLR     CSPIN                   ;片选禁止
+ 864                  POP     B
+ 865                  POP     ACC
+ 866                  RET
+ 867          ;-------------------------------------------------------------------------------
+ 868          ;子程序名称:TRANSBYTE().
+ 869          ;功能:送1字节数据到液晶显示控制器.
+ 870          ;输入:ACC.
+ 871          ;输出:无.
+ 872          ;影响:R0.
+ 873          ;修改日期:2009.10.28
+ 874          ;修改人:chujianjun@sunman.cn,tanchao@sunman.cn
+ 875          ;-------------------------------------------------------------------------------
+ 876          TRANSBYTE:                              ;送1字节数据到液晶显示控制器子程序
+ 877                  MOV     R0,#8
+ 878          TSB_PA: RLC     A
+ 879                  CALL    TRANSBIT
+ 880                  DJNZ    R0,TSB_PA
+ 881                  RLC     A
+ 882                  RET
+ 883          ;-------------------------------------------------------------------------------
+ 884          ;子程序名称:TRANSBIT().
+ 885          ;功能:送1位数据到液晶显示控制器.
+ 886          ;输入:C.
+ 887          ;输出:无.
+ 888          ;影响:无.
+ 889          ;修改日期:2009.10.28
+ 890          ;修改人:chujianjun@sunman.cn,tanchao@sunman.cn
+ 891          ;-------------------------------------------------------------------------------
+ 892          TRANSBIT:                               ;送1位数据到液晶显示控制器子程序
+ 893                  MOV     STDPIN,C                ;先送数据到数据口线DI
+ 894                  NOP
+ 895                  SETB    SCLKPIN                 ;再使时钟口线发一个负脉冲
+ 896                  NOP
+ 897                  CLR     SCLKPIN
+ 898                  NOP
+ 899                  SETB    SCLKPIN
+ 900                  RET
+ 901          
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  75 ERROR(S)

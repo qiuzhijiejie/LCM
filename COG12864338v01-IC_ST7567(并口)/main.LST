@@ -1,0 +1,119 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              05/26/2025 15:48:25 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          /*************************************************************************  
+   2          Driver IC    :  ST7565R / UC1701x 
+   3          interface    :  8080 for 8 bit mcu interface 
+   4          ************************************************************************/   
+   5          #include <REG52.H>    
+   6          #include "int/photo.c"
+   7          #include "12864.h"
+   8           
+   9          void main()   
+  10          { 
+  11   1              
+  12   1              unsigned char mode;
+  13   1      //      Init_IC();   
+  14   1      //lcd_test();  
+  15   1      //delayMs(3000);
+  16   1      //Yehui_UI();
+  17   1      //delayMs(3000);
+  18   1      //Clear();
+  19   1      
+  20   1      //whatsapp();
+  21   1      //delayMs(5000); 
+  22   1      //Clear();        
+  23   1      //lcd_describe();
+  24   1      //delayMs(3000);  
+  25   1      //Clear();
+  26   1      
+  27   1      //display_photo(tupian,0,0);      
+  28   1      //delayMs(3000);
+  29   1      //Clear();
+  30   1      
+  31   1      //trans_display_photo(tupian1,0,0);       
+  32   1      //delayMs(3000);
+  33   1      
+  34   1        while(1)
+  35   1        {
+  36   2              Init_IC();
+  37   2              lcd_test();  
+  38   2              delayMs(1000);
+  39   2              Yehui_UI();
+  40   2              delayMs(1000);
+  41   2              Clear();
+  42   2      
+  43   2              //      whatsapp();
+  44   2              //      delayMs(5000); 
+  45   2              //      Clear();          
+  46   2              lcd_describe();
+  47   2              delayMs(1000);  
+  48   2              Clear();
+  49   2      
+  50   2              display_photo(tupian,0,0);        
+  51   2              delayMs(1000);
+  52   2              Clear();
+  53   2      
+  54   2              trans_display_photo(tupian1,0,0);         
+  55   2              delayMs(1000);
+C51 COMPILER V9.60.7.0   MAIN                                                              05/26/2025 15:48:25 PAGE 2   
+
+  56   2                
+  57   2                
+  58   2                
+  59   2      //if (HOLD()) {  
+  60   2      //    mode++;           // 先增加 mode
+  61   2      //    mode %= 8;        // 让 mode 保持在 0~7 之间
+  62   2      //      Clear();
+  63   2      //    switch (mode) {
+  64   2      //        case 0:  
+  65   2      //            display_test(0xaa, 0xaa);
+  66   2      //            break;
+  67   2      //        case 1:            
+  68   2      //            Yehui_UI();               
+  69   2      //            break;
+  70   2      //        case 2:
+  71   2      //            display_test(0x55, 0x55);  
+  72   2      //            break;
+  73   2      //        case 3:
+  74   2      //            display_test(0x55, 0xaa);  
+  75   2      //            break;
+  76   2      //        case 4:
+  77   2      //            display_test(0xaa, 0x55);         
+  78   2      //            break;
+  79   2      //        case 5:
+  80   2      //            display_test(0xff, 0x00);  
+  81   2      //            break;
+  82   2      //        case 6:
+  83   2      //            display_test(0x00, 0xff); 
+  84   2      //            break;
+  85   2      //        case 7:
+  86   2      //            display_test(0xff, 0xff); 
+  87   2      //            break;
+  88   2      
+  89   2      //    }
+  90   2      //}
+  91   2                
+  92   2        }    
+  93   1      }   
+*** WARNING C280 IN LINE 12 OF main.c: 'mode': unreferenced local variable
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     88    ----
+   CONSTANT SIZE    =   2048    ----
+   XDATA SIZE       =   ----       1
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

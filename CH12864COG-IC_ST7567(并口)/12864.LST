@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 14:22:05 PAGE 1   
+C51 COMPILER V9.60.7.0   12864                                                             06/26/2025 13:45:18 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE 12864
@@ -62,7 +62,7 @@ line level    source
   53   1               delayUs(2); 
   54   1      } 
   55          
-C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 14:22:05 PAGE 2   
+C51 COMPILER V9.60.7.0   12864                                                             06/26/2025 13:45:18 PAGE 2   
 
   56          
   57          // Set Column Address 4
@@ -126,7 +126,7 @@ line level    source
  115   1        uchar i;       //行 列
  116   1        uchar code tdata[][2]=
  117   1        {
-C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 14:22:05 PAGE 3   
+C51 COMPILER V9.60.7.0   12864                                                             06/26/2025 13:45:18 PAGE 3   
 
  118   1              {0xff,0xff},    // All
  119   1              {0x00,0xFF},    // Virtical 
@@ -190,7 +190,7 @@ line level    source
  177   2      
  178   2              // 左边
  179   2              for(i = top; i <= bottom; i++)
-C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 14:22:05 PAGE 4   
+C51 COMPILER V9.60.7.0   12864                                                             06/26/2025 13:45:18 PAGE 4   
 
  180   2              {
  181   3                  GotoXY(i, left);
@@ -254,7 +254,7 @@ line level    source
  239   1                      uchar i;
  240   1                      uint index;
  241   1                      GotoXY(startP,startC);
-C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 14:22:05 PAGE 5   
+C51 COMPILER V9.60.7.0   12864                                                             06/26/2025 13:45:18 PAGE 5   
 
  242   1                      while((*ptrAscii) != '\0')
  243   1                      {
@@ -318,7 +318,7 @@ line level    source
  301          {
  302   1         uchar i,j;
  303   1         GotoXY(startP,startC);
-C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 14:22:05 PAGE 6   
+C51 COMPILER V9.60.7.0   12864                                                             06/26/2025 13:45:18 PAGE 6   
 
  304   1         for(i=0;i<8;i++)
  305   1          {
@@ -330,113 +330,107 @@ line level    source
  311   1      }
  312          void Init_IC()   
  313          {   
- 314   1              
- 315   1               cs  =  0;   
- 316   1               P1  =  0xFF;   
- 317   1               LCD_Reset(); 
- 318   1               write_cmd_dat(0,0xE2); //initialize interal function   
- 319   1               write_cmd_dat(0,0xA2); //LCD Bias selection(1/65 Duty,1/9Bias)         
- 320   1               write_cmd_dat(0,0xA0); //ADC selection(SEG0->SEG128) //改变SEG扫描方向 
- 321   1               write_cmd_dat(0,0xC8); //SHL selection(COM64->COM0) //改变COM扫描方向 
- 322   1               write_cmd_dat(0,0x2F); //power control(VB,VR,VF=1,1,1)
- 323   1              
- 324   1               write_cmd_dat(0,0x25); //Regulator resistor select 110 内部电位器调节（对应不同的VG）
- 325   1              
- 326   1               write_cmd_dat(0,0x81); //set reference voltage mode
- 327   1               write_cmd_dat(0,0x17); //set reference voltage //改变此值可以改变效果  
- 328   1              
- 329   1               write_cmd_dat(0,0x40); //Initial Display Line
- 330   1               write_cmd_dat(0,0xAF); //Display on 
- 331   1              
- 332   1              
- 333   1               Clear();
- 334   1      
- 335   1      }   
- 336          
- 337          
- 338          //按键函数
- 339          unsigned int HOLD()
- 340          {
- 341   1          if (Key1 == 0) 
- 342   1              {  
- 343   2              delayUs(5);  
- 344   2              if (Key1 == 0) 
- 345   2                      {  
- 346   3                  while (Key1 == 0); 
- 347   3                  return 1; 
- 348   3              }
- 349   2          }
- 350   1          return 0; 
- 351   1      }
- 352          
- 353          //按键函数
- 354          unsigned int UP() 
- 355          {
- 356   1          if (Key2 == 0) 
- 357   1              {  
- 358   2              delayUs(5);  
- 359   2              if (Key2 == 0) 
- 360   2                      { 
- 361   3                  while (Key2 == 0);  
- 362   3                  return 1;  
- 363   3              }
- 364   2          }
- 365   1          return 0; 
-C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 14:22:05 PAGE 7   
+ 314   1               cs  =  0;   
+ 315   1               P1  =  0xFF;   
+ 316   1               LCD_Reset(); 
+ 317   1               write_cmd_dat(0,0xE2); //initialize interal function   
+ 318   1               write_cmd_dat(0,0xA2); //LCD Bias selection(1/65 Duty,1/9Bias)         
+ 319   1               write_cmd_dat(0,0xA0); //ADC selection(SEG0->SEG128) //改变SEG扫描方向 
+ 320   1               write_cmd_dat(0,0xC8); //SHL selection(COM64->COM0) //改变COM扫描方向 
+ 321   1               write_cmd_dat(0,0x2F); //power control(VB,VR,VF=1,1,1) 
+ 322   1               write_cmd_dat(0,0x25); //Regulator resistor select 110 内部电位器调节（对应不同的VG）  
+ 323   1               write_cmd_dat(0,0x81); //set reference voltage mode
+ 324   1               write_cmd_dat(0,0x17); //set reference voltage //改变此值可以改变效果          
+ 325   1               write_cmd_dat(0,0x40); //Initial Display Line
+ 326   1               write_cmd_dat(0,0xAF); //Display on 
+ 327   1               Clear();
+ 328   1      
+ 329   1      }   
+ 330          
+ 331          
+ 332          //按键函数
+ 333          unsigned int HOLD()
+ 334          {
+ 335   1          if (Key1 == 0) 
+ 336   1              {  
+ 337   2              delayUs(5);  
+ 338   2              if (Key1 == 0) 
+ 339   2                      {  
+ 340   3                  while (Key1 == 0); 
+ 341   3                  return 1; 
+ 342   3              }
+ 343   2          }
+ 344   1          return 0; 
+ 345   1      }
+ 346          
+ 347          //按键函数
+ 348          unsigned int UP() 
+ 349          {
+ 350   1          if (Key2 == 0) 
+ 351   1              {  
+ 352   2              delayUs(5);  
+ 353   2              if (Key2 == 0) 
+ 354   2                      { 
+ 355   3                  while (Key2 == 0);  
+ 356   3                  return 1;  
+ 357   3              }
+ 358   2          }
+ 359   1          return 0; 
+ 360   1      }
+ 361          
+ 362          //按键函数
+ 363          unsigned int DN() 
+ 364          {
+ 365   1          if (Key3 == 0) 
+C51 COMPILER V9.60.7.0   12864                                                             06/26/2025 13:45:18 PAGE 7   
 
- 366   1      }
- 367          
- 368          //按键函数
- 369          unsigned int DN() 
- 370          {
- 371   1          if (Key3 == 0) 
- 372   1              {  
- 373   2              delayUs(5);  
- 374   2              if (Key3 == 0) 
- 375   2                      { 
- 376   3                  while (Key3 == 0);  
- 377   3                  return 1;  
- 378   3              }
- 379   2          }
- 380   1          return 0; 
- 381   1      }
- 382          
- 383          
- 384          void Yehui_UI()
- 385          {
- 386   1              uchar i; 
- 387   1              const unsigned char* hanzi_array[] = {guang, don, ye, hui, ke};
- 388   1              const unsigned char* hanzi_array2[] = {ji, you, xian, gong, si};
- 389   1              
- 390   1              for ( i = 0; i < 5; i++) {
- 391   2                      display_hanzi_fan(hanzi_array[i], 0, 20 + i * 16);
- 392   2              }
- 393   1      
- 394   1              for ( i = 0; i < 5; i++) {
- 395   2                      display_hanzi_fan(hanzi_array2[i], 2, 20 + i * 16);
- 396   2              }
- 397   1                  
- 398   1              disp_ascii0816("128*64 Dots",4,20);
- 399   1              disp_ascii0816("IC:ST7565R",  6,25);
- 400   1              
- 401   1      }
- 402          
- 403          void whatsapp()
- 404          {
- 405   1              disp_ascii0816("WhatsApp:",       2,0);
- 406   1              disp_ascii0816("+86136 2249 6694",6,0);
- 407   1              
- 408   1      }
- 409          
- 410          
- 411          
- 412          void lcd_describe(void)
- 413          {
- 414   1              lcd_kuang();     
- 415   1          disp_ascii0508("Support 8-Bit parallel", 2, 10);
- 416   1          disp_ascii0508("Bus (8080 or 6800 Mode)", 4, 10);
- 417   1          disp_ascii0508(" Serial Bus Interface",   6, 6);
- 418   1      }
+ 366   1              {  
+ 367   2              delayUs(5);  
+ 368   2              if (Key3 == 0) 
+ 369   2                      { 
+ 370   3                  while (Key3 == 0);  
+ 371   3                  return 1;  
+ 372   3              }
+ 373   2          }
+ 374   1          return 0; 
+ 375   1      }
+ 376          
+ 377          
+ 378          void Yehui_UI()
+ 379          {
+ 380   1              uchar i; 
+ 381   1              const unsigned char* hanzi_array[] = {guang, don, ye, hui, ke};
+ 382   1              const unsigned char* hanzi_array2[] = {ji, you, xian, gong, si};
+ 383   1              
+ 384   1              for ( i = 0; i < 5; i++) {
+ 385   2                      display_hanzi_fan(hanzi_array[i], 0, 20 + i * 16);
+ 386   2              }
+ 387   1      
+ 388   1              for ( i = 0; i < 5; i++) {
+ 389   2                      display_hanzi_fan(hanzi_array2[i], 2, 20 + i * 16);
+ 390   2              }
+ 391   1                  
+ 392   1              disp_ascii0816("128*64 Dots",4,20);
+ 393   1              disp_ascii0816("IC:ST7565R",  6,25);
+ 394   1              
+ 395   1      }
+ 396          
+ 397          void whatsapp()
+ 398          {
+ 399   1              disp_ascii0816("WhatsApp:",       2,0);
+ 400   1              disp_ascii0816("+86136 2249 6694",6,0);
+ 401   1              
+ 402   1      }
+ 403          
+ 404          
+ 405          
+ 406          void lcd_describe(void)
+ 407          {
+ 408   1              lcd_kuang();     
+ 409   1          disp_ascii0508("Support 8-Bit parallel", 2, 10);
+ 410   1          disp_ascii0508("Bus (8080 or 6800 Mode)", 4, 10);
+ 411   1          disp_ascii0508(" Serial Bus Interface",   6, 6);
+ 412   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
@@ -446,8 +440,6 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
-C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 14:22:05 PAGE 8   
-
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
 
