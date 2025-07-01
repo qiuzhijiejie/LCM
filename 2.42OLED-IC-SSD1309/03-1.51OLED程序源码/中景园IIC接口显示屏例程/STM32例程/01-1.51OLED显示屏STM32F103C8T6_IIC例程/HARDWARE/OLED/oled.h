@@ -6,14 +6,14 @@
 
 //-----------------OLED¶Ë¿Ú¶¨Òå---------------- 
 
-#define OLED_SCL_Clr() GPIO_ResetBits(GPIOA,GPIO_Pin_0)//SCL
-#define OLED_SCL_Set() GPIO_SetBits(GPIOA,GPIO_Pin_0)
+#define OLED_SCL_Clr() GPIO_ResetBits(GPIOB,GPIO_Pin_5)//SCL
+#define OLED_SCL_Set() GPIO_SetBits(GPIOB,GPIO_Pin_5)
 
-#define OLED_SDA_Clr() GPIO_ResetBits(GPIOA,GPIO_Pin_1)//DIN
-#define OLED_SDA_Set() GPIO_SetBits(GPIOA,GPIO_Pin_1)
+#define OLED_SDA_Clr() GPIO_ResetBits(GPIOB,GPIO_Pin_6)//DIN
+#define OLED_SDA_Set() GPIO_SetBits(GPIOB,GPIO_Pin_6)
 
-#define OLED_RES_Clr() GPIO_ResetBits(GPIOA,GPIO_Pin_2)//RES
-#define OLED_RES_Set() GPIO_SetBits(GPIOA,GPIO_Pin_2)
+#define OLED_RES_Clr() GPIO_ResetBits(GPIOB,GPIO_Pin_7)//RES
+#define OLED_RES_Set() GPIO_SetBits(GPIOB,GPIO_Pin_7)
 
 
 #define OLED_CMD  0	//Ð´ÃüÁî
@@ -42,6 +42,9 @@ void OLED_ShowChinese(u8 x,u8 y,u8 num,u8 size1,u8 mode);
 void OLED_ScrollDisplay(u8 num,u8 space,u8 mode);
 void OLED_ShowPicture(u8 x,u8 y,u8 sizex,u8 sizey,u8 BMP[],u8 mode);
 void OLED_Init(void);
+void OLED_Set_Pos(u8 x, u8 y);
+void OLED_Fill_Row(int Data) ;
+void OLED_Fill_Column(int oddData, int evenData) ;
 
 #endif
 

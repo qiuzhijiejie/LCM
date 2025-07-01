@@ -88,7 +88,7 @@ int main(void)
 	OLED_ShowChinese(54,3,7,16);
 	OLED_ShowChinese(72,3,8,16);
 	OLED_ShowChinese(90,3,9,16);
-	OLED_ShowString( 22,5,"OLED_2.42'",16);
+	OLED_ShowString( 22,5,"OLED_2.42",16);
 	delay_ms(90);
 	
 	OLED_Fill_Row(0X55) ;

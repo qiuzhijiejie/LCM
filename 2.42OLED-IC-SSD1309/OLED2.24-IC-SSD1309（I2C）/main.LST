@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              06/16/2025 09:58:39 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/30/2025 10:40:22 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
   53   1      //      delay_ms(60);
   54   1      //      OLED_DrawBMP(0,0,128,64,BMP2);
   55   1      //      OLED_ShowChinese(18,1,0,16); 
-C51 COMPILER V9.60.7.0   MAIN                                                              06/16/2025 09:58:39 PAGE 2   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/30/2025 10:40:22 PAGE 2   
 
   56   1      //      OLED_ShowChinese(36,1,1,16);
   57   1      //      OLED_ShowChinese(54,1,2,16);
@@ -99,7 +99,7 @@ line level    source
   88   2              OLED_ShowChinese(54,3,7,16);
   89   2              OLED_ShowChinese(72,3,8,16);
   90   2              OLED_ShowChinese(90,3,9,16);
-  91   2              OLED_ShowString( 22,5,"OLED_2.42'",16);
+  91   2              OLED_ShowString( 22,5,"OLED_2.42",16);
   92   2              delay_ms(90);
   93   2              
   94   2              OLED_Fill_Row(0X55) ;
@@ -126,7 +126,7 @@ line level    source
  115   2              OLED_DrawBMP(0,0,128,64,BMP1);
  116   2              delay_ms(90);
  117   2              OLED_DrawBMP(0,0,128,64,BMP2);
-C51 COMPILER V9.60.7.0   MAIN                                                              06/16/2025 09:58:39 PAGE 3   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/30/2025 10:40:22 PAGE 3   
 
  118   2              OLED_ShowChinese(18,1,0,16); 
  119   2              OLED_ShowChinese(36,1,1,16);
@@ -150,7 +150,7 @@ line level    source
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =    504    ----
-   CONSTANT SIZE    =   2072    ----
+   CONSTANT SIZE    =   2071    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----       1

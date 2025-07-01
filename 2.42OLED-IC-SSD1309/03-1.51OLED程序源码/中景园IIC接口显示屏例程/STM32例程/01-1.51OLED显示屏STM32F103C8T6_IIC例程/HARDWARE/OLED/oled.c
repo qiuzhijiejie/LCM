@@ -449,18 +449,18 @@ void OLED_ShowPicture(u8 x,u8 y,u8 sizex,u8 sizey,u8 BMP[],u8 mode)
 void OLED_Init(void)
 {
 	GPIO_InitTypeDef  GPIO_InitStructure;
- 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);	 //使能A端口时钟
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0|GPIO_Pin_1;	 
- 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD; 		 //推挽输出
+ 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);	 //使能B端口时钟
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6|GPIO_Pin_5;	 
+ 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD; 		 //开漏输出
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;//速度50MHz
- 	GPIO_Init(GPIOA, &GPIO_InitStructure);	  //初始化PA0,1
- 	GPIO_SetBits(GPIOA,GPIO_Pin_0|GPIO_Pin_1);
+ 	GPIO_Init(GPIOB, &GPIO_InitStructure);	  //初始化PA0,1
+ 	GPIO_SetBits(GPIOB,GPIO_Pin_6|GPIO_Pin_5);
 
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;	 
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;	 
  	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 		 //推挽输出
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;//速度50MHz
- 	GPIO_Init(GPIOA, &GPIO_InitStructure);	  //初始化PA2
- 	GPIO_SetBits(GPIOA,GPIO_Pin_2);
+ 	GPIO_Init(GPIOB, &GPIO_InitStructure);	  //初始化PA2
+ 	GPIO_SetBits(GPIOB,GPIO_Pin_7);
 	
 	OLED_RES_Clr();
 	delay_ms(200);
@@ -491,4 +491,38 @@ void OLED_Init(void)
 	OLED_Clear();
 	OLED_WR_Byte(0xAF,OLED_CMD);
 }
+//坐标设置
 
+void OLED_Set_Pos(u8 x, u8 y) 
+{ 
+	OLED_WR_Byte(0xb0+y,OLED_CMD);
+	OLED_WR_Byte(((x&0xf0)>>4)|0x10,OLED_CMD);
+	OLED_WR_Byte((x&0x0f),OLED_CMD);
+}
+void OLED_Fill_Row(int Data) 
+{   
+	unsigned int row,col;
+    for ( row = 0; row < 8; row++) { // OLED 128x64 的 8 页（每页 8 行）
+        OLED_Set_Pos(0, row); // 设置起始位置，从 (0, row) 开始
+        for ( col = 0; col < 130; col++) { // 每页 128 列
+            OLED_WR_Byte((char)Data, 1); // 写入数据
+        }
+    }
+}
+
+
+// 按列填充 OLED，根据列号是奇数还是偶数选择不同的数据填充
+void OLED_Fill_Column(int oddData, int evenData) 
+{
+    unsigned char page, column;
+    for (page = 0; page < 8; page++) { // OLED 128x64 屏幕有 8 页
+        OLED_Set_Pos(0, page); // 设置当前页的位置
+        for (column = 0; column < 130; column++) { // 每页有 128 列
+            if (column % 2 == 0) { // 偶数列
+                OLED_WR_Byte((char)oddData, 1); // 使用 oddData 填充偶数列
+            } else { // 奇数列
+                OLED_WR_Byte((char)evenData, 1); // 使用 evenData 填充奇数列
+            }
+        }
+    }
+}

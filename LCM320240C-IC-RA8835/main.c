@@ -11,12 +11,30 @@ void main(void)
 	 delay(500);
 	 lcd_init();
 	 delay(500);
-
+			lcd_init();
+		DisplayDots(0xAA, 0xAA);
+		delay(5000);
+		DisplayDots(0x55, 0x55);
+		delay(5000);
+		DisplayDots(0xAA, 0x55);
+		delay(5000);
+		DisplayDots(0x55, 0xAA);
+		delay(5000);
+		DisplayDots(0xff, 0x00);
+		delay(5000);
+		DisplayDots(0x00, 0xff);
+		delay(5000);
+		demo_picture();
+		delay(5000);
+		lcd_cls(0);
+		DisplayFullCGROM();
+		delay(5000);
+lcd_init();
  while(1)
 	{
 //		if(ReadKey1())
 //		mode++;
-//		mode%=8;
+//		mode%=7;
 //		DisplayDots(0x00,0x00);
 //		switch(mode)
 //		{	
@@ -37,34 +55,17 @@ void main(void)
 //		case 7:demo_picture();	
 //		break;
 //		}
-//	 demo_picture();   //show picture
-//	 demo_pixel();     //drawing pixels
-//	 demo_line();      //drawing line
-//	 demo_rectangle(); //painted square demo function
-//	 demo_circle();    //drawing circle
-//	 demo_sine();      //sine presentation function 
-//	 demo_hz();        //show chinese 
-//	 demo_roll();      //display scroll 
-//	 demo_game();     //show moving circle 
+	 demo_picture();   //show picture
+	 demo_pixel();     //drawing pixels
+	 demo_line();      //drawing line
+	 demo_rectangle(); //painted square demo function
+	 demo_circle();    //drawing circle
+	 demo_sine();      //sine presentation function 
+	 demo_hz();        //show chinese 
+	 demo_roll();      //display scroll 
+	 demo_game();     //show moving circle 
 	 
-		DisplayDots(0xAA, 0xAA);
-		delay(5000);
-		DisplayDots(0x55, 0x55);
-		delay(5000);
-		DisplayDots(0xAA, 0x55);
-		delay(5000);
-		DisplayDots(0x55, 0xAA);
-		delay(5000);
-		DisplayDots(0xff, 0x00);
-		delay(5000);
-		DisplayDots(0x00, 0xff);
-		delay(5000);
-		demo_picture();
-		delay(5000);
-		lcd_cls(0);
-		DisplayFullCGROM();
-		delay(5000);
-		lcd_init();
+
 	   
 	}
 }

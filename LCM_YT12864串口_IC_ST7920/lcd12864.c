@@ -11,12 +11,12 @@ unsigned char i,X,Y,XPosition,YPosition,FCHARBUF;
 
 unsigned int ReadKey1() // 按键检测函数
 {
-    if (KEY == 0)           
+    if (KEY == 1)           
 	{  // 按键被按下
         Delay(1);  // 简单的去抖动处理
-        if (KEY == 0) 
+        if (KEY == 1) 
 		{  // 检查按键是否仍然按下
-            while (KEY == 0);  // 等待按键释放
+            while (KEY == 1);  // 等待按键释放
             return 1;  // 返回按键被按下
         }
     }
@@ -255,8 +255,6 @@ void Set_DrawingPosition(void)
 }
 
 
-
-
 /**
   * @brief  屏幕填充为某个字节数据 DATA
   * @param  DATA
@@ -279,8 +277,6 @@ void FillScreen(unsigned char DATA)  // 整屏显示指定的字节数据
 }
 
 	
-
-
 /**
   * @brief  屏幕初始化
   * @param  None
@@ -302,7 +298,8 @@ void FillScreen(unsigned char DATA)  // 整屏显示指定的字节数据
 	Write_Command(0x01);
 	Delay(1);
 	Write_Command(0x06);
-
+	Delay(1);
+	Display_Clear();
 }
 
 /**
@@ -325,9 +322,6 @@ void moveToNextCharPosition(void)  // 移动光标到下一个字符位置
 }
 
 
-
-
-
 /**
   * @brief  设置字符光标在LCD内部RAM的地址
   * @param  None
@@ -343,7 +337,6 @@ void setLcdCursorPosition(void)
 	else if (Y == 2) Write_Command(addDDRAM | 0x88);// DDRAM地址:88H-8FH
 	else if (Y == 3) Write_Command(addDDRAM | 0x98);// DDRAM地址:98H-9FH
 }	
-
 
 
 /**
@@ -412,7 +405,6 @@ void setchartoCGRAM(unsigned char charindex ,unsigned char code *pattern)
 }
 
 
-
 /**
  * @brief 在指定的 (cx, cy) 位置显示字符串
  * @param x 0-4 字符的X坐标位置
@@ -427,7 +419,6 @@ void DisplaystringAtposition(unsigned char x ,unsigned char y ,unsigned char cod
 }
 
        
-
 
 /**
  * @brief 显示字符串，直到遇到字符码为0
@@ -527,153 +518,6 @@ void charlcdfill(unsigned int c) // 整屏显示指定ASCII字符的子程序
 
 
 
-
-
- 
-void FillScreenWithPattern(unsigned char pattern)
-{    
-    unsigned char x, y;
-
-    for (y = 0; y < 64; y++) // 遍历Y轴的64个位置（0-63），屏幕高度为64像素
-    {
-        YPosition = y;         // 设置Y轴位置
-        Set_DrawingPosition(); // 设置当前的绘图位置
-
-        for (x = 0; x < 16; x++) // 遍历X轴的16个位置（每行16字节）
-        {
-            Write_Data(pattern); // 在当前X位置显示传入的图案数据
-        }
-    }
-    YPosition = 0; // 完成后将Y轴位置重置
-}
-
-
-
-//麻点
-void FillCheckerboardPattern(void)
-{
-    unsigned char x, y;
-
-    for (y = 0; y < 64; y++)  // 遍历Y轴的64个位置
-    {
-        YPosition = y;
-        Set_DrawingPosition();
-
-        for (x = 0; x < 16; x++)  // 遍历X轴的16个字节
-        {
-            if (y % 2 == 0)   // 偶数行显示0xAA
-            {
-                Write_Data(0x55);
-            }
-            else  // 奇数行显示0x55
-            {
-                Write_Data(0xaa);
-            }
-        }
-    }
-}
-void ReverseFillCheckerboardPattern(void)
-{
-    unsigned char x, y;
-
-    for (y = 0; y < 64; y++)  // 遍历Y轴的64个位置
-    {
-        YPosition = y;
-        Set_DrawingPosition();
-
-        for (x = 0; x < 16; x++)  // 遍历X轴的16个字节
-        {
-            if (y % 2 == 0)   // 偶数行显示0xAA
-            {
-                Write_Data(0xaa);
-            }
-            else  // 奇数行显示0x55
-            {
-                Write_Data(0x55);
-            }
-        }
-    }
-}
-
-//垂直条纹图案
-void FillVerticalStripePattern(void)
-{
-    unsigned char x, y;
-
-    for (y = 0; y < 64; y++)  // 遍历Y轴
-    {
-        YPosition = y;
-        Set_DrawingPosition();
-
-        for (x = 0; x < 16; x++)  // 遍历X轴
-        {
-            Write_Data(0xaa);  // 每个字节上半部分全亮，下半部分全暗
-        }           //1010 1010
-    }               //0x55->01010 01010
-}
-void ReverseFillVerticalStripePattern(void)
-{
-    unsigned char x, y;
-
-    for (y = 0; y < 64; y++)  // 遍历Y轴
-    {
-        YPosition = y;
-        Set_DrawingPosition();
-
-        for (x = 0; x < 16; x++)  // 遍历X轴
-        {
-            Write_Data(0x55);  // 每个字节上半部分全亮，下半部分全暗
-        }           //1010 1010
-    }               //0x55->01010 01010
-}
-
-
-//水平条纹图案
-void FillHorizontalStripePattern(void)
-{
-    unsigned char x, y;
-
-    for (y = 0; y < 64; y++)  // 遍历Y轴
-    {
-        YPosition = y;
-        Set_DrawingPosition();
-
-        for (x = 0; x < 16; x++)  // 遍历X轴
-        {
-            if (y % 2 == 0)  // 偶数行显示全亮
-            {
-                Write_Data(0xFF);
-            }
-            else  // 奇数行显示全暗
-            {
-                Write_Data(0x00);
-            }
-        }
-    }
-}
-void ReverseFillHorizontalStripePattern(void)
-{
-    unsigned char x, y;
-
-    for (y = 0; y < 64; y++)  // 遍历Y轴
-    {
-        YPosition = y;
-        Set_DrawingPosition();
-
-        for (x = 0; x < 16; x++)  // 遍历X轴
-        {
-            if (y % 2 == 0)  // 偶数行显示全亮
-            {
-                Write_Data(0x00);
-            }
-            else  // 奇数行显示全暗
-            {
-                Write_Data(0xff);
-            }
-        }
-    }
-}
-
 //斜线图案
 void FillDiagonalLinePattern(void)
 {
@@ -693,50 +537,20 @@ void FillDiagonalLinePattern(void)
 }
 
 
-void DisplayPatterns() 
+// 按行填充图案（如麻点、水平条纹）
+// evenData: 偶数行数据，oddData: 奇数行数据
+void ST7920_Fill_Row(unsigned char evenData, unsigned char oddData)
 {
-    static int step = 0; 
+    unsigned char x, y;
+    for (y = 0; y < 64; y++) {
+        YPosition = y;
+        Set_DrawingPosition();
 
-    switch (step) 
-    {
-        case 0: FillScreenWithPattern(0xff); Delay(100); break;
-        case 1: FillCheckerboardPattern(); Delay(100); break;
-        case 2: ReverseFillCheckerboardPattern(); Delay(100); break;
-        case 3: FillVerticalStripePattern(); Delay(100); break;
-        case 4: ReverseFillVerticalStripePattern(); Delay(100); break;
-        case 5: ReverseFillHorizontalStripePattern(); Delay(100); break;
-        case 6: FillHorizontalStripePattern(); Delay(100); break;	
-		case 7: FillDiagonalLinePattern(); Delay(100); break;
-        case 8: FillScreenWithPattern(0x00);drawimge(Img_SUNMAN_128x64); Delay(100); break;
-        case 9: DisplaystringAtposition(0,1,"烨辉科技有限公司");DisplaystringAtposition(2,2,"YT-LCD12864"); Delay(100);Display_Clear(); break;
-
-    }
-    step++;
-    if (step > 9) step = 0;
-}
-
-void HandleKey() 
-{
-	unsigned char mode;
-	mode++;
-	mode%=10;
-	Display_Clear();
-	charlcdfill(' ');      
-    switch (mode) 
-    {	
-        case 0: FillScreenWithPattern(0xff); Delay(100); break;
-        case 1: FillCheckerboardPattern(); Delay(100); break;
-        case 2: ReverseFillCheckerboardPattern(); Delay(100); break;
-        case 3: FillVerticalStripePattern(); Delay(100); break;
-        case 4: ReverseFillVerticalStripePattern(); Delay(100); break;
-        case 5: ReverseFillHorizontalStripePattern(); Delay(100); break;
-        case 6: FillHorizontalStripePattern(); Delay(100); break;	
-		case 7: FillDiagonalLinePattern(); Delay(100); break;
-        case 8: FillScreenWithPattern(0x00);drawimge(Img_SUNMAN_128x64); Delay(100); break;
-        case 9:DisplaystringAtposition(0,1,"烨辉科技有限公司");DisplaystringAtposition(2,2,"YT-LCD12864"); Delay(100); break;
-
-
+        for (x = 0; x < 16; x++) {
+            if (y % 2 == 0)
+                Write_Data(evenData);
+            else
+                Write_Data(oddData);
+        }
     }
 }
-
-

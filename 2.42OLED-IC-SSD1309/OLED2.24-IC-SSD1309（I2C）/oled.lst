@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   OLED                                                              06/16/2025 09:50:26 PAGE 1   
+C51 COMPILER V9.60.7.0   OLED                                                              06/30/2025 10:26:45 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE OLED
@@ -62,7 +62,7 @@ line level    source
   52   2                      }
   53   1      }
   54          
-C51 COMPILER V9.60.7.0   OLED                                                              06/16/2025 09:50:26 PAGE 2   
+C51 COMPILER V9.60.7.0   OLED                                                              06/30/2025 10:26:45 PAGE 2   
 
   55          //延时
   56          void IIC_delay(void)
@@ -126,7 +126,7 @@ line level    source
  114   2        }
  115   1      }
  116          
-C51 COMPILER V9.60.7.0   OLED                                                              06/16/2025 09:50:26 PAGE 3   
+C51 COMPILER V9.60.7.0   OLED                                                              06/30/2025 10:26:45 PAGE 3   
 
  117          //发送一个字节
  118          //向SSD1306写入一个字节。
@@ -190,7 +190,7 @@ line level    source
  176   1              if(sizey==8)size1=6;
  177   1              else size1=(sizey/8+((sizey%8)?1:0))*(sizey/2);
  178   1              c=chr-' ';//得到偏移后的值
-C51 COMPILER V9.60.7.0   OLED                                                              06/16/2025 09:50:26 PAGE 4   
+C51 COMPILER V9.60.7.0   OLED                                                              06/30/2025 10:26:45 PAGE 4   
 
  179   1              OLED_Set_Pos(x,y);
  180   1              for(i=0;i<size1;i++)
@@ -254,7 +254,7 @@ line level    source
  238   2                      if(sizey==16) OLED_WR_Byte(Hzk[no][i],OLED_DATA);//16x16字号
  239   2      //              else if(sizey==xx) OLED_WR_Byte(xxx[c][i],OLED_DATA);//用户添加字号
  240   2                      else return;
-C51 COMPILER V9.60.7.0   OLED                                                              06/16/2025 09:50:26 PAGE 5   
+C51 COMPILER V9.60.7.0   OLED                                                              06/30/2025 10:26:45 PAGE 5   
 
  241   2              }                               
  242   1      }
@@ -318,7 +318,7 @@ line level    source
  300   1              OLED_Clear();
  301   1              OLED_WR_Byte(0xAF,OLED_CMD); /*display ON*/ 
  302   1      }
-C51 COMPILER V9.60.7.0   OLED                                                              06/16/2025 09:50:26 PAGE 6   
+C51 COMPILER V9.60.7.0   OLED                                                              06/30/2025 10:26:45 PAGE 6   
 
  303          
  304          
