@@ -5,9 +5,10 @@
 sbit CS   =P3^0;  //片选
 sbit STD  =P3^1;  //串行数据
 sbit SCLK =P3^2;  //串口时钟
+sbit RST  =P3^3;  //复位
 sbit KEY = P2^0;
 
-unsigned char i,X,Y,XPosition,YPosition,FCHARBUF;
+unsigned char X,Y,XPosition,YPosition,FCHARBUF;
 
 unsigned int ReadKey1() // 按键检测函数
 {
@@ -43,7 +44,6 @@ void Delay(unsigned char xms)	//@12.000MHz
  * @param  
  * @retval None
  */
-
 void Trans_Bit(bit d)  // 将一位数据传输到液晶显示控制器
 {
    STD = d;       // 先将传入的 bit 数据 d 送到数据引脚 STDPIN 上
@@ -220,7 +220,13 @@ void Display_Clear(void)
 {
 	Write_Command(0x30);
 	Write_Command(0x01);//P19
-}	     //0x0000 0001
+	Write_Command(0x08);
+	
+// Write_Command(0x01); //显示清屏
+// Write_Command(0x34); // 显示光标移动设置
+// Write_Command(0x30); // 显示开及光标设置
+}	     
+
  
 
 /**
@@ -284,21 +290,24 @@ void FillScreen(unsigned char DATA)  // 整屏显示指定的字节数据
   */
  void Lcd12864spi_init(void)
 {
-
+    RST=0;                 //Reset
+    Delay(10);             
+    RST=1;                 //Reset set H
+    Delay(10);
 	Write_Command(0x30);
-	Delay(1);
+	Delay(10);
 	Write_Command(0x30);
-	Delay(1);
+	Delay(10);
 	Write_Command(0x08);
-	Delay(1);
+	Delay(10);
 	Write_Command(0x10);
-	Delay(1);
+	Delay(10);
 	Write_Command(0x0c);
-	Delay(1);
+	Delay(10);
 	Write_Command(0x01);
-	Delay(1);
+	Delay(10);
 	Write_Command(0x06);
-	Delay(1);
+	Delay(10);
 	Display_Clear();
 }
 
@@ -416,6 +425,7 @@ void DisplaystringAtposition(unsigned char x ,unsigned char y ,unsigned char cod
 	X=x;
 	Y=y;
 	DisplayString(s);
+	
 }
 
        

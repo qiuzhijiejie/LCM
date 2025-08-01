@@ -13,7 +13,7 @@ void main()
   {
 	Init_IC();   
     lcd_test();  
-	Yehui_UI();
+//	Yehui_UI();
 	delayMs(300);
     Clear();
 	  

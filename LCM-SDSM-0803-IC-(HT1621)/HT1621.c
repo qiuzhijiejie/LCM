@@ -129,31 +129,6 @@ void delay(unsigned int z)
 }
 
 
-//void display_sequence()
-//{
-//    unsigned char i;
-
-//    // 从 8 到 0 倒序显示（全屏）
-//    for (i = 9; i < 255; i--) 
-//	{
-//        display_digit(0x40, digits[i], 11);  // 第一行
-//        display_digit(0x41, digits[i], 11);  // 第二行
-//        delay(3000); // 显示间隔
-//    }
-
-//    delay(1000); // 停顿
-
-//    // 从 0 到 8 正序显示（全屏）
-//    for (i = 0; i <= 9; i++) 
-//	{
-//        display_digit(0x40, digits[i], 11);  // 第一行
-//        display_digit(0x41, digits[i], 11);  // 第二行
-//        delay(3000); // 显示间隔
-//    }
-
-//    delay(3000); // 停顿
-//}
-
 
 // 段码：高4位 + 低4位
 typedef struct {

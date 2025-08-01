@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   HT1621                                                            06/07/2025 10:46:37 PAGE 1   
+C51 COMPILER V9.60.7.0   HT1621                                                            07/23/2025 10:02:39 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE HT1621
@@ -53,19 +53,19 @@ line level    source
   43   1              unsigned char x,y;
   44   1              LCDCS1=0;
   45   1              LCDDATA=1;
-  46   1              LCDWR=0;
+  46   1              LCDWR=1;
   47   1              _nop_();
   48   1          _nop_();
-  49   1              LCDWR=1;
+  49   1              LCDWR=0;
   50   1              for(y=0;y<2;y++)//（命令代码：100）
   51   1              {
   52   2                      LCDDATA=0;
-  53   2                      LCDWR=0;
+  53   2                      LCDWR=1;
   54   2                      _nop_();
-C51 COMPILER V9.60.7.0   HT1621                                                            06/07/2025 10:46:37 PAGE 2   
+C51 COMPILER V9.60.7.0   HT1621                                                            07/23/2025 10:02:39 PAGE 2   
 
   55   2                      _nop_();                
-  56   2                      LCDWR=1;
+  56   2                      LCDWR=0;
   57   2              }
   58   1              
   59   1              for(x=0; x<8; x++)
@@ -75,17 +75,17 @@ line level    source
   63   2                      else
   64   2                              LCDDATA = 0;
   65   2      
-  66   2                      LCDWR=0;        
+  66   2                      LCDWR=1;        
   67   2                      _nop_();
   68   2              _nop_();        
-  69   2                      LCDWR=1;
+  69   2                      LCDWR=0;
   70   2                      com <<= 1; //从高位到低位依次发送 8 位命令内容
   71   2              }
   72   1              LCDDATA=1;
-  73   1              LCDWR=0;
+  73   1              LCDWR=1;
   74   1              _nop_();
   75   1          _nop_();
-  76   1              LCDWR=1;
+  76   1              LCDWR=0;
   77   1              LCDCS1=1;
   78   1      }
   79          
@@ -94,11 +94,11 @@ line level    source
   82          {
   83   1              unsigned char x, y;
   84   1              LCDCS1=0;
-  85   1              LCDDATA=1;
-  86   1              LCDWR=0;
+  85   1              LCDDATA=0;
+  86   1              LCDWR=1;
   87   1              _nop_();
   88   1          _nop_();
-  89   1              LCDWR=1;
+  89   1              LCDWR=0;
   90   1      
   91   1              for(x=0; x<8; x++)
   92   1              {
@@ -107,10 +107,10 @@ line level    source
   95   2                      else
   96   2                              LCDDATA = 0;
   97   2      
-  98   2                      LCDWR=0;
+  98   2                      LCDWR=1;
   99   2                      _nop_();
  100   2              _nop_();
- 101   2                      LCDWR=1;
+ 101   2                      LCDWR=0;
  102   2      
  103   2                      add1 <<= 1; 
  104   2              }
@@ -121,12 +121,12 @@ line level    source
  109   2                              LCDDATA = 1;
  110   2                      else
  111   2                              LCDDATA = 0;
- 112   2                      LCDWR=0;
+ 112   2                      LCDWR=1;
  113   2                      _nop_();
  114   2              _nop_();
- 115   2                      LCDWR=1;
+ 115   2                      LCDWR=0;
  116   2      
-C51 COMPILER V9.60.7.0   HT1621                                                            06/07/2025 10:46:37 PAGE 3   
+C51 COMPILER V9.60.7.0   HT1621                                                            07/23/2025 10:02:39 PAGE 3   
 
  117   2                      date >>= 1;   
  118   2              }
@@ -143,85 +143,60 @@ line level    source
  129   1      }
  130          
  131          
- 132          //void display_sequence()
- 133          //{
- 134          //    unsigned char i;
- 135          
- 136          //    // 从 8 到 0 倒序显示（全屏）
- 137          //    for (i = 9; i < 255; i--) 
- 138          //      {
- 139          //        display_digit(0x40, digits[i], 11);  // 第一行
- 140          //        display_digit(0x41, digits[i], 11);  // 第二行
- 141          //        delay(3000); // 显示间隔
- 142          //    }
- 143          
- 144          //    delay(1000); // 停顿
- 145          
- 146          //    // 从 0 到 8 正序显示（全屏）
- 147          //    for (i = 0; i <= 9; i++) 
- 148          //      {
- 149          //        display_digit(0x40, digits[i], 11);  // 第一行
- 150          //        display_digit(0x41, digits[i], 11);  // 第二行
- 151          //        delay(3000); // 显示间隔
- 152          //    }
- 153          
- 154          //    delay(3000); // 停顿
- 155          //}
- 156          
- 157          
- 158          // 段码：高4位 + 低4位
- 159          typedef struct {
- 160              unsigned char left;
- 161              unsigned char right;
- 162          } SegmentData;
- 163          
- 164          // 数字段码表
- 165          SegmentData digits[] = {
- 166              {0x0D, 0x0F}, // 0
- 167              {0x00, 0x0E}, // 1
- 168              {0x0E, 0x0B}, // 2
- 169              {0x0A, 0x0F}, // 3
- 170              {0x03, 0x0E}, // 4
- 171              {0x0B, 0x0D}, // 5
- 172              {0x0F, 0x0D}, // 6
- 173              {0x00, 0x0F}, // 7
- 174              {0x0F, 0x0F}, // 8
- 175              {0x03, 0x0F}  // 9
- 176          };
- 177          
- 178          void display_digit(unsigned char digit, unsigned char mode)
-C51 COMPILER V9.60.7.0   HT1621                                                            06/07/2025 10:46:37 PAGE 4   
+ 132          
+ 133          // 段码：高4位 + 低4位
+ 134          typedef struct {
+ 135              unsigned char left;
+ 136              unsigned char right;
+ 137          } SegmentData;
+ 138          
+ 139          // 数字段码表
+ 140          SegmentData digits[] = {
+ 141              {0x0D, 0x0F}, // 0
+ 142              {0x00, 0x0E}, // 1
+ 143              {0x0E, 0x0B}, // 2
+ 144              {0x0A, 0x0F}, // 3
+ 145              {0x03, 0x0E}, // 4
+ 146              {0x0B, 0x0D}, // 5
+ 147              {0x0F, 0x0D}, // 6
+ 148              {0x00, 0x0F}, // 7
+ 149              {0x0F, 0x0F}, // 8
+ 150              {0x03, 0x0F}  // 9
+ 151          };
+ 152          
+ 153          void display_digit(unsigned char digit, unsigned char mode)
+ 154          {
+ 155   1          unsigned char addr;
+ 156   1          unsigned char count;
+ 157   1          unsigned char i;
+ 158   1          SegmentData seg;
+ 159   1      
+ 160   1          if (digit > 9 || (mode != 1 && mode != 2)) {
+ 161   2              return;
+ 162   2          }
+ 163   1      
+ 164   1          seg = digits[digit];
+ 165   1      
+ 166   1          if (mode == 1) {
+ 167   2              addr = 0x40;
+ 168   2              count = 9;
+ 169   2              for (i = 0; i < count; i++) {
+ 170   3                  write_data(addr,     seg.left);
+ 171   3                  write_data(addr + 1, seg.right);
+ 172   3                  addr += 2;
+ 173   3              }
+ 174   2          } else {
+ 175   2              addr = 0x52;
+ 176   2              count = 7;
+ 177   2              for (i = 0; i < count; i++) {
+ 178   3                  write_data(addr,     seg.right);
+C51 COMPILER V9.60.7.0   HT1621                                                            07/23/2025 10:02:39 PAGE 4   
 
- 179          {
- 180   1          unsigned char addr;
- 181   1          unsigned char count;
- 182   1          unsigned char i;
- 183   1          SegmentData seg;
- 184   1      
- 185   1          if (digit > 9 || (mode != 1 && mode != 2)) {
- 186   2              return;
- 187   2          }
- 188   1      
- 189   1          seg = digits[digit];
- 190   1      
- 191   1          if (mode == 1) {
- 192   2              addr = 0x40;
- 193   2              count = 9;
- 194   2              for (i = 0; i < count; i++) {
- 195   3                  write_data(addr,     seg.left);
- 196   3                  write_data(addr + 1, seg.right);
- 197   3                  addr += 2;
- 198   3              }
- 199   2          } else {
- 200   2              addr = 0x52;
- 201   2              count = 7;
- 202   2              for (i = 0; i < count; i++) {
- 203   3                  write_data(addr,     seg.right);
- 204   3                  write_data(addr + 1, seg.left);
- 205   3                  addr += 2;
- 206   3              }
- 207   2          }
- 208   1      }
+ 179   3                  write_data(addr + 1, seg.left);
+ 180   3                  addr += 2;
+ 181   3              }
+ 182   2          }
+ 183   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

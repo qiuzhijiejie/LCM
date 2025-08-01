@@ -3,12 +3,11 @@
 
 #include "reg51.h"
 #include "main.h"
+#define LCD_Max	22
 
 sbit SDI = P3^0;//DS    5serial data input
 sbit SCK = P3^2;//SH_CP 6shift register clock input
 sbit RCK = P3^1;//ST_CP 7storage register clock input
-#define LCD_Max	22
-
 
 extern u8 LCD_POLARITY;
 extern code u8 leddata1[];

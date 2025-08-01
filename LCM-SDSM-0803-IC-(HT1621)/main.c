@@ -3,7 +3,6 @@ extern unsigned int i;
 
 void main()
 {
-
 	while(1)
 	{	
 	lcd_init();  
@@ -18,7 +17,6 @@ void main()
 		display_digit(i, 2); // 显示数字 i 的 2dot 布局
 		delay(3000);
 	}
-
 		
 	}	
 }
