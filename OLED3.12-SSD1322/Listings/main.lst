@@ -1,0 +1,893 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2025 20:45:09 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\m
+                    -ain.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          //Modle :3.12"OLED
+   2          //Driver IC:SSD1322
+   3          //Interfaces:4-SPI
+   4          #include<reg51.h>
+   5          #include<intrins.h>
+   6          sbit SCLK = P3^0;  //CLK
+   7          sbit SDIN = P3^1;  //DIN
+   8          sbit _CS=P3^4; //??
+   9          sbit RES=P3^2; //??λ
+  10          sbit _RS=P3^3; //????/????
+  11           
+  12           
+  13           
+  14          void send_2bit(unsigned char two_bit_data);
+  15           
+  16          unsigned char code test_tab[16]={
+  17                                         0xff,0xff,0x00,0x00,
+  18                                         0xf8,0x00,0x07,0xe0,
+  19                                         0x00,0x1f,0xff,0xe0,
+  20                                         0x07,0xff,0xf8,0x1f};
+  21           
+  22          unsigned char code picture_tab[]={
+  23          //????x???=256x64???gyc????????????λ???//
+  24          0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
+  25          0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
+  26          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x1F,0xFF,0xFF,
+  27          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  28          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x03,0xFF,0xFF,0xFF,0xFF,
+  29          0xFF,0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  30          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x0F,0xFF,0xFF,0xFF,0xFF,
+  31          0xFF,0xF0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  32          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x7F,0xFF,0xF8,0x00,0x00,
+  33          0x07,0xFF,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  34          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0xFF,0xFE,0x00,0x00,0x00,
+  35          0x00,0x1F,0xF0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  36          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x0F,0xFF,0xFC,0x00,0x00,0x00,
+  37          0x00,0x01,0xFF,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  38          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x1F,0xFF,0xF0,0x00,0x00,0x00,
+  39          0x00,0x00,0x3F,0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  40          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x7C,0x07,0xF0,0x00,0x00,0x00,
+  41          0x00,0x00,0x07,0xE0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  42          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0xF0,0x07,0xF0,0x00,0x00,0x00,
+  43          0x00,0x00,0x01,0xF8,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  44          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x07,0xE0,0x07,0xF0,0x00,0x00,0x00,
+  45          0x00,0x00,0x00,0x3E,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  46          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x1F,0x80,0x07,0xF0,0x00,0x00,0x00,
+  47          0x00,0x00,0x00,0x0F,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  48          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x3E,0x00,0x07,0xF0,0x00,0x00,0x00,
+  49          0x00,0x00,0x00,0x03,0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  50          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xFC,0x00,0x07,0xF0,0x00,0x00,0x00,
+  51          0x00,0x00,0x00,0x01,0xE0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  52          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0xF8,0x00,0x07,0xF0,0x00,0x00,0x00,
+  53          0x1F,0xFF,0xFF,0xFE,0xF0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  54          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x03,0xE0,0x00,0x07,0xF0,0x00,0x00,0x00,
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2025 20:45:09 PAGE 2   
+
+  55          0x7F,0xFF,0xFF,0xFF,0xF8,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  56          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x07,0xC0,0x00,0x07,0xF0,0x00,0x00,0x07,
+  57          0xF8,0x00,0x00,0x01,0xFC,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  58          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x07,0x80,0x00,0x07,0xF0,0x00,0x00,0x1F,
+  59          0xF0,0x00,0x00,0x00,0x7E,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  60          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x0F,0x80,0x00,0x07,0xF0,0x00,0x00,0x3F,
+  61          0xC0,0x00,0x00,0x00,0x0E,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  62          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x0F,0x80,0x00,0x07,0xFF,0xFF,0xC0,0xFF,
+  63          0xFF,0xFF,0x80,0x00,0x0F,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  64          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x1E,0x00,0x00,0x07,0xFF,0xF0,0x01,0xFE,
+  65          0x1F,0xF8,0x00,0x00,0x07,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  66          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x1E,0x00,0x00,0x07,0xF7,0xF0,0x03,0xFC,
+  67          0x03,0xC0,0x00,0x00,0x07,0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  68          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x3E,0x00,0x00,0x07,0xF3,0xF8,0x03,0xFC,
+  69          0x07,0x80,0x00,0x00,0x07,0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  70          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x3E,0x00,0x00,0x07,0xF1,0xFC,0x03,0xFC,
+  71          0x0F,0x00,0x00,0x00,0x07,0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  72          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x3E,0x00,0x00,0x07,0xF0,0xFE,0x03,0xFC,
+  73          0x1E,0x00,0x00,0x00,0x07,0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  74          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x3E,0x00,0x00,0x07,0xF0,0x3F,0x01,0xFC,
+  75          0x3C,0x00,0x00,0x00,0x07,0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  76          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x1E,0x00,0x00,0x07,0xE0,0x1F,0x80,0xFF,
+  77          0xF8,0x00,0x00,0x00,0x07,0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  78          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x1E,0x00,0x00,0x07,0xE0,0x0F,0xE0,0x7F,
+  79          0xF0,0x00,0x00,0x00,0x1F,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  80          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x0F,0x00,0x00,0x07,0xE0,0x07,0xF0,0x1F,
+  81          0xE0,0x00,0x00,0x00,0x6F,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  82          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x0F,0x00,0x00,0x07,0xC0,0x03,0xF8,0x0F,
+  83          0xFF,0x80,0x00,0x7F,0xFE,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  84          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x07,0x80,0x00,0x0F,0xC0,0x00,0xFC,0x3F,
+  85          0xFF,0xFF,0xFF,0xFF,0xFE,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  86          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x07,0xE0,0x00,0xFF,0x80,0x00,0x7E,0x7C,
+  87          0x01,0xFF,0xFF,0xF0,0x7E,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  88          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x03,0xF3,0xE7,0xFE,0x00,0x00,0x3F,0xF8,
+  89          0x00,0x00,0x00,0x00,0xFC,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  90          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0xFB,0xFF,0xF8,0x00,0x00,0x1F,0xE0,
+  91          0x00,0x00,0x00,0x01,0xF8,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  92          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xFC,0xFE,0x00,0x00,0x00,0x0F,0xC0,
+  93          0x00,0x00,0x00,0x03,0xF0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  94          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x3F,0x00,0x00,0x00,0x00,0x0F,0xC0,
+  95          0x00,0x00,0x00,0x07,0xE0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  96          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x1F,0xC0,0x00,0x00,0x00,0x0F,0xC0,
+  97          0x00,0x00,0x00,0x1F,0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+  98          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x07,0xE0,0x00,0x00,0x00,0x0F,0xC0,
+  99          0x00,0x00,0x00,0x7F,0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 100          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x03,0xFC,0x00,0x00,0x00,0x0F,0xC0,
+ 101          0x00,0x00,0x03,0xFE,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 102          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x7F,0x80,0x00,0x00,0x0F,0xC0,
+ 103          0x00,0x00,0x0F,0xF8,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 104          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x1F,0xF0,0x00,0x00,0x0F,0xC0,
+ 105          0x00,0x00,0x3F,0xE0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 106          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x0F,0xFF,0x00,0x00,0x0F,0xC0,
+ 107          0x00,0x01,0xFF,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 108          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x03,0xFF,0xF0,0x00,0x0F,0xC0,
+ 109          0x00,0x3F,0xFC,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 110          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x7F,0xFF,0x80,0x0F,0xFF,
+ 111          0xFF,0xFF,0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 112          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x0F,0xFF,0xFF,0xFF,0xFF,
+ 113          0xFF,0xFC,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 114          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x0F,0xFF,0xFF,0xFF,
+ 115          0xFF,0xF0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 116          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0xFF,0xFF,0xFF,
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2025 20:45:09 PAGE 3   
+
+ 117          0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 118          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x07,0x80,0x00,0x00,0x00,0x00,0x00,
+ 119          0x00,0x00,0x00,0x07,0xF8,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 120          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x0F,0x80,0x00,0x00,0x00,0x03,0xE0,
+ 121          0x00,0x00,0x00,0x1F,0x3C,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 122          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x1F,0xC0,0x00,0x00,0x00,0x07,0xF8,
+ 123          0x00,0x00,0x02,0x47,0xBE,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 124          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x3C,0xF8,0x00,0x00,0x1C,0x0F,0x3C,
+ 125          0x00,0x00,0x03,0xDF,0x3C,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 126          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xF0,0x1E,0x00,0x00,0x1F,0x00,0xF0,
+ 127          0x00,0x00,0x01,0xFF,0xF8,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 128          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0xEF,0xC7,0xC0,0x00,0x18,0x03,0xFF,
+ 129          0x80,0x00,0x00,0xFF,0xF8,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 130          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x03,0xFF,0xE1,0xFE,0x00,0xC0,0x3F,0xE7,
+ 131          0x00,0x00,0x00,0x7F,0xE0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 132          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x07,0x1F,0xC0,0x3F,0xE0,0xFE,0x1C,0xFF,
+ 133          0x00,0x00,0x0F,0xEB,0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 134          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x1E,0x3F,0xF0,0x01,0xF0,0x7E,0x1F,0xFB,
+ 135          0x00,0x00,0x00,0xCF,0xE0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 136          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x38,0x7F,0x80,0x00,0x00,0x18,0x0F,0x73,
+ 137          0x80,0x00,0x03,0xCF,0x8E,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 138          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xF0,0x63,0xBC,0x00,0x00,0x1E,0x0E,0x63,
+ 139          0x00,0x00,0x07,0x3E,0x1E,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 140          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xC0,0x7B,0xF0,0x00,0x00,0x07,0x38,0x7F,
+ 141          0xF0,0x00,0x1E,0x3F,0xFC,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 142          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x73,0xC0,0x00,0x00,0x7F,0xFE,0x00,
+ 143          0x00,0x00,0x3C,0x70,0x3F,0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 144          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x1F,0xFF,0x80,0x00,0x01,0xFF,0xFF,
+ 145          0xFF,0x00,0xF0,0x70,0xCF,0xFE,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 146          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0xFF,0xFF,0x80,0x00,0x00,0x00,0xFF,
+ 147          0xFF,0x03,0xE0,0x3F,0x81,0xFF,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 148          0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+ 149          0x00,0x03,0x80,0x1E,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,
+ 150          0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
+ 151          0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
+ 152          };
+ 153          unsigned char code picture_tab1[]={
+ 154          //????x???=256x64???3.12...??,??????????λ???//
+ 155          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 156          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 157          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 158          0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 159          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 160          0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 161          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 162          0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 163          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 164          0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 165          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 166          0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 167          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 168          0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 169          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 170          0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 171          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 172          0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 173          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 174          0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 175          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 176          0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 177          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 178          0XF6,0X1F,0XF0,0X0F,0XF8,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2025 20:45:09 PAGE 4   
+
+ 179          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X07,
+ 180          0X1E,0X0E,0X1C,0X01,0XC0,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 181          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X0E,
+ 182          0X0E,0X0E,0X1C,0X01,0XC0,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 183          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X0E,
+ 184          0X06,0X0E,0X0E,0X01,0XC0,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 185          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X0E,
+ 186          0X06,0X0E,0X0E,0X01,0XC0,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 187          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X0E,
+ 188          0X00,0X0E,0X0E,0X01,0XC0,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 189          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X0F,
+ 190          0X00,0X0E,0X0E,0X01,0XC0,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 191          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X07,
+ 192          0XC0,0X0E,0X1C,0X01,0XC0,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 193          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 194          0XF8,0X0E,0X3C,0X01,0XC0,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 195          0X80,0X3F,0X00,0X00,0X00,0X18,0X00,0X07,0XE0,0X03,0XB8,0X00,0X00,0X00,0X00,0X00,
+ 196          0X7C,0X0F,0XF0,0X01,0XC0,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 197          0X81,0XFF,0XE0,0X00,0X07,0XF8,0X00,0X7F,0XFC,0X03,0XB8,0X00,0X00,0X00,0X00,0X00,
+ 198          0X1E,0X0E,0X00,0X01,0XC0,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 199          0X81,0X81,0XF0,0X00,0X1F,0XF8,0X00,0XF0,0X3E,0X03,0XB8,0X00,0X00,0X00,0X00,0X00,
+ 200          0X0F,0X0E,0X00,0X01,0XC0,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 201          0X80,0X00,0XF0,0X00,0X1F,0X78,0X00,0XC0,0X1E,0X03,0XB8,0X00,0X00,0X00,0X00,0X00,
+ 202          0X07,0X0E,0X00,0X01,0XC0,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 203          0X80,0X00,0X70,0X00,0X18,0X78,0X00,0X80,0X0E,0X03,0X98,0X00,0X00,0X00,0X00,0X0C,
+ 204          0X07,0X0E,0X00,0X01,0XC0,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 205          0X80,0X00,0X70,0X00,0X00,0X78,0X00,0X00,0X0E,0X03,0X18,0X00,0X00,0X00,0X00,0X0C,
+ 206          0X07,0X0E,0X00,0X01,0XC0,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 207          0X80,0X00,0X70,0X00,0X00,0X78,0X00,0X00,0X0E,0X03,0X18,0X00,0X00,0X00,0X00,0X0E,
+ 208          0X0E,0X0E,0X00,0X01,0XC0,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 209          0X80,0X00,0X70,0X00,0X00,0X78,0X00,0X00,0X0E,0X00,0X00,0X00,0X00,0X00,0X00,0X0F,
+ 210          0X0E,0X0E,0X00,0X01,0XC0,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 211          0X80,0X00,0XE0,0X00,0X00,0X78,0X00,0X00,0X0E,0X00,0X00,0X00,0X00,0X00,0X00,0X0D,
+ 212          0XF8,0X1F,0X00,0X0F,0XF8,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 213          0X80,0X03,0XC0,0X00,0X00,0X78,0X00,0X00,0X1C,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 214          0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 215          0X80,0XFF,0X80,0X00,0X00,0X78,0X00,0X00,0X1C,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 216          0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 217          0X80,0XFF,0X00,0X00,0X00,0X78,0X00,0X00,0X38,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 218          0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 219          0X80,0XFF,0XE0,0X00,0X00,0X78,0X00,0X00,0X70,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 220          0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 221          0X80,0X01,0XF0,0X00,0X00,0X78,0X00,0X00,0XF0,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 222          0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 223          0X80,0X00,0X70,0X00,0X00,0X78,0X00,0X01,0XE0,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 224          0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 225          0X80,0X00,0X38,0X00,0X00,0X78,0X00,0X07,0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 226          0X00,0X00,0X00,0X00,0XFC,0X03,0XFF,0X80,0X0F,0X80,0X18,0X00,0X3E,0X00,0X07,0X01,
+ 227          0X80,0X00,0X38,0X00,0X00,0X78,0X00,0X0F,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 228          0X00,0X00,0X00,0X03,0XFE,0X03,0XFF,0X80,0X3F,0XC0,0X10,0X00,0XFF,0X00,0X0F,0X01,
+ 229          0X80,0X00,0X38,0X00,0X00,0X78,0X00,0X1C,0X00,0X00,0X3F,0XC0,0X07,0XC0,0X7F,0XF0,
+ 230          0X3E,0XC0,0X00,0X06,0X07,0X03,0X80,0X00,0X70,0X40,0X10,0X01,0XC1,0X00,0X1F,0X01,
+ 231          0X80,0X00,0X78,0X00,0X00,0X78,0X00,0X38,0X00,0X00,0X1C,0XF0,0X1C,0X70,0X67,0X30,
+ 232          0XE3,0XC0,0X00,0X04,0X03,0X83,0X80,0X00,0XE0,0X01,0X11,0X03,0X80,0X00,0X1F,0X01,
+ 233          0X80,0X00,0X78,0X00,0X00,0X78,0X00,0X70,0X00,0X00,0X1C,0X38,0X18,0X30,0XC7,0X19,
+ 234          0XC1,0XC0,0X00,0X00,0X03,0X83,0X80,0X00,0XC0,0X03,0XDF,0X83,0X00,0X00,0X3B,0X01,
+ 235          0X83,0X81,0XF0,0X1C,0X00,0X78,0X00,0XE0,0X00,0X00,0X1C,0X38,0X38,0X38,0XC7,0X19,
+ 236          0XC0,0XC0,0X00,0X00,0X03,0X83,0X80,0X01,0X80,0X00,0XFE,0X06,0X00,0X00,0X73,0X01,
+ 237          0X83,0XFF,0XE0,0X3C,0X0F,0XFF,0XE1,0XFF,0XFE,0X00,0X1C,0X18,0X30,0X18,0X07,0X01,
+ 238          0XC0,0XC0,0X00,0X00,0X03,0X83,0X80,0X01,0X80,0X00,0X38,0X06,0X00,0X00,0X63,0X01,
+ 239          0X80,0XFE,0X00,0X1C,0X0F,0XFF,0XE1,0XFF,0XFE,0X00,0X1C,0X1C,0X70,0X1C,0X07,0X01,
+ 240          0XC0,0X00,0X3C,0X00,0X03,0X83,0X80,0X03,0X80,0X00,0X6C,0X0E,0X00,0X00,0XE3,0X01,
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2025 20:45:09 PAGE 5   
+
+ 241          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X1C,0X1C,0X70,0X1C,0X07,0X01,
+ 242          0XE0,0X00,0X3C,0X00,0X03,0X03,0X80,0X03,0X9F,0X00,0XEE,0X0E,0X7C,0X01,0XC3,0X01,
+ 243          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X1C,0X1C,0X70,0X1C,0X07,0X00,
+ 244          0XF8,0X00,0X3C,0X00,0X07,0X03,0XFC,0X03,0X3F,0XC0,0XC6,0X0C,0XFF,0X01,0X83,0X01,
+ 245          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X1C,0X1C,0X70,0X1C,0X07,0X00,
+ 246          0X3F,0X00,0X00,0X00,0X06,0X03,0XFF,0X03,0XE1,0XE0,0X00,0X0F,0X87,0X83,0X03,0X01,
+ 247          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X1C,0X1C,0X70,0X1C,0X07,0X00,
+ 248          0X0F,0X80,0X00,0X00,0X0E,0X00,0X07,0X83,0XC0,0XE0,0X00,0X0F,0X03,0X87,0X03,0X01,
+ 249          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X1C,0X1C,0X70,0X1C,0X07,0X00,
+ 250          0X03,0XC0,0X00,0X00,0X1C,0X00,0X03,0X83,0X80,0X60,0X00,0X0E,0X01,0X86,0X03,0X01,
+ 251          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X1C,0X1C,0X70,0X1C,0X07,0X00,
+ 252          0X01,0XE0,0X00,0X00,0X38,0X00,0X01,0XC3,0X80,0X70,0X00,0X0E,0X01,0XCC,0X03,0X01,
+ 253          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X1C,0X1C,0X70,0X1C,0X07,0X00,
+ 254          0X00,0XE0,0X00,0X00,0X70,0X00,0X01,0XC3,0X80,0X70,0X00,0X0E,0X01,0XDF,0XFF,0XE1,
+ 255          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X1C,0X38,0X38,0X18,0X07,0X01,
+ 256          0X80,0XE0,0X00,0X00,0XE0,0X00,0X01,0XC3,0X80,0X70,0X00,0X0E,0X01,0XDF,0XFF,0XE1,
+ 257          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X1C,0X38,0X38,0X38,0X07,0X01,
+ 258          0X80,0XE0,0X00,0X01,0XC0,0X00,0X01,0XC3,0X80,0X70,0X00,0X0E,0X01,0XC0,0X03,0X01,
+ 259          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X1C,0X70,0X18,0X30,0X07,0X01,
+ 260          0XC1,0XC0,0X3C,0X03,0X80,0X00,0X01,0XC1,0X80,0X60,0X00,0X06,0X01,0X80,0X03,0X01,
+ 261          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X1C,0XF0,0X0C,0X70,0X07,0X01,
+ 262          0XE1,0XC0,0X3C,0X07,0X00,0X00,0X03,0X81,0XC0,0XE0,0X00,0X07,0X03,0X80,0X03,0X01,
+ 263          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X3F,0XC0,0X07,0XC0,0X0F,0X81,
+ 264          0XBF,0X00,0X3C,0X0E,0X00,0X02,0X07,0X00,0XE1,0XC0,0X00,0X03,0X87,0X00,0X03,0X01,
+ 265          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 266          0X00,0X00,0X00,0X0F,0XFF,0X83,0XFE,0X00,0X7F,0X80,0X00,0X01,0XFE,0X00,0X03,0X01,
+ 267          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 268          0X00,0X00,0X00,0X0F,0XFF,0X81,0XF8,0X00,0X3E,0X00,0X00,0X00,0XF8,0X00,0X03,0X01,
+ 269          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 270          0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 271          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 272          0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 273          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 274          0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 275          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 276          0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 277          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 278          0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 279          0X80,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
+ 280          0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X01,
+ 281          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 282          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 283          };
+ 284           
+ 285          void Delay(unsigned int time)
+ 286                  {
+ 287   1                unsigned int i,j;
+ 288   1                for(i=0;i<time;i++)
+ 289   1                   for(j=0;j<20000;j++)
+ 290   1                         {;}
+ 291   1              }
+ 292          void Ins_trans(unsigned char  tData)
+ 293          {
+ 294   1          unsigned char i;
+ 295   1       
+ 296   1          _CS=0;
+ 297   1          _RS=0;
+ 298   1          for (i=0; i<8; i++)
+ 299   1          {
+ 300   2              SCLK=0;
+ 301   2              if (tData&0x80)
+ 302   2              {//Delay(1);
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2025 20:45:09 PAGE 6   
+
+ 303   3                  SDIN=1;
+ 304   3              }
+ 305   2              else
+ 306   2              {//Delay(1);
+ 307   3                  SDIN=0;
+ 308   3              }
+ 309   2              tData = tData << 1;
+ 310   2              SCLK=1;
+ 311   2          }
+ 312   1          _RS=1;
+ 313   1          _CS=1;
+ 314   1      }
+ 315           
+ 316          void Data_trans(unsigned char  tData)
+ 317          {
+ 318   1          unsigned char i;
+ 319   1       
+ 320   1          _CS=0;
+ 321   1          _RS=1;
+ 322   1          for (i=0; i<8; i++)
+ 323   1          {
+ 324   2              SCLK=0;
+ 325   2              if (tData&0x80)
+ 326   2              {//Delay(1);
+ 327   3                  SDIN=1;
+ 328   3              }
+ 329   2              else
+ 330   2              {//Delay(1);
+ 331   3                  SDIN=0;
+ 332   3              }
+ 333   2              tData = tData << 1;
+ 334   2              SCLK=1;
+ 335   2          }
+ 336   1          _RS=1;
+ 337   1          _CS=1;
+ 338   1      }
+ 339           
+ 340          void Initial()
+ 341          {
+ 342   1      Ins_trans(0xfd);/*Command Lock*/
+ 343   1      Data_trans(0x12);
+ 344   1       
+ 345   1      Ins_trans(0xae);//Sleep In
+ 346   1       
+ 347   1      Ins_trans(0xb3);//Set Display Clock Divide Ratio/Oscillator Frequency
+ 348   1      Data_trans(0x91);
+ 349   1       
+ 350   1      Ins_trans(0xca);//Set Multiplex Ratio
+ 351   1      Data_trans(0x3f);
+ 352   1       
+ 353   1      Ins_trans(0xA2);//Set Display Offset
+ 354   1      Data_trans(0x00);
+ 355   1       
+ 356   1      Ins_trans(0xa1);//Set Display Start Line
+ 357   1      Data_trans(0x00);
+ 358   1       
+ 359   1      Ins_trans(0xca);//Set Multiplex Ratio
+ 360   1      Data_trans(0x3f);
+ 361   1       
+ 362   1      Ins_trans(0xa0);//Set Re-Map $ Dual COM Line Mode
+ 363   1      Data_trans(0x14);
+ 364   1      Data_trans(0x11);
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2025 20:45:09 PAGE 7   
+
+ 365   1       
+ 366   1      Ins_trans(0xca);
+ 367   1      Data_trans(0x3f);
+ 368   1       
+ 369   1      Ins_trans(0xb5);//Set GPIO
+ 370   1      Data_trans(0x00);
+ 371   1       
+ 372   1      Ins_trans(0xab);//Function Selection
+ 373   1      Data_trans(0x01);
+ 374   1       
+ 375   1      Ins_trans(0xb4);//Enable External VSL
+ 376   1      Data_trans(0xa0);
+ 377   1      Data_trans(0xfd);
+ 378   1       
+ 379   1      Ins_trans(0xc1);//Set Contrast Current
+ 380   1      Data_trans(0x9f);
+ 381   1       
+ 382   1      Ins_trans(0xc7);//Master Contrast Current Control
+ 383   1      Data_trans(0x0f);
+ 384   1       
+ 385   1      Ins_trans(0xb1);//Set Phase Length
+ 386   1      Data_trans(0xe2);
+ 387   1       
+ 388   1      Ins_trans(0xd1);//Enhance Driving Scheme Capability
+ 389   1      Data_trans(0x82);
+ 390   1      Data_trans(0x20);
+ 391   1       
+ 392   1      Ins_trans(0xbb);//Set Pre-Charge Voltage
+ 393   1      Data_trans(0x1f);
+ 394   1       
+ 395   1      Ins_trans(0xb6);//Set Second Pre-Charge Period
+ 396   1      Data_trans(0x08);
+ 397   1       
+ 398   1       
+ 399   1      Ins_trans(0xbe);//Set VCOMH Deselect Level
+ 400   1      Data_trans(0x07);
+ 401   1       
+ 402   1      Ins_trans(0xa6);//Set Display Mode
+ 403   1       
+ 404   1      Ins_trans(0xaF);//Sleep Out
+ 405   1       
+ 406   1      }
+ 407           
+ 408          void Screen_clear()
+ 409                 {
+ 410   1               unsigned char row,column;
+ 411   1               Ins_trans(0x15); //set?е??
+ 412   1               Data_trans(0x1c);//?е?????
+ 413   1               Data_trans(0x5b);//?е??????
+ 414   1               Ins_trans(0x75); //set?е??
+ 415   1               Data_trans(0x00);//?е?????
+ 416   1               Data_trans(0x3f);//?е??????
+ 417   1               Ins_trans(0x5c);
+ 418   1                for(row=0;row<64;row++)             //row loop
+ 419   1                   {
+ 420   2                     for(column=0;column<128;column++) //column loop
+ 421   2                        {
+ 422   3                           Data_trans(0x00);
+ 423   3                          }
+ 424   2                     }
+ 425   1               }
+ 426           
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2025 20:45:09 PAGE 8   
+
+ 427          void Screen_fill()
+ 428                 {
+ 429   1               unsigned char row,column;
+ 430   1               Ins_trans(0x15); //set?е??
+ 431   1               Data_trans(0x1c);//?е?????
+ 432   1               Data_trans(0x5b);//?е??????
+ 433   1               Ins_trans(0x75); //set?е??
+ 434   1               Data_trans(0x00);//?е?????
+ 435   1               Data_trans(0x3f);//?е??????
+ 436   1               Ins_trans(0x5c);
+ 437   1                for(row=0;row<64;row++)             //row loop
+ 438   1                   {
+ 439   2                     for(column=0;column<128;column++) //column loop
+ 440   2                        {
+ 441   3                           Data_trans(0xff);
+ 442   3                          }
+ 443   2                     }
+ 444   1               }
+ 445          
+ 446          // 按列填充屏幕，根据列号选择不同的数据
+ 447          // data_odd  : 奇数列填充的数据
+ 448          // data_even : 偶数列填充的数据
+ 449          void Screen_fill_param(unsigned char data_odd, unsigned char data_even)
+ 450          {
+ 451   1          unsigned char row, column;
+ 452   1      
+ 453   1          // 设置列地址
+ 454   1          Ins_trans(0x15); // Set column address
+ 455   1          Data_trans(0x1C); // start column
+ 456   1          Data_trans(0x5B); // end column
+ 457   1      
+ 458   1          // 设置行地址
+ 459   1          Ins_trans(0x75); // Set row address
+ 460   1          Data_trans(0x00); // start row
+ 461   1          Data_trans(0x3F); // end row
+ 462   1      
+ 463   1          // 写入RAM
+ 464   1          Ins_trans(0x5C);
+ 465   1      
+ 466   1          for(row = 0; row < 64; row++) // 行循环
+ 467   1          {
+ 468   2              for(column = 0; column < 128; column++) // 列循环
+ 469   2              {
+ 470   3                  if(column % 2 == 0)       // 偶数列
+ 471   3                      Data_trans(data_even);
+ 472   3                  else                      // 奇数列
+ 473   3                      Data_trans(data_odd);
+ 474   3              }
+ 475   2          }
+ 476   1      }
+ 477          
+ 478                           
+ 479          void Test_display()
+ 480          {
+ 481   1              unsigned int i,row,column;
+ 482   1              Ins_trans(0x15); //set?е??
+ 483   1              Data_trans(0x1c);//?е?????
+ 484   1              Data_trans(0x5b);//?е??????
+ 485   1              Ins_trans(0x75); //set?е??
+ 486   1              Data_trans(0x00);//?е?????
+ 487   1              Data_trans(0x3f);//?е??????
+ 488   1              Ins_trans(0x5c);
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2025 20:45:09 PAGE 9   
+
+ 489   1      
+ 490   1              for(i=0;i<16;i+=2)              //picture loop
+ 491   1              {
+ 492   2                      for(row=0;row<64;row++)    //row loop
+ 493   2                      {
+ 494   3                              for(column=0;column<64;column++)   //column loop
+ 495   3                              {
+ 496   4                                      Data_trans(test_tab[i]);
+ 497   4                                      Data_trans(test_tab[i+1]);
+ 498   4                                      //Delay(1);
+ 499   4                              }
+ 500   3                      }
+ 501   2              Delay(20);
+ 502   2              }
+ 503   1      }
+ 504           
+ 505          
+ 506          
+ 507          
+ 508          
+ 509          void Picture_display()
+ 510                  {
+ 511   1                unsigned char row,column;
+ 512   1                unsigned int i=0;
+ 513   1              Ins_trans(0x15); //set?е??
+ 514   1              Data_trans(0x1c);//?е?????
+ 515   1              Data_trans(0x5b);//?е??????
+ 516   1              Ins_trans(0x75); //set?е??
+ 517   1              Data_trans(0x00);//?е?????
+ 518   1              Data_trans(0x3f);//?е??????
+ 519   1                Ins_trans(0x5c);
+ 520   1       
+ 521   1                for(row=0;row<64;row++)         //row loop
+ 522   1                   {
+ 523   2       
+ 524   2                     for(column=0;column<32;column++)  //column loop
+ 525   2                        {
+ 526   3                        unsigned char code_buf,code_buf2;
+ 527   3                       code_buf=picture_tab[i++];
+ 528   3       
+ 529   3                              code_buf2=code_buf&0xc0;
+ 530   3                              send_2bit(code_buf2);
+ 531   3                              code_buf2=code_buf&0x30;
+ 532   3                              code_buf2<<=2;
+ 533   3                              send_2bit(code_buf2);
+ 534   3                              code_buf2=code_buf&0x0c;
+ 535   3                              code_buf2<<=4;
+ 536   3                              send_2bit(code_buf2);
+ 537   3                              code_buf2=code_buf&0x03;
+ 538   3                              code_buf2<<=6;
+ 539   3                              send_2bit(code_buf2);
+ 540   3                        }
+ 541   2                   }
+ 542   1                Delay(20);
+ 543   1              }
+ 544           
+ 545          void Picture_display1()
+ 546          {
+ 547   1                unsigned char row,column;
+ 548   1                unsigned int i=0;
+ 549   1              Ins_trans(0x15); //set?е??
+ 550   1              Data_trans(0x1c);//?е?????
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2025 20:45:09 PAGE 10  
+
+ 551   1              Data_trans(0x5b);//?е??????
+ 552   1              Ins_trans(0x75); //set?е??
+ 553   1              Data_trans(0x00);//?е?????
+ 554   1              Data_trans(0x3f);//?е??????
+ 555   1                Ins_trans(0x5c);
+ 556   1       
+ 557   1                for(row=0;row<64;row++)         //row loop
+ 558   1                   {
+ 559   2       
+ 560   2                     for(column=0;column<32;column++)  //column loop
+ 561   2                        {
+ 562   3                        unsigned char code_buf,code_buf2;
+ 563   3                       code_buf=picture_tab1[i++];
+ 564   3       
+ 565   3                              code_buf2=code_buf&0xc0;
+ 566   3                              send_2bit(code_buf2);
+ 567   3                              code_buf2=code_buf&0x30;
+ 568   3                              code_buf2<<=2;
+ 569   3                              send_2bit(code_buf2);
+ 570   3                              code_buf2=code_buf&0x0c;
+ 571   3                              code_buf2<<=4;
+ 572   3                              send_2bit(code_buf2);
+ 573   3                              code_buf2=code_buf&0x03;
+ 574   3                              code_buf2<<=6;
+ 575   3                              send_2bit(code_buf2);
+ 576   3                        }
+ 577   2                   }
+ 578   1                Delay(20);
+ 579   1       }
+ 580           
+ 581          void send_2bit(unsigned char two_bit_data)
+ 582          {
+ 583   1              if(two_bit_data==0x00)
+ 584   1                      Data_trans(0x00);
+ 585   1              else if(two_bit_data==0x40)
+ 586   1                      Data_trans(0x0f);
+ 587   1              else if(two_bit_data==0x80)
+ 588   1                      Data_trans(0xf0);
+ 589   1              else
+ 590   1                      Data_trans(0xff);
+ 591   1      }
+ 592           
+ 593          void Fill_Block(unsigned char Data, unsigned char a, unsigned char b, unsigned char c, unsigned char d)//?
+             -??????
+ 594          {
+ 595   1      unsigned char i,j;
+ 596   1          Ins_trans(0x15); //set?е??
+ 597   1          Data_trans(0x1C+a);//?е?????
+ 598   1          Data_trans(0x1C+b);//?е??????
+ 599   1          Ins_trans(0x75); //set?е??
+ 600   1          Data_trans(c);//?е?????
+ 601   1          Data_trans(d);//?е??????
+ 602   1          Ins_trans(0x5C);
+ 603   1       
+ 604   1          for(i=0;i<(d-c+1);i++)
+ 605   1          {
+ 606   2              for(j=0;j<(b-a+1);j++)
+ 607   2              {
+ 608   3                  Data_trans(Data);
+ 609   3                  Data_trans(Data);
+ 610   3              }
+ 611   2          }
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2025 20:45:09 PAGE 11  
+
+ 612   1      }
+ 613           
+ 614          void Grayscale()//??????
+ 615          {
+ 616   1          /* Level 16 => Column 1~16 */
+ 617   1              Fill_Block(0xFF,0x00,0x03,0x00,0x3F);
+ 618   1       
+ 619   1          /* Level 15 => Column 17~32*/
+ 620   1              Fill_Block(0xEE,0x04,0x07,0x00,0x3F);
+ 621   1       
+ 622   1          /* Level 14 => Column 33~48*/
+ 623   1              Fill_Block(0xDD,0x08,0x0B,0x00,0x3F);
+ 624   1       
+ 625   1          /* Level 13 => Column 49~64*/
+ 626   1              Fill_Block(0xCC,0x0C,0x0F,0x00,0x3F);
+ 627   1       
+ 628   1          /* Level 12 => Column 65~80*/
+ 629   1              Fill_Block(0xBB,0x10,0x13,0x00,0x3F);
+ 630   1       
+ 631   1          /* Level 11 => Column 81~96*/
+ 632   1              Fill_Block(0xAA,0x14,0x17,0x00,0x3F);
+ 633   1       
+ 634   1          /* Level 10 => Column 97~112*/
+ 635   1              Fill_Block(0x99,0x18,0x1B,0x00,0x3F);
+ 636   1       
+ 637   1          /* Level 9 => Column 113~128*/
+ 638   1              Fill_Block(0x88,0x1C,0x1F,0x00,0x3F);
+ 639   1       
+ 640   1          /* Level 8 => Column 129~144*/
+ 641   1              Fill_Block(0x77,0x20,0x23,0x00,0x3F);
+ 642   1       
+ 643   1          /* Level 7 => Column 145~160*/
+ 644   1              Fill_Block(0x66,0x24,0x27,0x00,0x3F);
+ 645   1       
+ 646   1          /* Level 6 => Column 161~176*/
+ 647   1              Fill_Block(0x55,0x28,0x2B,0x00,0x3F);
+ 648   1       
+ 649   1          /* Level 5 => Column 177~192*/
+ 650   1              Fill_Block(0x44,0x2C,0x2F,0x00,0x3F);
+ 651   1       
+ 652   1          /* Level 4 => Column 193~208*/
+ 653   1              Fill_Block(0x33,0x30,0x33,0x00,0x3F);
+ 654   1       
+ 655   1          /* Level 3 => Column 209~224*/
+ 656   1              Fill_Block(0x22,0x34,0x37,0x00,0x3F);
+ 657   1       
+ 658   1          /* Level 2 => Column 225~240*/
+ 659   1              Fill_Block(0x11,0x38,0x3B,0x00,0x3F);
+ 660   1       
+ 661   1          /* Level 1 => Column 241~256*/
+ 662   1              Fill_Block(0x00,0x3C,0x3f,0x00,0x3F);
+ 663   1      }
+ 664          // 按字节填充屏幕，每个字节对应两列
+ 665          // data_byte : 每个字节表示两列像素状态
+ 666          void Screen_fill_byte(unsigned char data_byte)
+ 667          {
+ 668   1          unsigned char row, column;
+ 669   1      
+ 670   1          // 设置列地址
+ 671   1          Ins_trans(0x15); 
+ 672   1          Data_trans(0x1C); // start column
+ 673   1          Data_trans(0x5B); // end column
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2025 20:45:09 PAGE 12  
+
+ 674   1      
+ 675   1          // 设置行地址
+ 676   1          Ins_trans(0x75); 
+ 677   1          Data_trans(0x00); // start row
+ 678   1          Data_trans(0x3F); // end row
+ 679   1      
+ 680   1          // 写入RAM
+ 681   1          Ins_trans(0x5C);
+ 682   1      
+ 683   1          for(row = 0; row < 64; row++) // 行循环
+ 684   1          {
+ 685   2              for(column = 0; column < 128; column++) // 列循环，每个字节占两列
+ 686   2              {
+ 687   3                  Data_trans(data_byte);
+ 688   3              }
+ 689   2          }
+ 690   1      }
+ 691          
+ 692          
+ 693          void Screen_fill_row_256x64(unsigned char data_odd, unsigned char data_even)
+ 694          {
+ 695   1          unsigned int row, column;
+ 696   1      
+ 697   1          // 设置列地址（0~255列）
+ 698   1          Ins_trans(0x15);
+ 699   1          Data_trans(0x00); // start column
+ 700   1          Data_trans(0x7F); // end column (128字节 ×2列=256列)
+ 701   1      
+ 702   1          // 设置行地址（0~63行）
+ 703   1          Ins_trans(0x75);
+ 704   1          Data_trans(0x00); // start row
+ 705   1          Data_trans(0x3F); // end row
+ 706   1      
+ 707   1          // 写入RAM
+ 708   1          Ins_trans(0x5C);
+ 709   1      
+ 710   1          for(row = 0; row < 64; row++)
+ 711   1          {
+ 712   2              unsigned char fill = (row % 2) ? data_odd : data_even;
+ 713   2              for(column = 0; column < 128; column++) // 每行写128字节
+ 714   2                  Data_trans(fill);
+ 715   2          }
+ 716   1      }
+ 717          
+ 718          void Screen_fill_row_256x64_fixed(void)
+ 719          {
+ 720   1          unsigned int row, col;
+ 721   1      
+ 722   1          // 设置列地址 0~255
+ 723   1          Ins_trans(0x15);
+ 724   1          Data_trans(0x00);       // start column
+ 725   1          Data_trans(0x7F);       // end column (128字节 x 2列=256列)
+ 726   1      
+ 727   1          // 设置行地址 0~63
+ 728   1          Ins_trans(0x75);
+ 729   1          Data_trans(0x00);       // start row
+ 730   1          Data_trans(0x3F);       // end row
+ 731   1      
+ 732   1          // 写入 RAM
+ 733   1          Ins_trans(0x5C);
+ 734   1      
+ 735   1          for(row = 0; row < 64; row++)
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2025 20:45:09 PAGE 13  
+
+ 736   1          {
+ 737   2              // 奇数行亮 0xFF，偶数行灭 0x00
+ 738   2              unsigned char fill = (row % 2) ? 0xFF : 0x00;
+ 739   2      
+ 740   2              for(col = 0; col < 128; col++) // 每行写128字节 = 256列
+ 741   2              {
+ 742   3                  Data_trans(fill);       // 高4bit列
+ 743   3                  Data_trans(fill);       // 低4bit列
+ 744   3              }
+ 745   2          }
+ 746   1      }
+ 747          
+ 748          void Screen_fill_row_256x64_fixed1(void)
+ 749          {
+ 750   1          unsigned int row, col;
+ 751   1      
+ 752   1          // 设置列地址 0~255
+ 753   1          Ins_trans(0x15);
+ 754   1          Data_trans(0x00);       // start column
+ 755   1          Data_trans(0x7F);       // end column (128字节 x 2列=256列)
+ 756   1      
+ 757   1          // 设置行地址 0~63
+ 758   1          Ins_trans(0x75);
+ 759   1          Data_trans(0x00);       // start row
+ 760   1          Data_trans(0x3F);       // end row
+ 761   1      
+ 762   1          // 写入 RAM
+ 763   1          Ins_trans(0x5C);
+ 764   1      
+ 765   1          for(row = 0; row < 64; row++)
+ 766   1          {
+ 767   2              // 奇数行亮 0xFF，偶数行灭 0x00
+ 768   2              unsigned char fill = (row % 2) ? 0x00 : 0xff;
+ 769   2      
+ 770   2              for(col = 0; col < 128; col++) // 每行写128字节 = 256列
+ 771   2              {
+ 772   3                  Data_trans(fill);       // 高4bit列
+ 773   3                  Data_trans(fill);       // 低4bit列
+ 774   3              }
+ 775   2          }
+ 776   1      }
+ 777          
+ 778          // 麻点填充屏幕
+ 779          // data1 : 奇数列字节（高4bit/低4bit）
+ 780          // data2 : 偶数列字节
+ 781          void Screen_fill_checker_256x64(unsigned char data1, unsigned char data2)
+ 782          {
+ 783   1          unsigned int row, col;
+ 784   1          
+ 785   1          // 设置列地址 0~255
+ 786   1          Ins_trans(0x15);
+ 787   1          Data_trans(0x00);
+ 788   1          Data_trans(0x7F); // 128字节 x 2列 = 256列
+ 789   1      
+ 790   1          // 设置行地址 0~63
+ 791   1          Ins_trans(0x75);
+ 792   1          Data_trans(0x00);
+ 793   1          Data_trans(0x3F);
+ 794   1      
+ 795   1          // 写入 RAM
+ 796   1          Ins_trans(0x5C);
+ 797   1      
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2025 20:45:09 PAGE 14  
+
+ 798   1          for(row = 0; row < 64; row++)
+ 799   1          {
+ 800   2              for(col = 0; col < 128; col++)
+ 801   2              {
+ 802   3                  // 奇偶行交替
+ 803   3                  if(row % 2 == 0) // 偶数行
+ 804   3                      Data_trans(data2); // 偶数行填data2
+ 805   3                  else             // 奇数行
+ 806   3                      Data_trans(data1); // 奇数行填data1
+ 807   3              }
+ 808   2          }
+ 809   1      }
+ 810          
+ 811          void main()
+ 812              {
+ 813   1            RES=0;
+ 814   1            Delay(5);
+ 815   1            RES=1;
+ 816   1            Initial();//???????
+ 817   1      
+ 818   1            while(1)
+ 819   1             {
+ 820   2              Screen_clear();    //????
+ 821   2              Delay(20);
+ 822   2      //        Picture_display(); //?????
+ 823   2              Picture_display1();//?????1
+ 824   2              Screen_fill();      //???
+ 825   2              Delay(20);
+ 826   2              Grayscale();//??????
+ 827   2              Delay(20);
+ 828   2              Test_display();    //???????
+ 829   2                      Delay(20);
+ 830   2                      Screen_fill_byte(0xF0); // 高4bit亮低4bit灭 → 12亮 34灭 56亮 78灭 ...
+ 831   2                      Delay(20);
+ 832   2                      Screen_fill_byte(0x0F); // 高4bit灭低4bit亮 → 12灭 34亮 56灭 78亮 ...
+ 833   2                      Delay(20);
+ 834   2                      Screen_fill_byte(0xff); // 高4bit灭低4bit亮 → 12灭 34亮 56灭 78亮 ...
+ 835   2                      Delay(20);
+ 836   2                      Screen_fill_row_256x64_fixed(); // 奇数行亮，偶数行灭
+ 837   2                      Delay(20);
+ 838   2                      Screen_fill_row_256x64_fixed1(); // 奇数行亮，偶数行灭
+ 839   2                      Delay(20);
+ 840   2      
+ 841   2              }
+ 842   1          }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1445    ----
+   CONSTANT SIZE    =   4112    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      24
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

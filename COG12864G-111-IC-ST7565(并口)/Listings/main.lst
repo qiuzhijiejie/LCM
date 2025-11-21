@@ -1,0 +1,669 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              10/30/2025 14:59:19 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\m
+                    -ain.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          //#include <reg51.H> 
+   2          //#include <intrins.h> 
+   3          
+   4          //sbit lcd_rs=P3^2;    
+   5          //sbit lcd_reset=P3^3; 
+   6          //sbit lcd_cs1=P3^0;    
+   7          //sbit lcd_sid=P3^4;  
+   8          //sbit lcd_sclk=P3^1;  
+   9          
+  10          //sbit Rom_IN=P1^0;  
+  11          //sbit Rom_OUT=P1^1;
+  12          //sbit Rom_SCK=P1^5;  
+  13          //sbit Rom_CS=P1^2;   
+  14          
+  15          //#define uchar unsigned char  
+  16          //#define uint unsigned int 
+  17          //#define ulong unsigned long 
+  18          //uchar code jiong1[]={/*--  文字:  囧  --*/ 
+  19          ///*--  宋体 12;  此字体下对应的点阵为：宽x高=16x16   --*/ 
+  20          //0x00,0xFE,0x82,0x42,0xA2,0x9E,0x8A,0x82,0x86,0x8A,0xB2,0x62,0x02,0xFE,0x00,0x00, 
+  21          //0x00,0x7F,0x40,0x40,0x7F,0x40,0x40,0x40,0x40,0x40,0x7F,0x40,0x40,0x7F,0x00,0x00}; 
+  22          //uchar code lei1[]={/*--  文字:  畾  --*/ 
+  23          ///*--  宋体 12;  此字体下对应的点阵为：宽x高=16x16   --*/ 
+  24          //0x80,0x80,0x80,0xBF,0xA5,0xA5,0xA5,0x3F,0xA5,0xA5,0xA5,0xBF,0x80,0x80,0x80,0x00, 
+  25          //0x7F,0x24,0x24,0x3F,0x24,0x24,0x7F,0x00,0x7F,0x24,0x24,0x3F,0x24,0x24,0x7F,0x00}; 
+  26          
+  27          
+  28          
+  29          
+  30          ////=============transfer command to LCM=============== 
+  31          ///*写指令到LCD模块*/ 
+  32          //void transfer_command_lcd(int data1)    
+  33          //{ 
+  34          //      char i; 
+  35          //      lcd_rs=0; 
+  36          //      for(i=0;i<8;i++) 
+  37          //        { 
+  38          //              lcd_sclk=0; 
+  39          //              if(data1&0x80) 
+  40          //                      lcd_sid=1; 
+  41          //              else 
+  42          //                      lcd_sid=0; 
+  43          //              lcd_sclk=1; 
+  44          //              data1=data1<<=1; 
+  45          //        } 
+  46          //} 
+  47          
+  48          
+  49          ///*写数据到LCD模块*/ 
+  50          //void transfer_data_lcd(int data1) 
+  51          //{ 
+  52          //      char i; 
+  53          //      lcd_rs=1; 
+  54          //      for(i=0;i<8;i++) 
+C51 COMPILER V9.60.7.0   MAIN                                                              10/30/2025 14:59:19 PAGE 2   
+
+  55          //        { 
+  56          //              lcd_sclk=0; 
+  57          //              if(data1&0x80) 
+  58          //                      lcd_sid=1; 
+  59          //              else 
+  60          //                      lcd_sid=0; 
+  61          //              lcd_sclk=1; 
+  62          //              data1=data1<<=1; 
+  63          //       } 
+  64          //} 
+  65          // 
+  66          //void delay(int i)                
+  67          //{ 
+  68          // int j,k; 
+  69          // for(j=0;j<i;j++) 
+  70          // for(k=0;k<500;k++); 
+  71          //}
+  72          
+  73          
+  74          ///*等待一个按键，我的主板是用P2.0与GND之间接一个按键*/ 
+  75          //void waitkey() 
+  76          //{ 
+  77          //       repeat: 
+  78          //      if (P2&0x01) 
+  79          //              goto repeat; 
+  80          //      else 
+  81          //              delay(6); 
+  82          //      if 
+  83          //              (P2&0x01) goto 
+  84          //                      repeat; 
+  85          //      else 
+  86          //      delay(40);; 
+  87          //} 
+  88          // 
+  89          // //============initial 
+  90          //void initial_lcd() 
+  91          //{ 
+  92          //      lcd_cs1=0; 
+  93          //      Rom_CS = 1; 
+  94          //      lcd_reset=0;     
+  95          //      delay(20); 
+  96          //      lcd_reset=1;  
+  97          //      delay(20);         
+  98          //      transfer_command_lcd(0xe2); 
+  99          //      delay(5); 
+ 100          //      transfer_command_lcd(0x2c);  
+ 101          //      delay(5);  
+ 102          //      transfer_command_lcd(0x2e);  
+ 103          //      delay(5); 
+ 104          //      transfer_command_lcd(0x2f); 
+ 105          //      delay(5); 
+ 106          //      transfer_command_lcd(0x23);  /*粗调对比度，可设置范围0x20～0x27*/ 
+ 107          //      transfer_command_lcd(0x81);  /*微调对比度*/ 
+ 108          //      transfer_command_lcd(0x25);  /*0x1a,微调对比度的值，可设置范围0x00～0x3f*/ 
+ 109          //      transfer_command_lcd(0xa2);  /*1/9 偏压比（bias）*/ 
+ 110          //      transfer_command_lcd(0xc8);  /*行扫描顺序：从上到下*/ 
+ 111          //      transfer_command_lcd(0xa0);  /*列扫描顺序：从左到右*/ 
+ 112          //      transfer_command_lcd(0x60);  /*起始行：第一行开始*/ 
+ 113          //      transfer_command_lcd(0xaf);   
+ 114          //      lcd_cs1=1; 
+ 115          //}
+ 116          
+C51 COMPILER V9.60.7.0   MAIN                                                              10/30/2025 14:59:19 PAGE 3   
+
+ 117          ///*全屏清屏*/ 
+ 118          //void clear_screen() 
+ 119          //{ 
+ 120          //      unsigned char i,j; 
+ 121          //      lcd_cs1=0; 
+ 122          //      Rom_CS = 1;  
+ 123          //      for(i=0;i<9;i++) 
+ 124          //      { 
+ 125          //              transfer_command_lcd(0xb0+i); 
+ 126          //              transfer_command_lcd(0x10); 
+ 127          //              transfer_command_lcd(0x00); 
+ 128          //              for(j=0;j<132;j++) 
+ 129          //              { 
+ 130          //                      transfer_data_lcd(0x00); 
+ 131          //              } 
+ 132          //       } 
+ 133          //      lcd_cs1=1; 
+ 134          //} 
+ 135          
+ 136          ///*显示16x16点阵图像、汉字、生僻字或16x16点阵的其他图标*/ 
+ 137          //void display_graphic_16x16(uint page,uint column,uchar *dp) 
+ 138          //{ 
+ 139          //      uint i,j; 
+ 140          //      uchar page_address; 
+ 141          //      uchar column_address_L,column_address_H; 
+ 142          //      
+ 143          //      page_address = 0xb0+page-1; 
+ 144          //      column_address_L =column&0x0f; 
+ 145          //      column_address_H =((column>>4)&0x0f)+0x10; 
+ 146          //              lcd_cs1=0; 
+ 147          //      Rom_CS = 1;   
+ 148          //      
+ 149          //      for(j=0;j<2;j++) 
+ 150          //       { 
+ 151          //              transfer_command_lcd(page_address+j);  /*设置页地址*/ 
+ 152          //              transfer_command_lcd(column_address_H); /*设置列地址的高 4 位*/ 
+ 153          //              transfer_command_lcd(column_address_L); /*设置列地址的低 4 位*/ 
+ 154          //              for (i=0;i<16;i++) 
+ 155          //              {  
+ 156          //                      transfer_data_lcd(*dp); /*写数据到 LCD,每写完一个8位的数据后列地址自动加1*/ 
+ 157          //                      dp++; 
+ 158          //              } 
+ 159          
+ 160          //       } 
+ 161          //      lcd_cs1=1; 
+ 162          //}
+ 163          
+ 164          
+ 165          ///*显示8x16点阵图像、ASCII, 或8x16点阵的自造字符、其他图标*/ 
+ 166          //void display_graphic_8x16(uint page,uchar column,uchar *dp) 
+ 167          //{ 
+ 168          //      uint i,j; 
+ 169          //      uchar page_address; 
+ 170          //      uchar column_address_L,column_address_H; 
+ 171          //      lcd_cs1=0;  
+ 172          //      page_address = 0xb0+page-1; 
+ 173          //      column_address_L =column&0x0f; 
+ 174          //      column_address_H =((column>>4)&0x0f)+0x10; 
+ 175          //      
+ 176          //      for(j=0;j<2;j++) 
+ 177          //       { 
+ 178          //              transfer_command_lcd(page_address+j);  /*设置页地址*/ 
+C51 COMPILER V9.60.7.0   MAIN                                                              10/30/2025 14:59:19 PAGE 4   
+
+ 179          //              transfer_command_lcd(column_address_H); /*设置列地址的高 4 位*/ 
+ 180          //              transfer_command_lcd(column_address_L); /*设置列地址的低 4 位*/ 
+ 181          //              for (i=0;i<8;i++) 
+ 182          //              {  
+ 183          //                      transfer_data_lcd(*dp); 
+ 184          //                      dp++; 
+ 185          //              } 
+ 186          //       } 
+ 187          //      lcd_cs1=1; 
+ 188          //}
+ 189          
+ 190          
+ 191          
+ 192          ///*显示5*7点阵图像、ASCII, 或5x7点阵的自造字符、其他图标*/ 
+ 193          //void display_graphic_5x7(uint page,uchar column,uchar *dp) 
+ 194          //{ 
+ 195          //      uint col_cnt; 
+ 196          //      uchar page_address; 
+ 197          //      uchar column_address_L,column_address_H; 
+ 198          //      page_address = 0xb0+page-1; 
+ 199          //      
+ 200          //      lcd_cs1=0;  
+ 201          //      
+ 202          //      column_address_L =column&0x0f; 
+ 203          //      column_address_H =((column>>4)&0x0f)+0x10; 
+ 204          //      transfer_command_lcd(page_address);   /*Set Page Address*/ 
+ 205          //      transfer_command_lcd(column_address_H); /*Set MSB of column Address*/ 
+ 206          //      transfer_command_lcd(column_address_L); /*Set LSB of column Address*/
+ 207          //      
+ 208          //      for (col_cnt=0;col_cnt<8;col_cnt++) 
+ 209          //       {  
+ 210          //              transfer_data_lcd(*dp); 
+ 211          //              dp++; 
+ 212          //       } 
+ 213          //      lcd_cs1=1; 
+ 214          //}
+ 215          
+ 216          ///****送指令到晶联讯字库IC***/ 
+ 217          //void send_command_to_ROM( uchar datu ) 
+ 218          //{ 
+ 219          //      uchar i; 
+ 220          //      for(i=0;i<8;i++ ) 
+ 221          //       { 
+ 222          //              if(datu&0x80) 
+ 223          //                      Rom_IN = 1; 
+ 224          //              else 
+ 225          //                      Rom_IN = 0; 
+ 226          //                      datu = datu<<1; 
+ 227          //                      Rom_SCK=0; 
+ 228          //                      Rom_SCK=1; 
+ 229          //       } 
+ 230          //} 
+ 231          
+ 232          
+ 233          ///*字库IC中取汉字或字符数据（1个字节）***/ 
+ 234          //static uchar get_data_from_ROM( ) 
+ 235          //{ 
+ 236          //      uchar i; 
+ 237          //      uchar ret_data=0; 
+ 238          //      Rom_SCK=1; 
+ 239          //      for(i=0;i<8;i++) 
+ 240          //       { 
+C51 COMPILER V9.60.7.0   MAIN                                                              10/30/2025 14:59:19 PAGE 5   
+
+ 241          //              Rom_OUT=1; 
+ 242          //              Rom_SCK=0; 
+ 243          //              ret_data=ret_data<<1; 
+ 244          //              if( Rom_OUT ) 
+ 245          //                      ret_data=ret_data+1; 
+ 246          //              else 
+ 247          //                      ret_data=ret_data+0; 
+ 248          //              Rom_SCK=1; 
+ 249          //       } 
+ 250          //      return(ret_data); 
+ 251          //} 
+ 252          
+ 253          
+ 254          ///*从相关地址（addrHigh：地址高8位,addrMid：地址中8位,addrLow：地址8位，共24位）中连续读出DataLen个字节的
+             -数据到 pBuff
+ 255          //的地址*/ 
+ 256          ///*连续读取*/ 
+ 257          //void get_n_bytes_data_from_ROM(uchar addrHigh,uchar addrMid,uchar addrLow,uchar *pBuff,uchar DataLen ) 
+ 258          //{ 
+ 259          //       uchar i; 
+ 260          //       Rom_CS = 0; 
+ 261          //       lcd_cs1=1;  
+ 262          //       Rom_SCK=0; 
+ 263          //       send_command_to_ROM(0x03); 
+ 264          //       send_command_to_ROM(addrHigh); 
+ 265          //       send_command_to_ROM(addrMid); 
+ 266          //       send_command_to_ROM(addrLow); 
+ 267          //       for(i = 0; i < DataLen; i++ ) 
+ 268          //                *(pBuff+i) =get_data_from_ROM(); 
+ 269          //       Rom_CS = 1; 
+ 270          //}
+ 271          
+ 272          
+ 273          
+ 274          //ulong  fontaddr=0; 
+ 275          //void display_GB2312_string(uchar y,uchar x,uchar *text) 
+ 276          //{ 
+ 277          // uchar i= 0; 
+ 278          // uchar addrHigh,addrMid,addrLow ; 
+ 279          // uchar fontbuf[32];    
+ 280          //      
+ 281          // while((text[i]>0x00)) 
+ 282          // { 
+ 283          //       
+ 284          //  if(((text[i]>=0xb0) &&(text[i]<0xf7))&&(text[i+1]>=0xa1)) 
+ 285          //  {    
+ 286          //        
+ 287          //   /*国标简体（GB2312）汉字在JLX字库IC中的地址由以下公式来计算：*/ 
+ 288          //   /*Address = ((MSB - 0xB0) * 94 + (LSB - 0xA1)+ 846)*32+ BaseAdd;BaseAdd=0*/ 
+ 289          //   /*由于担心8位单片机有乘法溢出问题，所以分三部取地址*/ 
+ 290          //   fontaddr = (text[i]- 0xb0)*94;  
+ 291          //   fontaddr += (text[i+1]-0xa1)+846; 
+ 292          //   fontaddr = (ulong)(fontaddr*32); 
+ 293          //    
+ 294          //   addrHigh = (fontaddr&0xff0000)>>16;  /*地址的高8位,共24位*/ 
+ 295          //   addrMid = (fontaddr&0xff00)>>8;      /*地址的中8位,共24位*/ 
+ 296          //   addrLow = fontaddr&0xff;      /*地址的低8位,共24位*/ 
+ 297          //   get_n_bytes_data_from_ROM(addrHigh,addrMid,addrLow,fontbuf,32 );/*取32个字节的数据，存到"fontbuf[32]"
+             -*/ 
+ 298          // 
+ 299          //      display_graphic_16x16(y,x,fontbuf);/*显示汉字到LCD上，y为页地址，x为列地址，fontbuf[]为数据*/ 
+ 300          //   i+=2; 
+C51 COMPILER V9.60.7.0   MAIN                                                              10/30/2025 14:59:19 PAGE 6   
+
+ 301          //   x+=16; 
+ 302          //  } 
+ 303          //  else if((text[i]>=0x20) &&(text[i]<=0x7e))  
+ 304          //  {       
+ 305          //         unsigned char fontbuf[16];    
+ 306          //         fontaddr = (text[i]- 0x20); 
+ 307          //         fontaddr = (unsigned long)(fontaddr*16); 
+ 308          //         fontaddr = (unsigned long)(fontaddr+0x3b7c0);    
+ 309          //         addrHigh = (fontaddr&0xff0000)>>16; 
+ 310          //         addrMid = (fontaddr&0xff00)>>8; 
+ 311          //         addrLow = fontaddr&0xff; 
+ 312          
+ 313          //         get_n_bytes_data_from_ROM(addrHigh,addrMid,addrLow,fontbuf,16 );/*取16个字节 的数据，存到"fontbuf[32
+             -]"*/ 
+ 314          //              
+ 315          //         display_graphic_8x16(y,x,fontbuf);/*显示8x16的ASCII字到LCD上，y为页地址， x为列地址，fontbuf[]为数据
+             -*/ 
+ 316          //         i+=1; 
+ 317          //         x+=8; 
+ 318          //  } 
+ 319          //  else 
+ 320          //   i++;  
+ 321          // } 
+ 322          //  
+ 323          //} 
+ 324          
+ 325          //void display_string_5x7(uchar y,uchar x,uchar *text) 
+ 326          //{ 
+ 327          //       unsigned char i= 0; 
+ 328          //       unsigned char addrHigh,addrMid,addrLow ; 
+ 329          //       while((text[i]>0x00)) 
+ 330          //       { 
+ 331          //         
+ 332          //        if((text[i]>=0x20) &&(text[i]<=0x7e))  
+ 333          //        {       
+ 334          //                 unsigned char fontbuf[8];    
+ 335          //                 fontaddr = (text[i]- 0x20); 
+ 336          //                 fontaddr = (unsigned long)(fontaddr*8); 
+ 337          //                 fontaddr = (unsigned long)(fontaddr+0x3bfc0);    
+ 338          //                 addrHigh = (fontaddr&0xff0000)>>16; 
+ 339          //                 addrMid = (fontaddr&0xff00)>>8; 
+ 340          //                 addrLow = fontaddr&0xff;  
+ 341          //                 get_n_bytes_data_from_ROM(addrHigh,addrMid,addrLow,fontbuf,8);//取8个字节的数 
+ 342          //                 display_graphic_5x7(y,x,fontbuf);/*显示5x7的ASCII字到LCD上，y为页地址，x为 列地址，fontbuf[]为数据*
+             -/ 
+ 343          //                 i+=1; 
+ 344          //                 x+=8; 
+ 345          //        } 
+ 346          //        else 
+ 347          //        i++;  
+ 348          //       } 
+ 349          //  
+ 350          //}
+ 351          
+ 352          
+ 353          //void clear_screen_pattern(int x,int y) 
+ 354          //{ 
+ 355          //    unsigned char i, j; 
+ 356          //    for(i = 0; i < 9; i++) 
+ 357          //    { 
+ 358          //        Rom_CS = 0; 
+ 359          //        transfer_command_lcd(0xb0 + i); 
+C51 COMPILER V9.60.7.0   MAIN                                                              10/30/2025 14:59:19 PAGE 7   
+
+ 360          //        transfer_command_lcd(0x10); 
+ 361          //        transfer_command_lcd(0x00); 
+ 362          
+ 363          //        for(j = 0; j < 132; j++) 
+ 364          //        {
+ 365          //            if(j % 2 == 1)               // 奇数列亮
+ 366          //                transfer_data_lcd(x); 
+ 367          //            else                         // 偶数列灭
+ 368          //                transfer_data_lcd(y); 
+ 369          //        }
+ 370          //    } 
+ 371          //}
+ 372          
+ 373          //void main(void) 
+ 374          // {      
+ 375          //         Rom_CS=1; 
+ 376          //      initial_lcd(); 
+ 377          //      while(1) 
+ 378          //      { 
+ 379          
+ 380          //       clear_screen_pattern(0xff,0x00) ;
+ 381          //      delay(2000); 
+ 382          //      clear_screen_pattern(0x00,0xff) ;
+ 383          //      delay(2000); 
+ 384          //      clear_screen_pattern(0x55,0xaa) ;
+ 385          //      delay(2000); 
+ 386          //      clear_screen_pattern(0xaa,0x55) ;
+ 387          //      delay(2000);
+ 388          //      clear_screen_pattern(0xaa,0xaa) ;
+ 389          //      delay(2000);
+ 390          //      clear_screen_pattern(0x55,0x55) ;
+ 391          //      delay(2000);
+ 392          ////  clear_screen();    //clear all dots 
+ 393          ////       Rom_SCK=0;   
+ 394          ////  display_GB2312_string(1,1,"12864,带中文字库"); //在第1页，第1列，显示一串16x16
+ 395          ////               Rom_SCK=0; 
+ 396          ////  display_GB2312_string(3,1,"16X16简体汉字库,"); 
+ 397          ////               Rom_SCK=0; 
+ 398          ////  display_GB2312_string(5,1,"或8X16点阵ASCII,"); 
+ 399          ////     Rom_SCK=0; 
+ 400          ////  display_GB2312_string(7,1,"或5X7点阵ASCII码");           
+ 401          //////  waitkey();  
+ 402          ////  clear_screen();   
+ 403          ////       Rom_SCK=0; 
+ 404          ////  display_GB2312_string(1,1,"GB2312简体字库及");  
+ 405          ////  display_GB2312_string(3,1,"有图型功能,可自");  
+ 406          ////  display_GB2312_string(5,1,"编大字或图像或生");  
+ 407          ////  display_GB2312_string(7,1,"僻字,例如:囧"); 
+ 408          ////  display_graphic_16x16(7,81,jiong1);     /*在第7页，第81列显示单个自 编生僻汉字“囧”*/ 
+ 409          ////  display_graphic_16x16(7,97,lei1);     /*在第7页，第97列显示单个自编生 僻汉字"畾“*/ 
+ 410          //////  waitkey();  
+ 411          ////  clear_screen();    
+ 412          ////  display_GB2312_string(1,1,"<!@#$%^&*()_-+\/"); //在第1页，第1列，显示一串16x16 点阵汉字或8*16的ASCII
+             -字*/ 
+ 413          ////  display_string_5x7(3,1,"<!@#$%^&*()_-+\/");    //在第3页，第1列，显示一串5x7 
+ 414          ////display_string_5x7(4,1,"YHK ELECTRONICS "); 
+ 415          ////display_string_5x7(5,1,"CO.,LTD. estab- ");  
+ 416          ////display_string_5x7(6,1,"lished at year  "); 
+ 417          ////display_string_5x7(7,1,"2025.focus LCM  "); 
+ 418          ////display_string_5x7(8,1,"888-8888-809"); 
+ 419          ////// waitkey();     
+ 420          // } 
+C51 COMPILER V9.60.7.0   MAIN                                                              10/30/2025 14:59:19 PAGE 8   
+
+ 421          //} 
+ 422          
+ 423          
+ 424          
+ 425          
+ 426          #include <reg51.H> 
+ 427          sbit rs=P3^5;   
+ 428          sbit rd=P3^0;   
+ 429          sbit wr=P3^1;   
+ 430          sbit reset=P3^2; 
+ 431          sbit cs1=P3^3;  
+ 432          
+ 433           
+ 434           
+ 435          void transfer_data(int data1); 
+ 436          void transfer_command(int data1); 
+ 437          char code graphic1[]; 
+ 438          char code graphic2[]; 
+ 439          char code graphic3[]; 
+ 440          char code graphic4[]; 
+ 441          char code graphic5[]; 
+ 442          char code graphic6[]; 
+ 443          void delay(int i); 
+ 444          void Delay1(int i); 
+ 445          void disp_grap(char *dp); 
+ 446          void initial_lcd(); 
+ 447          void clear_screen(); 
+ 448          void waitkey(); 
+ 449          void clear_screen_pattern(int x,int y) ;
+ 450          
+ 451          
+ 452           //===============main program=================== 
+ 453          void main(void) 
+ 454           {      
+ 455   1      //      int i,j,k; 
+ 456   1              initial_lcd(); 
+ 457   1          while(1) 
+ 458   1      { 
+ 459   2              clear_screen_pattern(0xff,0x00) ;
+ 460   2              delay(2000); 
+ 461   2              clear_screen_pattern(0x00,0xff) ;
+ 462   2              delay(2000); 
+ 463   2              clear_screen_pattern(0x55,0xaa) ;
+ 464   2              delay(2000); 
+ 465   2              clear_screen_pattern(0xaa,0x55) ;
+ 466   2              delay(2000);
+ 467   2              clear_screen_pattern(0xaa,0xaa) ;
+ 468   2              delay(2000);
+ 469   2              clear_screen_pattern(0x55,0x55) ;
+ 470   2              delay(2000);
+ 471   2      //      clear_screen_row_pattern() ;
+ 472   2      //      delay(2000); 
+ 473   2      //      clear_screen();   //clear all dots 
+ 474   2      //      disp_grap(graphic1);  //display a picture of 128*64 dots 
+ 475   2      //      delay(2000);  
+ 476   2        
+ 477   2       }
+ 478   1       } 
+ 479           
+ 480           
+ 481           //============initial 
+ 482          void initial_lcd() 
+C51 COMPILER V9.60.7.0   MAIN                                                              10/30/2025 14:59:19 PAGE 9   
+
+ 483          { 
+ 484   1      reset=0;                 
+ 485   1      delay(20); 
+ 486   1      reset=1;   
+ 487   1      /*低电平复位*/ 
+ 488   1      /*复位完毕*/ 
+ 489   1      delay(20);         
+ 490   1      transfer_command(0xe2);  /*软复位*/
+ 491   1              delay(5); 
+ 492   1      transfer_command(0x2c);  /*升压步聚 1*/ 
+ 493   1      delay(5);  
+ 494   1      transfer_command(0x2e);  /*升压步聚 2*/ 
+ 495   1      delay(5); 
+ 496   1      transfer_command(0x2f);  /*升压步聚 3*/ 
+ 497   1      delay(5); 
+ 498   1      transfer_command(0x23);  /*粗调对比度，可设置范围0x20～0x27*/ 
+ 499   1      transfer_command(0x81);  /*微调对比度*/ 
+ 500   1      transfer_command(0x2f);  /*微调对比度的值，可设置范围0x00～0x3f*/ 
+ 501   1      transfer_command(0xa2);  /*1/9 偏压比（bias）*/ 
+ 502   1      transfer_command(0xc8);  /*行扫描顺序：从上到下*/ 
+ 503   1      transfer_command(0xa0);  /*列扫描顺序：从左到右*/ 
+ 504   1      transfer_command(0x60);  /*起始行：第一行开始*/ 
+ 505   1      transfer_command(0xaf);  /*开显示*/ 
+ 506   1      }
+ 507          
+ 508          
+ 509          //===============clear all dot martrics============= 
+ 510          void clear_screen() 
+ 511          { 
+ 512   1              unsigned char i,j; 
+ 513   1              for(i=0;i<9;i++) 
+ 514   1              { 
+ 515   2                      cs1=0; 
+ 516   2                      transfer_command(0xb0+i); 
+ 517   2                      transfer_command(0x10); 
+ 518   2                      transfer_command(0x00); 
+ 519   2                      for(j=0;j<132;j++) 
+ 520   2                        {
+ 521   3                              transfer_data(0x00); 
+ 522   3                        }
+ 523   2               } 
+ 524   1      }
+ 525          
+ 526          
+ 527          
+ 528          
+ 529          void clear_screen_pattern(int x,int y) 
+ 530          { 
+ 531   1          unsigned char i, j; 
+ 532   1          for(i = 0; i < 9; i++) 
+ 533   1          { 
+ 534   2              cs1 = 0; 
+ 535   2              transfer_command(0xb0 + i); 
+ 536   2              transfer_command(0x10); 
+ 537   2              transfer_command(0x00); 
+ 538   2      
+ 539   2              for(j = 0; j < 132; j++) 
+ 540   2              {
+ 541   3                  if(j % 2 == 1)               // 奇数列亮
+ 542   3                      transfer_data(x); 
+ 543   3                  else                         // 偶数列灭
+ 544   3                      transfer_data(y); 
+C51 COMPILER V9.60.7.0   MAIN                                                              10/30/2025 14:59:19 PAGE 10  
+
+ 545   3              }
+ 546   2          } 
+ 547   1      }
+ 548          
+ 549          
+ 550          
+ 551          //==================display a piture of 128*64 dots================ 
+ 552          void disp_grap(char *dp) 
+ 553          { 
+ 554   1                              int i,j; 
+ 555   1              for(i=0;i<8;i++) 
+ 556   1              { 
+ 557   2              cs1=0; 
+ 558   2              transfer_command(0xb0+i);   //set page address, 
+ 559   2              transfer_command(0x10);
+ 560   2              transfer_command(0x00+1); 
+ 561   2              for(j=0;j<128;j++) 
+ 562   2                {
+ 563   3                       transfer_data(*dp);     
+ 564   3                         dp++;    
+ 565   3                }
+ 566   2                }           
+ 567   1      }
+ 568          
+ 569          
+ 570          //=============transfer command to LCM=============== 
+ 571          void transfer_command(int data1)    
+ 572          { 
+ 573   1              cs1=0; 
+ 574   1              rs=0; 
+ 575   1              rd=0; 
+ 576   1              wr=0; 
+ 577   1              P1=data1; 
+ 578   1              rd=1; 
+ 579   1              cs1=1; 
+ 580   1              rd=0; 
+ 581   1      } 
+ 582          //-----------transfer data to LCM--------------- 
+ 583          void transfer_data(int data1) 
+ 584          { 
+ 585   1              cs1=0; 
+ 586   1              rs=1; 
+ 587   1              rd=0; 
+ 588   1              wr=0; 
+ 589   1              P1=data1; 
+ 590   1              rd=1; 
+ 591   1              cs1=1; 
+ 592   1              rd=0; 
+ 593   1      } 
+ 594          
+ 595          
+ 596          //=============delay time===================== 
+ 597          void delay(int i)                     
+ 598          { 
+ 599   1               int j,k; 
+ 600   1               for(j=0;j<i;j++) 
+ 601   1               for(k=0;k<990;k++); 
+ 602   1      } 
+ 603          //=============delay time===================== 
+ 604          void Delay1(int i) 
+ 605          { 
+ 606   1               int j,k; 
+C51 COMPILER V9.60.7.0   MAIN                                                              10/30/2025 14:59:19 PAGE 11  
+
+ 607   1               for(j=0;j<i;j++) 
+ 608   1               for(k=0;k<10;k++); 
+ 609   1      } 
+ 610          //--------------wait a switch,jump out if P2.0 get a signal"0"------------------ 
+ 611          void waitkey() 
+ 612          { 
+ 613   1               repeat: 
+ 614   1              if (P2&0x01) goto repeat; 
+ 615   1              else delay(6); 
+ 616   1              if (P2&0x01) goto repeat; 
+ 617   1              else 
+ 618   1              delay(40);; 
+ 619   1      } 
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    583    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      15
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,61 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              09/13/2025 22:04:49 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          /*************************************************************************  
+   2          Driver IC    :  ST7565R / UC1701x 
+   3          interface    :  8080 for 8 bit mcu interface 
+   4          ************************************************************************/   
+   5          #include <REG52.H>    
+   6          #include "int/photo.c"
+   7          #include "12864.h"
+   8           
+   9          void main()   
+  10          { 
+  11   1      
+  12   1        while(1)
+  13   1        {
+  14   2              Init_IC();   
+  15   2          lcd_test();  
+  16   2              Yehui_UI();
+  17   2              delayMs(1000);
+  18   2          Clear();
+  19   2                
+  20   2      //      whatsapp();
+  21   2      //      delayMs(5000); 
+  22   2      //      Clear();
+  23   2                
+  24   2              lcd_describe();
+  25   2              delayMs(1000);  
+  26   2          Clear();
+  27   2                
+  28   2          display_photo(tupian,0,0);    
+  29   2              delayMs(1000);
+  30   2          Clear();
+  31   2                
+  32   2      //      trans_display_photo(tupian1,0,0);         
+  33   2      //      delayMs(1000);
+  34   2      //      Init_IC();
+  35   2              
+  36   2                
+  37   2        }    
+  38   1      }   
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     59    ----
+   CONSTANT SIZE    =   2048    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

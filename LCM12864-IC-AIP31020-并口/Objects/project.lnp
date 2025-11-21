@@ -1,0 +1,6 @@
+".\Objects\main.obj",
+".\Objects\12864.obj",
+".\Objects\PIC.obj" 
+TO ".\Objects\project" 
+PRINT(".\Listings\project.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

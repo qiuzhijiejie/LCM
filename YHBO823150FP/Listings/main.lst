@@ -1,0 +1,512 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              11/04/2025 20:06:33 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\m
+                    -ain.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          
+   2          //CONTROL IC UC1671C
+   3          //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+   4          #include <reg52.h>
+   5          //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+   6          #define uchar unsigned char
+   7          #define uint  unsigned int
+   8          //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+   9          sbit SDA=P3^5;
+  10          sbit SCL=P3^6;
+  11          sbit RST=P3^4;
+  12          
+  13          //uchar code ch2[]={0x1d,0xbd,0xbd,0xbd,0xbd,0xb6,0x09,0xb6,0x09,0xb6,0x09,0xb6,0x09,0xb6,0x09,0xbd,0x90,0
+             -x3d,0x90,0x3d,0x90,0x3d,0x90,0x3d,0x90,0x30,0x10,0x1d,0x90,0x3d,0x90,0x3d,0x90,0x3d,0x90,0x3d,0x90,0x36,0x09,0xb6,0x09,0
+             -xb6,0x09,0xb6,0x09,0xb6,0x09,0xb1,0x01,0x10,0x01,0x60,0x9b,0x60,0x9b,0x60,0x9b,0x60,0x9b,};
+  14          uchar code ch2[]={0xbd,0xbd,0xbd,0xbd,0xb6,0x09,0xb6,0x09,0xb6,0x09,0xb6,0x09,0xb6,0x09,0xbd,0x90,0x3d,0x9
+             -0,0x3d,0x90,0x3d,0x90,0x3d,0x90,0x30,0x10,0x1d,0x90,0x3d,0x90,0x3d,0x90,0x3d,0x90,0x3d,0x90,0x36,0x09,0xb6,0x09,0xb6,0x0
+             -9,0xb6,0x09,0xb6,0x09,0xb1,0x01,0x10,0x01,0x60,0x9b,0x60,0x9b,0x60,0x9b,0x60,0x9b,};
+  15          uchar code ch4[]={0x06,0xd6,0xd6,0xd6,0xd6,0xd3,0x09,0x63,0x09,0x63,0x09,0x63,0x09,0x63,0x09,0x66,0x90,0x6
+             -6,0x90,0x66,0x90,0x66,0x90,0x66,0x90,0x61,0x01,0x06,0x90,0x66,0x90,0x66,0x90,0x66,0x90,0x66,0x90,0x63,0x09,0x63,0x09,0x6
+             -3,0x09,0x63,0x09,0x63,0x09,0x60,0x10,0x10,0x11,0x30,0x96,0x30,0x96,0x30,0x96,0x30,0x96,};
+  16          uchar code ch5[]={0x1f,0x4f,0x4f,0x4f,0x4f,0x42,0xf6,0xa2,0xf6,0xa2,0xf6,0xa2,0xf6,0xa2,0xf6,0xa5,0x6f,0x2
+             -5,0x6f,0x25,0x6f,0x25,0x6f,0x25,0x6f,0x21,0x00,0x15,0x6f,0x25,0x6f,0x25,0x6f,0x25,0x6f,0x25,0x6f,0x22,0xf6,0xa2,0xf6,0xa
+             -2,0xf6,0xa2,0xf6,0xa2,0xf6,0xa1,0x01,0x01,0x11,0x2f,0x6a,0x2f,0x6a,0x6f,0x2a,0x2f,0x6a,};
+  17          uchar code  on[]={0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xf
+             -f,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xf
+             -f,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,};
+  18          uchar code off[]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+             -0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,};
+  19          //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+  20          void i2c_start(void);
+  21          void i2c_write(uchar m);
+  22          void i2c_read(void);
+  23          void i2c_stop(void);
+  24          
+  25          #define AUTO 0x80               //P2^7: Input auto_run_id
+  26          #define ADDU 0x40               //P2^6: Display picture UP to end
+  27          #define SUBD 0x20               //P2^5: Display picture Down to begin
+  28          #define ADUP 0x10               //P2^4: For COG module:adjust Register's value to add
+  29          #define ADDN 0x08               //P2^3: For COG moduel:adjust Register's value to sub
+  30          #define KEY_IN  P2
+  31          #define v0              52 //  30VLCD 8.83
+  32          
+  33          uchar constr;           // ???   
+  34          #define BmpMax 5
+  35          uchar autoid;   //Indicate that LCD display automatically
+  36          uchar bmp_id;   //The picture's id to display
+  37          uchar dispid;   //To reflash the display picture
+  38          
+  39          void nop(void);
+  40          
+  41          void delay_n_ms(uint n);
+  42          void delay100us(void);
+  43          void delay10us(void);
+C51 COMPILER V9.60.7.0   MAIN                                                              11/04/2025 20:06:33 PAGE 2   
+
+  44          void lcd_inital(void);
+  45          void display_all(void);
+  46          void display_off(void);
+  47          void display_icon(void);
+  48          
+  49          void display_all_on(void);
+  50          #define dl0 1000
+  51          //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+  52          void nop()
+  53          {
+  54   1      }
+  55          //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+  56          void delay_n_ms(uint n)
+  57          {
+  58   1            uint i=0,j;
+  59   1            j=n;
+  60   1            for(j=n;j>0;j--)
+  61   1            {
+  62   2                  for(i=0;i<125;i++)
+  63   2                              {
+  64   3                              }
+  65   2            }
+  66   1               
+  67   1      }
+  68          //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+  69          void delay10us()
+  70          {
+  71   1            char i;
+  72   1                for(i=1;i>0;i--)
+  73   1                {
+  74   2                }
+  75   1      }
+  76          //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+  77          
+  78          
+  79          void IC_Start(void)
+  80          { 
+  81   1            delay_n_ms(1);
+  82   1            SDA=1;
+  83   1                SCL=1;
+  84   1                delay10us();
+  85   1                SDA=0;
+  86   1                delay10us();
+  87   1                SCL=0;                                
+  88   1      }
+  89          
+  90          void IC_Stop(void)
+  91          {
+  92   1          SDA=0;
+  93   1            delay10us();
+  94   1            SCL=1;
+  95   1            delay10us();
+  96   1            SDA=1; 
+  97   1                              
+  98   1      }
+  99          
+ 100          ////-------------------
+ 101          void F_Serial_WR_I2C(char R_Data_CMD)
+ 102          {       
+ 103   1              char i;
+ 104   1              for(i=0;i<8;i++)
+ 105   1              {               
+C51 COMPILER V9.60.7.0   MAIN                                                              11/04/2025 20:06:33 PAGE 3   
+
+ 106   2                  SCL=0;
+ 107   2                      
+ 108   2                      if(R_Data_CMD&0x80)             
+ 109   2                              SDA=1;
+ 110   2                      else
+ 111   2                              SDA=0;
+ 112   2                      R_Data_CMD<<=1;
+ 113   2      
+ 114   2               nop();
+ 115   2                 nop();
+ 116   2                 SCL=1;
+ 117   2                         nop();
+ 118   2                         nop();
+ 119   2                 SCL=0;               
+ 120   2              }       
+ 121   1                nop();
+ 122   1            nop();
+ 123   1            SCL=0;
+ 124   1            delay10us();
+ 125   1            SCL=1;
+ 126   1            nop();
+ 127   1            nop();   
+ 128   1            nop();
+ 129   1            while(SDA==1);
+ 130   1                SCL=0;
+ 131   1      }       
+ 132          
+ 133          void F_WriteInst(char R_CMD)
+ 134          {               
+ 135   1              
+ 136   1                      IC_Start();
+ 137   1                      F_Serial_WR_I2C(0xa8);
+ 138   1                                                                              
+ 139   1                      F_Serial_WR_I2C(R_CMD);
+ 140   1                                              
+ 141   1      }
+ 142                                                                                          
+ 143          void F_WriteData(char R_Data)   //--stop
+ 144          {                               
+ 145   1      
+ 146   1                      F_Serial_WR_I2C(R_Data);
+ 147   1                      IC_Stop();              
+ 148   1      
+ 149   1      }
+ 150          
+ 151          void F_WriteData_R(char R_Data) //no stop
+ 152          {                               
+ 153   1      
+ 154   1                      F_Serial_WR_I2C(R_Data);
+ 155   1      
+ 156   1      }
+ 157          
+ 158          //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+ 159          //void lcd_inital(void)
+ 160          //{
+ 161          //constr=v0;
+ 162          //       RST=0;
+ 163          //     delay_n_ms(30);
+ 164          //      RST=1;
+ 165          //     delay_n_ms(20);
+ 166          // //---------------------------------  
+ 167          //        F_WriteInst(0x50);            //soft reset 
+C51 COMPILER V9.60.7.0   MAIN                                                              11/04/2025 20:06:33 PAGE 4   
+
+ 168          //               delay_n_ms(5);                         //5ms
+ 169          
+ 170          //              F_WriteInst(0x51);              //device selcet
+ 171          //              F_WriteData(0x00);      
+ 172          //      
+ 173          //              F_WriteInst(0x52);              //
+ 174          //              F_WriteData(0x01);              //0x01 80HZ /0x03 120HZ //0X04 160HZ
+ 175          
+ 176          //              F_WriteInst(0x53);              //Pump control
+ 177          //              F_WriteData(0x01);              //PUMP enabled, 0X01 internal VLCD generation
+ 178          //              F_WriteInst(0x54);              //PUMP VOLTAGE SET
+ 179          //              F_WriteData(52);            //VLCD = 2.5 + VSET * 0.05 5.0V
+ 180          //              F_WriteInst(0x55);              //Display mode
+ 181          //              F_WriteData(0x01);              ///1/3 bias
+ 182          //              
+ 183          //              
+ 184          //              
+ 185          //                  // 开启 COM/SEG 输出
+ 186          //    F_WriteInst(0x56);                
+ 187          //    F_WriteData(0x00);            // 起始地址归零
+ 188          
+ 189          //    // 打开显示输出
+ 190          //    F_WriteInst(0x59);                
+ 191          //    F_WriteData(0x01);            // Display ON（1=打开显示输出）
+ 192          
+ 193          //    // 或者部分版本是：
+ 194          //    // F_WriteInst(0x5A);
+ 195          //    // F_WriteData(0x01);
+ 196          
+ 197          //    // 设置全显测试（可选）
+ 198          //    F_WriteInst(0x58);
+ 199          //    F_WriteData(0x01);      // 全显开启测试用
+ 200          //    delay_n_ms(500);
+ 201          //    F_WriteData(0x00);      // 再关闭全显，恢复正常显示
+ 202          
+ 203          //} 
+ 204          
+ 205          
+ 206          void display_all_on(void)
+ 207          {
+ 208   1          uchar i;
+ 209   1      
+ 210   1          F_WriteInst(0x51);      // Device select
+ 211   1          F_WriteData(0x00);
+ 212   1      
+ 213   1          F_WriteInst(0x56);      // Address pointer
+ 214   1          F_WriteData_R(0x00);    // 从 SEG0 开始
+ 215   1      
+ 216   1          for(i = 0; i < 120; i++)   // 全屏段码写满
+ 217   1          {
+ 218   2              F_WriteData_R(0xFF);
+ 219   2          }
+ 220   1          IC_Stop();
+ 221   1      }
+ 222          
+ 223          ////$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+ 224          void display_d(uchar *ptr)
+ 225          {
+ 226   1                      uchar i;
+ 227   1                      F_WriteInst(0x51);      // device
+ 228   1                      F_WriteData(0x00);
+ 229   1              
+C51 COMPILER V9.60.7.0   MAIN                                                              11/04/2025 20:06:33 PAGE 5   
+
+ 230   1                      F_WriteInst(0x56);      // ADDRESS
+ 231   1                      F_WriteData_R(0x00);// seg 0    
+ 232   1                              
+ 233   1                      for(i=0;i<59;i++)
+ 234   1                      {
+ 235   2                       F_WriteData_R(*ptr);  
+ 236   2                        ptr++;        
+ 237   2                      } 
+ 238   1            IC_Stop();
+ 239   1      }
+ 240          
+ 241          
+ 242          void lcd_inital(void)
+ 243          {
+ 244   1          constr = 20;   // 对应 VLCD 电压调整
+ 245   1          RST = 0;
+ 246   1          delay_n_ms(30);
+ 247   1          RST = 1;
+ 248   1          delay_n_ms(20);
+ 249   1      
+ 250   1          // 软件复位
+ 251   1          F_WriteInst(0x50);
+ 252   1          delay_n_ms(10);
+ 253   1      
+ 254   1          // 设备选择
+ 255   1          F_WriteInst(0x51);
+ 256   1          F_WriteData(0x00);
+ 257   1      
+ 258   1          // 帧率设置（80Hz）
+ 259   1          F_WriteInst(0x52);
+ 260   1          F_WriteData(0x01);
+ 261   1      
+ 262   1          // Pump 控制
+ 263   1          F_WriteInst(0x53);
+ 264   1          F_WriteData(0x01);  // 内部VLCD启用
+ 265   1      
+ 266   1          // Pump电压设置
+ 267   1          F_WriteInst(0x54);
+ 268   1          F_WriteData(constr); // 可调亮度（2.5 + VSET*0.05）
+ 269   1      
+ 270   1          // 显示模式设置（1/4 Duty, 1/3 Bias 通常更亮）
+ 271   1          F_WriteInst(0x55);
+ 272   1          F_WriteData(0x03);  // 尝试改成0x03看看亮不亮
+ 273   1      
+ 274   1          delay_n_ms(50);
+ 275   1      
+ 276   1          // 地址初始化
+ 277   1          F_WriteInst(0x56);
+ 278   1          F_WriteData(0x00);
+ 279   1      
+ 280   1          // 打开显示输出
+ 281   1          F_WriteInst(0x59);
+ 282   1          F_WriteData(0x01);  // Display ON
+ 283   1      
+ 284   1          delay_n_ms(100);
+ 285   1      
+ 286   1          // 全显测试（可选，测试所有段是否通）
+ 287   1          F_WriteInst(0x58);
+ 288   1          F_WriteData(0x01);
+ 289   1          delay_n_ms(300);
+ 290   1          F_WriteData(0x00);  // 关闭全显
+ 291   1      }
+C51 COMPILER V9.60.7.0   MAIN                                                              11/04/2025 20:06:33 PAGE 6   
+
+ 292          
+ 293          ///////////////////////////////////////////
+ 294          void display_on()
+ 295          {
+ 296   1                      uchar i;
+ 297   1                      F_WriteInst(0x51);      // device
+ 298   1                      F_WriteData(0x00);
+ 299   1              
+ 300   1                      F_WriteInst(0x56);      // ADDRESS
+ 301   1                      F_WriteData_R(0x00);// seg 0    
+ 302   1                      
+ 303   1                      for(i=0;i<117;i++)
+ 304   1                      {
+ 305   2                               F_WriteData_R(0xff);  
+ 306   2                      } 
+ 307   1                      IC_Stop();
+ 308   1      }
+ 309          //-----------------------------------------------------------------------------
+ 310          void display_off()
+ 311          {
+ 312   1                      uchar i;
+ 313   1                      F_WriteInst(0x51);      // device
+ 314   1                      F_WriteData(0x00);
+ 315   1              
+ 316   1                      F_WriteInst(0x56);      // ADDRESS
+ 317   1                      F_WriteData_R(0x00);// seg 0    
+ 318   1                      
+ 319   1                      for(i=0;i<59;i++)
+ 320   1                      {
+ 321   2                               F_WriteData_R(0x00);  
+ 322   2                      } 
+ 323   1                      IC_Stop();
+ 324   1      }
+ 325          //-----------------------------------------------------------------------------
+ 326          void do_key()
+ 327          {
+ 328   1              uchar tkeyin;
+ 329   1      
+ 330   1              KEY_IN=0xff;
+ 331   1              delay_n_ms(15);
+ 332   1              tkeyin=KEY_IN;
+ 333   1      
+ 334   1              // ж  ? ? ± ?
+ 335   1              if((tkeyin&AUTO)==0x00) autoid=1;
+ 336   1              else autoid=0;
+ 337   1      
+ 338   1              //       · bmp_id++
+ 339   1              if((tkeyin&ADDU)==0x00)
+ 340   1              {
+ 341   2               
+ 342   2                      dispid=1;               //? ± ?  "1"           
+ 343   2                      bmp_id++;
+ 344   2                      if(bmp_id>=BmpMax) 
+ 345   2                              bmp_id=0;
+ 346   2              }
+ 347   1                      
+ 348   1              //       ? bmp_id--
+ 349   1              if((tkeyin&SUBD)==0x00)
+ 350   1              {
+ 351   2                      dispid=1;               //? ± ?  "1"
+ 352   2                      if(bmp_id>0) 
+ 353   2                      {
+C51 COMPILER V9.60.7.0   MAIN                                                              11/04/2025 20:06:33 PAGE 7   
+
+ 354   3                              bmp_id--;
+ 355   3                      }
+ 356   2                      else
+ 357   2                  {
+ 358   3                      bmp_id=BmpMax-1;
+ 359   3                      }
+ 360   2       
+ 361   2              }
+ 362   1      
+ 363   1                              
+ 364   1              // ???   constr++
+ 365   1              if((tkeyin&ADUP)==0x00)
+ 366   1              {
+ 367   2                      if(constr<63) constr++;
+ 368   2                      F_WriteInst(0x54);              //PUMP VOLTAGE SET
+ 369   2                      F_WriteData(constr);    ////VLCD = 2.5 + VSET * 0.05 5.0V
+ 370   2              }
+ 371   1              // ???   constr--
+ 372   1              if((tkeyin&ADDN)==0x00)
+ 373   1              {
+ 374   2                      if(constr>0) constr--;
+ 375   2                      F_WriteInst(0x54);              //PUMP VOLTAGE SET
+ 376   2                      F_WriteData(constr);    ////VLCD = 2.5 + VSET * 0.05 5.0V
+ 377   2              }
+ 378   1                              
+ 379   1              delay_n_ms(150);
+ 380   1      }
+ 381          ////////////////////////////////////////
+ 382          //void main( void )   
+ 383          //{
+ 384          //      P1=0xff;
+ 385          //      P3=0xff;
+ 386          //      lcd_inital();
+ 387          //      delay10us();
+ 388          //      do
+ 389          //      {
+ 390          //        display_on();
+ 391          //              delay_n_ms(5000);;
+ 392          //                       display_d(on);
+ 393          //               delay_n_ms(500);               
+ 394          //                       display_d(off);
+ 395          //                       delay_n_ms(500);       
+ 396          //                       display_d(on);
+ 397          //                       delay_n_ms(500);
+ 398          
+ 399          //      }while(1); 
+ 400          //}
+ 401          
+ 402          
+ 403          void main (void)  
+ 404          {
+ 405   1          autoid=1;
+ 406   1          bmp_id=0;
+ 407   1              dispid=1;
+ 408   1            P1=0xff;
+ 409   1            P3=0xff;
+ 410   1            lcd_inital();
+ 411   1            delay10us();
+ 412   1      
+ 413   1      //        display_d(off);
+ 414   1      
+ 415   1      //while(1);
+C51 COMPILER V9.60.7.0   MAIN                                                              11/04/2025 20:06:33 PAGE 8   
+
+ 416   1      display_d(ch2);
+ 417   1      delay_n_ms(99999999999999999);
+ 418   1      //display_d(ch4);
+ 419   1      //delay_n_ms(10000);
+ 420   1      //display_d(ch5);
+ 421   1      //delay_n_ms(10000);
+ 422   1      //display_d(on);
+ 423   1      //delay_n_ms(10000);    
+ 424   1      //      while(1)
+ 425   1      //      {
+ 426   1      //              do_key();
+ 427   1      //              if(dispid==1)
+ 428   1      //              {
+ 429   1      //                      switch(bmp_id)
+ 430   1      //                      {
+ 431   1      //                              case 0:                 //? ?   
+ 432   1      //                                      display_on();
+ 433   1      //                                      break;
+ 434   1      //                          case 1:                     //   ?   
+ 435   1      //                                      display_off();
+ 436   1      //                                      break;
+ 437   1      //                              case 2:                 //   ?   1
+ 438   1      //                                      display_d(ch2);
+ 439   1      //                                      break;
+ 440   1      //                              case 3:                 //   ?   2
+ 441   1      //                                  display_d(ch4);
+ 442   1      //                                  break;
+ 443   1      //                              case 4:                 //   ?   2
+ 444   1      //                                  display_d(ch5);
+ 445   1      //                                  break;              
+ 446   1      //                              default:
+ 447   1      //                                      break;
+ 448   1      //                      }
+ 449   1      //                      dispid=0;                       //   ? ± ?
+ 450   1      //              }
+ 451   1      
+ 452   1      //              //For auto display switch
+ 453   1      //              if(autoid==1) 
+ 454   1      //              {
+ 455   1      //                      dispid=1;
+ 456   1      //                      bmp_id++;
+ 457   1      //                      if(bmp_id>=BmpMax) bmp_id=0;
+ 458   1      
+ 459   1      //                               delay_n_ms(dl0);       // ?   ??  ?dl0
+ 460   1      
+ 461   1      //              }
+ 462   1      //      }
+ 463   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    553    ----
+   CONSTANT SIZE    =    294    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

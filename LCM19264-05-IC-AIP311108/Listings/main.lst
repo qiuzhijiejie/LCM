@@ -1,0 +1,98 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              08/05/2025 17:19:08 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\m
+                    -ain.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "lcm19264.h"
+   2          #include "pic.h"
+   3          void main( void )   
+   4          {   
+   5   1       unsigned char mode;    
+   6   1       Delay(20);  
+   7   1       IE=0x81;
+   8   1       IP=0x01;
+   9   1       TCON=0x01;
+  10   1       int0=1;  
+  11   1      
+  12   1          LcmInit();   
+  13   1          LcmClear(); 
+  14   1               
+  15   1         LcmPutDots(0x55,0xaa);
+  16   1         Delay(5000);
+  17   1               
+  18   1         LcmPutDots(0xaa,0x55);
+  19   1         Delay(5000);
+  20   1               
+  21   1         LcmPutDots(0x55,0x55);
+  22   1         Delay(5000); 
+  23   1               
+  24   1         LcmPutDots(0xaa,0xaa);
+  25   1         Delay(5000); 
+  26   1               
+  27   1         LcmPutDots(0xff,0x00);
+  28   1         Delay(5000); 
+  29   1               
+  30   1         LcmPutDots(0x00,0xff);
+  31   1         Delay(5000); 
+  32   1      
+  33   1         LcmPutDots(0xff,0xff);
+  34   1         Delay(5000);         
+  35   1      
+  36   1         LcmPutBMP(BMP1);
+  37   1         Display_Chinese();
+  38   1         Delay(5000);
+  39   1         LcmClear();  
+  40   1       while(1)   
+  41   1       {
+  42   2      
+  43   2        
+  44   2                      if(ReadKey())
+  45   2                      mode++;
+  46   2                      mode%=8;
+  47   2      //              LcmClear();
+  48   2                      switch(mode){   
+  49   3                      case 0:LcmPutDots(0xff,0x00);
+  50   3                      break;
+  51   3                      case 1:LcmPutDots(0x00,0xff);
+  52   3                      break;
+  53   3                      case 2:LcmPutDots(0x55,0x55);
+  54   3                      break;
+C51 COMPILER V9.60.7.0   MAIN                                                              08/05/2025 17:19:08 PAGE 2   
+
+  55   3                      case 3:LcmPutDots(0xaa,0xaa);
+  56   3                      break;
+  57   3                      case 4:LcmPutDots(0xaa,0x55);
+  58   3                      break;
+  59   3                      case 5:LcmPutDots(0x55,0xaa);   
+  60   3                      break;
+  61   3                      case 6:LcmPutDots(0xff,0xff);   
+  62   3                      break;
+  63   3                      case 7:   LcmPutBMP(BMP1);Display_Chinese();    
+  64   3                      break;
+  65   3         
+  66   3      //   Display_Chinese();
+  67   3      //   Delay(3000);  
+  68   3      //   Display_character();
+  69   3      
+  70   3       }   
+  71   2      }   
+  72   1       }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    251    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

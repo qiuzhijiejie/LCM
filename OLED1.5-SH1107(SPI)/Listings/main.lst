@@ -1,0 +1,574 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2025 20:47:34 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\m
+                    -ain.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          /********************金逸晨**************************
+   2          *****************1.5‘ 128-128 方屏     4PIN IIC OLED FOR AT89S52/STC12*************
+   3          *****AT89S52驱动**************************
+   4          ***** P20----3  SCK   ,  P21----4  SDA   ,
+   5          ***** BY:GU 
+   6          SH1107
+   7          //取模方式：列行式，低位在前，阴码
+   8          ********************************************************/
+   9          #include "reg51.h"
+  10          
+  11          #define set_0   0x01
+  12          #define set_1   0x02
+  13          #define set_2   0x04
+  14          #define set_3   0x08    
+  15          #define set_4   0x10
+  16          #define set_5   0x20
+  17          #define set_6   0x40
+  18          #define set_7   0x80
+  19          
+  20          #define clr_0   0xFE
+  21          #define clr_1   0xFD
+  22          #define clr_2   0xFB
+  23          #define clr_3   0xF7    
+  24          #define clr_4   0xEF
+  25          #define clr_5   0xDF
+  26          #define clr_6   0xBF
+  27          #define clr_7   0x7F
+  28          /**********IIC引脚分配，连接oled屏，更具实际情况修改*********/
+  29          
+  30          #define IIC_SCK_0  P1 &=clr_0        //P1_0      
+  31          #define IIC_SCK_1  P1|=set_0       
+  32          #define IIC_SDA_0  P1&=clr_1        //P1_1        
+  33          #define IIC_SDA_1  P1|=set_1
+  34          
+  35          
+  36          #define OLED_COLUMN_NUMBER 128
+  37          #define OLED_LINE_NUMBER 128
+  38          #define OLED_COLUMN_OFFSET 0
+  39          #define OLED_PAGE_NUMBER (OLED_LINE_NUMBER/8)
+  40          #define COMMAND_NUMBER 25
+  41          const unsigned char  *point;
+  42          unsigned char ACK=0;
+  43          const unsigned char  OLED_init_cmd[COMMAND_NUMBER]=                     //SH1107
+  44          {
+  45            
+  46                 0xAE,//关闭显示
+  47                  
+  48                 0xD5,//设置时钟分频因子,震荡频率
+  49                 0x50,  //[3:0],分频因子;[7:4],震荡频率 默认0x50
+  50          
+  51                 0xA8,//设置驱动路数
+  52                 0X7f,//默认(1/64)
+  53                  
+  54                 0xD3,//设置显示偏移
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2025 20:47:34 PAGE 2   
+
+  55                 0X00,//默认为0
+  56                  
+  57                 0x40,//设置显示开始行 [5:0],行数.
+  58                  
+  59                 0x8D,//电荷泵设置
+  60                 0x14,//bit2，开启/关闭
+  61                 0x20,//设置内存地址模式
+  62                 0x02,//[1:0],00，列地址模式;01，行地址模式;10,页地址模式;默认10;
+  63                 0xA0,//段重定义设置,bit0:0,0->0;1,0->127;  A1
+  64                  
+  65                 0xC0,//设置COM扫描方向;bit3:0,普通模式;1,重定义模式 COM[N-1]->COM0;N:驱动路数 C0 翻转显示 C8
+  66                     
+  67                 0xDA,//设置COM硬件引脚配置
+  68                 0x12,//[5:4]配置  
+  69                     
+  70                 0x81,//对比度设置
+  71                 0x7f,//1~255;默认0X7F (亮度设置,越大越亮)
+  72                     
+  73                 0xD9,//设置预充电周期
+  74                 0x22,//[3:0],PHASE 1;[7:4],PHASE 2;
+  75                     
+  76                 0xDB,//设置VCOMH 电压倍率
+  77                 0x37,//[6:4] 000,0.65*vcc;001,0.77*vcc;011,0.83*vcc;
+  78                     
+  79                 0xA4,//全局显示开启;bit0:1,开启;0,关闭;(白屏/黑屏)
+  80                     
+  81                 0xA6,//设置显示方式;bit0:1,反相显示;0,正常显示 
+  82                 
+  83                 0xAF,//开启显示     
+  84          };
+  85          code unsigned char china_char[][32]=   //列行式，低位在前，阴码
+  86          {
+  87          {/*-- ID:0,字符:"Ｍ",ASCII编码:A3CD,对应字:宽x高=16x16,画布:宽W=16 高H=16,共32字节*/
+  88          0x00,0x00,0x04,0xfc,0x1c,0x70,0xe0,0x80,0x00,0x80,0xe0,0x10,0xfc,0xfc,0x04,0x00,
+  89          0x00,0x00,0x20,0x3f,0x20,0x00,0x01,0x07,0x1c,0x07,0x00,0x20,0x3f,0x3f,0x20,0x00,},
+  90          
+  91          {/*-- ID:1,字符:"ａ",ASCII编码:A3E1,对应字:宽x高=16x16,画布:宽W=16 高H=16,共32字节*/
+  92          0x00,0x00,0x00,0x00,0x80,0xc0,0x40,0x40,0x40,0xc0,0x80,0x00,0x00,0x00,0x00,0x00,
+  93          0x00,0x00,0x00,0x00,0x0c,0x1e,0x12,0x12,0x12,0x1f,0x0f,0x10,0x10,0x00,0x00,0x00,},
+  94          
+  95          {/*-- ID:2,字符:"ｄ",ASCII编码:A3E4,对应字:宽x高=16x16,画布:宽W=16 高H=16,共32字节*/
+  96          0x00,0x00,0x00,0x00,0x80,0xc0,0x40,0x40,0x44,0xfc,0xfc,0x00,0x00,0x00,0x00,0x00,
+  97          0x00,0x00,0x00,0x00,0x0f,0x1f,0x10,0x10,0x10,0x1f,0x0f,0x10,0x00,0x00,0x00,0x00,},
+  98          
+  99          {/*-- ID:3,字符:"ｅ",ASCII编码:A3E5,对应字:宽x高=16x16,画布:宽W=16 高H=16,共32字节*/
+ 100          0x00,0x00,0x00,0x00,0x80,0x80,0x40,0x40,0x40,0x40,0xc0,0x80,0x00,0x00,0x00,0x00,
+ 101          0x00,0x00,0x00,0x00,0x0f,0x1f,0x12,0x12,0x12,0x12,0x1b,0x0b,0x00,0x00,0x00,0x00,},
+ 102          
+ 103          {/*-- ID:4,字符:"ｉ",ASCII编码:A3E9,对应字:宽x高=16x16,画布:宽W=16 高H=16,共32字节*/
+ 104          0x00,0x00,0x00,0x00,0x00,0x00,0x40,0xd8,0xd8,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+ 105          0x00,0x00,0x00,0x00,0x00,0x00,0x10,0x1f,0x1f,0x10,0x00,0x00,0x00,0x00,0x00,0x00,},
+ 106          
+ 107          {/*-- ID:5,字符:"ｎ",ASCII编码:A3EE,对应字:宽x高=16x16,画布:宽W=16 高H=16,共32字节*/
+ 108          0x00,0x00,0x40,0x40,0x80,0xc0,0x40,0x40,0x40,0x40,0xc0,0x80,0x00,0x00,0x00,0x00,
+ 109          0x00,0x00,0x00,0x10,0x1f,0x1f,0x10,0x00,0x00,0x10,0x1f,0x1f,0x10,0x00,0x00,0x00,},
+ 110          
+ 111          {/*-- ID:6,字符:"Ｃ",ASCII编码:A3C3,对应字:宽x高=16x16,画布:宽W=16 高H=16,共32字节*/
+ 112          0x00,0x00,0x00,0xe0,0xf0,0x18,0x0c,0x04,0x04,0x04,0x0c,0x18,0x18,0x00,0x00,0x00,
+ 113          0x00,0x00,0x00,0x07,0x0f,0x18,0x30,0x20,0x20,0x20,0x30,0x10,0x08,0x00,0x00,0x00,},
+ 114          
+ 115          {/*-- ID:7,字符:"ｈ",ASCII编码:A3E8,对应字:宽x高=16x16,画布:宽W=16 高H=16,共32字节*/
+ 116          0x00,0x00,0x00,0x00,0x04,0xfc,0xfc,0x80,0x40,0x40,0xc0,0x80,0x00,0x00,0x00,0x00,
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2025 20:47:34 PAGE 3   
+
+ 117          0x00,0x00,0x00,0x00,0x10,0x1f,0x1f,0x00,0x00,0x10,0x1f,0x1f,0x10,0x00,0x00,0x00},
+ 118          
+ 119          {/*-- ID:8,字符:"ｉ",ASCII编码:A3E9,对应字:宽x高=16x16,画布:宽W=16 高H=16,共32字节*/
+ 120          0x00,0x00,0x00,0x00,0x00,0x00,0x40,0xd8,0xd8,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+ 121          0x00,0x00,0x00,0x00,0x00,0x00,0x10,0x1f,0x1f,0x10,0x00,0x00,0x00,0x00,0x00,0x00,},
+ 122          
+ 123          {/*-- ID:9,字符:"ｎ",ASCII编码:A3EE,对应字:宽x高=16x16,画布:宽W=16 高H=16,共32字节*/
+ 124          0x00,0x00,0x40,0x40,0x80,0xc0,0x40,0x40,0x40,0x40,0xc0,0x80,0x00,0x00,0x00,0x00,
+ 125          0x00,0x00,0x00,0x10,0x1f,0x1f,0x10,0x00,0x00,0x10,0x1f,0x1f,0x10,0x00,0x00,0x00,},
+ 126          
+ 127          {/*-- ID:10,字符:"ａ",ASCII编码:A3E1,对应字:宽x高=16x16,画布:宽W=16 高H=16,共32字节*/
+ 128          0x00,0x00,0x00,0x00,0x80,0xc0,0x40,0x40,0x40,0xc0,0x80,0x00,0x00,0x00,0x00,0x00,
+ 129          0x00,0x00,0x00,0x00,0x0c,0x1e,0x12,0x12,0x12,0x1f,0x0f,0x10,0x10,0x00,0x00,0x00},
+ 130          
+ 131          {/*-- ID:0,字符:"！",ASCII编码:A3A1,对应字:宽x高=16x16,画布:宽W=16 高H=16,共32字节*/
+ 132          0x00,0x00,0x00,0x00,0x00,0x00,0x7c,0xfe,0xfe,0x7c,0x00,0x00,0x00,0x00,0x00,0x00,
+ 133          0x00,0x00,0x00,0x00,0x00,0x00,0x10,0x3b,0x3b,0x10,0x00,0x00,0x00,0x00,0x00,0x00},
+ 134          
+ 135          };
+ 136          code unsigned char  picture_tab[]={
+ 137          //图片显示，列行式，低位在前，阴码
+ 138          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 139          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 140          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 141          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 142          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 143          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 144          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 145          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 146          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 147          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 148          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 149          0XFF,0XFF,0X7F,0X7F,0X7F,0X3F,0X3F,0X3F,0X1F,0X1F,0X9F,0X9F,0X9F,0X9F,0X9F,0X8F,
+ 150          0X8F,0X8F,0X9F,0X9F,0X9F,0X9F,0X1F,0X1F,0X3F,0X3F,0X3F,0X3F,0X7F,0X7F,0XFF,0XFF,
+ 151          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 152          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 153          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 154          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 155          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 156          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0X7F,0X3F,0X1F,0X8F,0X8F,0XC7,0X03,0X01,0X01,
+ 157          0X00,0X00,0X00,0X00,0XFC,0XFE,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 158          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFE,0XFE,0XFE,0XFC,0XFC,0XF8,
+ 159          0XF9,0XF1,0XE3,0XE3,0XC7,0X8F,0X1F,0X3F,0X7F,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 160          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 161          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 162          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 163          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 164          0XFF,0XFF,0X3F,0X0F,0X87,0XE1,0XF0,0XF8,0XFE,0XFF,0XFF,0XFF,0XFF,0XFF,0X00,0X00,
+ 165          0X00,0X00,0X00,0X00,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 166          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0X7F,0X3F,0X1F,0X1F,0X1F,0X8F,0XCF,0XCF,0XCF,
+ 167          0XCF,0XCF,0XCF,0XCF,0XCF,0XCF,0X9F,0X9E,0X1C,0X38,0X21,0X03,0X0F,0X1F,0X7F,0XFF,
+ 168          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 169          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 170          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 171          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0X1F,
+ 172          0X03,0XC0,0XF8,0XFE,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0X00,0X00,
+ 173          0X00,0X00,0X00,0X00,0X0F,0X0F,0X0F,0X0F,0XCF,0XCF,0XCF,0XEF,0XFF,0XFF,0XFF,0XFF,
+ 174          0XFF,0X7F,0X1F,0X07,0X01,0X00,0X00,0XC0,0XC8,0XCC,0XCF,0XCF,0X0F,0X0F,0X0F,0X0F,
+ 175          0X8F,0XCF,0XCF,0XEF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFE,0XFC,0XF0,0X80,0XFC,0XE0,0X01,
+ 176          0X0F,0X7F,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 177          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 178          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2025 20:47:34 PAGE 4   
+
+ 179          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0X01,0X00,
+ 180          0XFC,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0X00,0X00,
+ 181          0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X03,0X07,0X1F,0X3F,0XFF,0XFF,0XFF,0XFF,
+ 182          0X07,0X00,0X00,0X00,0X00,0X00,0XFF,0XFF,0X3F,0X0F,0X07,0XC1,0XF0,0XF8,0XFE,0XFF,
+ 183          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 184          0X00,0X00,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 185          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 186          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 187          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XF0,0X00,
+ 188          0X07,0XFF,0XFF,0XFF,0X7F,0X7F,0X7F,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0X00,0X00,
+ 189          0X00,0X00,0X00,0X80,0XFF,0XFE,0XF8,0XF0,0XC0,0X80,0X00,0X00,0X00,0X03,0X07,0X1F,
+ 190          0X7C,0XC0,0X00,0X00,0X00,0X00,0X01,0X60,0XF8,0XFC,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 191          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0X1F,
+ 192          0X00,0XC0,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 193          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 194          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 195          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFE,
+ 196          0XF0,0XC0,0X07,0X10,0X60,0XC0,0X80,0X80,0X83,0X8F,0X9F,0X9F,0X8F,0X87,0XC0,0XC0,
+ 197          0XE0,0XF0,0XFC,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFE,0XFC,0XF0,0X00,0X00,0X00,
+ 198          0X00,0X00,0X00,0XF0,0XF8,0XF0,0XE0,0XC0,0X81,0X83,0X87,0X0F,0X1F,0X1F,0X3F,0X3F,
+ 199          0X3F,0X3F,0X3F,0X3F,0X3F,0X3F,0X9F,0X9F,0XCF,0XCF,0XE7,0X73,0X19,0X06,0X81,0XE0,
+ 200          0XFC,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 201          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 202          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 203          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 204          0XFF,0XFF,0XFF,0XFE,0XF8,0XF0,0XE3,0XC7,0X0F,0X1F,0X3F,0X7F,0XFF,0XFF,0XFF,0XFF,
+ 205          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0X00,0X00,0X00,
+ 206          0X00,0X00,0X00,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 207          0XFF,0XFF,0XFF,0XFF,0X7F,0X3F,0X1F,0X0F,0X87,0XC3,0XE1,0XF8,0XFC,0XFF,0XFF,0XFF,
+ 208          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 209          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 210          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 211          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 212          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFE,0XFC,0XF8,0XF9,0XF1,0XE3,
+ 213          0XE7,0XC7,0XCF,0X8F,0X8F,0X9F,0X1F,0X1F,0X3F,0X3F,0X3F,0X1F,0X0F,0X00,0X00,0X00,
+ 214          0X00,0X00,0X00,0X07,0X1F,0X3F,0X3F,0X3F,0X1F,0X1F,0X9F,0X8F,0X8F,0XCF,0XC7,0XE7,
+ 215          0XE3,0XF1,0XF1,0XF8,0XFC,0XFE,0XFE,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 216          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 217          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 218          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 219          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 220          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 221          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFE,0XFE,0XFE,0XFE,0XFE,
+ 222          0XFE,0XFE,0XFE,0XFE,0XFE,0XFE,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 223          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 224          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 225          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 226          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 227          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0X7F,
+ 228          0X1F,0X03,0X03,0X07,0X3F,0X3F,0X7F,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 229          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0X7F,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0X3F,0X1B,
+ 230          0X07,0X87,0X0F,0X1F,0X3F,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 231          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0X9F,0X3F,0X7F,0XB7,0X27,0X03,0X13,0X93,0X33,
+ 232          0X03,0X07,0XCF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 233          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 234          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 235          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0X3F,0X0F,0XC3,0XE0,0X68,
+ 236          0X86,0X87,0X03,0X03,0X23,0X26,0X7C,0XF8,0XF1,0XE3,0XC3,0X87,0X8F,0X8F,0X0F,0X1F,
+ 237          0X1F,0X3F,0XFF,0XFF,0XFF,0XFF,0X9F,0X9A,0X18,0X18,0XB8,0XFF,0XF7,0X0F,0X0E,0X67,
+ 238          0X21,0X00,0X80,0X92,0X89,0X81,0XB3,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 239          0XFF,0XFF,0XFF,0XFF,0XFF,0XDF,0X9F,0X9F,0X08,0X08,0XC1,0XA8,0X01,0X14,0X84,0X40,
+ 240          0X70,0XF7,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2025 20:47:34 PAGE 5   
+
+ 241          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 242          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 243          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFB,0XF9,0XFC,0XFE,0XFF,0XFF,0XCC,0X88,
+ 244          0XC8,0X64,0X00,0X00,0X0E,0X43,0X63,0X73,0X7F,0X7F,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 245          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XDF,0X9C,0X98,0X83,0X87,0X9F,0XAE,0XA6,0X32,0X38,
+ 246          0X7E,0X62,0X40,0X5C,0X5B,0X58,0X50,0X4F,0X4F,0X7F,0X7F,0X7F,0XFF,0XFF,0XFF,0XFF,
+ 247          0XFF,0XFF,0XFF,0XFF,0X3F,0X9F,0XC7,0XF1,0XFC,0X09,0X01,0XE0,0XE4,0X64,0X66,0XA6,
+ 248          0XC2,0X88,0X19,0X1F,0X3F,0X3F,0X7F,0X7F,0X7F,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 249          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 250          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 251          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFC,0XF8,0XFC,
+ 252          0XFC,0XFC,0XFE,0XFE,0XFE,0XFE,0XFE,0XFE,0XFE,0XFE,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 253          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 254          0XFF,0XFE,0XFE,0XFE,0XFE,0XFC,0XFC,0XFC,0XFC,0XFE,0XFE,0XFE,0XFF,0XFF,0XFF,0XFF,
+ 255          0XFF,0XF9,0XF9,0XFC,0XFE,0XFF,0XFF,0XFF,0XFF,0XFF,0XFC,0XF8,0XF8,0XFC,0XFE,0XFF,
+ 256          0XFF,0XFF,0XFF,0XFF,0XFE,0XFE,0XFE,0XFE,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 257          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 258          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 259          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 260          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 261          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 262          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 263          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 264          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 265          0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+ 266          };
+ 267          void delay_us(unsigned int _us_time)
+ 268          {       
+ 269   1        unsigned char x=0;
+ 270   1        for(;_us_time>0;_us_time--)
+ 271   1        {
+ 272   2          x++;
+ 273   2        }
+ 274   1      }
+ 275          void delay_ms(unsigned int _ms_time)
+ 276            {
+ 277   1          unsigned int i,j;
+ 278   1          for(i=0;i<_ms_time;i++)
+ 279   1          {
+ 280   2          for(j=0;j<900;j++)
+ 281   2            {;}
+ 282   2          }
+ 283   1        }
+ 284          /**************************IIC模块发送函数************************************************
+ 285          
+ 286           *************************************************************************/
+ 287          //写入  最后将SDA拉高，以等待从设备产生应答
+ 288          void IIC_write(unsigned char date)
+ 289          {
+ 290   1              unsigned char i, temp;
+ 291   1              temp = date;
+ 292   1                              
+ 293   1              for(i=0; i<8; i++)
+ 294   1              {       IIC_SCK_0;
+ 295   2                      
+ 296   2                      if ((temp&0x80)==0)
+ 297   2                        IIC_SDA_0;
+ 298   2                      else IIC_SDA_1;
+ 299   2                      temp = temp << 1;
+ 300   2                                                        //最少250ns延时
+ 301   2                      IIC_SCK_1;
+ 302   2                      
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2025 20:47:34 PAGE 6   
+
+ 303   2              }
+ 304   1              IIC_SCK_0;
+ 305   1              
+ 306   1              IIC_SDA_1;
+ 307   1              
+ 308   1              IIC_SCK_1;
+ 309   1              
+ 310   1               ACK =0;
+ 311   1              IIC_SCK_0;
+ 312   1              
+ 313   1      
+ 314   1      }
+ 315          //启动信号
+ 316          //SCL在高电平期间，SDA由高电平向低电平的变化定义为启动信号
+ 317          void IIC_start()
+ 318          {
+ 319   1              IIC_SDA_1;
+ 320   1              
+ 321   1              IIC_SCK_1;
+ 322   1                                                 //所有操作结束释放SCL        
+ 323   1              IIC_SDA_0;
+ 324   1              
+ 325   1              IIC_SCK_0;
+ 326   1              
+ 327   1              IIC_write(0x78);
+ 328   1              
+ 329   1      }
+ 330          
+ 331          //停止信号
+ 332          //SCL在高电平期间，SDA由低电平向高电平的变化定义为停止信号
+ 333          void IIC_stop()
+ 334          {
+ 335   1              IIC_SDA_0;
+ 336   1              
+ 337   1              IIC_SCK_1;
+ 338   1              
+ 339   1              IIC_SDA_1;
+ 340   1              
+ 341   1      }
+ 342          
+ 343          void OLED_send_cmd(unsigned char o_command)
+ 344            {
+ 345   1          
+ 346   1          IIC_start();
+ 347   1          IIC_write(0x00); 
+ 348   1          IIC_write(o_command);
+ 349   1          IIC_stop();
+ 350   1          
+ 351   1        }
+ 352          void OLED_send_data(unsigned char o_data)
+ 353            { 
+ 354   1          IIC_start();
+ 355   1          IIC_write(0x40);
+ 356   1          IIC_write(o_data);
+ 357   1          IIC_stop();
+ 358   1         }
+ 359          void Column_set(unsigned char column)
+ 360            {
+ 361   1              column+=OLED_COLUMN_OFFSET;
+ 362   1          OLED_send_cmd(0x10|(column>>4));    //???????
+ 363   1          OLED_send_cmd(0x00|(column&0x0f));   //???????  
+ 364   1               
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2025 20:47:34 PAGE 7   
+
+ 365   1        }
+ 366          void Page_set(unsigned char page)
+ 367            {
+ 368   1          OLED_send_cmd(0xb0+page);
+ 369   1        }
+ 370          void OLED_clear(void)
+ 371            {
+ 372   1          unsigned char page,column;
+ 373   1          for(page=0;page<OLED_PAGE_NUMBER;page++)             //page loop
+ 374   1            { 
+ 375   2                Page_set(page);
+ 376   2                Column_set(0);          
+ 377   2                for(column=0;column<OLED_COLUMN_NUMBER;column++)      //column loop
+ 378   2                  {
+ 379   3                    OLED_send_data(0x00);
+ 380   3                  }
+ 381   2            }
+ 382   1        }
+ 383            
+ 384          void OLED_full(unsigned char oddData, unsigned char evenData)
+ 385          {
+ 386   1          unsigned char page, column;
+ 387   1          for(page = 0; page < OLED_PAGE_NUMBER; page++)   // page loop
+ 388   1          { 
+ 389   2              Page_set(page);
+ 390   2              Column_set(0);    
+ 391   2              for(column = 0; column < OLED_COLUMN_NUMBER; column++) // column loop
+ 392   2              {
+ 393   3                  if(column % 2 == 0)      // 偶数列
+ 394   3                      OLED_send_data(evenData);
+ 395   3                  else                     // 奇数列
+ 396   3                      OLED_send_data(oddData);
+ 397   3              }
+ 398   2          }
+ 399   1      }
+ 400            
+ 401          void OLED_init(void)
+ 402            {
+ 403   1          unsigned char i;
+ 404   1              
+ 405   1          for(i=0;i<COMMAND_NUMBER;i++)
+ 406   1            {
+ 407   2              OLED_send_cmd(OLED_init_cmd[i]);
+ 408   2            }
+ 409   1        }
+ 410          
+ 411          void Picture_display(const unsigned char *ptr_pic)
+ 412            {
+ 413   1          unsigned char page,column;
+ 414   1          for(page=0;page<(OLED_PAGE_NUMBER);page++)        //page loop
+ 415   1            { 
+ 416   2              Page_set(page);
+ 417   2              Column_set(0);    
+ 418   2              for(column=0;column<OLED_COLUMN_NUMBER;column++)        //column loop
+ 419   2                {
+ 420   3                  OLED_send_data(*ptr_pic++);
+ 421   3                }
+ 422   2            }
+ 423   1        }
+ 424          void Picture_ReverseDisplay(const unsigned char *ptr_pic)
+ 425          {
+ 426   1          unsigned char page,column,dis_data;
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2025 20:47:34 PAGE 8   
+
+ 427   1          for(page=0;page<(OLED_PAGE_NUMBER);page++)        //page loop
+ 428   1            { 
+ 429   2                      Page_set(page);
+ 430   2                      Column_set(0);    
+ 431   2                      for(column=0;column<OLED_COLUMN_NUMBER;column++)        //column loop
+ 432   2                {
+ 433   3                  dis_data=*ptr_pic++;
+ 434   3                  
+ 435   3                               
+ 436   3                                       dis_data=~dis_data;
+ 437   3                  OLED_send_data(dis_data);
+ 438   3                }
+ 439   2            }
+ 440   1        }
+ 441          void display_char16_16(char x_page,char y_column,const unsigned char *char16_16)
+ 442          {
+ 443   1              unsigned char column,dis_data; 
+ 444   1                      Page_set(x_page);
+ 445   1                      Column_set(y_column);     
+ 446   1                      for(column=0;column<16;column++)        //column loop
+ 447   1                {
+ 448   2                  dis_data=*char16_16++;
+ 449   2                  OLED_send_data(dis_data);
+ 450   2                }
+ 451   1                        Page_set(x_page+1);
+ 452   1                      Column_set(y_column);     
+ 453   1                      for(column=0;column<16;column++)        //column loop
+ 454   1                {
+ 455   2                  dis_data=*char16_16++;
+ 456   2                  OLED_send_data(dis_data);
+ 457   2                }
+ 458   1      }
+ 459          
+ 460          void IO_init(void)
+ 461          {
+ 462   1        P2|=0xFF;                         //PC  06,07，03,04,07输出模式
+ 463   1        
+ 464   1      
+ 465   1      }
+ 466          
+ 467          unsigned char y_pos[] = {16, 32, 48, 60, 78, 84, 100, 116};
+ 468          unsigned char i;
+ 469          int main()
+ 470          { 
+ 471   1       
+ 472   1        IO_init();
+ 473   1        
+ 474   1        OLED_init();
+ 475   1      //  OLED_full();
+ 476   1        delay_ms(100);
+ 477   1        OLED_clear();
+ 478   1        while(1)
+ 479   1        {
+ 480   2      //    point= &picture_tab[0];
+ 481   2      //    Picture_display(point);
+ 482   2      //    delay_ms(500);
+ 483   2      //    point= &picture_tab[0];
+ 484   2      //    Picture_ReverseDisplay(point);
+ 485   2      //    delay_ms(500);
+ 486   2      //    OLED_clear();
+ 487   2          display_char16_16(0,0,china_char[0]);
+ 488   2          delay_ms(500);
+C51 COMPILER V9.60.7.0   MAIN                                                              08/25/2025 20:47:34 PAGE 9   
+
+ 489   2          display_char16_16(2,16,china_char[1]);
+ 490   2          delay_ms(500);
+ 491   2          display_char16_16(4,32,china_char[2]);
+ 492   2          delay_ms(500);
+ 493   2          display_char16_16(6,48,china_char[3]);
+ 494   2          delay_ms(500);
+ 495   2          display_char16_16(8,64,china_char[4]);
+ 496   2          delay_ms(500);
+ 497   2          display_char16_16(10,80,china_char[5]);
+ 498   2          delay_ms(500);
+ 499   2                
+ 500   2          display_char16_16(14,16,china_char[6]);
+ 501   2          delay_ms(500);
+ 502   2          display_char16_16(14,32,china_char[7]);
+ 503   2          delay_ms(500);       
+ 504   2              display_char16_16(14,48,china_char[8]);
+ 505   2          delay_ms(500);
+ 506   2          display_char16_16(14,64,china_char[9]);
+ 507   2          delay_ms(500);
+ 508   2          display_char16_16(14,80,china_char[10]);
+ 509   2          delay_ms(500);
+ 510   2          display_char16_16(14,96,china_char[11]);
+ 511   2          delay_ms(500); 
+ 512   2      
+ 513   2      //for(i = 0; i < 11; i++)
+ 514   2      //{
+ 515   2      //    display_char16_16(0, y_pos[i], china_char[i]);
+ 516   2      //    delay_ms(500);
+ 517   2      //}
+ 518   2      
+ 519   2      OLED_full(0xFF, 0x00);  
+ 520   2      delay_ms(200);
+ 521   2      OLED_full(0x00, 0xff);  
+ 522   2       delay_ms(200);
+ 523   2      OLED_full(0xAA, 0x55);  
+ 524   2      delay_ms(200);
+ 525   2      OLED_full(0x55, 0xaa);  
+ 526   2      delay_ms(200);
+ 527   2      OLED_full(0xAA, 0xaa); 
+ 528   2      delay_ms(200);
+ 529   2      OLED_full(0x55, 0x55);
+ 530   2      delay_ms(200);
+ 531   2      OLED_full(0xff, 0xff); 
+ 532   2      
+ 533   2        }
+ 534   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    757    ----
+   CONSTANT SIZE    =   2432    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     38      14
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

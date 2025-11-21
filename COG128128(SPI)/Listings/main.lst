@@ -1,0 +1,445 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              08/26/2025 15:56:41 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\m
+                    -ain.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <reg51.H>
+   2          #include <intrins.h>
+   3          #include <chinese_code.h>
+   4          
+   5          
+   6          sbit  reset=P3^5;          //
+   7          sbit    scl=P1^7;            //
+   8          sbit    sda=P1^6;            //
+   9          sbit  key=P2^0;            //
+  10          
+  11          #define uchar unsigned char 
+  12          #define uint unsigned int
+  13          #define ulong unsigned long
+  14          
+  15          void delay(int i)
+  16          {
+  17   1              int j,k;
+  18   1              for(j=0;j<i;j++)
+  19   1              for(k=0;k<110;k++);     
+  20   1      }
+  21          
+  22          //等待一个按键
+  23          void waitkey()
+  24          {
+  25   1       repeat:
+  26   1              if (key==1) goto repeat;
+  27   1              else;
+  28   1                      delay(1500);
+  29   1      }
+  30          
+  31          void transfer(int data1)
+  32          {
+  33   1              int i;
+  34   1              for(i=0;i<8;i++)
+  35   1         {
+  36   2                      scl=0;
+  37   2                      if(data1&0x80) sda=1;
+  38   2                      else sda=0;
+  39   2                      scl=1;
+  40   2                      scl=0;
+  41   2                      data1=data1<<1;
+  42   2         }
+  43   1                      sda=0;
+  44   1                      scl=1;
+  45   1                      scl=0;
+  46   1      }
+  47          
+  48          void start_flag()
+  49          {
+  50   1              scl=1;          /*START FLAG*/
+  51   1              sda=1;          /*START FLAG*/
+  52   1              sda=0;          /*START FLAG*/
+  53   1      }
+  54          
+C51 COMPILER V9.60.7.0   MAIN                                                              08/26/2025 15:56:41 PAGE 2   
+
+  55          void stop_flag()
+  56          {
+  57   1              scl=1;          /*STOP FLAG*/
+  58   1              sda=0;          /*STOP FLAG*/           
+  59   1              sda=1;          /*STOP FLAG*/
+  60   1      }
+  61          
+  62          //写命令到液晶显示模块
+  63          void transfer_command(uchar com)   
+  64          {
+  65   1              start_flag(); 
+  66   1              transfer(0x78); 
+  67   1              transfer(0x00); 
+  68   1              transfer(com); 
+  69   1              stop_flag(); 
+  70   1      }
+  71          
+  72          //写数据到液晶显示模块
+  73          void transfer_data(uchar dat)
+  74          {
+  75   1              start_flag(); 
+  76   1              transfer(0x78); 
+  77   1              transfer(0x40); 
+  78   1              transfer(dat); 
+  79   1              stop_flag(); 
+  80   1      } 
+  81          
+  82          void initial_lcd()
+  83          {
+  84   1              reset=0;
+  85   1              delay(500);
+  86   1              reset=1;
+  87   1              delay(100);
+  88   1              
+  89   1              transfer_command(0x2c);
+  90   1              delay(200);
+  91   1              transfer_command(0x2e);
+  92   1              delay(200);
+  93   1              transfer_command(0x2f);
+  94   1              delay(10);
+  95   1              
+  96   1              transfer_command(0xae);         //显示关
+  97   1              transfer_command(0x38);         //模式设置
+  98   1              transfer_command(0xb8);         //85HZ
+  99   1              transfer_command(0xc8);         //行扫描顺序    
+ 100   1              transfer_command(0xa0);         //列扫描顺序
+ 101   1              
+ 102   1              transfer_command(0x44);         //Set initial COM0 register
+ 103   1              transfer_command(0x00);
+ 104   1              transfer_command(0x40);         //Set initial display line register
+ 105   1              transfer_command(0x00);
+ 106   1      
+ 107   1              transfer_command(0xab);
+ 108   1              transfer_command(0x67);
+ 109   1              transfer_command(0x27);         //粗调对比度，可设置范围0x20～0x27
+ 110   1              transfer_command(0x81);         //微调对比度
+ 111   1              transfer_command(0x28);         //微调对比度的值，可设置范围0x00～0x3f
+ 112   1      
+ 113   1              transfer_command(0x56);         //0x56  1/11 bias
+ 114   1              transfer_command(0xf3);
+ 115   1              transfer_command(0x04);
+ 116   1              transfer_command(0x93);
+C51 COMPILER V9.60.7.0   MAIN                                                              08/26/2025 15:56:41 PAGE 3   
+
+ 117   1          
+ 118   1              transfer_command(0xaf);         //显示开
+ 119   1      
+ 120   1      }
+ 121          
+ 122          
+ 123          void lcd_address(uchar page,uchar column)
+ 124          {
+ 125   1              column=column;
+ 126   1              page=page-1;
+ 127   1              transfer_command(0xb0+page);
+ 128   1              transfer_command(((column>>4)&0x0f)+0x10);
+ 129   1              transfer_command(column&0x0f);
+ 130   1      }
+ 131          
+ 132          void clear_screen()
+ 133          {       
+ 134   1              uchar i,j;
+ 135   1              for(j=0;j<16;j++)
+ 136   1              {
+ 137   2                      lcd_address(j+1,0);
+ 138   2                      for(i=0;i<128;i++)
+ 139   2                      {
+ 140   3                              transfer_data(0x00);
+ 141   3                      
+ 142   3                              transfer_data(0x00);
+ 143   3      
+ 144   3                      }
+ 145   2              }
+ 146   1      }
+ 147          
+ 148          
+ 149          void full_display(unsigned char dots)
+ 150          {       
+ 151   1              uchar i,j;
+ 152   1              for(j=0;j<16;j++)
+ 153   1              {
+ 154   2                      lcd_address(j+1,0);
+ 155   2                      for(i=0;i<128;i++)
+ 156   2                      {
+ 157   3                              transfer_data(dots);
+ 158   3                      
+ 159   3                              transfer_data(dots);
+ 160   3      
+ 161   3                      }
+ 162   2              }
+ 163   1      }
+ 164          
+ 165          
+ 166          
+ 167          
+ 168          
+ 169          //显示8x16的点阵的字符串，括号里的参数分别为（页,列，字符串指针）
+ 170          void display_string_8x16(uchar page,uchar column,uchar *text)
+ 171          {
+ 172   1              uint i=0,j,k,n;
+ 173   1      
+ 174   1              while(text[i]>0x00)
+ 175   1              {
+ 176   2                      if((text[i]>=0x20)&&(text[i]<=0x7e))
+ 177   2                      {
+ 178   3                              j=text[i]-0x20;
+C51 COMPILER V9.60.7.0   MAIN                                                              08/26/2025 15:56:41 PAGE 4   
+
+ 179   3                              for(n=0;n<2;n++)
+ 180   3                              {
+ 181   4                                      lcd_address(page+n,column);
+ 182   4                                      for(k=0;k<8;k++)
+ 183   4                                      {
+ 184   5                                              transfer_data(ascii_table_8x16[j][k+8*n]);
+ 185   5                                              transfer_data(ascii_table_8x16[j][k+8*n]);
+ 186   5                                      }
+ 187   4                              }
+ 188   3                              i++;
+ 189   3                              column+=8;
+ 190   3                      }
+ 191   2                      else
+ 192   2                      i++;
+ 193   2                      
+ 194   2                      if(column>127)
+ 195   2                      {
+ 196   3                              column=0;
+ 197   3                              page+=2;
+ 198   3                      }       
+ 199   2              }       
+ 200   1      }
+ 201          
+ 202          //写入一组16x16点阵的汉字字符串（字符串表格中需含有此字）
+ 203          //括号里的参数：(页，列，汉字字符串）
+ 204          void display_string_16x16(uchar page,uchar column,uchar *text)
+ 205          {
+ 206   1              uchar i,j,k;
+ 207   1              uint address;
+ 208   1              j = 0;
+ 209   1              while(text[j] != '\0')
+ 210   1              {
+ 211   2                      i=0;
+ 212   2                      address=1;
+ 213   2                      while(Chinese_text_16x16[i]> 0x7e )
+ 214   2                      {
+ 215   3                              if(Chinese_text_16x16[i] == text[j])
+ 216   3                              {
+ 217   4                                      if(Chinese_text_16x16[i+1] == text[j+1])
+ 218   4                                      {
+ 219   5                                              address = i*16;
+ 220   5                                              break;
+ 221   5                                      }
+ 222   4                              }
+ 223   3                              i +=2;
+ 224   3                      }
+ 225   2                      if(column>127)
+ 226   2                      {
+ 227   3                              column =0;
+ 228   3                              page +=2;
+ 229   3                      }
+ 230   2                      if(address !=1)
+ 231   2                      {
+ 232   3                              for(k=0;k<2;k++)
+ 233   3                              {
+ 234   4                                      lcd_address(page+k,column);
+ 235   4                                      for(i=0;i<16;i++)
+ 236   4                                      {
+ 237   5                                              transfer_data(Chinese_code_16x16[address]);
+ 238   5                                              transfer_data(Chinese_code_16x16[address]);
+ 239   5                                              address++;
+ 240   5                                              
+C51 COMPILER V9.60.7.0   MAIN                                                              08/26/2025 15:56:41 PAGE 5   
+
+ 241   5                                      }
+ 242   4                              }
+ 243   3                              j +=2;
+ 244   3                      }
+ 245   2                      else
+ 246   2                      {
+ 247   3                              for(k=0;k<2;k++)
+ 248   3                              {
+ 249   4                                      lcd_address(page+k,column);
+ 250   4                                      for(i=0;i<16;i++)
+ 251   4                                      {
+ 252   5                                              transfer_data(0x00);
+ 253   5                                              transfer_data(0x00);
+ 254   5                                              
+ 255   5                                      }
+ 256   4                              }
+ 257   3                              j++;
+ 258   3                      }
+ 259   2                      column +=16;
+ 260   2              }
+ 261   1      }
+ 262          
+ 263          //显示16x16点阵的汉字或者ASCII码8x16点阵的字符混合字符串
+ 264          //括号里的参数：(页，列，字符串）
+ 265          void display_string_8x16_16x16(uchar page,uchar column,uchar *text)
+ 266          {
+ 267   1              uchar temp[3];
+ 268   1              uchar i=0;
+ 269   1              while(text[i] !='\0')
+ 270   1              {
+ 271   2                      if(text[i]>0x7e)
+ 272   2                      {
+ 273   3                              temp[0]=text[i];
+ 274   3                              temp[1]=text[i+1];
+ 275   3                              temp[2]='\0';                                                                                                           //汉字为两个字节
+ 276   3                              display_string_16x16(page,column,temp); //显示汉字
+ 277   3                              column +=16;
+ 278   3                              i +=2;
+ 279   3                              if(column>127)
+ 280   3                              {
+ 281   4                                      column =0;
+ 282   4                                      page +=2;
+ 283   4                              }
+ 284   3                      }
+ 285   2                      else
+ 286   2                      {
+ 287   3                              temp[0]=text[i];
+ 288   3                              temp[1]='\0';                                                                                                           //字母占一个字节
+ 289   3                              display_string_8x16(page,column,temp);  //显示字母
+ 290   3                              column +=8;
+ 291   3                              i++;
+ 292   3                              if(column>127)
+ 293   3                              {
+ 294   4                                      column =0;
+ 295   4                                      page +=2;
+ 296   4                              }
+ 297   3                      }
+ 298   2              }
+ 299   1      }
+ 300          
+ 301          void display_32x32(uchar page,uchar column,uchar *dp)
+ 302          {
+C51 COMPILER V9.60.7.0   MAIN                                                              08/26/2025 15:56:41 PAGE 6   
+
+ 303   1              int i,j;
+ 304   1              for(j=0;j<4;j++)
+ 305   1              {
+ 306   2                      lcd_address(page+j,column);
+ 307   2                      for(i=0;i<32;i++)
+ 308   2                      {
+ 309   3                              transfer_data(*dp);
+ 310   3                              transfer_data(*dp);
+ 311   3                              dp++;
+ 312   3                      }
+ 313   2              }
+ 314   1              
+ 315   1      }
+ 316          
+ 317          void display_graphic(uchar *dp)
+ 318          {
+ 319   1              int i,j;
+ 320   1              for(j=0;j<16;j++)
+ 321   1              {
+ 322   2                      lcd_address(j+1,0);
+ 323   2                      for(i=0;i<128;i++)
+ 324   2                      {
+ 325   3                              transfer_data(*dp);
+ 326   3                              transfer_data(*dp);
+ 327   3                              dp++;   
+ 328   3                      }
+ 329   2              }
+ 330   1      }
+ 331          
+ 332          
+ 333          // 切黑白模式（1字节对应纵向8点）
+ 334          void st7571_set_bw_mode(void)
+ 335          {
+ 336   1          transfer_command(0x7B); // Enter Extension Command Set 3
+ 337   1          transfer_command(0x11); // Set Color Mode: B/W
+ 338   1          transfer_command(0x00); // Return to normal command set
+ 339   1      }
+ 340          
+ 341          
+ 342          // 显式逐列写：偶数列写 dots_even，奇数列写 dots_odd
+ 343          void explicit_column_test(unsigned char dots_even, unsigned char dots_odd)
+ 344          {
+ 345   1          unsigned char page, col;
+ 346   1          for(page = 1; page <= 16; page++)        // page 1..16
+ 347   1          {
+ 348   2              for(col = 0; col < 128; col++)       // col 0..127
+ 349   2              {
+ 350   3                  lcd_address(page, col);          // 明确设置到 page,col
+ 351   3                  if((col & 1) == 0)
+ 352   3                      transfer_data(dots_even);    // 偶数列
+ 353   3                  else
+ 354   3                      transfer_data(dots_odd);     // 奇数列
+ 355   3              }
+ 356   2          }
+ 357   1      }
+ 358          
+ 359          // 切回灰度模式（默认模式）
+ 360          void st7571_set_gray_mode(void)
+ 361          {
+ 362   1          transfer_command(0x7B); // 进入扩展命令集 3
+ 363   1          transfer_command(0x12); // Set Color Mode: 4 gray scale
+ 364   1          transfer_command(0x00); // 回到普通命令集
+C51 COMPILER V9.60.7.0   MAIN                                                              08/26/2025 15:56:41 PAGE 7   
+
+ 365   1      }
+ 366          
+ 367          void main(void)
+ 368          {
+ 369   1              initial_lcd();
+ 370   1              while(1)
+ 371   1              {
+ 372   2                      st7571_set_gray_mode();
+ 373   2                      display_graphic(bmp2);
+ 374   2                      delay(3000);
+ 375   2                      clear_screen();
+ 376   2                      
+ 377   2                      display_graphic(bmp3);
+ 378   2                      display_string_16x16(5,32,"中国制造");
+ 379   2                      display_string_8x16(8,16,"Made in China");
+ 380   2                      display_string_8x16(10,8,"Dots:128 x 128");
+ 381   2                      display_string_8x16(12,32,"IC:ST571");
+ 382   2                      delay(3000);
+ 383   2                      
+ 384   2                      st7571_set_bw_mode();
+ 385   2                      explicit_column_test(0x00, 0xFF);
+ 386   2                      delay(3000);
+ 387   2                      explicit_column_test(0xff, 0x00);
+ 388   2                      delay(3000);
+ 389   2                      explicit_column_test(0x55, 0xaa);
+ 390   2                      delay(3000);
+ 391   2                      explicit_column_test(0xaa, 0x55);
+ 392   2                      delay(3000);    
+ 393   2      
+ 394   2                      explicit_column_test(0xaa, 0xaa);
+ 395   2                      delay(3000);
+ 396   2                      explicit_column_test(0x55, 0x55);
+ 397   2                      delay(3000);            
+ 398   2                      clear_screen();         
+ 399   2      
+ 400   2                      
+ 401   2                      
+ 402   2      //              display_32x32(1,16,jing32);
+ 403   2      //              display_32x32(1,48,lian32);
+ 404   2      //              display_32x32(1,80,xun32);
+ 405   2      
+ 406   2      
+ 407   2      
+ 408   2              }
+ 409   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1459    ----
+   CONSTANT SIZE    =     47    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      52
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
