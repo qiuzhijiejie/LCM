@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   320240                                                            06/11/2025 15:08:24 PAGE 1   
+C51 COMPILER V9.60.7.0   320240                                                            09/22/2025 09:37:09 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE 320240
@@ -62,7 +62,7 @@ line level    source
   52          /******************************************************* 
   53          check busy  检查忙碌状态
   54          *******************************************************/
-C51 COMPILER V9.60.7.0   320240                                                            06/11/2025 15:08:24 PAGE 2   
+C51 COMPILER V9.60.7.0   320240                                                            09/22/2025 09:37:09 PAGE 2   
 
   55          void chkbusy(void)
   56          {
@@ -126,7 +126,7 @@ line level    source
  114   1       show_on();           //display on
  115   1      }
  116          /******************************************************* 
-C51 COMPILER V9.60.7.0   320240                                                            06/11/2025 15:08:24 PAGE 3   
+C51 COMPILER V9.60.7.0   320240                                                            09/22/2025 09:37:09 PAGE 3   
 
  117          clear display  清晰的显示屏
  118          32KB RAM 
@@ -190,7 +190,7 @@ line level    source
  176          void locate_xy2(uint x, uchar y)
  177          {
  178   1       uint  addr;
-C51 COMPILER V9.60.7.0   320240                                                            06/11/2025 15:08:24 PAGE 4   
+C51 COMPILER V9.60.7.0   320240                                                            09/22/2025 09:37:09 PAGE 4   
 
  179   1       addr  = (uint)(y) * AP + x/8;
  180   1       write_cmd(csrw);         //Write cursor address
@@ -254,7 +254,7 @@ line level    source
  238   3         if(dir) write_dat(7 - i); //Horizontally to the right
  239   3         else write_dat(i);        //Horizontally to the left
  240   3        delay(50000);
-C51 COMPILER V9.60.7.0   320240                                                            06/11/2025 15:08:24 PAGE 5   
+C51 COMPILER V9.60.7.0   320240                                                            09/22/2025 09:37:09 PAGE 5   
 
  241   3        delay(50000);
  242   3        }
@@ -318,7 +318,7 @@ line level    source
  300   1       for(j = 0; j < num/32; j++)
 *** WARNING C198 IN LINE 300 OF 320240.c: sizeof returns zero
  301   1       { 
-C51 COMPILER V9.60.7.0   320240                                                            06/11/2025 15:08:24 PAGE 6   
+C51 COMPILER V9.60.7.0   320240                                                            09/22/2025 09:37:09 PAGE 6   
 
  302   2              for(k=0;k<16;k++)
  303   2              {         locate_xy22(x+adr,y+k);  //Cursor positioning
@@ -382,7 +382,7 @@ line level    source
  361   1      }
  362          /******************************************************* 
  363          display pixels 显示器像素
-C51 COMPILER V9.60.7.0   320240                                                            06/11/2025 15:08:24 PAGE 7   
+C51 COMPILER V9.60.7.0   320240                                                            09/22/2025 09:37:09 PAGE 7   
 
  364          x: 0~319 320
  365          y: 0~239 240
@@ -446,7 +446,7 @@ line level    source
  423   3        }
  424   2       }
  425   1      }
-C51 COMPILER V9.60.7.0   320240                                                            06/11/2025 15:08:24 PAGE 8   
+C51 COMPILER V9.60.7.0   320240                                                            09/22/2025 09:37:09 PAGE 8   
 
  426          /******************************************************* 
  427          display square 展示广场
@@ -510,7 +510,7 @@ line level    source
  485          y: coordinate  119
  486          attr:Display Properties??0-Drawing   1-clear
  487          *******************************************************/
-C51 COMPILER V9.60.7.0   320240                                                            06/11/2025 15:08:24 PAGE 9   
+C51 COMPILER V9.60.7.0   320240                                                            09/22/2025 09:37:09 PAGE 9   
 
  488          void show_sine(uchar y,uchar a,uchar n,bit attr)
  489          {
@@ -574,7 +574,7 @@ line level    source
  547   1         delay(50000);
  548   1         delay(50000);
  549   1         delay(50000);
-C51 COMPILER V9.60.7.0   320240                                                            06/11/2025 15:08:24 PAGE 10  
+C51 COMPILER V9.60.7.0   320240                                                            09/22/2025 09:37:09 PAGE 10  
 
  550   1         delay(50000);
  551   1      }
@@ -638,7 +638,7 @@ line level    source
  609          
  610          
  611          
-C51 COMPILER V9.60.7.0   320240                                                            06/11/2025 15:08:24 PAGE 11  
+C51 COMPILER V9.60.7.0   320240                                                            09/22/2025 09:37:09 PAGE 11  
 
  612          /******************************************************* 
  613          sine presentation function  正弦表示函数
@@ -702,7 +702,7 @@ line level    source
  671   1      show_hzt(2,2,0x84);
  672   1      show_hzt(4,2,0x88);
  673   1      show_hzt(6,2,0x8c);
-C51 COMPILER V9.60.7.0   320240                                                            06/11/2025 15:08:24 PAGE 12  
+C51 COMPILER V9.60.7.0   320240                                                            09/22/2025 09:37:09 PAGE 12  
 
  674   1         delay(50);
  675   1      
@@ -766,7 +766,7 @@ line level    source
  733   2              delay(10);  // 简单的去抖动处理
  734   2              if (LCD_KEY == 1) 
  735   2                      {  // 检查按键是否仍然按下
-C51 COMPILER V9.60.7.0   320240                                                            06/11/2025 15:08:24 PAGE 13  
+C51 COMPILER V9.60.7.0   320240                                                            09/22/2025 09:37:09 PAGE 13  
 
  736   3                  while (LCD_KEY == 1);  // 等待按键释放
  737   3                  return 1;  // 返回按键被按下

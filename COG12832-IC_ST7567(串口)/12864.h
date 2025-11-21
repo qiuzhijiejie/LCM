@@ -3,7 +3,6 @@
 
 #include <REGX52.H>
 
-
 sbit sclk = P3^6;   /*接口定义:lcd_sclk就是LCD的D6 时钟线*/
 sbit sid  = P3^7;   /*接口定义:lcd_sid就是LCD的D7 数据输入*/
 sbit di   = P1^2;   /*接口定义:lcd_rs就是LCD的D/I H为数据 L为指令*/

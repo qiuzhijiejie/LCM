@@ -1,10 +1,10 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              08/03/2024 21:04:11 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              08/26/2025 18:09:33 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
 OBJECT MODULE PLACED IN .\Objects\main.obj
-COMPILER INVOKED BY: E:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
-                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+COMPILER INVOKED BY: D:\KEIL_STM32\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\m
+                    -ain.lst) OBJECT(.\Objects\main.obj)
 
 line level    source
 
@@ -62,7 +62,7 @@ line level    source
   52          //PIN12:D5   [Data I/O]-----------------P1.5
   53          //PIN13:D6   [Data I/O]-----------------P1.6
   54          //PIN14:D7   [Data I/O]-----------------P1.7
-C51 COMPILER V9.60.7.0   MAIN                                                              08/03/2024 21:04:11 PAGE 2   
+C51 COMPILER V9.60.7.0   MAIN                                                              08/26/2025 18:09:33 PAGE 2   
 
   55          //PIN15:BLA  [?????]---------------?10????+5V.
   56          //PIN16:BLK  [?????]---------------VSS
@@ -98,7 +98,7 @@ line level    source
   86   1          exdelay();                          //???300mS
   87   1      
   88   1      //2.?????: ?(0,1)??????"*ShenZhen Oriental**"
-  89   1          putstrxy(0,1,"*ShenZhen Oriental**");      //?(0,1)?????????
+  89   1          putstrxy(2,1,"**Made in China**");      //?(0,1)?????????
   90   1          exdelay();                          //???300mS
   91   1          exdelay();                          //???300mS
   92   1      
@@ -108,9 +108,9 @@ line level    source
   96   1          exdelay();                          //???300mS
   97   1      
   98   1      //4.?????: ?(0,3)??????"WWW.ORIENTAL-LCD.COM"
-  99   1          putstrxy(0,3,"WWW.ORIENTAL-LCD.COM");   //?(0,3)?????????
- 100   1          exdelay();                          //???300mS
- 101   1          exdelay();                          //???300mS
+  99   1      //    putstrxy(0,3,"WWW.ORIENTAL-LCD.COM");   //?(0,3)?????????
+ 100   1      //    exdelay();                          //???300mS
+ 101   1      //    exdelay();                          //???300mS
  102   1      
  103   1      //5.??????: ????0..9 ????
  104   1          for(i='0';i<'9'+1;i++)
@@ -126,7 +126,7 @@ line level    source
  114   2              charcursornext();               //?????????????
  115   2              exdelay();                      //???300mS
  116   2          }
-C51 COMPILER V9.60.7.0   MAIN                                                              08/03/2024 21:04:11 PAGE 3   
+C51 COMPILER V9.60.7.0   MAIN                                                              08/26/2025 18:09:33 PAGE 3   
 
  117   1      
  118   1      //7.????: ???????1???LCD??.
@@ -190,7 +190,7 @@ line level    source
  176          //????:2009.08.11
  177          //???:chujianjun@sunman.cn,tanchao@sunman.cn
  178          //-------------------------------------------------------------------------------
-C51 COMPILER V9.60.7.0   MAIN                                                              08/03/2024 21:04:11 PAGE 4   
+C51 COMPILER V9.60.7.0   MAIN                                                              08/26/2025 18:09:33 PAGE 4   
 
  179          void putchar(unsigned char c)           //?(CXPOS,CYPOS)??????????
  180          {
@@ -254,7 +254,7 @@ line level    source
  238          void lcdreset(void)                     //SMC2004???????????????
  239          {                                       //2004???????0x38
  240   1          lcdwc(0x38);                        //?????????
-C51 COMPILER V9.60.7.0   MAIN                                                              08/03/2024 21:04:11 PAGE 5   
+C51 COMPILER V9.60.7.0   MAIN                                                              08/26/2025 18:09:33 PAGE 5   
 
  241   1          delay3ms();                         //??3MS
  242   1          lcdwc(0x38);                        //?????????
@@ -318,7 +318,7 @@ line level    source
  300          //-------------------------------------------------------------------------------
  301          unsigned char lcdrd(void)               //??????
  302          {   unsigned char d;
-C51 COMPILER V9.60.7.0   MAIN                                                              08/03/2024 21:04:11 PAGE 6   
+C51 COMPILER V9.60.7.0   MAIN                                                              08/26/2025 18:09:33 PAGE 6   
 
  303   1          lcdwaitidle();                       //HD44780??????????
  304   1          P1=0xff;
@@ -349,8 +349,8 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    518    ----
-   CONSTANT SIZE    =     72    ----
+   CODE SIZE        =    501    ----
+   CONSTANT SIZE    =     48    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =      2       9

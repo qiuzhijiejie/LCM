@@ -2,11 +2,11 @@
 #include <intrins.h>
 #include "16032.h"
 #include "picture.h"
-//unsigned char mode;
+unsigned char mode;
 
-//void main(void)
-//{ 
-//	
+void main(void)
+{ 
+	
 //	lcdreset();                   
 //    Clean(' '); 
 //	charlcdfill(0x10);
@@ -32,9 +32,29 @@
 //	putstrxy(0,0,"广东烨辉科技有限公司"); 	
 //    putstrxy(3,1," LCM16032_03 ");   
 
-//while(1)
-//    { 
-//			
+while(1)
+    { 
+	lcdreset();                   
+    Clean(' '); 
+	charlcdfill(0x10);
+	exdelay(); exdelay(); 
+    Clean(' '); 
+	fillLCD_OddColumn(0xFF, 0x00);
+	exdelay(); exdelay(); 
+	fillLCD_OddColumn(0x00, 0xff);
+	exdelay(); exdelay();
+	fillLCD_OddColumn(0xaa, 0x55);
+	exdelay(); exdelay();
+	fillLCD_OddColumn(0x55, 0xaa);
+	exdelay();exdelay(); 
+	fillLCD_OddColumn(0xaa, 0xaa);
+	exdelay(); exdelay();
+	fillLCD_OddColumn(0x55, 0x55);
+	exdelay();exdelay();		
+	fillLCD_OddColumn(0x00, 0x00);
+	putstrxy(3,0,"Made in China"); 	
+    putstrxy(3,1," LCM16032_03 ");  
+	exdelay();exdelay();exdelay();exdelay();
 //	if (ReadKey()) 
 //{
 //    mode++;
@@ -78,22 +98,22 @@
 //            break;
 //	}
 //}		
-//    }
-//}
-
-void main(void)   
-{
-	lcdreset();                   
-    Clean(' '); 
-    while (1)  
-    {      
-        if (ReadKey()) 
-        {
-            HandleKey(); 
-        } 
-        else 
-        {          
-            DisplayPatterns(); 
-        }
-    }   
+    }
 }
+
+//void main(void)   
+//{
+//	lcdreset();                   
+//    Clean(' '); 
+//    while (1)  
+//    {      
+//        if (ReadKey()) 
+//        {
+//            HandleKey(); 
+//        } 
+//        else 
+//        {          
+//            DisplayPatterns(); 
+//        }
+//    }   
+//}

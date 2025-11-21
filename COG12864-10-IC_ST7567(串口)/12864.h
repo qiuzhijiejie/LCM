@@ -10,6 +10,14 @@ sbit di   = P1^2;   /*接口定义:lcd_rs就是LCD的D/I H为数据 L为指令*/
 sbit rst  = P1^0;   /*接口定义:lcd_reset就是LCD的/RST*/
 sbit cs   = P1^1;   /*接口定义:lcd_cs1就是LCD的cs*/
 
+
+////HCG13264-70
+//sbit sclk = P1^7;   /*接口定义:lcd_sclk就是LCD的D6 时钟线*/
+//sbit sid  = P3^1;   /*接口定义:lcd_sid就是LCD的D7 数据输入*/
+//sbit di   = P1^6;   /*接口定义:lcd_rs就是LCD的D/I H为数据 L为指令*/
+//sbit rst  = P1^5;   /*接口定义:lcd_reset就是LCD的/RST*/
+//sbit cs   = P1^4;   /*接口定义:lcd_cs1就是LCD的cs*/
+
 sbit LED = P0^6;  
 
 #define uchar unsigned char 

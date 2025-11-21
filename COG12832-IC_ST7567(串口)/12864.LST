@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   12864                                                             05/29/2025 18:58:55 PAGE 1   
+C51 COMPILER V9.60.7.0   12864                                                             11/14/2025 13:35:30 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE 12864
@@ -62,7 +62,7 @@ line level    source
   53   2        sclk=1;
   54   2        delayUs(5);
   55   2        com<<=1;
-C51 COMPILER V9.60.7.0   12864                                                             05/29/2025 18:58:55 PAGE 2   
+C51 COMPILER V9.60.7.0   12864                                                             11/14/2025 13:35:30 PAGE 2   
 
   56   2        sclk=0;
   57   2        }
@@ -126,7 +126,7 @@ line level    source
  115   1      }
  116            
  117          void lcd_test()
-C51 COMPILER V9.60.7.0   12864                                                             05/29/2025 18:58:55 PAGE 3   
+C51 COMPILER V9.60.7.0   12864                                                             11/14/2025 13:35:30 PAGE 3   
 
  118          {
  119   1        uchar i;
@@ -190,7 +190,7 @@ line level    source
  177   2              {
  178   3                  GotoXY(bottom, j);
  179   3                  write_cmd_dat(1, 0xFF);
-C51 COMPILER V9.60.7.0   12864                                                             05/29/2025 18:58:55 PAGE 4   
+C51 COMPILER V9.60.7.0   12864                                                             11/14/2025 13:35:30 PAGE 4   
 
  180   3              }
  181   2      
@@ -254,7 +254,7 @@ line level    source
  239          {
  240   1      
  241   1                      uchar i;
-C51 COMPILER V9.60.7.0   12864                                                             05/29/2025 18:58:55 PAGE 5   
+C51 COMPILER V9.60.7.0   12864                                                             11/14/2025 13:35:30 PAGE 5   
 
  242   1                      uint index;
  243   1                      GotoXY(startP,startC);
@@ -318,7 +318,7 @@ line level    source
  301          
  302          
  303          void Init_IC()   
-C51 COMPILER V9.60.7.0   12864                                                             05/29/2025 18:58:55 PAGE 6   
+C51 COMPILER V9.60.7.0   12864                                                             11/14/2025 13:35:30 PAGE 6   
 
  304          {   
  305   1       cs  =  0;   

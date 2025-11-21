@@ -1,15 +1,15 @@
 #include <REGX52.H>
 #include "LCD2004B.h"
-//unsigned char mode;
-//unsigned char data pattern1[8] = {0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15};
-//unsigned char data pattern2[8] = {0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A};	
-//unsigned char data pattern3[8] = {0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15}; 
-//unsigned char data pattern4[8] = {0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A}; 
-//unsigned char data pattern5[8] = {0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00};
-//unsigned char data pattern6[8] = {0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F}; 	
-//unsigned char data pattern7[8] = {0x00, 0x15, 0x00, 0x15, 0x00, 0x15, 0x00, 0x15}; 
-//int main() 
-//{
+unsigned char mode;
+unsigned char data pattern1[8] = {0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15};
+unsigned char data pattern2[8] = {0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A};	
+unsigned char data pattern3[8] = {0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15}; 
+unsigned char data pattern4[8] = {0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A}; 
+unsigned char data pattern5[8] = {0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00};
+unsigned char data pattern6[8] = {0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F}; 	
+unsigned char data pattern7[8] = {0x00, 0x15, 0x00, 0x15, 0x00, 0x15, 0x00, 0x15}; 
+int main() 
+{
 //	LCD_Init(); 
 //	LCD_Clear();
 //	displayCustomCharacter1(pattern1);
@@ -36,10 +36,41 @@
 //	Delay(80);
 //	LCD_Clear();
 //	LCD_ShowString(2,6,"LCM2004B");
-//	LCD_ShowString(1,2,"YeHuiDisplay.com");
-//			
-//while (1) 
-//{
+//	LCD_ShowString(1,2,"Made in China");
+			
+while (1) 
+{
+	
+	
+	
+		LCD_Init(); 
+	LCD_Clear();
+	displayCustomCharacter1(pattern1);
+	Delay(80); 
+	displayCustomCharacter1(pattern2); 
+	Delay(80); 
+	displayCustomCharacter1(pattern3);
+	Delay(80); 
+	displayCustomCharacter1(pattern4); 
+	Delay(80); 
+	displayCustomCharacter1(pattern5); 
+	Delay(80); 
+	displayCustomCharacter1(pattern6); 
+	Delay(80); 
+	displayCustomCharacter1(pattern7); 
+	Delay(80); 
+	write_CGROM(0x20);
+	Delay(80);
+//	write_CGROM(0x60);
+//	Delay(80);
+	write_CGROM(0xB0);
+	Delay(80);
+//	Write_DDRAM(0xCE);
+//	Delay(80);
+	LCD_Clear();
+	LCD_ShowString(2,6,"LCM2004B");
+	LCD_ShowString(1,4,"Made in China");
+	Delay(80);
 
 //		if (ReadKey1()) 
 //	  {  
@@ -81,27 +112,27 @@
 //    
 //		}
 //	}			
-//}
-
-//	}
-
-void main(void)   
-{
-
-	LCD_Init(); 
-	LCD_Clear();
-
-    while (1)  
-    {
-      
-        if (ReadKey1()) 
-        {
-            HandleKey(); 
-        } 
-        else 
-        {
-          
-            DisplayPatterns(); 
-        }
-    }   
 }
+
+	}
+
+//void main(void)   
+//{
+
+//	LCD_Init(); 
+//	LCD_Clear();
+
+//    while (1)  
+//    {
+//      
+//        if (ReadKey1()) 
+//        {
+//            HandleKey(); 
+//        } 
+//        else 
+//        {
+//          
+//            DisplayPatterns(); 
+//        }
+//    }   
+//}

@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MIAN                                                              06/21/2025 10:24:22 PAGE 1   
+C51 COMPILER V9.60.7.0   MIAN                                                              09/03/2025 08:58:30 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MIAN
@@ -42,10 +42,10 @@ line level    source
   33   2              yehui_UI();
   34   2              Delay_Xms(4000);
   35   2      //      WhatsApp();
-  36   2              YHLTD();
+  36   2      //      YHLTD();
   37   2              Delay_Xms(4000);
-  38   2              DispPic( PIC_5 );
-  39   2              Delay_Xms(4000);
+  38   2      //      DispPic( PIC_5 );
+  39   2      //      Delay_Xms(4000);
   40   2              DispDot(0xf0,0x0f);
   41   2              Delay_Xms(4000);                         
   42   2              DispDots( 0x33,0xcc);
@@ -62,7 +62,7 @@ line level    source
   53   2      
   54   2      //     Start:   //跳转标号      
   55   2      //if (HOLD()) {  
-C51 COMPILER V9.60.7.0   MIAN                                                              06/21/2025 10:24:22 PAGE 2   
+C51 COMPILER V9.60.7.0   MIAN                                                              09/03/2025 08:58:30 PAGE 2   
 
   56   2      //    mode++;           // 先增加 mode
   57   2      //    mode %= 11;        // 让 mode 保持在 0~7 之间
@@ -126,7 +126,7 @@ line level    source
  115   2      //                      Delay_Xms(600);
  116   2      //                      WhatsApp();
  117   2      //                      Delay_Xms(100); 
-C51 COMPILER V9.60.7.0   MIAN                                                              06/21/2025 10:24:22 PAGE 3   
+C51 COMPILER V9.60.7.0   MIAN                                                              09/03/2025 08:58:30 PAGE 3   
 
  118   2      //                }     
  119   2      //      }
@@ -190,7 +190,7 @@ line level    source
  177   2      //              if( Change(70)==1 ) goto Start; //暂停键有动作跳转到程序的最头上
  178   2      //              push();
  179   2      //              Pause();
-C51 COMPILER V9.60.7.0   MIAN                                                              06/21/2025 10:24:22 PAGE 4   
+C51 COMPILER V9.60.7.0   MIAN                                                              09/03/2025 08:58:30 PAGE 4   
 
  180   2      
  181   2      //              DispFram( 0x55,0x55 );                                   //      横线
@@ -254,7 +254,7 @@ line level    source
  239   2      //              Delay_Xms(600);
  240   2      //              if( Change(50)==1 ) goto Start; //暂停键有动作跳转到程序的最头上          
  241   2      
-C51 COMPILER V9.60.7.0   MIAN                                                              06/21/2025 10:24:22 PAGE 5   
+C51 COMPILER V9.60.7.0   MIAN                                                              09/03/2025 08:58:30 PAGE 5   
 
  242   2      
  243   2      //              DispPic( PIC_5 );
@@ -312,13 +312,13 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    138    ----
+   CODE SIZE        =    119    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----       1
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
-C51 COMPILER V9.60.7.0   MIAN                                                              06/21/2025 10:24:22 PAGE 6   
+C51 COMPILER V9.60.7.0   MIAN                                                              09/03/2025 08:58:30 PAGE 6   
 
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

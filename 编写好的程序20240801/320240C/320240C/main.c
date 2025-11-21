@@ -9,7 +9,29 @@ void main(void)
 	 delay(10);
 	 reset=1;
 	 delay(500);
-	 lcd_init();
+//	 lcd_init();
+//	 delay(500);
+//		DisplayDots(0xAA, 0xAA);
+//		delay(5000);
+//		DisplayDots(0x55, 0x55);
+//		delay(5000);
+//		DisplayDots(0xAA, 0x55);
+//		delay(5000);
+//		DisplayDots(0x55, 0xAA);
+//		delay(5000);
+//		DisplayDots(0xff, 0x00);
+//		delay(5000);
+//		DisplayDots(0x00, 0xff);
+//		delay(5000);
+//		demo_picture();
+//		delay(5000);		
+ while(1)
+	{
+		
+		
+		
+		
+			 lcd_init();
 	 delay(500);
 		DisplayDots(0xAA, 0xAA);
 		delay(5000);
@@ -24,32 +46,30 @@ void main(void)
 		DisplayDots(0x00, 0xff);
 		delay(5000);
 		demo_picture();
-		delay(5000);		
- while(1)
-	{
-		if(ReadKey1())
-		mode++;
-		mode%=8;
-		DisplayDots(0x00,0x00);
-		switch(mode)
-		{	
-		case 0:DisplayDots(0xff,0x00);
-		break;
-		case 1:DisplayDots(0x00,0xFF);
-		break;
-		case 2:DisplayDots(0x55,0x55);
-		break;
-		case 3:DisplayDots(0xAA,0xAA);
-		break;
-		case 4:DisplayDots(0xaa,0x55);
-		break;
-		case 5:DisplayDots(0x55,0xAA);
-		break;
-		case 6:DisplayDots(0xFF,0xFF);
-		break;
-		case 7:demo_picture();	
-		break;
+		delay(5000);	
+//		if(ReadKey1())
+//		mode++;
+//		mode%=8;
+//		DisplayDots(0x00,0x00);
+//		switch(mode)
+//		{	
+//		case 0:DisplayDots(0xff,0x00);
+//		break;
+//		case 1:DisplayDots(0x00,0xFF);
+//		break;
+//		case 2:DisplayDots(0x55,0x55);
+//		break;
+//		case 3:DisplayDots(0xAA,0xAA);
+//		break;
+//		case 4:DisplayDots(0xaa,0x55);
+//		break;
+//		case 5:DisplayDots(0x55,0xAA);
+//		break;
+//		case 6:DisplayDots(0xFF,0xFF);
+//		break;
+//		case 7:demo_picture();	
+//		break;
 
-		}
+//		}
 	}
 }

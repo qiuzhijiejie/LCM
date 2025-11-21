@@ -6,10 +6,10 @@
 #define uint  unsigned int
 #define uchar unsigned char
 #define A0                    P3_0  	//Selection of command or data.  1 :data  0 : command
-#define E1                    P3_2		//Enable signal (E1) Right 
-#define E2                    P3_3		//Enable signal (E2) Left
-#define R_W                   P3_1		//Read/Write (R/W) signal for the 68-type microcontroller, or WRITE(WR) signal for the 80-type microcontroller.
-#define RST                   P3_5		//RESET PIN;
+#define E1                    P3_3		//Enable signal (E1) Right 
+#define E2                    P3_5		//Enable signal (E2) Left
+#define R_W                   P3_4		//Read/Write (R/W) signal for the 68-type microcontroller, or WRITE(WR) signal for the 80-type microcontroller.
+#define RST                   P3_1		//RESET PIN;
 #define DATA_BUS              P1		//Data bus	
 
 sbit LCD_KEY=P2^0;
@@ -367,15 +367,26 @@ void Display8_16English(unsigned char page, unsigned char col, unsigned char Cha
 }
 
 
+
+void DisplayLineEnglishEx(unsigned char x, unsigned char start_y, unsigned char start_index, unsigned char count)
+{
+    unsigned char i;
+    for(i = 0; i < count; i++)
+    {
+        Display8_16English(x, (start_y + i) * 8, start_index + i, English_character);
+    }
+}
+
+
 //Show some Chinese characters
 void show_chinese(void)
 {	
 	Display_dot(0x00,0x00);
-    for (i = 0; i < 7; i++) 
+    for (i = 2; i < 7; i++) 
     {
         Display16_16Chinese(2, i * 16, i, ft);
     }
-
+	
     // 在 page 0 显示字符 7 到 9
     for (i = 0; i < 3; i++) 
     {
@@ -383,19 +394,7 @@ void show_chinese(void)
     }
 }
 
-void show_english(void)
-{	
-	Display_dot(0x00,0x00);
-    for (i = 0; i < 12; i++) 
-    {
-        Display8_16English(2, i * 8, i, English_character);
-    }
 
-    for (i = 0; i < 13; i++) 
-    {
-        Display8_16English(0, i * 8, i + 16,English_character);
-    }
-}
 
 
 //display Picture
@@ -429,7 +428,7 @@ void HandleKey()
 		if (ReadKey1()) 
 	  {  
 		mode++;
-		mode %= 9;			
+		mode %= 8;			
 		switch (mode) 
 	  {
         case 0:            
@@ -447,8 +446,6 @@ void HandleKey()
 		case 6:
 			Display_dot(0xFF,0xFF);Delay(2000);break;
 		case 7:
-			show_english();Delay(8000);break;
-		case 8:
 			show_chinese();Delay(8000);break;
 		}
 	}
@@ -466,9 +463,8 @@ void DisplayPatterns()
         case 4: Display_dot(0x55,0x55);Delay(2000);   Delay(80); break;
         case 5: Display_dot(0xFF,0x00);Delay(2000);   Delay(80); break;
         case 6: Display_dot(0xFF,0xFF);Delay(2000);   Delay(80); break;
-        case 7: show_english(); Delay(300); break;
-        case 8:	Display_dot(0x00,0x00);show_chinese();Delay(300); break;
+        case 7:	Display_dot(0x00,0x00);show_chinese();Delay(300); break;
     }
     step++;
-    if (step > 8) step = 0; // 循环
+    if (step > 7) step = 0; // 循环
 }

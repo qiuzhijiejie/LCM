@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    07/23/2025  10:02:45  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    11/13/2025  09:18:36  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22.4.0, INVOKED BY:
@@ -59,7 +59,7 @@ SEGMENT                             DATA_GROUP
   +--> ?PR?LCD_INIT?HT1621
   +--> ?PR?_DELAY?HT1621
   +--> ?PR?LCD_CLEAR?HT1621
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  07/23/2025  10:02:45  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/13/2025  09:18:36  PAGE 2
 
 
   +--> ?PR?LCD_ALL?HT1621
@@ -87,6 +87,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\project (MAIN)
   -------         MODULE        MAIN
   C:0000H         SYMBOL        _ICE_DUMMY_
   D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
   C:0259H         PUBLIC        main
   -------         PROC          MAIN
   C:0259H         LINE#         4
@@ -110,22 +111,23 @@ SYMBOL TABLE OF MODULE:  .\Objects\project (MAIN)
   -------         MODULE        HT1621
   C:0000H         SYMBOL        _ICE_DUMMY_
   D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
   D:0008H         PUBLIC        digits
   C:0323H         PUBLIC        _delay
-  B:0090H.2       PUBLIC        LCDCS1
+  B:00B0H.0       PUBLIC        LCDCS1
   C:02FFH         PUBLIC        lcd_clear
   C:0214H         PUBLIC        _write_data
   C:0343H         PUBLIC        lcd_init
   C:029DH         PUBLIC        _write_com
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/13/2025  09:18:36  PAGE 3
+
+
   C:02DAH         PUBLIC        lcd_all
   D:001CH         PUBLIC        i
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  07/23/2025  10:02:45  PAGE 3
-
-
   D:001EH         PUBLIC        j
   C:00F9H         PUBLIC        _display_digit
-  B:0090H.1       PUBLIC        LCDDATA
-  B:0090H.0       PUBLIC        LCDWR
+  B:00B0H.3       PUBLIC        LCDDATA
+  B:00B0H.1       PUBLIC        LCDWR
   -------         PROC          LCD_INIT
   C:0343H         LINE#         5
   C:0343H         LINE#         6
@@ -177,11 +179,11 @@ SYMBOL TABLE OF MODULE:  .\Objects\project (MAIN)
   C:02A3H         LINE#         47
   C:02A4H         LINE#         48
   C:02A5H         LINE#         49
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/13/2025  09:18:36  PAGE 4
+
+
   C:02A7H         LINE#         50
   C:02A9H         LINE#         51
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  07/23/2025  10:02:45  PAGE 4
-
-
   C:02A9H         LINE#         52
   C:02ABH         LINE#         53
   C:02ADH         LINE#         54
@@ -237,11 +239,11 @@ SYMBOL TABLE OF MODULE:  .\Objects\project (MAIN)
   C:023AH         LINE#         107
   C:023AH         LINE#         108
   C:023EH         LINE#         109
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/13/2025  09:18:36  PAGE 5
+
+
   C:0242H         LINE#         111
   C:0244H         LINE#         112
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  07/23/2025  10:02:45  PAGE 5
-
-
   C:0246H         LINE#         113
   C:0247H         LINE#         114
   C:0248H         LINE#         115
@@ -271,37 +273,37 @@ SYMBOL TABLE OF MODULE:  .\Objects\project (MAIN)
   D:0023H         SYMBOL        i
   D:0024H         SYMBOL        seg
   -------         ENDDO         
-  C:00F9H         LINE#         153
-  C:00FBH         LINE#         154
-  C:00FBH         LINE#         160
-  C:0110H         LINE#         162
-  C:0110H         LINE#         164
-  C:0126H         LINE#         166
-  C:012CH         LINE#         167
-  C:012FH         LINE#         168
-  C:0132H         LINE#         169
-  C:013BH         LINE#         170
-  C:0145H         LINE#         171
-  C:0151H         LINE#         172
-  C:0155H         LINE#         173
+  C:00F9H         LINE#         152
+  C:00FBH         LINE#         153
+  C:00FBH         LINE#         159
+  C:0110H         LINE#         161
+  C:0110H         LINE#         163
+  C:0126H         LINE#         165
+  C:012CH         LINE#         166
+  C:012FH         LINE#         167
+  C:0132H         LINE#         168
+  C:013BH         LINE#         169
+  C:0145H         LINE#         170
+  C:0151H         LINE#         171
+  C:0155H         LINE#         172
+  C:0159H         LINE#         173
   C:0159H         LINE#         174
-  C:0159H         LINE#         175
-  C:015CH         LINE#         176
-  C:015FH         LINE#         177
-  C:0169H         LINE#         178
-  C:0173H         LINE#         179
-  C:017FH         LINE#         180
-  C:0183H         LINE#         181
+  C:015CH         LINE#         175
+  C:015FH         LINE#         176
+  C:0169H         LINE#         177
+  C:0173H         LINE#         178
+  C:017FH         LINE#         179
+  C:0183H         LINE#         180
+  C:0187H         LINE#         181
   C:0187H         LINE#         182
-  C:0187H         LINE#         183
   -------         ENDPROC       _DISPLAY_DIGIT
   -------         ENDMOD        HT1621
 
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/13/2025  09:18:36  PAGE 6
+
+
   -------         MODULE        ?C?COPY
   C:00D3H         PUBLIC        ?C?COPY
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  07/23/2025  10:02:45  PAGE 6
-
-
   -------         ENDMOD        ?C?COPY
 
 Program Size: data=39.0 xdata=0 code=883

@@ -95,7 +95,7 @@ bit CharImageReverse;                   //??????????,0(????),1(??)
 //????:[??] ????:[????]
 //????:[??] ????:[??] ????:[16]
 
-#define ENGLISHCHARNUMBER  34      //?????????????????
+#define ENGLISHCHARNUMBER  35      //?????????????????
 #define CHINESECHARNUMBER  1       //?????????????????
 #define ENGLISHCHARSIZE    8       //????X????????
 #define CHINESECHARSIZE    16      //????X????????Y????????
@@ -127,6 +127,7 @@ unsigned int code EnglishCode[]={
 0x5a,    //??022:[Z]
 0x61,    //??023:[a]
 0x63,    //??024:[c]
+0x64,    //??024:[d]
 0x65,    //??025:[e]
 0x67,    //??026:[g]
 0x68,    //??027:[h]
@@ -192,6 +193,11 @@ unsigned char code EnglishCharDot[]={
 0x44,0x0c,0x34,0x44,0x4c,0x36,0x00,0x00,
 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x1c,   //??024:[c]
 0x22,0x40,0x40,0x40,0x22,0x1c,0x00,0x00,
+
+/*-- ID:0,字符:"d",ASCII编码:64,对应字:宽x高=8x16,画布:宽W=8 高H=16,共16字节*/
+0x00,0x00,0x00,0x06,0x02,0x02,0x3E,0x42,
+0x42,0x42,0x42,0x46,0x3B,0x00,0x00,0x00,
+
 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x3c,   //??025:[e]
 0x42,0x42,0x7e,0x40,0x42,0x3c,0x00,0x00,
 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x3e,   //??026:[g]
@@ -273,30 +279,31 @@ void exsample(void)                     //????
     lcdfill(0);                         //??
 
 //1.????: ?(1,19)????32??SUNMAN??
-    XPOS=1;
-    YPOS=19;
-    putimage(Img_sunman_32);            //??????LCDRAM???
-    exdelay();                          //???600mS
-
+//    XPOS=1;
+//    YPOS=19;
+//    putimage(Img_sunman_32);            //??????LCDRAM???
+//    exdelay();                          //???600mS
+ lcdfill(0x55) ;exdelay(); exdelay(); 
+ lcdfill(0xaa) ;exdelay();exdelay();  
+ lcdfill(0x00) ;
+	
 //2.?????: ?(6,3)????"LCM24064B Oriental Technology"???.
-    XPOS=6;
-    YPOS=3;
-    putstr("LCM24064B Oriental Technology");
-    exdelay();                          //???600mS
+    XPOS=60;
+    YPOS=8;
+    putstr(" L C M 24064B ");
+    exdelay();    exdelay();                       //???600mS
 
 //3.?????: ?(40,32)????"WWW.ORIENTAL-LCD.COM"???.
-    XPOS=40;
-    YPOS=32;
-    putstr("WWW.ORIENTAL-LCD.COM");
-    exdelay();                          //???600mS
+    XPOS=50;
+    YPOS=26;
+    putstr(" Made in China");
+    exdelay(); exdelay(); exdelay();                          //???600mS
 
 //4.????: ?(40,32)????"WWW.ORIENTAL-LCD.COM"???.
-    XPOS=40;
-    YPOS=32;
-    CharImageReverse=1;
-    putstr("WWW.ORIENTAL-LCD.COM");
-    CharImageReverse=0;
-    exdelay();                          //???600mS
+                         //???600mS
+
+
+
 
 //5.????: RECT(0,0)-(239,63),???.
     rect(0,0,239,63,1);
@@ -322,7 +329,7 @@ void exsample(void)                     //????
 
 //10.????: ?????????.
     lcdfill(0);                        //??
-    exdelay();                          //???600mS
+    exdelay();       exdelay();                    //???600mS
 }
 void exdelay(void)                      //???????
 { unsigned char i,j,k;                  //???600mS

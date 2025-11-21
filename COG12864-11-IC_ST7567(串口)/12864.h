@@ -3,18 +3,23 @@
 
 #include <REGX52.H>
 
+//sbit sclk = P3^6;   /*接口定义:lcd_sclk就是LCD的D6 时钟线*/
+//sbit sid  = P3^7;   /*接口定义:lcd_sid就是LCD的D7 数据输入*/
+//sbit di   = P1^2;   /*接口定义:lcd_rs就是LCD的D/I H为数据 L为指令*/
+//sbit rst  = P1^0;   /*接口定义:lcd_reset就是LCD的/RST*/
+//sbit cs   = P1^1;   /*接口定义:lcd_cs1就是LCD的cs*/
 
-sbit sclk = P3^6;   /*接口定义:lcd_sclk就是LCD的D6 时钟线*/
-sbit sid  = P3^7;   /*接口定义:lcd_sid就是LCD的D7 数据输入*/
-sbit di   = P1^2;   /*接口定义:lcd_rs就是LCD的D/I H为数据 L为指令*/
-sbit rst  = P1^0;   /*接口定义:lcd_reset就是LCD的/RST*/
-sbit cs   = P1^1;   /*接口定义:lcd_cs1就是LCD的cs*/
+
+sbit sclk = P3^1;   /*接口定义:lcd_sclk就是LCD的D6 时钟线*/
+sbit sid  = P3^4;   /*接口定义:lcd_sid就是LCD的D7 数据输入*/
+sbit di   = P3^2;   /*接口定义:lcd_rs就是LCD的D/I H为数据 L为指令*/
+sbit rst  = P3^3;   /*接口定义:lcd_reset就是LCD的/RST*/
+sbit cs   = P3^0;   /*接口定义:lcd_cs1就是LCD的cs*/
 
 sbit LED = P0^6;  
 
 #define uchar unsigned char 
 #define uint unsigned int 
-
 
 void delayUs(uint Tus);
 void delayMs(uint Tms);

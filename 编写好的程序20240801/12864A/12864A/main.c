@@ -96,7 +96,7 @@ bit CharImageReverse;                   //×Ö·û¼°Í¼ÐÎµÄ·´ÏÔ¿ØÖÆ,0(Õý³£ÏÔÊ¾),1(·´Ï
 //×Ö½Ú·½Ïò:[´¹Ö±] ×ÖÎ»Ë³Ðò:[´ÓµÍµ½¸ß]
 //ÖÐÎÄ×ÖÌå:[ËÎÌå] Ó¢ÎÄ×ÖÌå:[ËÎÌå] ×ÖÌå´óÐ¡:[16]
 
-#define ENGLISHCHARNUMBER  30      //¾«¼ò°æÓ¢ÎÄ×Ö·û¿âÖÐµÄÓ¢ÎÄ×Ö·ûµÄ¸öÊý
+#define ENGLISHCHARNUMBER  31      //¾«¼ò°æÓ¢ÎÄ×Ö·û¿âÖÐµÄÓ¢ÎÄ×Ö·ûµÄ¸öÊý
 #define CHINESECHARNUMBER  1       //¾«¼ò°æÖÐÎÄ×Ö·û¿âÖÐµÄÖÐÎÄ×Ö·ûµÄ¸öÊý
 #define ENGLISHCHARSIZE    8       //Ó¢ÎÄ×Ö·ûX·½ÏòÏÔÊ¾µãµÄ¸öÊý
 #define CHINESECHARSIZE    16      //ÖÐÎÄ×Ö·ûX·½Ïò¼°ÖÐÓ¢ÎÄ×Ö·ûY·½ÏòÏÔÊ¾µãµÄ¸öÊý
@@ -127,6 +127,7 @@ unsigned int code EnglishCode[]={
 0x57,    //×Ö·û021:[W]
 0x5a,    //×Ö·û022:[Z]
 0x61,    //×Ö·û023:[a]
+0x64,    //×Ö·û023:[d]
 0x65,    //×Ö·û024:[e]
 0x68,    //×Ö·û025:[h]
 0x69,    //×Ö·û026:[i]
@@ -187,6 +188,9 @@ unsigned char code EnglishCharDot[]={
 0xc8,0x20,0x38,0x20,0x08,0x18,0x00,0x00,
 0x00,0x00,0x00,0x19,0x80,0x24,0x80,0x24,   //×Ö·û023:[a]
 0x80,0x12,0x00,0x3f,0x00,0x20,0x00,0x00,
+/*-- ID:0,×Ö·û:"d",ASCII±àÂë:64,¶ÔÓ¦×Ö:¿íx¸ß=8x16,»­²¼:¿íW=8 ¸ßH=16,¹²16×Ö½Ú*/
+0x00,0x00,0x00,0x06,0x02,0x02,0x3E,0x42,
+0x42,0x42,0x42,0x46,0x3B,0x00,0x00,0x00,
 0x00,0x00,0x00,0x1f,0x80,0x24,0x80,0x24,   //×Ö·û024:[e]
 0x80,0x24,0x80,0x24,0x00,0x17,0x00,0x00,
 0x10,0x20,0xf0,0x3f,0x00,0x21,0x80,0x00,   //×Ö·û025:[h]
@@ -274,24 +278,24 @@ void exsample(void)                     //ÑÝÊ¾³ÌÐò
     exdelay();                          //ÑÓÊ±Ô¼600mS
 
 //3.×Ö·û´®²âÊÔ: ÔÚ(36,16)Î»ÖÃÏÔÊ¾"Oriental"×Ö·û´®.
-    XPOS=36;
+    XPOS=20;
     YPOS=16;
-    putstr("Intelligent Optoelectronics Co., Ltd.");
+    putstr("In China");
     exdelay();                          //ÑÓÊ±Ô¼600mS
 
 //4.×Ö·û´®²âÊÔ: ÔÚ(1,32)Î»ÖÃÏÔÊ¾"ORIENTAL-LCD.COM"×Ö·û´®.
-    XPOS=1;
-    YPOS=32;
-    putstr("ORIENTAL-LCD.COM");
-    exdelay();                          //ÑÓÊ±Ô¼600mS
+//    XPOS=1;
+//    YPOS=32;
+//    putstr("ORIENTAL-LCD.COM");
+//    exdelay();                          //ÑÓÊ±Ô¼600mS
 
 //5.·´ÏÔ²âÊÔ: ÔÚ(1,32)Î»ÖÃ·´ÏÔ"ORIENTAL-LCD.COM"×Ö·û´®.
-    XPOS=1;
-    YPOS=32;
-    CharImageReverse=1;
-    putstr("ORIENTAL-LCD.COM");
-    CharImageReverse=0;
-    exdelay();                          //ÑÓÊ±Ô¼600mS
+//    XPOS=1;
+//    YPOS=32;
+//    CharImageReverse=1;
+//    putstr("ORIENTAL-LCD.COM");
+//    CharImageReverse=0;
+//    exdelay();                          //ÑÓÊ±Ô¼600mS
 
 //6.»æÍ¼²âÊÔ: RECT(0,0)-(127,63),»­¾ØÐÎ.
     rect(0,0,127,63,1);
@@ -317,7 +321,11 @@ void exsample(void)                     //ÑÝÊ¾³ÌÐò
 
 //11.È«ÆÁ²âÊÔ: ËùÓÐ×ø±êµãÈ«²¿ÏÔÊ¾.
     lcdfill(0xff);                      //È«ÏÔ
-    exdelay();                          //ÑÓÊ±Ô¼600mS
+    exdelay();  exdelay();                        //ÑÓÊ±Ô¼600mS
+	    lcdfill(0xaa);                      //È«ÏÔ
+    exdelay(); exdelay();
+	    lcdfill(0x55);                      //È«ÏÔ
+    exdelay(); exdelay();
 
 }
 void exdelay(void)                      //ÑÝÊ¾ÑÓÊ±×Ó³ÌÐò

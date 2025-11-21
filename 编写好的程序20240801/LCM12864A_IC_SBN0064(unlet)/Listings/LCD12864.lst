@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   LCD12864                                                          06/19/2025 09:01:50 PAGE 1   
+C51 COMPILER V9.60.7.0   LCD12864                                                          08/14/2025 14:28:44 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD12864
@@ -16,26 +16,26 @@ line level    source
    6          #include "lcd12864.h"   
    7          #include "picture.h"    
    8          
-   9          //sbit RS  =P3^0;    
-  10          //sbit RW  =P3^1;     
-  11          //sbit E   =P3^2;    
-  12          //   
-  13          //sbit CS1 =P3^3;    //active "H"
-  14          //sbit CS2 =P3^4;    //active "H"   
-  15          //sbit int0=P2^1; 
-  16          //sbit KEY=P2^0; 
-  17          //bit loge=0;  
+   9          sbit RS  =P3^0;    
+  10          sbit RW  =P3^1;     
+  11          sbit E   =P3^2;    
+  12             
+  13          sbit CS1 =P3^3;    //active "H"
+  14          sbit CS2 =P3^4;    //active "H"   
+  15          sbit int0=P2^1; 
+  16          sbit KEY=P2^0; 
+  17          bit loge=0;  
   18          
   19          
-  20          sbit RS  =P3^0;    
-  21          sbit RW  =P3^3;     
-  22          sbit E   =P3^4;    
-  23             
-  24          sbit CS1 =P3^1;    //active "H"
-  25          sbit CS2 =P3^2;    //active "H"   
-  26          sbit int0=P2^1; 
-  27          sbit KEY=P2^0; 
-  28          bit loge=0;
+  20          //sbit RS  =P3^0;    
+  21          //sbit RW  =P3^3;     
+  22          //sbit E   =P3^4;    
+  23          //   
+  24          //sbit CS1 =P3^1;    //active "H"
+  25          //sbit CS2 =P3^2;    //active "H"   
+  26          //sbit int0=P2^1; 
+  27          //sbit KEY=P2^0; 
+  28          //bit loge=0;
   29          
   30          unsigned char Page;     
   31          unsigned char Col; 
@@ -62,7 +62,7 @@ line level    source
   52             
   53          void BusyR(void)   
   54          { unsigned char flag=0xff;  
-C51 COMPILER V9.60.7.0   LCD12864                                                          06/19/2025 09:01:50 PAGE 2   
+C51 COMPILER V9.60.7.0   LCD12864                                                          08/14/2025 14:28:44 PAGE 2   
 
   55   1       CS1= 0;   
   56   1       CS2= 1;        //active "H"
@@ -126,7 +126,7 @@ line level    source
  114   1       E  = 0;   
  115   1       _nop_();   
  116   1      }   
-C51 COMPILER V9.60.7.0   LCD12864                                                          06/19/2025 09:01:50 PAGE 3   
+C51 COMPILER V9.60.7.0   LCD12864                                                          08/14/2025 14:28:44 PAGE 3   
 
  117          /***************************/   
  118          /*Write command 65-128                */   
@@ -190,7 +190,7 @@ line level    source
  176   1       for(Page=0;Page<8;Page++)   
  177   1        for(Col=0;Col<128;Col++)   
  178   1         WriteData(0);   
-C51 COMPILER V9.60.7.0   LCD12864                                                          06/19/2025 09:01:50 PAGE 4   
+C51 COMPILER V9.60.7.0   LCD12864                                                          08/14/2025 14:28:44 PAGE 4   
 
  179   1      }   
  180             
@@ -254,7 +254,7 @@ line level    source
  238   1      }     
  239          
  240          /*void LcmReverseBMP( void )   
-C51 COMPILER V9.60.7.0   LCD12864                                                          06/19/2025 09:01:50 PAGE 5   
+C51 COMPILER V9.60.7.0   LCD12864                                                          08/14/2025 14:28:44 PAGE 5   
 
  241          {   
  242           unsigned char temp;   
@@ -318,7 +318,7 @@ line level    source
  300   3              }
  301   2       Col  = 0;
  302   2       }
-C51 COMPILER V9.60.7.0   LCD12864                                                          06/19/2025 09:01:50 PAGE 6   
+C51 COMPILER V9.60.7.0   LCD12864                                                          08/14/2025 14:28:44 PAGE 6   
 
  303   1        Delay(500);
  304   1      
@@ -382,7 +382,7 @@ line level    source
  362   1       unsigned char us,usn;   
  363   1       while(MS!=0)   
  364   1       {   
-C51 COMPILER V9.60.7.0   LCD12864                                                          06/19/2025 09:01:50 PAGE 7   
+C51 COMPILER V9.60.7.0   LCD12864                                                          08/14/2025 14:28:44 PAGE 7   
 
  365   2        usn = 2; //for 12M    
  366   2        while(usn!=0)   
@@ -446,7 +446,7 @@ line level    source
  424          
  425          unsigned char key(void)
  426          {
-C51 COMPILER V9.60.7.0   LCD12864                                                          06/19/2025 09:01:50 PAGE 8   
+C51 COMPILER V9.60.7.0   LCD12864                                                          08/14/2025 14:28:44 PAGE 8   
 
  427   1              if(KEY==0)
  428   1              {

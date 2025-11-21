@@ -221,15 +221,15 @@ void exsample(void)                     //演示程序
     exdelay();                          //延时约300mS
 
 //2.字符串演示: 在(2,1)字符位置显示"ORIENTAL-LCD"
-    putstrxy(2,1,"ORIENTAL-LCD");   //在(0,1)位置开始显示字符串
+    putstrxy(2,1,"Made in China");   //在(0,1)位置开始显示字符串
 
     exdelay();                          //延时约300mS
     exdelay();                          //延时约300mS
 
 //3.字符串演示: 在(1,0)字符位置显示"深圳束方电子"
 	 charlcdfill(' '); 
-    putstrxy(1,0,"智力光电股");       //在(0,0)位置开始显示字符串
-	putstrxy(1,1,"份有限公司"); 
+    putstrxy(1,0,"中国制造");       //在(0,0)位置开始显示字符串
+//	putstrxy(1,1,"份有限公司"); 
     exdelay();                          //延时约300mS
     exdelay();                          //延时约300mS
 

@@ -17,13 +17,13 @@
 #include <REG52.H>       
    
 
-sbit RS  =P3^0;    
-sbit RW  =P3^1;     
-sbit E   =P3^2;    
+sbit RS  =P3^2;    
+sbit RW  =P3^3;     
+sbit E   =P3^5;    
    
-sbit CS1 =P3^3;    //active "H"
-sbit CS2 =P3^4;    //active "H"   
-sbit RES =P3^5;  //LCM Built-in RC Reset
+sbit CS1 =P3^0;    //active "H"
+sbit CS2 =P3^1;    //active "H"   
+sbit RES =P3^4;  //LCM Built-in RC Reset
 
 sbit int0=P2^0; 
 
@@ -466,34 +466,35 @@ void Main( void )
  while(1)   
  {
 LcmPutDots(0x55,0xaa);
- Delay(600); 
+ Delay(5000); 
   LcmPutDots(0xaa,0x55);
-  Delay(600);
+  Delay(5000);
   
  LcmPutDots(0x55,0x55);
- Delay(600); 
+ Delay(5000); 
   LcmPutDots(0xaa,0xaa);
-  Delay(600); 
+  Delay(5000); 
 
   LcmPutDots(0xff,0x00);
-  Delay(600); 
+  Delay(5000); 
   LcmPutDots(0x00,0xff);
-  Delay(600); 
+  Delay(5000); 
 
      
-   LcmPutBMP(BMP3);   
-  Delay(1000); 
+//   LcmPutBMP(BMP3);   
+//  Delay(5000); 
 
- LcmReverseBMPP(BMP3);   
-  Delay(1000); 
- LcmPutBMP(BMP4);   
-  Delay(1000); 
-    LcmReverseBMPP(BMP4);   
-  Delay(1000);  	
+// LcmReverseBMPP(BMP3);   
+//  Delay(5000); 
+// LcmPutBMP(BMP4);   
+//  Delay(5000); 
+//    LcmReverseBMPP(BMP4);   
+ // Delay(5000);  	
   LcmClear(); 
-  Display_Chinese();
-  Delay(1000); 
+//  Display_Chinese();
+//  Delay(5000); 
   Display_character();
+  Delay(5000);
  }   
 }   
   

@@ -45,9 +45,9 @@ Define the instruction code,  parameter 定义指令码、参数
 
 sbit _WR   =P3^1; 
 sbit _RD   =P3^0;  
-sbit CS   =P3^5; 
+sbit CS   =P3^7; 
 sbit CD   =P3^3; 
-sbit reset=P3^2;
+sbit reset=P3^6;
 sbit LCD_KEY=P2^0;
 void chkbusy(void);
 uchar lcd_cmdread(void);

@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 1   
+C51 COMPILER V9.60.7.0   320240                                                            09/15/2025 15:40:47 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE 320240
@@ -62,7 +62,7 @@ line level    source
   52          /******************************************************* 
   53          check busy  ¼ì²éÃ¦Âµ×´Ì¬
   54          *******************************************************/
-C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 2   
+C51 COMPILER V9.60.7.0   320240                                                            09/15/2025 15:40:47 PAGE 2   
 
   55          void chkbusy(void)
   56          {
@@ -126,7 +126,7 @@ line level    source
  114   1       show_off();          //display off
  115   1       lcd_cls(0);          //clrar dispay
  116   1       show_on();           //display on
-C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 3   
+C51 COMPILER V9.60.7.0   320240                                                            09/15/2025 15:40:47 PAGE 3   
 
  117   1      }
  118          /******************************************************* 
@@ -190,7 +190,7 @@ line level    source
  176          2  area   Graphics
  177          *******************************************************/
  178          void locate_xy2(uint x, uchar y)
-C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 4   
+C51 COMPILER V9.60.7.0   320240                                                            09/15/2025 15:40:47 PAGE 4   
 
  179          {
  180   1       uint  addr;
@@ -254,7 +254,7 @@ line level    source
  238   2        {
  239   3         write_cmd(hdotscr);
  240   3         if(dir) write_dat(7 - i); //Horizontally to the right
-C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 5   
+C51 COMPILER V9.60.7.0   320240                                                            09/15/2025 15:40:47 PAGE 5   
 
  241   3         else write_dat(i);        //Horizontally to the left
  242   3        delay(50000);
@@ -318,7 +318,7 @@ line level    source
  300   1       uchar i, j,k,adr=0;
  301   1       write_cmd(csrdirr);    //Cursor right direction
  302   1       for(j = 0; j < num/32; j++)
-C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 6   
+C51 COMPILER V9.60.7.0   320240                                                            09/15/2025 15:40:47 PAGE 6   
 
 *** WARNING C198 IN LINE 302 OF 320240.c: sizeof returns zero
  303   1       { 
@@ -382,7 +382,7 @@ line level    source
  361   1       write_dat(n_4 + 2);
  362   1       write_dat(n_4 + 3);
  363   1      }
-C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 7   
+C51 COMPILER V9.60.7.0   320240                                                            09/15/2025 15:40:47 PAGE 7   
 
  364          /******************************************************* 
  365          display pixels ÏÔÊ¾Æ÷ÏñËØ
@@ -446,7 +446,7 @@ line level    source
  423   3         yerr -= ds;
  424   3         y1   += inc_y;
  425   3        }
-C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 8   
+C51 COMPILER V9.60.7.0   320240                                                            09/15/2025 15:40:47 PAGE 8   
 
  426   2       }
  427   1      }
@@ -510,7 +510,7 @@ line level    source
  485   2       }
  486   1      }
  487          /******************************************************* 
-C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 9   
+C51 COMPILER V9.60.7.0   320240                                                            09/15/2025 15:40:47 PAGE 9   
 
  488          display sine   ÏÔÊ¾ÕýÏÒ
  489          y: coordinate  119
@@ -574,7 +574,7 @@ line level    source
  547   1       show_line(1,1,1,238, 0);    //"|"
  548   1       show_line(1,238,318,238, 0);//"/"
  549   1       show_line(318,1,318,238, 0);//"|"      
-C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 10  
+C51 COMPILER V9.60.7.0   320240                                                            09/15/2025 15:40:47 PAGE 10  
 
  550   1              
  551   1      // show_line(0,0,239,239, 0);
@@ -638,7 +638,7 @@ line level    source
  609   1       lcd_cls(0);
  610   1      // show_pic (0, 0, tab1, 0);
  611   1      //      delay(10);
-C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 11  
+C51 COMPILER V9.60.7.0   320240                                                            09/15/2025 15:40:47 PAGE 11  
 
  612   1      //demo_line();
  613   1       show_pic (0, 0, tab2, 0);
@@ -702,7 +702,7 @@ line level    source
  671          {
  672   1      // lcd_init();
  673   1       lcd_cls(0);
-C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 12  
+C51 COMPILER V9.60.7.0   320240                                                            09/15/2025 15:40:47 PAGE 12  
 
  674   1       show_hzg(0, 0,  tab, 0);
  675   1       show_hzg(0, 32, tab, 1);
@@ -766,7 +766,7 @@ line level    source
  733          
  734          
  735          uint ReadKey1() // °´¼ü¼ì²âº¯Êý
-C51 COMPILER V9.60.7.0   320240                                                            06/24/2025 13:27:33 PAGE 13  
+C51 COMPILER V9.60.7.0   320240                                                            09/15/2025 15:40:47 PAGE 13  
 
  736          {
  737   1          if (LCD_KEY == 1)           

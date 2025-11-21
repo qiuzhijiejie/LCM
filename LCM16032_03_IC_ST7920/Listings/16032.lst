@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   16032                                                             12/13/2024 10:17:13 PAGE 1   
+C51 COMPILER V9.60.7.0   16032                                                             09/18/2025 09:59:47 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE 16032
@@ -62,7 +62,7 @@ line level    source
   52          
   53          void lcdwc(unsigned char c)  //向液晶显示控制器送指令
   54          {   lcdwaitidle();           
-C51 COMPILER V9.60.7.0   16032                                                             12/13/2024 10:17:13 PAGE 2   
+C51 COMPILER V9.60.7.0   16032                                                             09/18/2025 09:59:47 PAGE 2   
 
   55   1          P1=c;
   56   1          RS=0;                        //RS 0:select instruction write,        
@@ -126,7 +126,7 @@ line level    source
  114          {
  115   1          unsigned char i; 
  116   1          while (row < 32)   
-C51 COMPILER V9.60.7.0   16032                                                             12/13/2024 10:17:13 PAGE 3   
+C51 COMPILER V9.60.7.0   16032                                                             09/18/2025 09:59:47 PAGE 3   
 
  117   1          {
  118   2              setLCDCursor();   
@@ -190,7 +190,7 @@ line level    source
  176          {   unsigned char d;
  177   1          if(c>128)                 //字符码大于128表示为汉字
  178   1          {   if( (Column&0x1)==1 ) //写汉字时,Column字符位置在奇数位置,则
-C51 COMPILER V9.60.7.0   16032                                                             12/13/2024 10:17:13 PAGE 4   
+C51 COMPILER V9.60.7.0   16032                                                             09/18/2025 09:59:47 PAGE 4   
 
  179   2              {   lcdwd(' ');       //自动补添一个空格对齐后再显示汉字
  180   3                  charcursornext(); //置字符位置为下一个有效位置
@@ -236,8 +236,8 @@ line level    source
  220          
  221          void putstrxy(unsigned char cx,unsigned char cy,unsigned char code *s)
  222          {                                       //在(cx,cy)字符位置写字符串子程序
- 223   1          Column=cx;                           //置当前X位置为cx
- 224   1          row=cy;                           //置当前Y位置为cy
+ 223   1          Column=cx;                          //置当前X位置为cx
+ 224   1          row=cy;                             //置当前Y位置为cy
  225   1          putstr(s);
  226   1      }
  227          
@@ -254,7 +254,7 @@ line level    source
  238          
  239          void putsizeimage(unsigned char XSIZE,unsigned char YSIZE,unsigned char code *s)
  240          {  unsigned char lx,ly,x;
-C51 COMPILER V9.60.7.0   16032                                                             12/13/2024 10:17:13 PAGE 5   
+C51 COMPILER V9.60.7.0   16032                                                             09/18/2025 09:59:47 PAGE 5   
 
  241   1         x=Column;
  242   1         for(ly=0;ly<YSIZE;ly++,row++)
@@ -318,7 +318,7 @@ line level    source
  300          {
  301   1              unsigned char mode;
  302   1              
-C51 COMPILER V9.60.7.0   16032                                                             12/13/2024 10:17:13 PAGE 6   
+C51 COMPILER V9.60.7.0   16032                                                             09/18/2025 09:59:47 PAGE 6   
 
  303   1                      if (ReadKey()) 
  304   1                {  

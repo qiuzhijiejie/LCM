@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              12/11/2024 16:00:54 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/10/2025 11:42:53 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -10,124 +10,210 @@ line level    source
 
    1          #include <REGX52.H>
    2          #include "LCD1602.h"
-   3          //      unsigned char mode;
-   4          //      unsigned char data pattern1[8] = {0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15}; // 棋盘
-   5          //      unsigned char data pattern2[8] = {0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A};    
-   6          //      unsigned char data pattern3[8] = {0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15}; //竖线
-   7          //    unsigned char data pattern4[8] = {0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A}; 
-   8          //    unsigned char data pattern5[8] = {0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00};//横线 
-   9          //      unsigned char data pattern6[8] = {0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F};      
-  10          //      unsigned char data pattern7[8] = {0x00, 0x15, 0x00, 0x15, 0x00, 0x15, 0x00, 0x15}; //麻点
+   3                  unsigned char mode;
+   4                  unsigned char data pattern1[8] = {0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15}; // 棋盘
+   5                  unsigned char data pattern2[8] = {0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A};    
+   6                  unsigned char data pattern3[8] = {0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15}; //竖线
+   7              unsigned char data pattern4[8] = {0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A}; 
+   8              unsigned char data pattern5[8] = {0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00};//横线 
+   9                  unsigned char data pattern6[8] = {0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F};      
+  10                  unsigned char data pattern7[8] = {0x00, 0x15, 0x00, 0x15, 0x00, 0x15, 0x00, 0x15}; //麻点
   11          //int main() 
   12          //{
-  13          //      LCD_Init(); 
-  14          //      LCD_Clear();
-  15          //      displayCustomCharacter1(pattern1); // 显示棋盘
-  16          //      Delay(80); 
-  17          //      displayCustomCharacter1(pattern2); 
-  18          //      Delay(80); 
-  19          //      displayCustomCharacter1(pattern3); // 显示竖线
-  20          //      Delay(80); 
-  21          //      displayCustomCharacter1(pattern4); 
-  22          //      Delay(80); 
-  23          //      displayCustomCharacter1(pattern5); // 显示横线
-  24          //      Delay(80); 
-  25          //      displayCustomCharacter1(pattern6); 
-  26          //      Delay(80); 
-  27          //      displayCustomCharacter1(pattern7); // 显示麻点
-  28          //      Delay(80); 
-  29          //      write_CGROM(0x21);//内置
-  30          //      Delay(80);
-  31          //      write_CGROM(0xA1);//内置
-  32          //      Delay(80);
-  33          //      Write_DDRAM(0xCE);//内置字符
-  34          //      Delay(80);
-  35          //      LCD_Clear();
-  36          //      LCD_ShowString(1,3,"LCM1602_10");
-  37          //      LCD_ShowString(0,0,"YeHuiDisplay.com");
-  38          //                      
-  39          //while (1) 
-  40          //{
-  41          
-  42          //              if (ReadKey1()) 
-  43          //        {  
-  44          //              LCD_Clear();
-  45          //              mode++;
-  46          //              mode %= 10;                     
-  47          //              switch (mode) 
-  48          //        {
-  49          //        case 0:            
-  50          //                      displayCustomCharacter1(pattern1); 
-  51          //            break;
-  52          //        case 1:
-  53          //            displayCustomCharacter1(pattern2);  
-  54          //            break;
-C51 COMPILER V9.60.7.0   MAIN                                                              12/11/2024 16:00:54 PAGE 2   
+  13          //              
+  14          //while (1) 
+  15          //{
+  16          //              if (ReadKey1()) 
+  17          //        {  
+  18          //              LCD_Clear();
+  19          //              mode++;
+  20          //              mode %= 10;                     
+  21          //              switch (mode) 
+  22          //        {
+  23          //        case 0:            
+  24          //                      displayCustomCharacter1(pattern1); 
+  25          //            break;
+  26          //        case 1:
+  27          //            displayCustomCharacter1(pattern2);  
+  28          //            break;
+  29          //        case 2:
+  30          //            displayCustomCharacter1(pattern3); 
+  31          //            break;
+  32          //        case 3:
+  33          //           displayCustomCharacter1(pattern4);  
+  34          //            break;
+  35          //        case 4:
+  36          //            displayCustomCharacter1(pattern5);  
+  37          //            break;
+  38          //        case 5:
+  39          //            displayCustomCharacter1(pattern6);  
+  40          //            break;
+  41          //              case 6:
+  42          //                      displayCustomCharacter1(pattern7);
+  43          //                      break;
+  44          //              case 7:
+  45          //                      write_CGROM(0x21); 
+  46          //                 break;
+  47          //              case 8:
+  48          //                      write_CGROM(0xA1); 
+  49          //                 break;
+  50          //              case 9:
+  51          //                      Write_DDRAM(0xFF); 
+  52          //                 break;
+  53          //    
+  54          //              }
+C51 COMPILER V9.60.7.0   MAIN                                                              11/10/2025 11:42:53 PAGE 2   
 
-  55          //        case 2:
-  56          //            displayCustomCharacter1(pattern3); 
-  57          //            break;
-  58          //        case 3:
-  59          //           displayCustomCharacter1(pattern4);  
-  60          //            break;
-  61          //        case 4:
-  62          //            displayCustomCharacter1(pattern5);  
-  63          //            break;
-  64          //        case 5:
-  65          //            displayCustomCharacter1(pattern6);  
-  66          //            break;
-  67          //              case 6:
-  68          //                      displayCustomCharacter1(pattern7);
-  69          //                      break;
-  70          //              case 7:
-  71          //                      write_CGROM(0x21); 
-  72          //                 break;
-  73          //              case 8:
-  74          //                      write_CGROM(0xA1); 
-  75          //                 break;
-  76          //              case 9:
-  77          //                      Write_DDRAM(0xFF); 
-  78          //                 break;
-  79          //    
-  80          //              }
-  81          //      }                       
-  82          //}
-  83          
-  84          //      }
-  85          
-  86          void main(void)   
-  87          {
-  88   1      
-  89   1              LCD_Init(); 
-  90   1              LCD_Clear();
-  91   1      
-  92   1          while (1)  
-  93   1          {
-  94   2            
-  95   2              if (ReadKey1()) 
-  96   2              {
-  97   3                  HandleKey(); 
-  98   3              } 
-  99   2              else 
- 100   2              {
- 101   3                
- 102   3                  DisplayPatterns(); 
- 103   3              }
- 104   2          }   
- 105   1      }
+  55          
+  56          //      LCD_Init(); 
+  57          //      LCD_Clear();
+  58          //      displayCustomCharacter1(pattern1); // 显示棋盘
+  59          //      Delay(200); 
+  60          //      displayCustomCharacter1(pattern2); 
+  61          //      Delay(200); 
+  62          //      displayCustomCharacter1(pattern3); // 显示竖线
+  63          //      Delay(200); 
+  64          //      displayCustomCharacter1(pattern4); 
+  65          //      Delay(200); 
+  66          //      displayCustomCharacter1(pattern5); // 显示横线
+  67          //      Delay(200); 
+  68          //      displayCustomCharacter1(pattern6); 
+  69          //      Delay(200); 
+  70          //      displayCustomCharacter1(pattern7); // 显示麻点
+  71          //      Delay(200); 
+  72          //      write_CGROM(0x21);//内置
+  73          //      Delay(200);
+  74          //      write_CGROM(0xA1);//内置
+  75          //      Delay(200);
+  76          //      Write_DDRAM(0xCE);//内置字符
+  77          //      Delay(200);
+  78          //      LCD_Clear();
+  79          //      LCD_ShowString(1,3,"LCM1602_10");
+  80          //      LCD_ShowString(0,2,"Made in China");
+  81          //      Delay(200);
+  82          //      }       
+  83          //              if (ReadKey1()) 
+  84          //      {  
+  85          //      LCD_Init(); 
+  86          //      LCD_Clear();
+  87          //      displayCustomCharacter1(pattern1); // 显示棋盘
+  88          //      Delay(500);
+  89          //      displayCustomCharacter1(pattern2); 
+  90          //      Delay(500);
+  91          //      displayCustomCharacter1(pattern3); // 显示竖线
+  92          //      Delay(500);
+  93          //      displayCustomCharacter1(pattern4); 
+  94          //      Delay(500);
+  95          //      displayCustomCharacter1(pattern5); // 显示横线
+  96          //      Delay(500);
+  97          //      displayCustomCharacter1(pattern6); 
+  98          //      Delay(500);
+  99          //      displayCustomCharacter1(pattern7); // 显示麻点
+ 100          //      Delay(500);
+ 101          //      write_CGROM(0x21);//内置
+ 102          //      Delay(200);
+ 103          //      write_CGROM(0xA1);//内置
+ 104          //      Delay(200);
+ 105          //      Write_DDRAM(0xCE);//内置字符
+ 106          //      Delay(200);
+ 107          //      LCD_Clear();
+ 108          //      LCD_ShowString(1,3,"LCM1602_10");
+ 109          //      LCD_ShowString(0,2,"Made in China");
+ 110          //      Delay(200);
+ 111          //      }       
+ 112          //}
+ 113          
+ 114          //      }
+ 115          
+ 116          //void main(void)   
+C51 COMPILER V9.60.7.0   MAIN                                                              11/10/2025 11:42:53 PAGE 3   
+
+ 117          //{
+ 118          
+ 119          //      LCD_Init(); 
+ 120          //      LCD_Clear();
+ 121          
+ 122          //    while (1)  
+ 123          //    {
+ 124          //      
+ 125          //        if (ReadKey1()) 
+ 126          //        {
+ 127          //            HandleKey(); 
+ 128          //        } 
+ 129          //        else 
+ 130          //        {
+ 131          //          
+ 132          //            DisplayPatterns(); 
+ 133          //        }
+ 134          //    }   
+ 135          //}
+ 136          
+ 137          
+ 138          //------------------------------------------
+ 139          // 封装显示流程的函数
+ 140          //------------------------------------------
+ 141          void run_display(bit speedFlag)
+ 142          {
+ 143   1          unsigned int delayTime = speedFlag ? 200 : 500;
+ 144   1      
+ 145   1          LCD_Init(); 
+ 146   1          LCD_Clear();
+ 147   1      
+ 148   1          displayCustomCharacter1(pattern1); Delay(delayTime);
+ 149   1          displayCustomCharacter1(pattern2); Delay(delayTime);
+ 150   1          displayCustomCharacter1(pattern3); Delay(delayTime);
+ 151   1          displayCustomCharacter1(pattern4); Delay(delayTime);
+ 152   1          displayCustomCharacter1(pattern5); Delay(delayTime);
+ 153   1          displayCustomCharacter1(pattern6); Delay(delayTime);
+ 154   1          displayCustomCharacter1(pattern7); Delay(delayTime);
+ 155   1      
+ 156   1          write_CGROM(0x21); Delay(200);
+ 157   1          write_CGROM(0xA1); Delay(200);
+ 158   1          Write_DDRAM(0xCE); Delay(200);
+ 159   1          LCD_Clear();
+ 160   1          LCD_ShowString(1,3,"LCM1602_10");
+ 161   1          LCD_ShowString(0,2,"Made in China");
+ 162   1          Delay(200);
+ 163   1      }
+ 164          
+ 165          bit speedFlag = 0;  // 0=慢速, 1=快速
+ 166          
+ 167          void main(void)
+ 168          {
+ 169   1          LCD_Init(); 
+ 170   1          LCD_Clear();
+ 171   1      
+ 172   1          // 上电时默认先执行一次慢速显示
+ 173   1          run_display(speedFlag);
+ 174   1      
+ 175   1          while(1)
+ 176   1          {
+ 177   2              if (ReadKey1())        // 检测按键按下
+ 178   2              {
+C51 COMPILER V9.60.7.0   MAIN                                                              11/10/2025 11:42:53 PAGE 4   
+
+ 179   3                  Delay(20);         // 消抖
+ 180   3                  if (ReadKey1())    // 确认按下
+ 181   3                  {
+ 182   4                      speedFlag = !speedFlag;   // 切换速度档位
+ 183   4                      while(ReadKey1());        // 等待松手
+ 184   4                      run_display(speedFlag);   // 按一次键重新显示（速度改变）
+ 185   4                  }
+ 186   3              }
+ 187   2          }
+ 188   1      }
+ 189          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     23    ----
-   CONSTANT SIZE    =   ----    ----
+   CODE SIZE        =    259    ----
+   CONSTANT SIZE    =     25    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----    ----
+   DATA SIZE        =     57       2
    IDATA SIZE       =   ----    ----
-   BIT SIZE         =   ----    ----
+   BIT SIZE         =      1       1
 END OF MODULE INFORMATION.
-
-C51 COMPILER V9.60.7.0   MAIN                                                              12/11/2024 16:00:54 PAGE 3   
 
 
 C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

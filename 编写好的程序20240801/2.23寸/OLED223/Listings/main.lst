@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              04/21/2025 22:26:03 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              08/14/2025 08:48:42 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
   52                 0xA8,//设置驱动路数
   53                 0X1F,//默认(1/32)
   54                  
-C51 COMPILER V9.60.7.0   MAIN                                                              04/21/2025 22:26:03 PAGE 2   
+C51 COMPILER V9.60.7.0   MAIN                                                              08/14/2025 08:48:42 PAGE 2   
 
   55                 0xD3,//设置显示偏移
   56                 0X00,//默认为0
@@ -126,7 +126,7 @@ line level    source
  114                  0x00,0x00,0x01,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x01,0x01,
  115                  0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x00,
  116                  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-C51 COMPILER V9.60.7.0   MAIN                                                              04/21/2025 22:26:03 PAGE 3   
+C51 COMPILER V9.60.7.0   MAIN                                                              08/14/2025 08:48:42 PAGE 3   
 
  117                  0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x3F,0x3F,0x03,0x03,
  118                  0xF3,0x13,0x11,0x11,0x11,0x11,0x11,0x11,0x01,0xF1,0x11,0x61,0x81,0x01,0x01,0x01,
@@ -190,7 +190,7 @@ line level    source
  176            {
  177   1          unsigned int i,j;
  178   1          for(i=0;i<_ms_time;i++)
-C51 COMPILER V9.60.7.0   MAIN                                                              04/21/2025 22:26:03 PAGE 4   
+C51 COMPILER V9.60.7.0   MAIN                                                              08/14/2025 08:48:42 PAGE 4   
 
  179   1          {
  180   2          for(j=0;j<900;j++)
@@ -254,7 +254,7 @@ line level    source
  238   1              
  239   1              IIC_SDA_1;
  240   1              
-C51 COMPILER V9.60.7.0   MAIN                                                              04/21/2025 22:26:03 PAGE 5   
+C51 COMPILER V9.60.7.0   MAIN                                                              08/14/2025 08:48:42 PAGE 5   
 
  241   1      }
  242          
@@ -318,7 +318,7 @@ line level    source
  300   1            {
  301   2              OLED_send_cmd(OLED_init_cmd[i]);
  302   2            }
-C51 COMPILER V9.60.7.0   MAIN                                                              04/21/2025 22:26:03 PAGE 6   
+C51 COMPILER V9.60.7.0   MAIN                                                              08/14/2025 08:48:42 PAGE 6   
 
  303   1        }
  304          
@@ -382,12 +382,16 @@ line level    source
  362   2          delay_ms(5000);
  363   2          
  364   2          Picture_ReverseDisplay(point);
-C51 COMPILER V9.60.7.0   MAIN                                                              04/21/2025 22:26:03 PAGE 7   
+C51 COMPILER V9.60.7.0   MAIN                                                              08/14/2025 08:48:42 PAGE 7   
 
  365   2          delay_ms(5000);
  366   2          OLED_clear();
  367   2        }
  368   1      }
+ 369          
+ 370          
+ 371          
+ 372          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

@@ -5,11 +5,18 @@
 #define uint unsigned int 
 #define data   P1 
     
-sbit cs  =  P3^0;    
-sbit rst =  P3^3;   
-sbit di  =  P3^2;   //0-命令模式 1-数据模式
-sbit wr  =  P3^5;   
-sbit rd  =  P3^4;
+//sbit cs  =  P3^0;    
+//sbit rst =  P3^3;   
+//sbit di  =  P3^2;   //0-命令模式 1-数据模式
+//sbit wr  =  P3^5;   
+//sbit rd  =  P3^4;
+
+
+sbit cs  =  P3^3;    
+sbit rst =  P3^2;   
+sbit di  =  P3^5;   //0-命令模式 1-数据模式
+sbit wr  =  P3^1;   
+sbit rd  =  P3^0;
 
 ///按键接口定义(与测试板一致)
 sbit Key1 =P2^5;//HOLD

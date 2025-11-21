@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              06/11/2025 13:53:38 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/25/2025 09:51:03 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -13,114 +13,140 @@ line level    source
    3          #include "picture.h"
    4          sbit LCD_FS=P3^5;
    5          sbit LCD_EN=P3^3;
-   6          //unsigned char mode;
-   7          ////extern  unsigned char  Y; 
-   8          ////extern  unsigned char  X; 
+   6          unsigned char mode;
+   7          //extern  unsigned char  Y; 
+   8          //extern  unsigned char  X; 
    9          
   10          
-  11          //void Main( void )   
-  12          //{
-  13          //      LCD_EN=0;  
-  14          //      LCD_FS=0; 
-  15          //      LcmInit(); 
-  16          //      LcmClear();
-  17          //    DisplayDots(0x55,0xaa);
-  18          //    Delay(500);       
-  19          //    DisplayDots(0xaa,0x55);
-  20          //    Delay(500);  
-  21          //    DisplayDots(0x55,0x55);
-  22          //    Delay(500);       
-  23          //    DisplayDots(0xaa,0xaa);
-  24          //    Delay(500); 
-  25          //    DisplayDots(0xff,0x00);
-  26          //    Delay(500); 
-  27          //    DisplayDots(0x00,0xff);
-  28          //    Delay(500); 
-  29          //      DisplayDots(0xff,0xff);
-  30          //    Delay(500);       
-  31          //      LcmClear();
-  32          //      
-  33          //    DisplayBMP(0,0,240,128,BMP1);   
-  34          //    Delay(500);    
-  35          //    ReverseDisplayBMP(0,0,240,128,BMP1);   
-  36          //    Delay(500);
-  37          //      
-  38          //      LcmClear();
-  39          //      Display_FullCGROM();
-  40          //      Delay(500);
-  41          //      
-  42          //      LcmClear();
-  43          //      picture();
-  44          //      
-  45          
-  46          // while(1)  
-  47          //{
-  48          
-  49          //              if(ReadKey1())
-  50          //              mode++;
-  51          //              mode%=10;
-  52          //              LcmClear();
-  53          //              switch(mode){   
-  54          //              case 0:DisplayDots(0xff,0x00);
-C51 COMPILER V9.60.7.0   MAIN                                                              06/11/2025 13:53:38 PAGE 2   
+  11          void Main( void )   
+  12          {
+  13   1              LCD_EN=0;  
+  14   1              LCD_FS=0; 
+  15   1              LcmInit(); 
+  16   1      //      LcmClear();
+  17   1      //    DisplayDots(0x55,0xaa);
+  18   1      //    Delay(2000);      
+  19   1      //    DisplayDots(0xaa,0x55);
+  20   1      //    Delay(2000);  
+  21   1      //    DisplayDots(0x55,0x55);
+  22   1      //    Delay(2000);      
+  23   1      //    DisplayDots(0xaa,0xaa);
+  24   1      //    Delay(2000); 
+  25   1      //    DisplayDots(0xff,0x00);
+  26   1      //    Delay(2000); 
+  27   1      //    DisplayDots(0x00,0xff);
+  28   1      //    Delay(2000); 
+  29   1      //        DisplayDots(0xff,0xff);
+  30   1      //    Delay(2000);      
+  31   1      //        LcmClear();
+  32   1      //      
+  33   1      //    DisplayBMP(0,0,240,128,BMP1);   
+  34   1      //    Delay(2000);    
+  35   1      //    ReverseDisplayBMP(0,0,240,128,BMP1);   
+  36   1      //    Delay(2000);
+  37   1      //      
+  38   1      //      LcmClear();
+  39   1      //      Display_FullCGROM();
+  40   1      //      Delay(2000);
+  41   1      //      
+  42   1      //      LcmClear();
+  43   1      //      picture();
+  44   1              
+  45   1      
+  46   1       while(1)  
+  47   1      {
+  48   2              LcmClear();
+  49   2              picture();
+  50   2              Delay(900); 
+  51   2          DisplayDots(0x55,0xaa);
+  52   2          Delay(900);         
+  53   2          DisplayDots(0xaa,0x55);
+  54   2          Delay(900);   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/25/2025 09:51:03 PAGE 2   
 
-  55          //              break;
-  56          //              case 1:DisplayDots(0x55,0xaa);
-  57          //              break;
-  58          //              case 2:DisplayDots(0x55,0x55);
-  59          //              break;
-  60          //              case 3:DisplayDots(0x00,0xff);
-  61          //              break;
-  62          //              case 4:DisplayDots(0xaa,0xaa);
-  63          //              break;
-  64          //              case 5:picture();       
-  65          //              break;
-  66          //              case 6:Display_FullCGROM();     
-  67          //              break;
-  68          //              case 7:DisplayBMP(0,0,240,128,BMP1);    
-  69          //              break;
-  70          //              case 8:ReverseDisplayBMP(0,0,240,128,BMP1);
-  71          //              break;
-  72          //              case 9:ReverseDisplayBMP(0,0,240,128,BMP0); 
-  73          //              break;
-  74          
-  75          //}
-  76          // }   
-  77          //}
-  78          
-  79          
-  80          
-  81          
-  82          
-  83          void main(void)   
-  84          {
-  85   1          LCD_EN = 0;  
-  86   1          LCD_FS = 0; 
-  87   1          LcmInit(); 
-  88   1          LcmClear();
-  89   1      
-  90   1          while (1)  
-  91   1          {
-  92   2            
-  93   2              if (ReadKey1()) 
-  94   2              {
-  95   3                  HandleKey(); 
-  96   3              } 
-  97   2              else 
-  98   2              {
-  99   3                
- 100   3                  DisplayPatterns(); 
- 101   3              }
- 102   2          }   
- 103   1      }
+  55   2          DisplayDots(0x55,0x55);
+  56   2          Delay(900);         
+  57   2          DisplayDots(0xaa,0xaa);
+  58   2          Delay(900);  
+  59   2          DisplayDots(0xff,0x00);
+  60   2          Delay(900);  
+  61   2          DisplayDots(0x00,0xff);
+  62   2          Delay(900);  
+  63   2              DisplayDots(0xff,0xff);
+  64   2          Delay(900);         
+  65   2              LcmClear();
+  66   2              
+  67   2          DisplayBMP(0,0,240,128,BMP1);   
+  68   2          Delay(900);     
+  69   2          ReverseDisplayBMP(0,0,240,128,BMP1);   
+  70   2          Delay(900); 
+  71   2              
+  72   2              LcmClear();
+  73   2              Display_FullCGROM();
+  74   2              Delay(900);
+  75   2              
+  76   2      //              if(ReadKey1())
+  77   2      //              mode++;
+  78   2      //              mode%=10;
+  79   2      //              LcmClear();
+  80   2      //              switch(mode){   
+  81   2      //              case 0:DisplayDots(0xff,0x00);
+  82   2      //              break;
+  83   2      //              case 1:DisplayDots(0x55,0xaa);
+  84   2      //              break;
+  85   2      //              case 2:DisplayDots(0x55,0x55);
+  86   2      //              break;
+  87   2      //              case 3:DisplayDots(0x00,0xff);
+  88   2      //              break;
+  89   2      //              case 4:DisplayDots(0xaa,0xaa);
+  90   2      //              break;
+  91   2      //              case 5:picture();       
+  92   2      //              break;
+  93   2      //              case 6:Display_FullCGROM();     
+  94   2      //              break;
+  95   2      //              case 7:DisplayBMP(0,0,240,128,BMP1);    
+  96   2      //              break;
+  97   2      //              case 8:ReverseDisplayBMP(0,0,240,128,BMP1);
+  98   2      //              break;
+  99   2      //              case 9:ReverseDisplayBMP(0,0,240,128,BMP0); 
+ 100   2      //              break;
+ 101   2      
+ 102   2      //}
+ 103   2       }   
+ 104   1      }
+ 105          
+ 106          
+ 107          //void main(void)   
+ 108          //{
+ 109          //    LCD_EN = 0;  
+ 110          //    LCD_FS = 0; 
+ 111          //    LcmInit(); 
+ 112          //    LcmClear();
+ 113          
+ 114          //    while (1)  
+ 115          //    {
+ 116          //      
+C51 COMPILER V9.60.7.0   MAIN                                                              09/25/2025 09:51:03 PAGE 3   
+
+ 117          //        if (ReadKey1()) 
+ 118          //        {
+ 119          //            HandleKey(); 
+ 120          //        } 
+ 121          //        else 
+ 122          //        {
+ 123          //          
+ 124          //            DisplayPatterns(); 
+ 125          //        }
+ 126          //    }   
+ 127          //}
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     27    ----
+   CODE SIZE        =    185    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----    ----
+   DATA SIZE        =      1    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

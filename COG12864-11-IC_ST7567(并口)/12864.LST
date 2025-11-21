@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 10:23:41 PAGE 1   
+C51 COMPILER V9.60.7.0   12864                                                             10/30/2025 09:19:51 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE 12864
@@ -62,7 +62,7 @@ line level    source
   53   1               delayUs(2); 
   54   1      } 
   55          
-C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 10:23:41 PAGE 2   
+C51 COMPILER V9.60.7.0   12864                                                             10/30/2025 09:19:51 PAGE 2   
 
   56          
   57          // Set Column Address 4
@@ -126,7 +126,7 @@ line level    source
  115   1        uchar i;       //ÐÐ ÁÐ
  116   1        uchar code tdata[][2]=
  117   1        {
-C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 10:23:41 PAGE 3   
+C51 COMPILER V9.60.7.0   12864                                                             10/30/2025 09:19:51 PAGE 3   
 
  118   1              {0xff,0xff},    // All
  119   1              {0x00,0xFF},    // Virtical 
@@ -190,7 +190,7 @@ line level    source
  177   2      
  178   2              // ×ó±ß
  179   2              for(i = top; i <= bottom; i++)
-C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 10:23:41 PAGE 4   
+C51 COMPILER V9.60.7.0   12864                                                             10/30/2025 09:19:51 PAGE 4   
 
  180   2              {
  181   3                  GotoXY(i, left);
@@ -254,7 +254,7 @@ line level    source
  239   1                      uchar i;
  240   1                      uint index;
  241   1                      GotoXY(startP,startC);
-C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 10:23:41 PAGE 5   
+C51 COMPILER V9.60.7.0   12864                                                             10/30/2025 09:19:51 PAGE 5   
 
  242   1                      while((*ptrAscii) != '\0')
  243   1                      {
@@ -318,7 +318,7 @@ line level    source
  301          {
  302   1         uchar i,j;
  303   1         GotoXY(startP,startC);
-C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 10:23:41 PAGE 6   
+C51 COMPILER V9.60.7.0   12864                                                             10/30/2025 09:19:51 PAGE 6   
 
  304   1         for(i=0;i<8;i++)
  305   1          {
@@ -382,7 +382,7 @@ line level    source
  363   3              }
  364   2          }
  365   1          return 0; 
-C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 10:23:41 PAGE 7   
+C51 COMPILER V9.60.7.0   12864                                                             10/30/2025 09:19:51 PAGE 7   
 
  366   1      }
  367          
@@ -446,7 +446,7 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
-C51 COMPILER V9.60.7.0   12864                                                             05/22/2025 10:23:41 PAGE 8   
+C51 COMPILER V9.60.7.0   12864                                                             10/30/2025 09:19:51 PAGE 8   
 
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

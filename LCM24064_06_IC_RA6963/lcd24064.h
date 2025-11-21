@@ -8,11 +8,11 @@
 #define	Character 	0
 
 
-sbit CD =P3^0;    	// 	COMMAND/DATA
-sbit RESET =P2^4; 	//	RESET
-sbit FS =P3^3; 		//  0??8*8   1 6*8     
-sbit _WR =P3^1; 	//	WRITE    
-sbit _RD =P3^2;		//	READ
+sbit CD =P3^3;    	// 	COMMAND/DATA
+sbit RESET =P3^4; 	//	RESET
+sbit FS =P3^5; 		//  0??8*8   1 6*8     
+sbit _WR =P3^0; 	//	WRITE    
+sbit _RD =P3^1;		//	READ
 sbit  Key=P2^0;
 
 void Locatexy(uchar xa,uchar ya,uchar mode);

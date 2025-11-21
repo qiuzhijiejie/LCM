@@ -933,24 +933,29 @@ while(AOUTOB==1&STEP==0)
 		}
 }
 
+
+//hz_display8x8(5,0, 1, words3[0]);
+//hz_display8x8(5,0, 1, words3[0]);
+//hz_display8x8(5,0, 1, words3[0]);	
 void yehui_UI()
 {
 	unsigned char i,k;
-	char *words1[] = {guang, dong, ye, hui, ke};
+	char *words1[] = {M, aa, dd, ee,ii,nn,C,hh,ii,nn,aa};
 	char *words2[] = {ji, you, xian, gong, si};
 	char *words3[] = {C, O, G, one,three,two,xing,six,four};
 	
 	DispPic( PIC_99 );
-	for (i = 0; i < 5; i++) 
-	{
-		hz_display8x16(1, 8 + i, i + 1, words1[i]);
-	}
 
-	for (i = 0; i < 5; i++) 
-	{	
-		hz_display8x16(3, 8 + i, i + 1, words2[i]);
-	}
-	
+//	for (i = 0; i < 5; i++) 
+//	{	
+//		hz_display8x16(3, 8 + i, i + 1, words2[i]);
+//	}
+	for ( k = 0; k < 11; k++)  // 显示 3 个字符
+	{
+	    unsigned char col_start = 28;  // 第一个字符的起始列
+	    unsigned char spacing = 8;     // 每个字符占 8 列
+		hz_display8x8(1, (col_start + k * spacing) & 0x0F, (col_start + k * spacing) >> 4, words1[k]);
+	}	
 	for ( k = 0; k < 9; k++)  // 显示 3 个字符
 	{
 	    unsigned char col_start = 28;  // 第一个字符的起始列

@@ -8,7 +8,7 @@
 #include <REGX52.H>
 
 #define  num  sizeof(tab)
-#define  width  320  //picture width
+#define  width   320  //picture width
 #define  height  240  //picture height
 
 #define uchar unsigned char  
@@ -43,8 +43,8 @@ Define the instruction code,  parameter 定义指令码、参数
 #define busy       0x40  //Busy signal D6   0500 0000
 #define AP (systemset_P8[6])//A row of the display storage unit of the number of bytes
 
-sbit _WR   =P3^1; 
-sbit _RD   =P3^0;  
+sbit _WR  =P3^1; 
+sbit _RD  =P3^0;  
 sbit CS   =P3^5; 
 sbit CD   =P3^3; 
 sbit reset=P3^2;

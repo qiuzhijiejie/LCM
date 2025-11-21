@@ -3,49 +3,76 @@
 #include "picture.h"
 sbit LCD_FS=P3^5;
 sbit LCD_EN=P3^3;
-//unsigned char mode;
-////extern  unsigned char  Y; 
-////extern  unsigned char  X; 
+unsigned char mode;
+//extern  unsigned char  Y; 
+//extern  unsigned char  X; 
 
 
-//void Main( void )   
-//{
-//	LCD_EN=0;  
-//	LCD_FS=0; 
-//	LcmInit(); 
+void Main( void )   
+{
+	LCD_EN=0;  
+	LCD_FS=0; 
+	LcmInit(); 
 //	LcmClear();
 //    DisplayDots(0x55,0xaa);
-//    Delay(500); 	
+//    Delay(2000); 	
 //    DisplayDots(0xaa,0x55);
-//    Delay(500);  
+//    Delay(2000);  
 //    DisplayDots(0x55,0x55);
-//    Delay(500); 	
+//    Delay(2000); 	
 //    DisplayDots(0xaa,0xaa);
-//    Delay(500); 
+//    Delay(2000); 
 //    DisplayDots(0xff,0x00);
-//    Delay(500); 
+//    Delay(2000); 
 //    DisplayDots(0x00,0xff);
-//    Delay(500); 
-//	DisplayDots(0xff,0xff);
-//    Delay(500); 	
-//	LcmClear();
+//    Delay(2000); 
+//	  DisplayDots(0xff,0xff);
+//    Delay(2000); 	
+//	  LcmClear();
 //	
 //    DisplayBMP(0,0,240,128,BMP1);   
-//    Delay(500);    
+//    Delay(2000);    
 //    ReverseDisplayBMP(0,0,240,128,BMP1);   
-//    Delay(500);
+//    Delay(2000);
 //	
 //	LcmClear();
 //	Display_FullCGROM();
-//	Delay(500);
+//	Delay(2000);
 //	
 //	LcmClear();
 //	picture();
-//	
+	
 
-// while(1)  
-//{
-
+ while(1)  
+{
+	LcmClear();
+	picture();
+	Delay(900); 
+    DisplayDots(0x55,0xaa);
+    Delay(900);  	
+    DisplayDots(0xaa,0x55);
+    Delay(900);   
+    DisplayDots(0x55,0x55);
+    Delay(900);  	
+    DisplayDots(0xaa,0xaa);
+    Delay(900);  
+    DisplayDots(0xff,0x00);
+    Delay(900);  
+    DisplayDots(0x00,0xff);
+    Delay(900);  
+	DisplayDots(0xff,0xff);
+    Delay(900);  	
+	LcmClear();
+	
+    DisplayBMP(0,0,240,128,BMP1);   
+    Delay(900);     
+    ReverseDisplayBMP(0,0,240,128,BMP1);   
+    Delay(900); 
+	
+	LcmClear();
+	Display_FullCGROM();
+	Delay(900);
+	
 //  		if(ReadKey1())
 //		mode++;
 //		mode%=10;
@@ -73,31 +100,28 @@ sbit LCD_EN=P3^3;
 //		break;
 
 //}
-// }   
-//}
-
-
-
-
-
-void main(void)   
-{
-    LCD_EN = 0;  
-    LCD_FS = 0; 
-    LcmInit(); 
-    LcmClear();
-
-    while (1)  
-    {
-      
-        if (ReadKey1()) 
-        {
-            HandleKey(); 
-        } 
-        else 
-        {
-          
-            DisplayPatterns(); 
-        }
-    }   
+ }   
 }
+
+
+//void main(void)   
+//{
+//    LCD_EN = 0;  
+//    LCD_FS = 0; 
+//    LcmInit(); 
+//    LcmClear();
+
+//    while (1)  
+//    {
+//      
+//        if (ReadKey1()) 
+//        {
+//            HandleKey(); 
+//        } 
+//        else 
+//        {
+//          
+//            DisplayPatterns(); 
+//        }
+//    }   
+//}

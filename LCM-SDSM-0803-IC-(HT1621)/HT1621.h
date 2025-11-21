@@ -2,9 +2,16 @@
 #ifndef __HT1621_H__
 #define __HT1621_H__
 
-sbit LCDDATA = P1^1;
-sbit LCDCS1  = P1^2;
-sbit LCDWR   = P1^0;
+//sbit LCDDATA = P1^1;
+//sbit LCDCS1  = P1^2;
+//sbit LCDWR   = P1^0;
+//sbit LCDRD   = P1^3;
+
+
+
+sbit LCDDATA = P3^3;
+sbit LCDCS1  = P3^0;
+sbit LCDWR   = P3^1;
 sbit LCDRD   = P1^3;
 
 void lcd_init();

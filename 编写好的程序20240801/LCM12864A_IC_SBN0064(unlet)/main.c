@@ -1,30 +1,30 @@
- #include <REG52.H>       
+#include <REG52.H>       
 #include "lcd12864.h"   
 #include "picture.h" 
-//unsigned char mode;
+unsigned char mode;
 sbit int0=P2^1; 
-//   
-//void main( void )   
-//{      
-//  Delay(20);  
-//  IE=0x81;
-//  IP=0x01;
-//  TCON=0x01;
-//  int0=1;  
-//  LcmInit();   
-//  LcmClear(); 
-//  LcmPutDots(0x55,0xaa);
-//  Delay(600); 
-//  LcmPutDots(0xaa,0x55);
-//  Delay(600); 
-//  LcmPutDots(0x55,0x55);
-//  Delay(600); 
-//  LcmPutDots(0xaa,0xaa);
-//  Delay(600); 
-//  LcmPutDots(0xff,0x00);
-//  Delay(600); 
-//  LcmPutDots(0x00,0xff);
-//  Delay(600); 
+   
+void main( void )   
+{      
+  Delay(20);  
+  IE=0x81;
+  IP=0x01;
+  TCON=0x01;
+  int0=1;  
+  LcmInit();   
+  LcmClear(); 
+  LcmPutDots(0x55,0xaa);
+  Delay(600); 
+  LcmPutDots(0xaa,0x55);
+  Delay(600); 
+  LcmPutDots(0x55,0x55);
+  Delay(600); 
+  LcmPutDots(0xaa,0xaa);
+  Delay(600); 
+  LcmPutDots(0xff,0x00);
+  Delay(600); 
+  LcmPutDots(0x00,0xff);
+  Delay(600); 
 //  Display_Chinese();
 //  Delay(500); 
 
@@ -56,31 +56,31 @@ sbit int0=P2^1;
 //	 }
 
 // }   
-//} 
+} 
 
-void main(void)   
-{
+//void main(void)   
+//{
 
-	Delay(20); 
-	IE=0x81;
-	IP=0x01;
-	TCON=0x01;
-	int0=1;  
-	LcmInit();   
-	LcmClear(); 
-    while (1)  
-    {   
-        if (key()) 
-        {
-            HandleKey(); 
-        } 
-        else 
-        {
-          
-            DisplayPatterns(); 
-        }
-    }   
-}
+//	Delay(20); 
+//	IE=0x81;
+//	IP=0x01;
+//	TCON=0x01;
+//	int0=1;  
+//	LcmInit();   
+//	LcmClear(); 
+//    while (1)  
+//    {   
+//        if (key()) 
+//        {
+//            HandleKey(); 
+//        } 
+//        else 
+//        {
+//          
+//            DisplayPatterns(); 
+//        }
+//    }   
+//}
 
 
   

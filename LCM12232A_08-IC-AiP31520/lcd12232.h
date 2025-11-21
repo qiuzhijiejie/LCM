@@ -24,7 +24,7 @@ void Display16_16Chinese(unsigned char page, unsigned char col, unsigned char Ch
 void Display8_16English(unsigned char page, unsigned char col, unsigned char Character_coding,  unsigned char ft[]) ;
 void DisplayPatterns();
 void HandleKey() ;
-
-
+void DisplayLineEnglish(unsigned char start_y, unsigned char count);
+void DisplayLineEnglishEx(unsigned char x, unsigned char start_y, unsigned char start_index, unsigned char count);
 
 #endif

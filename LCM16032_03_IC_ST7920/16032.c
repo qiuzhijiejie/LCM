@@ -220,8 +220,8 @@ void putstr(unsigned char code *s)      //显示字符串子程序,字符码为0时退出
 
 void putstrxy(unsigned char cx,unsigned char cy,unsigned char code *s)
 {                                       //在(cx,cy)字符位置写字符串子程序
-    Column=cx;                           //置当前X位置为cx
-    row=cy;                           //置当前Y位置为cy
+    Column=cx;                          //置当前X位置为cx
+    row=cy;                             //置当前Y位置为cy
     putstr(s);
 }
 

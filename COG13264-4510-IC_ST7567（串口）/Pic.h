@@ -32,6 +32,7 @@ extern uchar code B1[16];
 extern uchar code bb[16];
 extern uchar code C[16];
 extern uchar code D[16];
+extern uchar code dd[16];
 extern uchar code E[16];
 extern uchar code ee[16];
 extern uchar code F[16];

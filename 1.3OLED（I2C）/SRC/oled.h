@@ -11,9 +11,11 @@
 #define OLED_DATA 1	//写数据
 
 
-sbit OLED_SCL=P2^0;//SCL
-sbit OLED_SDA=P2^1;//SDA
+//sbit OLED_SCL=P2^0;//SCL
+//sbit OLED_SDA=P2^1;//SDA
 
+sbit OLED_SCL=P1^0;//SCL
+sbit OLED_SDA=P1^1;//SDA
 sbit OLED_RES =P1^2;//RES
 
 //-----------------OLED端口定义----------------

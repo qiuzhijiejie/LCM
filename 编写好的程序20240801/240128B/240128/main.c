@@ -95,7 +95,7 @@ bit CharImageReverse;                   //×Ö·û¼°Í¼ÐÎµÄ·´ÏÔ¿ØÖÆ,0(Õý³£ÏÔÊ¾),1(·´Ï
 //×Ö½Ú·½Ïò:[Ë®Æ½] ×ÖÎ»Ë³Ðò:[´Ó¸ßµ½µÍ]
 //ÖÐÎÄ×ÖÌå:[ËÎÌå] Ó¢ÎÄ×ÖÌå:[ËÎÌå] ×ÖÌå´óÐ¡:[16]
 
-#define ENGLISHCHARNUMBER  40      //¾«¼ò°æÓ¢ÎÄ×Ö·û¿âÖÐµÄÓ¢ÎÄ×Ö·ûµÄ¸öÊý
+#define ENGLISHCHARNUMBER  41      //¾«¼ò°æÓ¢ÎÄ×Ö·û¿âÖÐµÄÓ¢ÎÄ×Ö·ûµÄ¸öÊý
 #define CHINESECHARNUMBER  1       //¾«¼ò°æÖÐÎÄ×Ö·û¿âÖÐµÄÖÐÎÄ×Ö·ûµÄ¸öÊý
 #define ENGLISHCHARSIZE    8       //Ó¢ÎÄ×Ö·ûX·½ÏòÏÔÊ¾µãµÄ¸öÊý
 #define CHINESECHARSIZE    16      //ÖÐÎÄ×Ö·ûX·½Ïò¼°ÖÐÓ¢ÎÄ×Ö·ûY·½ÏòÏÔÊ¾µãµÄ¸öÊý
@@ -131,6 +131,7 @@ unsigned int code EnglishCode[]={
 0x5a,    //×Ö·û026:[Z]
 0x61,    //×Ö·û027:[a]
 0x63,    //×Ö·û028:[c]
+0x64,    //×Ö·û028:[c]
 0x65,    //×Ö·û029:[e]
 0x67,    //×Ö·û030:[g]
 0x68,    //×Ö·û031:[h]
@@ -206,6 +207,10 @@ unsigned char code EnglishCharDot[]={
 0x44,0x0c,0x34,0x44,0x4c,0x36,0x00,0x00,
 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x1c,   //×Ö·û028:[c]
 0x22,0x40,0x40,0x40,0x22,0x1c,0x00,0x00,
+
+/*-- ID:0,×Ö·û:"d",ASCII±àÂë:64,¶ÔÓ¦×Ö:¿íx¸ß=8x16,»­²¼:¿íW=8 ¸ßH=16,¹²16×Ö½Ú*/
+0x00,0x00,0x00,0x06,0x02,0x02,0x3E,0x42,0x42,0x42,0x42,0x46,0x3B,0x00,0x00,0x00,
+
 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x3c,   //×Ö·û029:[e]
 0x42,0x42,0x7e,0x40,0x42,0x3c,0x00,0x00,
 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x3e,   //×Ö·û030:[g]
@@ -303,14 +308,14 @@ void exsample(void)                     //ÑÝÊ¾³ÌÐò
     exdelay();                          //ÑÓÊ±Ô¼600mS
 
 //3.×Ö·û´®²âÊÔ: ÔÚ(12,32)Î»ÖÃÏÔÊ¾"ShenZhen Oriental Technology"×Ö·û´®.
-    XPOS=12;
+    XPOS=50;
     YPOS=32;
-    putstr("Intelligent Optoelectronics");    
+    putstr(" Made in China");    
 	
-	XPOS=12;
-    YPOS=48;
-    putstr(" Co.,LtD.");
-    exdelay();                          //ÑÓÊ±Ô¼600mS
+//	XPOS=12;
+//    YPOS=48;
+//    putstr(" Co.,LtD.");
+//    exdelay();                          //ÑÓÊ±Ô¼600mS
 
 //4.×Ö·û´®²âÊÔ: ÔÚ(40,52)Î»ÖÃÏÔÊ¾"WWW.ORIENTAL-LCD.COM"×Ö·û´®.
 //    XPOS=40;
@@ -365,7 +370,8 @@ void exsample(void)                     //ÑÝÊ¾³ÌÐò
 //13.È«ÆÁ²âÊÔ: ËùÓÐ×ø±êµãÈ«²¿ÏÔÊ¾.
     lcdfill(0);                        //È«ÏÔ
     exdelay();                          //ÑÓÊ±Ô¼600mS
-
+lcdfill(0x55)  ;exdelay();exdelay();
+lcdfill(0xaa) ;exdelay();exdelay(); 
 }
 void exdelay(void)                      //ÑÝÊ¾ÑÓÊ±×Ó³ÌÐò
 { unsigned char i,j,k;                  //ÑÓÊ±Ô¼600mS

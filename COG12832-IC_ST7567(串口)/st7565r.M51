@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    05/29/2025  18:58:56  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    11/14/2025  13:35:30  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22.4.0, INVOKED BY:
@@ -59,7 +59,7 @@ LINK MAP OF MODULE:  st7565r (?C_STARTUP)
             CODE    19D0H     0014H     UNIT         ?PR?LCD_RESET?12864
             CODE    19E4H     000DH     UNIT         ?PR?CLEAR?12864
             CODE    19F1H     000CH     UNIT         ?C_C51STARTUP
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/29/2025  18:58:56  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/14/2025  13:35:30  PAGE 2
 
 
             CODE    19FDH     000AH     UNIT         ?PR?_GOTOXY?12864
@@ -119,7 +119,7 @@ SEGMENT                                DATA_GROUP
 
 ?PR?WAIT_AND_CLEAR?12864             -----    -----
   +--> ?PR?_DELAYMS?12864
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/29/2025  18:58:56  PAGE 3
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/14/2025  13:35:30  PAGE 3
 
 
   +--> ?PR?CLEAR?12864
@@ -179,7 +179,7 @@ SYMBOL TABLE OF MODULE:  st7565r (?C_STARTUP)
   C:19F1H         LINE#         133
   C:19F3H         LINE#         134
   C:19F4H         LINE#         135
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/29/2025  18:58:56  PAGE 4
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/14/2025  13:35:30  PAGE 4
 
 
   C:19F5H         LINE#         136
@@ -239,7 +239,7 @@ SYMBOL TABLE OF MODULE:  st7565r (?C_STARTUP)
   B:00B0H.6       PUBLIC        sclk
   C:13EDH         PUBLIC        xian
   C:19A4H         PUBLIC        _SetCA
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/29/2025  18:58:56  PAGE 5
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/14/2025  13:35:30  PAGE 5
 
 
   C:1A07H         PUBLIC        wait_and_clear
@@ -299,7 +299,7 @@ SYMBOL TABLE OF MODULE:  st7565r (?C_STARTUP)
   -------         PROC          LCD_RESET
   C:19D0H         LINE#         34
   C:19D0H         LINE#         35
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/29/2025  18:58:56  PAGE 6
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/14/2025  13:35:30  PAGE 6
 
 
   C:19D0H         LINE#         36
@@ -359,7 +359,7 @@ SYMBOL TABLE OF MODULE:  st7565r (?C_STARTUP)
   C:19C4H         LINE#         78
   C:19C9H         LINE#         79
   -------         ENDPROC       _WRITE_DATA
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/29/2025  18:58:56  PAGE 7
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/14/2025  13:35:30  PAGE 7
 
 
   -------         PROC          _GOTOXY
@@ -419,7 +419,7 @@ SYMBOL TABLE OF MODULE:  st7565r (?C_STARTUP)
   -------         ENDPROC       LCD_TEST
   -------         PROC          LCD_KUANG
   -------         DO            
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/29/2025  18:58:56  PAGE 8
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/14/2025  13:35:30  PAGE 8
 
 
   D:0002H         SYMBOL        i
@@ -479,7 +479,7 @@ SYMBOL TABLE OF MODULE:  st7565r (?C_STARTUP)
   C:16DEH         LINE#         192
   C:16E2H         LINE#         193
   C:16E5H         LINE#         194
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/29/2025  18:58:56  PAGE 9
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/14/2025  13:35:30  PAGE 9
 
 
   C:16E8H         LINE#         197
@@ -539,7 +539,7 @@ SYMBOL TABLE OF MODULE:  st7565r (?C_STARTUP)
   C:1670H         LINE#         252
   C:167AH         LINE#         253
   C:167AH         LINE#         254
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/29/2025  18:58:56  PAGE 10
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/14/2025  13:35:30  PAGE 10
 
 
   C:167CH         LINE#         255
@@ -599,7 +599,7 @@ SYMBOL TABLE OF MODULE:  st7565r (?C_STARTUP)
   C:17A5H         LINE#         292
   C:17A8H         LINE#         293
   C:17A8H         LINE#         294
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/29/2025  18:58:56  PAGE 11
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/14/2025  13:35:30  PAGE 11
 
 
   C:17ABH         LINE#         295
@@ -659,7 +659,7 @@ SYMBOL TABLE OF MODULE:  st7565r (?C_STARTUP)
   C:1588H         PUBLIC        ?C?IMUL
   -------         ENDMOD        ?C?IMUL
 
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/29/2025  18:58:56  PAGE 12
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/14/2025  13:35:30  PAGE 12
 
 
 Program Size: data=77.0 xdata=0 code=6682

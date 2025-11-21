@@ -17,6 +17,6 @@ void main()
 		display_digit(i, 2); // 显示数字 i 的 2dot 布局
 		delay(3000);
 	}
-		
+	
 	}	
 }

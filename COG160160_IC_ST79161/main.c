@@ -61,9 +61,9 @@ void main()
 		disp_bmp(Border);
 		delayms(5000);
 		while (DN());
-		Yehui_UI();
-		delayms(5000);
-		while (DN());
+//		Yehui_UI();
+//		delayms(5000);
+//		while (DN());
 		disp_bmp(CustImg);
 		delayms(5000);
 

@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   LCD                                                               07/11/2025 16:04:45 PAGE 1   
+C51 COMPILER V9.60.7.0   LCD                                                               09/20/2025 14:13:26 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD
@@ -62,7 +62,7 @@ line level    source
   52                          0x9E,  //"D"
   53                          0x7C,  //"E"
   54                          0x78,  //"F"
-C51 COMPILER V9.60.7.0   LCD                                                               07/11/2025 16:04:45 PAGE 2   
+C51 COMPILER V9.60.7.0   LCD                                                               09/20/2025 14:13:26 PAGE 2   
 
   55                          0xBA,  //"H"
   56                          0x2C,  //"L"
@@ -126,7 +126,7 @@ line level    source
  114                          0xF2,  //"E"
  115                          0xE2,  //"F"
  116                          0xEC,  //"H"
-C51 COMPILER V9.60.7.0   LCD                                                               07/11/2025 16:04:45 PAGE 3   
+C51 COMPILER V9.60.7.0   LCD                                                               09/20/2025 14:13:26 PAGE 3   
 
  117                          0xB0,  //"L"
  118                          0xAE,  //"n"
@@ -190,7 +190,7 @@ line level    source
  176          {
  177   1              u8 ret_dat=0;
  178   1              switch(pos)
-C51 COMPILER V9.60.7.0   LCD                                                               07/11/2025 16:04:45 PAGE 4   
+C51 COMPILER V9.60.7.0   LCD                                                               09/20/2025 14:13:26 PAGE 4   
 
  179   1              {
  180   2                      case 14:
@@ -254,7 +254,7 @@ line level    source
  238   1              for(i=0;i<8;i++)
  239   1              {
  240   2                      SCK =0;
-C51 COMPILER V9.60.7.0   LCD                                                               07/11/2025 16:04:45 PAGE 5   
+C51 COMPILER V9.60.7.0   LCD                                                               09/20/2025 14:13:26 PAGE 5   
 
  241   2                      //LCD_Delay(1);
  242   2                      if(dat&0x80)
@@ -318,7 +318,7 @@ line level    source
  300   1              RCK=1;  //将数据更新到端口
  301   1      }
 
-C51 COMPILER V9.60.7.0   LCD                                                               07/11/2025 16:04:45 PAGE 6   
+C51 COMPILER V9.60.7.0   LCD                                                               09/20/2025 14:13:26 PAGE 6   
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

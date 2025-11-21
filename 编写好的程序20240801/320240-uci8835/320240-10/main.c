@@ -20,6 +20,11 @@ sbit RD_E=P1^4;
 sbit WR_RW=P1^5;
 sbit A0 =P1^6;
 
+//sbit RES=P3^2;
+//sbit CS =P3^5;
+//sbit RD_E=P3^0;
+//sbit WR_RW=P3^1;
+//sbit A0 =P3^3;
 
 
 void ComWrite(Uchar com);

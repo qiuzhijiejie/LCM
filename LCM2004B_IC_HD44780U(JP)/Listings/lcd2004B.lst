@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   LCD2004B                                                          12/11/2024 16:16:18 PAGE 1   
+C51 COMPILER V9.60.7.0   LCD2004B                                                          08/29/2025 15:56:06 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD2004B
@@ -62,7 +62,7 @@ line level    source
   52          
   53          
   54          /**
-C51 COMPILER V9.60.7.0   LCD2004B                                                          12/11/2024 16:16:18 PAGE 2   
+C51 COMPILER V9.60.7.0   LCD2004B                                                          08/29/2025 15:56:06 PAGE 2   
 
   55            * @brief  LCD2004写命令
   56            * @param  Command 要写入的命令
@@ -126,7 +126,7 @@ line level    source
  114   1          LCD_WriteCommand(0x01); // 光标复位，清屏
  115   1              Delay(0.1); 
  116   1      
-C51 COMPILER V9.60.7.0   LCD2004B                                                          12/11/2024 16:16:18 PAGE 3   
+C51 COMPILER V9.60.7.0   LCD2004B                                                          08/29/2025 15:56:06 PAGE 3   
 
  117   1      }
  118          
@@ -190,7 +190,7 @@ line level    source
  176          
  177          
  178          /**
-C51 COMPILER V9.60.7.0   LCD2004B                                                          12/11/2024 16:16:18 PAGE 4   
+C51 COMPILER V9.60.7.0   LCD2004B                                                          08/29/2025 15:56:06 PAGE 4   
 
  179           * @brief  显示字符函数
  180           * @param  Line0-3行 Column 0-19列 i字符
@@ -254,7 +254,7 @@ line level    source
  238           * @retval 无
  239           */
  240          void Write_DDRAM(unsigned char a)
-C51 COMPILER V9.60.7.0   LCD2004B                                                          12/11/2024 16:16:18 PAGE 5   
+C51 COMPILER V9.60.7.0   LCD2004B                                                          08/29/2025 15:56:06 PAGE 5   
 
  241          {
  242   1          unsigned char j;
@@ -318,7 +318,7 @@ line level    source
  300   3                  if (row == 0) 
  301   3                  {
  302   4                      position = 0x80 + col;   // 第1行地址 0x80 起始
-C51 COMPILER V9.60.7.0   LCD2004B                                                          12/11/2024 16:16:18 PAGE 6   
+C51 COMPILER V9.60.7.0   LCD2004B                                                          08/29/2025 15:56:06 PAGE 6   
 
  303   4                  } 
  304   3                  else if (row == 1)
@@ -342,82 +342,82 @@ line level    source
  322   1      }
  323          
  324          
- 325          unsigned char data pattern1[8] = {0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15}; 
- 326          unsigned char data pattern2[8] = {0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A};    
- 327          unsigned char data pattern3[8] = {0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15}; 
- 328          unsigned char data pattern4[8] = {0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A}; 
- 329          unsigned char data pattern5[8] = {0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00}; 
- 330          unsigned char data pattern6[8] = {0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F};      
- 331          unsigned char data pattern7[8] = {0x00, 0x15, 0x00, 0x15, 0x00, 0x15, 0x00, 0x15}; 
- 332          void HandleKey() 
- 333          {
- 334   1              unsigned char mode;
- 335   1              
- 336   1                      if (ReadKey1()) 
- 337   1                {  
- 338   2                      LCD_Clear();
- 339   2                      mode++;
- 340   2                      mode %= 8;                      
- 341   2                      switch (mode) 
- 342   2                {
- 343   3              case 0:            
- 344   3                              displayCustomCharacter1(pattern1); 
- 345   3                  break;
- 346   3              case 1:
- 347   3                  displayCustomCharacter1(pattern2);  
- 348   3                  break;
- 349   3              case 2:
- 350   3                  displayCustomCharacter1(pattern3); 
- 351   3                  break;
- 352   3              case 3:
- 353   3                 displayCustomCharacter1(pattern4);  
- 354   3                  break;
- 355   3              case 4:
- 356   3                  displayCustomCharacter1(pattern5);  
- 357   3                  break;
- 358   3              case 5:
- 359   3                  displayCustomCharacter1(pattern6);  
- 360   3                  break;
- 361   3                      case 6:
- 362   3                              displayCustomCharacter1(pattern7);
- 363   3                              break;
- 364   3                      case 7:
-C51 COMPILER V9.60.7.0   LCD2004B                                                          12/11/2024 16:16:18 PAGE 7   
+ 325          //unsigned char data pattern1[8] = {0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15}; 
+ 326          //unsigned char data pattern2[8] = {0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A};  
+ 327          //unsigned char data pattern3[8] = {0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15}; 
+ 328          //unsigned char data pattern4[8] = {0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A}; 
+ 329          //unsigned char data pattern5[8] = {0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00}; 
+ 330          //unsigned char data pattern6[8] = {0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F};    
+ 331          //unsigned char data pattern7[8] = {0x00, 0x15, 0x00, 0x15, 0x00, 0x15, 0x00, 0x15}; 
+ 332          //void HandleKey() 
+ 333          //{
+ 334          //      unsigned char mode;
+ 335          //      
+ 336          //              if (ReadKey1()) 
+ 337          //        {  
+ 338          //              LCD_Clear();
+ 339          //              mode++;
+ 340          //              mode %= 8;                      
+ 341          //              switch (mode) 
+ 342          //        {
+ 343          //        case 0:            
+ 344          //                      displayCustomCharacter1(pattern1); 
+ 345          //            break;
+ 346          //        case 1:
+ 347          //            displayCustomCharacter1(pattern2);  
+ 348          //            break;
+ 349          //        case 2:
+ 350          //            displayCustomCharacter1(pattern3); 
+ 351          //            break;
+ 352          //        case 3:
+ 353          //           displayCustomCharacter1(pattern4);  
+ 354          //            break;
+ 355          //        case 4:
+ 356          //            displayCustomCharacter1(pattern5);  
+ 357          //            break;
+ 358          //        case 5:
+ 359          //            displayCustomCharacter1(pattern6);  
+ 360          //            break;
+ 361          //              case 6:
+ 362          //                      displayCustomCharacter1(pattern7);
+ 363          //                      break;
+ 364          //              case 7:
+C51 COMPILER V9.60.7.0   LCD2004B                                                          08/29/2025 15:56:06 PAGE 7   
 
- 365   3                              write_CGROM(0x10); 
- 366   3                         break;
- 367   3                      }
- 368   2              }
- 369   1      }
+ 365          //                      write_CGROM(0x10); 
+ 366          //                 break;
+ 367          //              }
+ 368          //      }
+ 369          //}
  370          
- 371          void DisplayPatterns() 
- 372          {
- 373   1          static int step = 0; // 当前显示图案步骤
- 374   1          switch (step) 
- 375   1          {
- 376   2              case 0: displayCustomCharacter1(pattern1);  Delay(80); break;
- 377   2              case 1: displayCustomCharacter1(pattern2);  Delay(80); break;
- 378   2              case 2: displayCustomCharacter1(pattern3);  Delay(80); break;
- 379   2              case 3: displayCustomCharacter1(pattern4);  Delay(80); break;
- 380   2              case 4: displayCustomCharacter1(pattern5);  Delay(80); break;
- 381   2              case 5: displayCustomCharacter1(pattern6);  Delay(80); break;
- 382   2              case 6: displayCustomCharacter1(pattern7);  Delay(80); break;
- 383   2              case 7: write_CGROM(0x10); Delay(80); break;
- 384   2              case 8: Write_DDRAM(0x60); Delay(80); break;
- 385   2              case 9: LCD_Clear();LCD_ShowString(2,6,"LCM2004B");LCD_ShowString(1,2,"YeHuiDisplay.com");Delay(80
-             -); break;
- 386   2          }
- 387   1          step++;
- 388   1          if (step > 9) step = 0; // 循环
- 389   1      }
+ 371          //void DisplayPatterns() 
+ 372          //{
+ 373          //    static int step = 0; // 当前显示图案步骤
+ 374          //    switch (step) 
+ 375          //    {
+ 376          //        case 0: displayCustomCharacter1(pattern1);  Delay(80); break;
+ 377          //        case 1: displayCustomCharacter1(pattern2);  Delay(80); break;
+ 378          //        case 2: displayCustomCharacter1(pattern3);  Delay(80); break;
+ 379          //        case 3: displayCustomCharacter1(pattern4);  Delay(80); break;
+ 380          //        case 4: displayCustomCharacter1(pattern5);  Delay(80); break;
+ 381          //        case 5: displayCustomCharacter1(pattern6);  Delay(80); break;
+ 382          //        case 6: displayCustomCharacter1(pattern7);  Delay(80); break;
+ 383          //        case 7: write_CGROM(0x10); Delay(80); break;
+ 384          //        case 8: Write_DDRAM(0x60); Delay(80); break;
+ 385          //        case 9:       LCD_Clear();LCD_ShowString(2,6,"LCM2004B");LCD_ShowString(1,2,"YeHuiDisplay.com");Delay(
+             -80); break;
+ 386          //    }
+ 387          //    step++;
+ 388          //    if (step > 9) step = 0; // 循环
+ 389          //}
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    800    ----
-   CONSTANT SIZE    =     26    ----
+   CODE SIZE        =    496    ----
+   CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =     58      10
+   DATA SIZE        =   ----       9
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

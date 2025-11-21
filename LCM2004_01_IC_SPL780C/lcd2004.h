@@ -3,6 +3,10 @@
 #define LCD_DataPort P1  // 定义P0引脚为数据端口
 
 
+
+
+
+
 void Delay(xms);
 void LCD_WriteCommand(unsigned char Command);
 void LCD_WriteData(unsigned char Data);

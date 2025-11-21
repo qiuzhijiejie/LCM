@@ -33,10 +33,10 @@ void main(void)
 	yehui_UI();
 	Delay_Xms(4000);
 //	WhatsApp();
-	YHLTD();
+//	YHLTD();
 	Delay_Xms(4000);
-	DispPic( PIC_5 );
-	Delay_Xms(4000);
+//	DispPic( PIC_5 );
+//	Delay_Xms(4000);
 	DispDot(0xf0,0x0f);
 	Delay_Xms(4000);			 
 	DispDots( 0x33,0xcc);

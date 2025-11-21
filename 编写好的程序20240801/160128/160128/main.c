@@ -315,12 +315,12 @@ void exsample(void)                     //演示程序
     exdelay();                          //延时约600mS
 
 //3.字符串测试: 在(6,35)位置显示"Oriental Technology"字符串.
-    XPOS=1;
-    YPOS=35;
-    putstr("Intelligent Optoelec");   
+    XPOS=20;
+    YPOS=43;
+    putstr(" Made in China");   
 	XPOS=1;
     YPOS=52;
-    putstr("tronics Co., Ltd.");
+//    putstr("tronics Co., Ltd.");
     exdelay();                          //延时约600mS
 
 //4.字符串测试: 在(1,52)位置显示"WWW.ORIENTAL-LCD.COM"字符串.
@@ -340,14 +340,14 @@ void exsample(void)                     //演示程序
 //6.字符串测试: 在(10,72)位置显示"DFSTN:160*128 DOTS"字符串.
     XPOS=10;
     YPOS=72;
-    putstr("DFSTN:160*128 DOTS");
+    putstr(" DFSTN:160*128 DOTS");
     exdelay();                          //延时约600mS
 
 //7.反显测试: 在(10,72)位置反显"DFSTN:160*128 DOTS"字符串.
     XPOS=10;
     YPOS=72;
     CharImageReverse=1;
-    putstr("DFSTN:160*128 DOTS");
+    putstr(" DFSTN:160*128 DOTS");
     CharImageReverse=0;
     exdelay();                          //延时约600mS
 

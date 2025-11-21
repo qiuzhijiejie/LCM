@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   HT1621                                                            07/23/2025 10:02:39 PAGE 1   
+C51 COMPILER V9.60.7.0   HT1621                                                            09/26/2025 11:24:12 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE HT1621
@@ -62,7 +62,7 @@ line level    source
   52   2                      LCDDATA=0;
   53   2                      LCDWR=1;
   54   2                      _nop_();
-C51 COMPILER V9.60.7.0   HT1621                                                            07/23/2025 10:02:39 PAGE 2   
+C51 COMPILER V9.60.7.0   HT1621                                                            09/26/2025 11:24:12 PAGE 2   
 
   55   2                      _nop_();                
   56   2                      LCDWR=0;
@@ -126,7 +126,7 @@ line level    source
  114   2              _nop_();
  115   2                      LCDWR=0;
  116   2      
-C51 COMPILER V9.60.7.0   HT1621                                                            07/23/2025 10:02:39 PAGE 3   
+C51 COMPILER V9.60.7.0   HT1621                                                            09/26/2025 11:24:12 PAGE 3   
 
  117   2                      date >>= 1;   
  118   2              }
@@ -143,60 +143,59 @@ line level    source
  129   1      }
  130          
  131          
- 132          
- 133          // 段码：高4位 + 低4位
- 134          typedef struct {
- 135              unsigned char left;
- 136              unsigned char right;
- 137          } SegmentData;
- 138          
- 139          // 数字段码表
- 140          SegmentData digits[] = {
- 141              {0x0D, 0x0F}, // 0
- 142              {0x00, 0x0E}, // 1
- 143              {0x0E, 0x0B}, // 2
- 144              {0x0A, 0x0F}, // 3
- 145              {0x03, 0x0E}, // 4
- 146              {0x0B, 0x0D}, // 5
- 147              {0x0F, 0x0D}, // 6
- 148              {0x00, 0x0F}, // 7
- 149              {0x0F, 0x0F}, // 8
- 150              {0x03, 0x0F}  // 9
- 151          };
- 152          
- 153          void display_digit(unsigned char digit, unsigned char mode)
- 154          {
- 155   1          unsigned char addr;
- 156   1          unsigned char count;
- 157   1          unsigned char i;
- 158   1          SegmentData seg;
- 159   1      
- 160   1          if (digit > 9 || (mode != 1 && mode != 2)) {
- 161   2              return;
- 162   2          }
- 163   1      
- 164   1          seg = digits[digit];
- 165   1      
- 166   1          if (mode == 1) {
- 167   2              addr = 0x40;
- 168   2              count = 9;
- 169   2              for (i = 0; i < count; i++) {
- 170   3                  write_data(addr,     seg.left);
- 171   3                  write_data(addr + 1, seg.right);
- 172   3                  addr += 2;
- 173   3              }
- 174   2          } else {
- 175   2              addr = 0x52;
- 176   2              count = 7;
- 177   2              for (i = 0; i < count; i++) {
- 178   3                  write_data(addr,     seg.right);
-C51 COMPILER V9.60.7.0   HT1621                                                            07/23/2025 10:02:39 PAGE 4   
+ 132          // 段码：高4位 + 低4位
+ 133          typedef struct {
+ 134              unsigned char left;
+ 135              unsigned char right;
+ 136          } SegmentData;
+ 137          
+ 138          // 数字段码表
+ 139          SegmentData digits[] = {
+ 140              {0x0D, 0x0F}, // 0
+ 141              {0x00, 0x0E}, // 1
+ 142              {0x0E, 0x0B}, // 2
+ 143              {0x0A, 0x0F}, // 3
+ 144              {0x03, 0x0E}, // 4
+ 145              {0x0B, 0x0D}, // 5
+ 146              {0x0F, 0x0D}, // 6
+ 147              {0x00, 0x0F}, // 7
+ 148              {0x0F, 0x0F}, // 8
+ 149              {0x03, 0x0F}  // 9
+ 150          };
+ 151          
+ 152          void display_digit(unsigned char digit, unsigned char mode)
+ 153          {
+ 154   1          unsigned char addr;
+ 155   1          unsigned char count;
+ 156   1          unsigned char i;
+ 157   1          SegmentData seg;
+ 158   1      
+ 159   1          if (digit > 9 || (mode != 1 && mode != 2)) {
+ 160   2              return;
+ 161   2          }
+ 162   1      
+ 163   1          seg = digits[digit];
+ 164   1      
+ 165   1          if (mode == 1) {
+ 166   2              addr = 0x40;
+ 167   2              count = 9;
+ 168   2              for (i = 0; i < count; i++) {
+ 169   3                  write_data(addr,     seg.left);
+ 170   3                  write_data(addr + 1, seg.right);
+ 171   3                  addr += 2;
+ 172   3              }
+ 173   2          } else {
+ 174   2              addr = 0x52;
+ 175   2              count = 7;
+ 176   2              for (i = 0; i < count; i++) {
+ 177   3                  write_data(addr,     seg.right);
+ 178   3                  write_data(addr + 1, seg.left);
+C51 COMPILER V9.60.7.0   HT1621                                                            09/26/2025 11:24:12 PAGE 4   
 
- 179   3                  write_data(addr + 1, seg.left);
- 180   3                  addr += 2;
- 181   3              }
- 182   2          }
- 183   1      }
+ 179   3                  addr += 2;
+ 180   3              }
+ 181   2          }
+ 182   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

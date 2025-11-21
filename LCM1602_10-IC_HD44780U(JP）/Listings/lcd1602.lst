@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   LCD1602                                                           12/11/2024 16:00:42 PAGE 1   
+C51 COMPILER V9.60.7.0   LCD1602                                                           11/10/2025 11:35:21 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD1602
@@ -15,7 +15,7 @@ line level    source
    5          sbit LCD_EN = P3^2;
    6          sbit   KEY1 =P2^0;      
    7          
-   8          unsigned char mode;     
+   8          //unsigned char mode;   
    9          
   10          unsigned int ReadKey1() 
   11          {
@@ -62,7 +62,7 @@ line level    source
   52          
   53          
   54          
-C51 COMPILER V9.60.7.0   LCD1602                                                           12/11/2024 16:00:42 PAGE 2   
+C51 COMPILER V9.60.7.0   LCD1602                                                           11/10/2025 11:35:21 PAGE 2   
 
   55          /**
   56            * @brief  LCD1602写命令
@@ -126,7 +126,7 @@ line level    source
  114   1          LCD_WriteCommand(0x38); // 设置20×4显示,5X7点阵,8位数据接口 
  115   1          LCD_WriteCommand(0x0c); // 显示开,光标关,闪烁关
  116   1      //      LCD_WriteCommand(0x0f);//显示开,光标开.闪烁开
-C51 COMPILER V9.60.7.0   LCD1602                                                           12/11/2024 16:00:42 PAGE 3   
+C51 COMPILER V9.60.7.0   LCD1602                                                           11/10/2025 11:35:21 PAGE 3   
 
  117   1          LCD_WriteCommand(0x06); // 当读或写一个字符后地址指针加一,不移动
  118   1          LCD_WriteCommand(0x01); // 光标复位，清屏
@@ -190,7 +190,7 @@ line level    source
  176          void LCD_USER_ShowString(unsigned char Line, unsigned char Column, unsigned char  i) 
  177          {                       
  178   1              LCD_SetCursor(Line, Column); // 光标
-C51 COMPILER V9.60.7.0   LCD1602                                                           12/11/2024 16:00:42 PAGE 4   
+C51 COMPILER V9.60.7.0   LCD1602                                                           11/10/2025 11:35:21 PAGE 4   
 
  179   1              LCD_WriteData(i);
  180   1      }
@@ -254,7 +254,7 @@ line level    source
  238   1          for (j = 0; j < 20; j++) 
  239   1          {
  240   2              LCD_WriteData(a);    // 将字符 'a' 写入 LCD 显示数据存储器
-C51 COMPILER V9.60.7.0   LCD1602                                                           12/11/2024 16:00:42 PAGE 5   
+C51 COMPILER V9.60.7.0   LCD1602                                                           11/10/2025 11:35:21 PAGE 5   
 
  241   2          }
  242   1      
@@ -309,82 +309,82 @@ line level    source
  291   3              }
  292   2          }
  293   1      }
- 294          unsigned char data pattern1[8] = {0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15}; 
- 295          unsigned char data pattern2[8] = {0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A};    
- 296          unsigned char data pattern3[8] = {0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15};
- 297          unsigned char data pattern4[8] = {0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A}; 
- 298          unsigned char data pattern5[8] = {0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00};
- 299          unsigned char data pattern6[8] = {0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F};      
- 300          unsigned char data pattern7[8] = {0x00, 0x15, 0x00, 0x15, 0x00, 0x15, 0x00, 0x15}; 
- 301          void HandleKey() 
- 302          {
-C51 COMPILER V9.60.7.0   LCD1602                                                           12/11/2024 16:00:42 PAGE 6   
+ 294          //unsigned char data pattern1[8] = {0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15}; 
+ 295          //unsigned char data pattern2[8] = {0x0A, 0x15, 0x0A, 0x15, 0x0A, 0x15, 0x0A};  
+ 296          //unsigned char data pattern3[8] = {0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15};
+ 297          //unsigned char data pattern4[8] = {0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A}; 
+ 298          //unsigned char data pattern5[8] = {0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00};
+ 299          //unsigned char data pattern6[8] = {0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F, 0x00, 0x1F};    
+ 300          //unsigned char data pattern7[8] = {0x00, 0x15, 0x00, 0x15, 0x00, 0x15, 0x00, 0x15}; 
+ 301          //void HandleKey() 
+ 302          //{
+C51 COMPILER V9.60.7.0   LCD1602                                                           11/10/2025 11:35:21 PAGE 6   
 
- 303   1              if (ReadKey1()) 
- 304   1               {
- 305   2                                
- 306   2      //              LCD_Clear();
- 307   2                      mode++;
- 308   2                      mode %= 8;                      
- 309   2                      switch (mode) 
- 310   2               {
- 311   3              case 0:            
- 312   3                              displayCustomCharacter1(pattern1);//Delay(1000);
- 313   3                  break;
- 314   3              case 1:
- 315   3                  displayCustomCharacter1(pattern2);//Delay(1000); 
- 316   3                  break;
- 317   3              case 2:
- 318   3                  displayCustomCharacter1(pattern3);//Delay(1000); 
- 319   3                  break;
- 320   3              case 3:
- 321   3                  displayCustomCharacter1(pattern4);//Delay(1000);  
- 322   3                  break;
- 323   3              case 4:
- 324   3                  displayCustomCharacter1(pattern5);//Delay(1000);  
- 325   3                  break;
- 326   3              case 5:
- 327   3                  displayCustomCharacter1(pattern6);//Delay(1000); 
- 328   3                  break;
- 329   3                      case 6:
- 330   3                              displayCustomCharacter1(pattern7);//Delay(1000);
- 331   3                              break;
- 332   3                      case 7:
- 333   3                              write_CGROM(0x21);//Delay(1000);     
- 334   3                      }
- 335   2              }
- 336   1      }
+ 303          //      if (ReadKey1()) 
+ 304          //       {
+ 305          //                        
+ 306          ////            LCD_Clear();
+ 307          //              mode++;
+ 308          //              mode %= 8;                      
+ 309          //              switch (mode) 
+ 310          //       {
+ 311          //        case 0:            
+ 312          //                      displayCustomCharacter1(pattern1);//Delay(1000);
+ 313          //            break;
+ 314          //        case 1:
+ 315          //            displayCustomCharacter1(pattern2);//Delay(1000); 
+ 316          //            break;
+ 317          //        case 2:
+ 318          //            displayCustomCharacter1(pattern3);//Delay(1000); 
+ 319          //            break;
+ 320          //        case 3:
+ 321          //            displayCustomCharacter1(pattern4);//Delay(1000);  
+ 322          //            break;
+ 323          //        case 4:
+ 324          //            displayCustomCharacter1(pattern5);//Delay(1000);  
+ 325          //            break;
+ 326          //        case 5:
+ 327          //            displayCustomCharacter1(pattern6);//Delay(1000); 
+ 328          //            break;
+ 329          //              case 6:
+ 330          //                      displayCustomCharacter1(pattern7);//Delay(1000);
+ 331          //                      break;
+ 332          //              case 7:
+ 333          //                      write_CGROM(0x21);//Delay(1000);     
+ 334          //              }
+ 335          //      }
+ 336          //}
  337          
- 338          void DisplayPatterns() 
- 339          {
- 340   1          static int step = 0; 
- 341   1          switch (step) 
- 342   1          {
- 343   2              case 0: displayCustomCharacter1(pattern1);  Delay(80); break;
- 344   2              case 1: displayCustomCharacter1(pattern2);  Delay(80); break;
- 345   2              case 2: displayCustomCharacter1(pattern3);  Delay(80); break;
- 346   2              case 3: displayCustomCharacter1(pattern4);  Delay(80); break;
- 347   2              case 4: displayCustomCharacter1(pattern5);  Delay(80); break;
- 348   2              case 5: displayCustomCharacter1(pattern6);  Delay(80); break;
- 349   2              case 6: displayCustomCharacter1(pattern7);  Delay(80); break;
- 350   2              case 7: write_CGROM(0x21); Delay(80); break;
- 351   2              case 8: Write_DDRAM(0xA1); Delay(80); break;
- 352   2              case 9: LCD_Clear();LCD_ShowString(1,3,"LCM1602_10");LCD_ShowString(0,0,"YeHuiDisplay.com");Delay(
-             -80); break;
- 353   2          }
- 354   1          step++;
- 355   1          if (step > 9) step = 0; 
- 356   1      }
+ 338          //void DisplayPatterns() 
+ 339          //{
+ 340          //    static int step = 0; 
+ 341          //    switch (step) 
+ 342          //    {
+ 343          //        case 0: displayCustomCharacter1(pattern1);  Delay(80); break;
+ 344          //        case 1: displayCustomCharacter1(pattern2);  Delay(80); break;
+ 345          //        case 2: displayCustomCharacter1(pattern3);  Delay(80); break;
+ 346          //        case 3: displayCustomCharacter1(pattern4);  Delay(80); break;
+ 347          //        case 4: displayCustomCharacter1(pattern5);  Delay(80); break;
+ 348          //        case 5: displayCustomCharacter1(pattern6);  Delay(80); break;
+ 349          //        case 6: displayCustomCharacter1(pattern7);  Delay(80); break;
+ 350          //        case 7: write_CGROM(0x21); Delay(80); break;
+ 351          //        case 8: Write_DDRAM(0xA1); Delay(80); break;
+ 352          //        case 9: LCD_Clear();LCD_ShowString(1,3,"LCM1602_10");LCD_ShowString(0,0,"YeHuiDisplay.com");Dela
+             -y(80); break;
+ 353          //    }
+ 354          //    step++;
+ 355          //    if (step > 9) step = 0; 
+ 356          //}
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    747    ----
-   CONSTANT SIZE    =     28    ----
+   CODE SIZE        =    447    ----
+   CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-C51 COMPILER V9.60.7.0   LCD1602                                                           12/11/2024 16:00:42 PAGE 7   
+C51 COMPILER V9.60.7.0   LCD1602                                                           11/10/2025 11:35:21 PAGE 7   
 
-   DATA SIZE        =     59       9
+   DATA SIZE        =   ----       9
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

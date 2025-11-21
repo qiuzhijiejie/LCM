@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              12/11/2024 14:13:18 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/19/2025 15:02:53 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -11,102 +11,123 @@ line level    source
    1           #include <REG52.H>       
    2          #include "lcd12864.h"   
    3          #include "picture.h" 
-   4          //unsigned char mode;
+   4          unsigned char mode;
    5          sbit int0=P2^1; 
-   6          //   
-   7          //void main( void )   
-   8          //{      
-   9          //  Delay(20);  
-  10          //  IE=0x81;
-  11          //  IP=0x01;
-  12          //  TCON=0x01;
-  13          //  int0=1;  
-  14          //  LcmInit();   
-  15          //  LcmClear(); 
-  16          //  LcmPutDots(0x55,0xaa);
-  17          //  Delay(600); 
-  18          //  LcmPutDots(0xaa,0x55);
-  19          //  Delay(600); 
-  20          //  LcmPutDots(0x55,0x55);
-  21          //  Delay(600); 
-  22          //  LcmPutDots(0xaa,0xaa);
-  23          //  Delay(600); 
-  24          //  LcmPutDots(0xff,0x00);
-  25          //  Delay(600); 
-  26          //  LcmPutDots(0x00,0xff);
-  27          //  Delay(600); 
-  28          //  Display_Chinese();
-  29          //  Delay(500); 
-  30          
-  31          // while(1)   
-  32          // {
-  33          //       if(key())
-  34          //       {
-  35          //               mode++;
-  36          //               if(mode>8)mode=1;
-  37          //               switch(mode)
-  38          //               {
-  39          //                       case 1:LcmPutDots(0x55,0xaa);
-  40          //                       break;
-  41          //                       case 2:LcmPutDots(0xaa,0x55);
-  42          //                       break;
-  43          //                       case 3:LcmPutDots(0xaa,0xaa);
-  44          //                       break;
-  45          //                       case 4:LcmPutDots(0x55,0x55);
-  46          //                       break;
-  47          //                       case 5:LcmPutDots(0x00,0xff);
-  48          //                       break; 
-  49          //                       case 6:LcmPutDots(0xff,0x00);
-  50          //                       break; 
-  51          //                       case 7:LcmPutDots(0xff,0xff);
-  52          //                       break; 
-  53          //                       case 8:Display_Chinese();
-  54          //                       break;                          
-C51 COMPILER V9.60.7.0   MAIN                                                              12/11/2024 14:13:18 PAGE 2   
+   6             
+   7          void main( void )   
+   8          {      
+   9   1        Delay(20);  
+  10   1        IE=0x81;
+  11   1        IP=0x01;
+  12   1        TCON=0x01;
+  13   1        int0=1;  
+  14   1      //  LcmInit();   
+  15   1      //  LcmClear(); 
+  16   1      //  LcmPutDots(0x55,0xaa);
+  17   1      //  Delay(600); 
+  18   1      //  LcmPutDots(0xaa,0x55);
+  19   1      //  Delay(600); 
+  20   1      //  LcmPutDots(0x55,0x55);
+  21   1      //  Delay(600); 
+  22   1      //  LcmPutDots(0xaa,0xaa);
+  23   1      //  Delay(600); 
+  24   1      //  LcmPutDots(0xff,0x00);
+  25   1      //  Delay(600); 
+  26   1      //  LcmPutDots(0x00,0xff);
+  27   1      //  Delay(600); 
+  28   1      //  Display_Chinese();
+  29   1      //  Delay(500); 
+  30   1      
+  31   1       while(1)   
+  32   1       {
+  33   2               
+  34   2        LcmInit();   
+  35   2        LcmClear(); 
+  36   2        Display_Chinese();
+  37   2        Delay(1500); 
+  38   2        LcmPutDots(0x55,0xaa);
+  39   2        Delay(600); 
+  40   2        LcmPutDots(0xaa,0x55);
+  41   2        Delay(600); 
+  42   2        LcmPutDots(0x55,0x55);
+  43   2        Delay(600); 
+  44   2        LcmPutDots(0xaa,0xaa);
+  45   2        Delay(600); 
+  46   2        LcmPutDots(0xff,0x00);
+  47   2        Delay(600); 
+  48   2        LcmPutDots(0x00,0xff);
+  49   2        Delay(600); 
+  50   2      
+  51   2               
+  52   2      //       if(key())
+  53   2      //       {
+  54   2      //               mode++;
+C51 COMPILER V9.60.7.0   MAIN                                                              09/19/2025 15:02:53 PAGE 2   
 
-  55          //               }               
-  56          //       }
-  57          
-  58          // }   
-  59          //} 
-  60          
-  61          void main(void)   
-  62          {
-  63   1      
-  64   1              Delay(20); 
-  65   1              IE=0x81;
-  66   1              IP=0x01;
-  67   1              TCON=0x01;
-  68   1              int0=1;  
-  69   1              LcmInit();   
-  70   1              LcmClear(); 
-  71   1          while (1)  
-  72   1          {   
-  73   2              if (key()) 
-  74   2              {
-  75   3                  HandleKey(); 
-  76   3              } 
-  77   2              else 
-  78   2              {
-  79   3                
-  80   3                  DisplayPatterns(); 
-  81   3              }
-  82   2          }   
-  83   1      }
-  84          
-  85          
-  86            
+  55   2      //               if(mode>8)mode=1;
+  56   2      //               switch(mode)
+  57   2      //               {
+  58   2      //                       case 1:LcmPutDots(0x55,0xaa);
+  59   2      //                       break;
+  60   2      //                       case 2:LcmPutDots(0xaa,0x55);
+  61   2      //                       break;
+  62   2      //                       case 3:LcmPutDots(0xaa,0xaa);
+  63   2      //                       break;
+  64   2      //                       case 4:LcmPutDots(0x55,0x55);
+  65   2      //                       break;
+  66   2      //                       case 5:LcmPutDots(0x00,0xff);
+  67   2      //                       break; 
+  68   2      //                       case 6:LcmPutDots(0xff,0x00);
+  69   2      //                       break; 
+  70   2      //                       case 7:LcmPutDots(0xff,0xff);
+  71   2      //                       break; 
+  72   2      //                       case 8:Display_Chinese();
+  73   2      //                       break;                          
+  74   2      //               }               
+  75   2      //       }
+  76   2      
+  77   2       }   
+  78   1      } 
+  79          
+  80          //void main(void)   
+  81          //{
+  82          
+  83          //      Delay(20); 
+  84          //      IE=0x81;
+  85          //      IP=0x01;
+  86          //      TCON=0x01;
+  87          //      int0=1;  
+  88          //      LcmInit();   
+  89          //      LcmClear(); 
+  90          //    while (1)  
+  91          //    {   
+  92          //        if (key()) 
+  93          //        {
+  94          //            HandleKey(); 
+  95          //        } 
+  96          //        else 
+  97          //        {
+  98          //          
+  99          //            DisplayPatterns(); 
+ 100          //        }
+ 101          //    }   
+ 102          //}
+ 103          
+ 104          
+ 105            
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     40    ----
+   CODE SIZE        =    120    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =   ----    ----
+   XDATA SIZE       =      1    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
+
+C51 COMPILER V9.60.7.0   MAIN                                                              09/19/2025 15:02:53 PAGE 3   
 
 
 C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

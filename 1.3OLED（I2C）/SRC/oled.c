@@ -84,11 +84,11 @@ void I2C_Stop(void)
 void I2C_WaitAck(void) //测数据信号的电平
 {
 	OLED_SDA_Set();
-	IIC_delay();
+//	IIC_delay();
 	OLED_SCL_Set();
-	IIC_delay();
+//	IIC_delay();
 	OLED_SCL_Clr();
-	IIC_delay();
+//	IIC_delay();
 }
 
 //写入一个字节
@@ -106,9 +106,9 @@ void Send_Byte(u8 dat)
 		{
 			OLED_SDA_Clr();
     }
-		IIC_delay();
+//		IIC_delay();
 		OLED_SCL_Set();
-		IIC_delay();
+//		IIC_delay();
 		OLED_SCL_Clr();
 		dat<<=1;
   }

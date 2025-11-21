@@ -6,26 +6,26 @@
 #include "lcd12864.h"   
 #include "picture.h"    
 
-//sbit RS  =P3^0;    
-//sbit RW  =P3^1;     
-//sbit E   =P3^2;    
-//   
-//sbit CS1 =P3^3;    //active "H"
-//sbit CS2 =P3^4;    //active "H"   
-//sbit int0=P2^1; 
-//sbit KEY=P2^0; 
-//bit loge=0;  
-
-
 sbit RS  =P3^0;    
-sbit RW  =P3^3;     
-sbit E   =P3^4;    
+sbit RW  =P3^1;     
+sbit E   =P3^2;    
    
-sbit CS1 =P3^1;    //active "H"
-sbit CS2 =P3^2;    //active "H"   
+sbit CS1 =P3^3;    //active "H"
+sbit CS2 =P3^4;    //active "H"   
 sbit int0=P2^1; 
 sbit KEY=P2^0; 
-bit loge=0;
+bit loge=0;  
+
+
+//sbit RS  =P3^0;    
+//sbit RW  =P3^3;     
+//sbit E   =P3^4;    
+//   
+//sbit CS1 =P3^1;    //active "H"
+//sbit CS2 =P3^2;    //active "H"   
+//sbit int0=P2^1; 
+//sbit KEY=P2^0; 
+//bit loge=0;
 
 unsigned char Page;     
 unsigned char Col; 

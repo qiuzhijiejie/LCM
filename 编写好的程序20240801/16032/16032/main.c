@@ -224,15 +224,15 @@ void exsample(void)                     //演示程序
     putstrxy(4,1,"160*32 DOTS");   //在(4,1)位置开始显示字符串
     exdelay();                          //延时约300mS
     exdelay();                          //延时约300mS
-
+charlcdfill(' '); 
 //3.字符串演示: 在(0,0)字符位置显示"深圳束方科技有限公司"
-    putstrxy(0,0,"智力光电股份有限公司");       //在(0,0)位置开始显示字符串
+    putstrxy(3,3,"中国制造 ");       //在(0,0)位置开始显示字符串
     exdelay();                          //延时约300mS
     exdelay();                          //延时约300mS
 
 //4.字符串演示: 在(0,1)字符位置显示"WWW.ORIENTAL-LCD.COM"
-    putstrxy(0,0,"Intelligent Optoelec");   //在(0,1)位置开始显示字符串
-	putstrxy(0,1," tronics Co., Ltd.");   //在(0,1)位置开始显示字符串
+    putstrxy(3,0,"Made in Chian");   //在(0,1)位置开始显示字符串
+//	putstrxy(2,1," tronics Co., Ltd.");   //在(0,1)位置开始显示字符串
     exdelay();                          //延时约300mS
     exdelay();                          //延时约300mS
 

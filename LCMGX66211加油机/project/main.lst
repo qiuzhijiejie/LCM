@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              07/11/2025 16:07:11 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/20/2025 14:13:26 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
   52   3                                      if(LCD_POLARITY==1)     //极性反转
   53   3                                              LCD_POLARITY=1;
   54   3                                      else
-C51 COMPILER V9.60.7.0   MAIN                                                              07/11/2025 16:07:11 PAGE 2   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/20/2025 14:13:26 PAGE 2   
 
   55   3                                              LCD_POLARITY=0;
   56   3                                      
@@ -126,7 +126,7 @@ line level    source
  114   1              while(TI==0);
  115   1              TI=0;   
  116   1      }
-C51 COMPILER V9.60.7.0   MAIN                                                              07/11/2025 16:07:11 PAGE 3   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/20/2025 14:13:26 PAGE 3   
 
  117          
  118          void Uart_Send_Hex(u8 Byte_HEX)
@@ -190,7 +190,7 @@ line level    source
  176   1              KEY3 = 1;
  177   1      
  178   1      }
-C51 COMPILER V9.60.7.0   MAIN                                                              07/11/2025 16:07:11 PAGE 4   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/20/2025 14:13:26 PAGE 4   
 
  179          //-----------------------------------------------
  180          
@@ -254,7 +254,7 @@ line level    source
  238                          {
  239                                  if(Freq>20) Freq--;
  240                                  Cycle = 500/Freq;
-C51 COMPILER V9.60.7.0   MAIN                                                              07/11/2025 16:07:11 PAGE 5   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/20/2025 14:13:26 PAGE 5   
 
  241                                  Uart_dbg_print("[KEY_DN] Freq= ");Uart_Send_Dec(Freq);
  242                                  Uart_dbg_print(" Cycle= ");Uart_Send_Dec(Cycle);
@@ -318,7 +318,7 @@ line level    source
  300   1              while (1)
  301   1              {
  302   2                      delay_ms(5000); 
-C51 COMPILER V9.60.7.0   MAIN                                                              07/11/2025 16:07:11 PAGE 6   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/20/2025 14:13:26 PAGE 6   
 
  303   2      
  304   2                      // 在 LCD 上显示当前数字

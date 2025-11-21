@@ -362,7 +362,7 @@ void DisplayDots( uchar DotByte,uchar DotByte1 )
 { 	uchar i,j;  
 	Locatexy(0,0,Graphic);  
  	WriteCommand(0,0,0xb0,0 );//Set Data Auto Write  
-	for(j = 0; j < 64; j++)  // 循环64行
+	for(j = 0; j < 70; j++)  // 循环64行
 	{
 		for(i = 0; i < 30; i++)  // 每行的前30个字节写入DotByte
 		{
@@ -441,7 +441,7 @@ void LcmInit( void )
 //	WriteCommand(0,0,0x81,0);//EXOR Mode - Table 6-14
 //	WriteCommand(0,0,0x83,0);//AND Mode - Table 6-14
 //	WriteCommand(0,0,0x84,0);//Text Attribute Mode - Table 6-14
-//	WriteCommand(0,0,0x80,0);//Internal Character Generator Mode - Table 6-14
+	WriteCommand(0,0,0x80,0);//Internal Character Generator Mode - Table 6-14
 //	WriteCommand(0,0,0x90,0);//External Character Generator Mode  - Table 6-14
 	
 	WriteCommand(0,0,0x9c,0);//Text on, Graphic on - Table 6-16 
@@ -451,10 +451,10 @@ void LcmInit( void )
 //	WriteCommand(0,0,0x93,0);//Cursor on, Blink on 
 }
 
-uchar start_x[] = {42, 42, 43};  // 每组显示的起始X坐标
+uchar start_x[] = {37, 37, 38};  // 每组显示的起始X坐标
 uchar start_y[] = {20, 50, 80};  // 每组显示的起始Y坐标
-uchar start_code[] = {0, 16, 29};  // 每组显示的起始字符编码
-uchar count[] = {16, 13, 12};  // 每组显示的字符数量
+uchar start_code[] = {0, 15, 28};  // 每组显示的起始字符编码
+uchar count[] = {13, 13, 12};  // 每组显示的字符数量
 
 void picture(void)
 {   

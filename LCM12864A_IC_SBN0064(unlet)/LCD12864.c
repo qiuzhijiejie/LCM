@@ -322,15 +322,15 @@ void Display_Chinese()
 // }
 	LcmPutBMP(BMP0); 
  Page = 2;   
- Col  = 0;
- for(a=0;a<8;a++)
+ Col  = 24;
+ for(a=0;a<4;a++)
  {
  Display_16_16(font,a);
  }
 
  Page = 4;   
  Col  = 0;
- for(a=8;a<16;a++)
+ for(a=4;a<12;a++)
  {
  Display_16_16(font,a);
  }

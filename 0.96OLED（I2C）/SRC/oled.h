@@ -11,8 +11,11 @@
 #define OLED_DATA 1	//Ð´Êý¾Ý
 
 
-sbit OLED_SCL=P3^6;//SCL
-sbit OLED_SDA=P3^7;//SDA
+//sbit OLED_SCL=P3^6;//SCL
+//sbit OLED_SDA=P3^7;//SDA
+
+sbit OLED_SCL=P1^0;//SCL
+sbit OLED_SDA=P1^1;//SDA
 
 sbit OLED_RES =P1^2;//RES
 

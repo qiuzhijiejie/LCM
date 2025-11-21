@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              06/18/2025 11:19:36 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/14/2025 22:22:26 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
   52          //PIN3: NC   [空脚]
   53          //PIN4: RS   [数据/命令选择 数据1,命令0]-P3.0
   54          //PIN5: RW   [读/写控制 读1,写0]--------P3.1
-C51 COMPILER V9.60.7.0   MAIN                                                              06/18/2025 11:19:36 PAGE 2   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/14/2025 22:22:26 PAGE 2   
 
   55          //PIN6: E    [使能信号 高有效]----------P3.2
   56          //PIN7: D0   [Data I/O]-----------------P1.0
@@ -126,7 +126,7 @@ line level    source
  114          0xf0,0x00,
  115          0xfe,0x00,
  116          0x0f,0x80,
-C51 COMPILER V9.60.7.0   MAIN                                                              06/18/2025 11:19:36 PAGE 3   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/14/2025 22:22:26 PAGE 3   
 
  117          0x03,0xc0,
  118          0xf0,0xe0,
@@ -190,7 +190,7 @@ line level    source
  176          0x0e,0x3f,0xfc,0x70,
  177          0x1c,0xfe,0x7f,0x38,
  178          0x39,0xfc,0x3f,0x9c,
-C51 COMPILER V9.60.7.0   MAIN                                                              06/18/2025 11:19:36 PAGE 4   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/14/2025 22:22:26 PAGE 4   
 
  179          0x33,0xfc,0x3f,0xcc,
  180          0x73,0xfe,0x7f,0xce,
@@ -237,15 +237,15 @@ line level    source
  221   1          exdelay();                          //延时约300mS
  222   1      
  223   1      //2.字符串演示: 在(2,1)字符位置显示"ORIENTAL-LCD"
- 224   1          putstrxy(2,1,"ORIENTAL-LCD");   //在(0,1)位置开始显示字符串
+ 224   1          putstrxy(2,1,"Made in China");   //在(0,1)位置开始显示字符串
  225   1      
  226   1          exdelay();                          //延时约300mS
  227   1          exdelay();                          //延时约300mS
  228   1      
  229   1      //3.字符串演示: 在(1,0)字符位置显示"深圳束方电子"
  230   1               charlcdfill(' '); 
- 231   1          putstrxy(1,0,"智力光电股");       //在(0,0)位置开始显示字符串
- 232   1              putstrxy(1,1,"份有限公司"); 
+ 231   1          putstrxy(1,0,"中国制造");       //在(0,0)位置开始显示字符串
+ 232   1      //      putstrxy(1,1,"份有限公司"); 
  233   1          exdelay();                          //延时约300mS
  234   1          exdelay();                          //延时约300mS
  235   1      
@@ -254,7 +254,7 @@ line level    source
  238   1          putstrxy(2,1,"122*32 DOTS");   //在(0,1)位置开始显示字符串
  239   1          putstrxy(2,0,"122*32 DOTS");   //在(0,1)位置开始显示字符串
  240   1          exdelay();                          //延时约300mS
-C51 COMPILER V9.60.7.0   MAIN                                                              06/18/2025 11:19:36 PAGE 5   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/14/2025 22:22:26 PAGE 5   
 
  241   1          exdelay();                          //延时约300mS
  242   1      
@@ -318,7 +318,7 @@ line level    source
  300          //-------------------------------------------------------------------------------
  301          void charlcdfill(unsigned int c)        //整屏显示A代表的ASCII字符子程序
  302          {   for(CXPOS=CYPOS=0;1;)
-C51 COMPILER V9.60.7.0   MAIN                                                              06/18/2025 11:19:36 PAGE 6   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/14/2025 22:22:26 PAGE 6   
 
  303   1          {   putchar(c);                     //定位写字符
  304   2              if((CXPOS==0) && (CYPOS==0)) break;
@@ -382,7 +382,7 @@ line level    source
  362   1      }
  363          //-------------------------------------------------------------------------------
  364          //子程序名称:void putstrxy(unsigned char cx,unsigned char cy,unsigned char *s).
-C51 COMPILER V9.60.7.0   MAIN                                                              06/18/2025 11:19:36 PAGE 7   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/14/2025 22:22:26 PAGE 7   
 
  365          //功能:在(cx,cy)字符位置写字符串.
  366          //修改日期:2009.08.11
@@ -446,7 +446,7 @@ line level    source
  424   1          YSIZE=*s;
  425   1          s++;
  426   1          putsizeimage(XSIZE,YSIZE,s);
-C51 COMPILER V9.60.7.0   MAIN                                                              06/18/2025 11:19:36 PAGE 8   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/14/2025 22:22:26 PAGE 8   
 
  427   1      }
  428          //-------------------------------------------------------------------------------
@@ -510,7 +510,7 @@ line level    source
  486          //-------------------------------------------------------------------------------
  487          //子程序名称:void glcdfill(unsigned char d).
  488          //功能:整屏显示d表示的字节数据.
-C51 COMPILER V9.60.7.0   MAIN                                                              06/18/2025 11:19:36 PAGE 9   
+C51 COMPILER V9.60.7.0   MAIN                                                              09/14/2025 22:22:26 PAGE 9   
 
  489          //修改日期:2009.11.02
  490          //修改人:XIEJIANREN
@@ -574,7 +574,7 @@ line level    source
  548          //功能:关闭绘图区域显示
  549          //修改日期:2009.10.28
  550          //修改人:XIEJIANREN
-C51 COMPILER V9.60.7.0   MAIN                                                              06/18/2025 11:19:36 PAGE 10  
+C51 COMPILER V9.60.7.0   MAIN                                                              09/14/2025 22:22:26 PAGE 10  
 
  551          //-------------------------------------------------------------------------------
  552          void lcdgraphoff(void)                  //绘图区域显示关闭子程序
@@ -638,7 +638,7 @@ line level    source
  610          //修改人:XIEJIANREN
  611          //-------------------------------------------------------------------------------
  612          void lcdwaitidle(void)                  //控制器忙检测子程序
-C51 COMPILER V9.60.7.0   MAIN                                                              06/18/2025 11:19:36 PAGE 11  
+C51 COMPILER V9.60.7.0   MAIN                                                              09/14/2025 22:22:26 PAGE 11  
 
  613          {   unsigned char i;
  614   1          P1=0xff;
@@ -652,8 +652,8 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    898    ----
-   CONSTANT SIZE    =    316    ----
+   CODE SIZE        =    887    ----
+   CONSTANT SIZE    =    304    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =      4      26

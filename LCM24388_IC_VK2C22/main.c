@@ -27,13 +27,10 @@ void main(void)
 
 	while(1)
 	{
-		
-		
-		
+			
 	Vk2c22_Init();
  	
 	Vk2c22_DisAll(0x00);
-
 
 	for ( i = 0; i <= 15; i++) 
 	{
